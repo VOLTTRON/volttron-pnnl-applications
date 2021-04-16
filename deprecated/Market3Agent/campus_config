@@ -1,0 +1,9 @@
+{
+  "agentid": "campus_agent",
+  "name": "PNNL_Campus",
+
+  "T": 24,
+  "simulation": true,
+  "simulation_start_time": "2019-09-01 00:00:00",
+  "simulation_one_hour_in_seconds": 1200
+}

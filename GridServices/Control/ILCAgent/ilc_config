@@ -1,0 +1,28 @@
+{
+    "campus": "CAMPUS",
+    "building": "BUILDING",
+    "power_meter": {
+        "device_topic": "CAMPUS/BUILDING/METERS",
+        "point": "WholeBuildingPower"
+         "demand_forumla": {
+            "operation": "Abs(WholeBuildingPower)",
+            "operation_args": ["WholeBuildingPower"]
+         }
+    },
+    "agent_id": "ILC",
+    "demand_limit": 30.0,
+    "control_time": 20.0,
+    "curtailment_confirm": 5.0,
+    "curtailment_break": 20.0,
+    "average_building_power_window": 15.0,
+    "stagger_release": true,
+    "stagger_off_time": true,
+    "clusters": [ 
+        {
+            "device_control_file": "control_config",
+            "device_criteria_file": "criteria_config",
+            "pairwise_criteria_file": "pairwise_criteria.json",
+            "cluster_priority": 1.0
+        }
+    ]
+ }

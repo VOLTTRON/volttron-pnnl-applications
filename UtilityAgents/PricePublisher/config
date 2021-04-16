@@ -1,0 +1,2 @@
+cron_schedule: '*/5 * * * *'
+price_file: /home/vuzer/transactivecontrol/MarketAgents/config/RTP/RTP-sept.csv

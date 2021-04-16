@@ -1,0 +1,3284 @@
+
+ Meters for 8,ZONE-VAV-CORRIDOR LIGHTS:Lights Electric Energy [J]
+  OnMeter=Electricity:Facility [J]
+  OnMeter=Electricity:Building [J]
+  OnMeter=Electricity:Zone:ZONE-VAV-CORRIDOR [J]
+  OnMeter=InteriorLights:Electricity [J]
+  OnMeter=InteriorLights:Electricity:Zone:ZONE-VAV-CORRIDOR [J]
+  OnMeter=General Lights:InteriorLights:Electricity [J]
+
+ Meters for 70,ZONE-VAV-102 LIGHTS:Lights Electric Energy [J]
+  OnMeter=Electricity:Facility [J]
+  OnMeter=Electricity:Building [J]
+  OnMeter=Electricity:Zone:ZONE-VAV-102 [J]
+  OnMeter=InteriorLights:Electricity [J]
+  OnMeter=InteriorLights:Electricity:Zone:ZONE-VAV-102 [J]
+  OnMeter=General Lights:InteriorLights:Electricity [J]
+
+ Meters for 92,ZONE-VAV-104 LIGHTS:Lights Electric Energy [J]
+  OnMeter=Electricity:Facility [J]
+  OnMeter=Electricity:Building [J]
+  OnMeter=Electricity:Zone:ZONE-VAV-104 [J]
+  OnMeter=InteriorLights:Electricity [J]
+  OnMeter=InteriorLights:Electricity:Zone:ZONE-VAV-104 [J]
+  OnMeter=General Lights:InteriorLights:Electricity [J]
+
+ Meters for 114,ZONE-VAV-105 LIGHTS:Lights Electric Energy [J]
+  OnMeter=Electricity:Facility [J]
+  OnMeter=Electricity:Building [J]
+  OnMeter=Electricity:Zone:ZONE-VAV-105 [J]
+  OnMeter=InteriorLights:Electricity [J]
+  OnMeter=InteriorLights:Electricity:Zone:ZONE-VAV-105 [J]
+  OnMeter=General Lights:InteriorLights:Electricity [J]
+
+ Meters for 136,ZONE-VAV-107 LIGHTS:Lights Electric Energy [J]
+  OnMeter=Electricity:Facility [J]
+  OnMeter=Electricity:Building [J]
+  OnMeter=Electricity:Zone:ZONE-VAV-107 [J]
+  OnMeter=InteriorLights:Electricity [J]
+  OnMeter=InteriorLights:Electricity:Zone:ZONE-VAV-107 [J]
+  OnMeter=General Lights:InteriorLights:Electricity [J]
+
+ Meters for 158,ZONE-VAV-108 LIGHTS:Lights Electric Energy [J]
+  OnMeter=Electricity:Facility [J]
+  OnMeter=Electricity:Building [J]
+  OnMeter=Electricity:Zone:ZONE-VAV-108 [J]
+  OnMeter=InteriorLights:Electricity [J]
+  OnMeter=InteriorLights:Electricity:Zone:ZONE-VAV-108 [J]
+  OnMeter=General Lights:InteriorLights:Electricity [J]
+
+ Meters for 180,ZONE-VAV-112 LIGHTS:Lights Electric Energy [J]
+  OnMeter=Electricity:Facility [J]
+  OnMeter=Electricity:Building [J]
+  OnMeter=Electricity:Zone:ZONE-VAV-112 [J]
+  OnMeter=InteriorLights:Electricity [J]
+  OnMeter=InteriorLights:Electricity:Zone:ZONE-VAV-112 [J]
+  OnMeter=General Lights:InteriorLights:Electricity [J]
+
+ Meters for 202,ZONE-VAV-116 LIGHTS:Lights Electric Energy [J]
+  OnMeter=Electricity:Facility [J]
+  OnMeter=Electricity:Building [J]
+  OnMeter=Electricity:Zone:ZONE-VAV-116 [J]
+  OnMeter=InteriorLights:Electricity [J]
+  OnMeter=InteriorLights:Electricity:Zone:ZONE-VAV-116 [J]
+  OnMeter=General Lights:InteriorLights:Electricity [J]
+
+ Meters for 224,ZONE-VAV-118 LIGHTS:Lights Electric Energy [J]
+  OnMeter=Electricity:Facility [J]
+  OnMeter=Electricity:Building [J]
+  OnMeter=Electricity:Zone:ZONE-VAV-118 [J]
+  OnMeter=InteriorLights:Electricity [J]
+  OnMeter=InteriorLights:Electricity:Zone:ZONE-VAV-118 [J]
+  OnMeter=General Lights:InteriorLights:Electricity [J]
+
+ Meters for 246,ZONE-VAV-119 LIGHTS:Lights Electric Energy [J]
+  OnMeter=Electricity:Facility [J]
+  OnMeter=Electricity:Building [J]
+  OnMeter=Electricity:Zone:ZONE-VAV-119 [J]
+  OnMeter=InteriorLights:Electricity [J]
+  OnMeter=InteriorLights:Electricity:Zone:ZONE-VAV-119 [J]
+  OnMeter=General Lights:InteriorLights:Electricity [J]
+
+ Meters for 268,ZONE-VAV-120 LIGHTS:Lights Electric Energy [J]
+  OnMeter=Electricity:Facility [J]
+  OnMeter=Electricity:Building [J]
+  OnMeter=Electricity:Zone:ZONE-VAV-120 [J]
+  OnMeter=InteriorLights:Electricity [J]
+  OnMeter=InteriorLights:Electricity:Zone:ZONE-VAV-120 [J]
+  OnMeter=General Lights:InteriorLights:Electricity [J]
+
+ Meters for 290,ZONE-VAV-123A LIGHTS:Lights Electric Energy [J]
+  OnMeter=Electricity:Facility [J]
+  OnMeter=Electricity:Building [J]
+  OnMeter=Electricity:Zone:ZONE-VAV-123A [J]
+  OnMeter=InteriorLights:Electricity [J]
+  OnMeter=InteriorLights:Electricity:Zone:ZONE-VAV-123A [J]
+  OnMeter=General Lights:InteriorLights:Electricity [J]
+
+ Meters for 312,ZONE-VAV-123B LIGHTS:Lights Electric Energy [J]
+  OnMeter=Electricity:Facility [J]
+  OnMeter=Electricity:Building [J]
+  OnMeter=Electricity:Zone:ZONE-VAV-123B [J]
+  OnMeter=InteriorLights:Electricity [J]
+  OnMeter=InteriorLights:Electricity:Zone:ZONE-VAV-123B [J]
+  OnMeter=General Lights:InteriorLights:Electricity [J]
+
+ Meters for 334,ZONE-VAV-127A LIGHTS:Lights Electric Energy [J]
+  OnMeter=Electricity:Facility [J]
+  OnMeter=Electricity:Building [J]
+  OnMeter=Electricity:Zone:ZONE-VAV-127A [J]
+  OnMeter=InteriorLights:Electricity [J]
+  OnMeter=InteriorLights:Electricity:Zone:ZONE-VAV-127A [J]
+  OnMeter=General Lights:InteriorLights:Electricity [J]
+
+ Meters for 356,ZONE-VAV-127B LIGHTS:Lights Electric Energy [J]
+  OnMeter=Electricity:Facility [J]
+  OnMeter=Electricity:Building [J]
+  OnMeter=Electricity:Zone:ZONE-VAV-127B [J]
+  OnMeter=InteriorLights:Electricity [J]
+  OnMeter=InteriorLights:Electricity:Zone:ZONE-VAV-127B [J]
+  OnMeter=General Lights:InteriorLights:Electricity [J]
+
+ Meters for 378,ZONE-VAV-129 LIGHTS:Lights Electric Energy [J]
+  OnMeter=Electricity:Facility [J]
+  OnMeter=Electricity:Building [J]
+  OnMeter=Electricity:Zone:ZONE-VAV-129 [J]
+  OnMeter=InteriorLights:Electricity [J]
+  OnMeter=InteriorLights:Electricity:Zone:ZONE-VAV-129 [J]
+  OnMeter=General Lights:InteriorLights:Electricity [J]
+
+ Meters for 400,ZONE-VAV-131 LIGHTS:Lights Electric Energy [J]
+  OnMeter=Electricity:Facility [J]
+  OnMeter=Electricity:Building [J]
+  OnMeter=Electricity:Zone:ZONE-VAV-131 [J]
+  OnMeter=InteriorLights:Electricity [J]
+  OnMeter=InteriorLights:Electricity:Zone:ZONE-VAV-131 [J]
+  OnMeter=General Lights:InteriorLights:Electricity [J]
+
+ Meters for 422,ZONE-VAV-133 LIGHTS:Lights Electric Energy [J]
+  OnMeter=Electricity:Facility [J]
+  OnMeter=Electricity:Building [J]
+  OnMeter=Electricity:Zone:ZONE-VAV-133 [J]
+  OnMeter=InteriorLights:Electricity [J]
+  OnMeter=InteriorLights:Electricity:Zone:ZONE-VAV-133 [J]
+  OnMeter=General Lights:InteriorLights:Electricity [J]
+
+ Meters for 444,ZONE-VAV-142 LIGHTS:Lights Electric Energy [J]
+  OnMeter=Electricity:Facility [J]
+  OnMeter=Electricity:Building [J]
+  OnMeter=Electricity:Zone:ZONE-VAV-142 [J]
+  OnMeter=InteriorLights:Electricity [J]
+  OnMeter=InteriorLights:Electricity:Zone:ZONE-VAV-142 [J]
+  OnMeter=General Lights:InteriorLights:Electricity [J]
+
+ Meters for 466,ZONE-VAV-143 LIGHTS:Lights Electric Energy [J]
+  OnMeter=Electricity:Facility [J]
+  OnMeter=Electricity:Building [J]
+  OnMeter=Electricity:Zone:ZONE-VAV-143 [J]
+  OnMeter=InteriorLights:Electricity [J]
+  OnMeter=InteriorLights:Electricity:Zone:ZONE-VAV-143 [J]
+  OnMeter=General Lights:InteriorLights:Electricity [J]
+
+ Meters for 488,ZONE-VAV-150 LIGHTS:Lights Electric Energy [J]
+  OnMeter=Electricity:Facility [J]
+  OnMeter=Electricity:Building [J]
+  OnMeter=Electricity:Zone:ZONE-VAV-150 [J]
+  OnMeter=InteriorLights:Electricity [J]
+  OnMeter=InteriorLights:Electricity:Zone:ZONE-VAV-150 [J]
+  OnMeter=General Lights:InteriorLights:Electricity [J]
+
+ Meters for 510,ZONE-AHU-002 LIGHTS:Lights Electric Energy [J]
+  OnMeter=Electricity:Facility [J]
+  OnMeter=Electricity:Building [J]
+  OnMeter=Electricity:Zone:ZONE-AHU-002 [J]
+  OnMeter=InteriorLights:Electricity [J]
+  OnMeter=InteriorLights:Electricity:Zone:ZONE-AHU-002 [J]
+  OnMeter=General Lights:InteriorLights:Electricity [J]
+
+ Meters for 532,ZONE-AHU-004 LIGHTS:Lights Electric Energy [J]
+  OnMeter=Electricity:Facility [J]
+  OnMeter=Electricity:Building [J]
+  OnMeter=Electricity:Zone:ZONE-AHU-004 [J]
+  OnMeter=InteriorLights:Electricity [J]
+  OnMeter=InteriorLights:Electricity:Zone:ZONE-AHU-004 [J]
+  OnMeter=General Lights:InteriorLights:Electricity [J]
+
+ Meters for 554,ZONE-AHU-005 LIGHTS:Lights Electric Energy [J]
+  OnMeter=Electricity:Facility [J]
+  OnMeter=Electricity:Building [J]
+  OnMeter=Electricity:Zone:ZONE-AHU-005 [J]
+  OnMeter=InteriorLights:Electricity [J]
+  OnMeter=InteriorLights:Electricity:Zone:ZONE-AHU-005 [J]
+  OnMeter=General Lights:InteriorLights:Electricity [J]
+
+ Meters for 576,ZONE-FCU-001 LIGHTS:Lights Electric Energy [J]
+  OnMeter=Electricity:Facility [J]
+  OnMeter=Electricity:Building [J]
+  OnMeter=Electricity:Zone:ZONE-FCU-001 [J]
+  OnMeter=InteriorLights:Electricity [J]
+  OnMeter=InteriorLights:Electricity:Zone:ZONE-FCU-001 [J]
+  OnMeter=General Lights:InteriorLights:Electricity [J]
+
+ Meters for 598,ZONE-FCU-002 LIGHTS:Lights Electric Energy [J]
+  OnMeter=Electricity:Facility [J]
+  OnMeter=Electricity:Building [J]
+  OnMeter=Electricity:Zone:ZONE-FCU-002 [J]
+  OnMeter=InteriorLights:Electricity [J]
+  OnMeter=InteriorLights:Electricity:Zone:ZONE-FCU-002 [J]
+  OnMeter=General Lights:InteriorLights:Electricity [J]
+
+ Meters for 620,ZONE-FCU-003 LIGHTS:Lights Electric Energy [J]
+  OnMeter=Electricity:Facility [J]
+  OnMeter=Electricity:Building [J]
+  OnMeter=Electricity:Zone:ZONE-FCU-003 [J]
+  OnMeter=InteriorLights:Electricity [J]
+  OnMeter=InteriorLights:Electricity:Zone:ZONE-FCU-003 [J]
+  OnMeter=General Lights:InteriorLights:Electricity [J]
+
+ Meters for 642,ZONE-HTR-001 LIGHTS:Lights Electric Energy [J]
+  OnMeter=Electricity:Facility [J]
+  OnMeter=Electricity:Building [J]
+  OnMeter=Electricity:Zone:ZONE-HTR-001 [J]
+  OnMeter=InteriorLights:Electricity [J]
+  OnMeter=InteriorLights:Electricity:Zone:ZONE-HTR-001 [J]
+  OnMeter=General Lights:InteriorLights:Electricity [J]
+
+ Meters for 664,ZONE-HTR-002 LIGHTS:Lights Electric Energy [J]
+  OnMeter=Electricity:Facility [J]
+  OnMeter=Electricity:Building [J]
+  OnMeter=Electricity:Zone:ZONE-HTR-002 [J]
+  OnMeter=InteriorLights:Electricity [J]
+  OnMeter=InteriorLights:Electricity:Zone:ZONE-HTR-002 [J]
+  OnMeter=General Lights:InteriorLights:Electricity [J]
+
+ Meters for 686,ZONE-HTR-003 LIGHTS:Lights Electric Energy [J]
+  OnMeter=Electricity:Facility [J]
+  OnMeter=Electricity:Building [J]
+  OnMeter=Electricity:Zone:ZONE-HTR-003 [J]
+  OnMeter=InteriorLights:Electricity [J]
+  OnMeter=InteriorLights:Electricity:Zone:ZONE-HTR-003 [J]
+  OnMeter=General Lights:InteriorLights:Electricity [J]
+
+ Meters for 708,ZONE-HTR-004 LIGHTS:Lights Electric Energy [J]
+  OnMeter=Electricity:Facility [J]
+  OnMeter=Electricity:Building [J]
+  OnMeter=Electricity:Zone:ZONE-HTR-004 [J]
+  OnMeter=InteriorLights:Electricity [J]
+  OnMeter=InteriorLights:Electricity:Zone:ZONE-HTR-004 [J]
+  OnMeter=General Lights:InteriorLights:Electricity [J]
+
+ Meters for 730,ZONE-VAV-RESTROOM LIGHTS:Lights Electric Energy [J]
+  OnMeter=Electricity:Facility [J]
+  OnMeter=Electricity:Building [J]
+  OnMeter=Electricity:Zone:ZONE-VAV-RESTROOM [J]
+  OnMeter=InteriorLights:Electricity [J]
+  OnMeter=InteriorLights:Electricity:Zone:ZONE-VAV-RESTROOM [J]
+  OnMeter=General Lights:InteriorLights:Electricity [J]
+
+ Meters for 752,ZONE-VAV-136 LIGHTS:Lights Electric Energy [J]
+  OnMeter=Electricity:Facility [J]
+  OnMeter=Electricity:Building [J]
+  OnMeter=Electricity:Zone:ZONE-VAV-136 [J]
+  OnMeter=InteriorLights:Electricity [J]
+  OnMeter=InteriorLights:Electricity:Zone:ZONE-VAV-136 [J]
+  OnMeter=General Lights:InteriorLights:Electricity [J]
+
+ Meters for 773,ZONE-VAV-CORRIDOR MISCPLUG EQUIP:Electric Equipment Electric Energy [J]
+  OnMeter=Electricity:Facility [J]
+  OnMeter=Electricity:Building [J]
+  OnMeter=Electricity:Zone:ZONE-VAV-CORRIDOR [J]
+  OnMeter=InteriorEquipment:Electricity [J]
+  OnMeter=InteriorEquipment:Electricity:Zone:ZONE-VAV-CORRIDOR [J]
+  OnMeter=MiscPlug:InteriorEquipment:Electricity [J]
+
+ Meters for 804,ZONE-VAV-102 MISCPLUG EQUIP:Electric Equipment Electric Energy [J]
+  OnMeter=Electricity:Facility [J]
+  OnMeter=Electricity:Building [J]
+  OnMeter=Electricity:Zone:ZONE-VAV-102 [J]
+  OnMeter=InteriorEquipment:Electricity [J]
+  OnMeter=InteriorEquipment:Electricity:Zone:ZONE-VAV-102 [J]
+  OnMeter=MiscPlug:InteriorEquipment:Electricity [J]
+
+ Meters for 815,ZONE-VAV-104 MISCPLUG EQUIP:Electric Equipment Electric Energy [J]
+  OnMeter=Electricity:Facility [J]
+  OnMeter=Electricity:Building [J]
+  OnMeter=Electricity:Zone:ZONE-VAV-104 [J]
+  OnMeter=InteriorEquipment:Electricity [J]
+  OnMeter=InteriorEquipment:Electricity:Zone:ZONE-VAV-104 [J]
+  OnMeter=MiscPlug:InteriorEquipment:Electricity [J]
+
+ Meters for 826,ZONE-VAV-105 MISCPLUG EQUIP:Electric Equipment Electric Energy [J]
+  OnMeter=Electricity:Facility [J]
+  OnMeter=Electricity:Building [J]
+  OnMeter=Electricity:Zone:ZONE-VAV-105 [J]
+  OnMeter=InteriorEquipment:Electricity [J]
+  OnMeter=InteriorEquipment:Electricity:Zone:ZONE-VAV-105 [J]
+  OnMeter=MiscPlug:InteriorEquipment:Electricity [J]
+
+ Meters for 837,ZONE-VAV-107 MISCPLUG EQUIP:Electric Equipment Electric Energy [J]
+  OnMeter=Electricity:Facility [J]
+  OnMeter=Electricity:Building [J]
+  OnMeter=Electricity:Zone:ZONE-VAV-107 [J]
+  OnMeter=InteriorEquipment:Electricity [J]
+  OnMeter=InteriorEquipment:Electricity:Zone:ZONE-VAV-107 [J]
+  OnMeter=MiscPlug:InteriorEquipment:Electricity [J]
+
+ Meters for 848,ZONE-VAV-108 MISCPLUG EQUIP:Electric Equipment Electric Energy [J]
+  OnMeter=Electricity:Facility [J]
+  OnMeter=Electricity:Building [J]
+  OnMeter=Electricity:Zone:ZONE-VAV-108 [J]
+  OnMeter=InteriorEquipment:Electricity [J]
+  OnMeter=InteriorEquipment:Electricity:Zone:ZONE-VAV-108 [J]
+  OnMeter=MiscPlug:InteriorEquipment:Electricity [J]
+
+ Meters for 859,ZONE-VAV-112 MISCPLUG EQUIP:Electric Equipment Electric Energy [J]
+  OnMeter=Electricity:Facility [J]
+  OnMeter=Electricity:Building [J]
+  OnMeter=Electricity:Zone:ZONE-VAV-112 [J]
+  OnMeter=InteriorEquipment:Electricity [J]
+  OnMeter=InteriorEquipment:Electricity:Zone:ZONE-VAV-112 [J]
+  OnMeter=MiscPlug:InteriorEquipment:Electricity [J]
+
+ Meters for 870,ZONE-VAV-116 MISCPLUG EQUIP:Electric Equipment Electric Energy [J]
+  OnMeter=Electricity:Facility [J]
+  OnMeter=Electricity:Building [J]
+  OnMeter=Electricity:Zone:ZONE-VAV-116 [J]
+  OnMeter=InteriorEquipment:Electricity [J]
+  OnMeter=InteriorEquipment:Electricity:Zone:ZONE-VAV-116 [J]
+  OnMeter=MiscPlug:InteriorEquipment:Electricity [J]
+
+ Meters for 881,ZONE-VAV-118 MISCPLUG EQUIP:Electric Equipment Electric Energy [J]
+  OnMeter=Electricity:Facility [J]
+  OnMeter=Electricity:Building [J]
+  OnMeter=Electricity:Zone:ZONE-VAV-118 [J]
+  OnMeter=InteriorEquipment:Electricity [J]
+  OnMeter=InteriorEquipment:Electricity:Zone:ZONE-VAV-118 [J]
+  OnMeter=MiscPlug:InteriorEquipment:Electricity [J]
+
+ Meters for 892,ZONE-VAV-119 MISCPLUG EQUIP:Electric Equipment Electric Energy [J]
+  OnMeter=Electricity:Facility [J]
+  OnMeter=Electricity:Building [J]
+  OnMeter=Electricity:Zone:ZONE-VAV-119 [J]
+  OnMeter=InteriorEquipment:Electricity [J]
+  OnMeter=InteriorEquipment:Electricity:Zone:ZONE-VAV-119 [J]
+  OnMeter=MiscPlug:InteriorEquipment:Electricity [J]
+
+ Meters for 903,ZONE-VAV-120 MISCPLUG EQUIP:Electric Equipment Electric Energy [J]
+  OnMeter=Electricity:Facility [J]
+  OnMeter=Electricity:Building [J]
+  OnMeter=Electricity:Zone:ZONE-VAV-120 [J]
+  OnMeter=InteriorEquipment:Electricity [J]
+  OnMeter=InteriorEquipment:Electricity:Zone:ZONE-VAV-120 [J]
+  OnMeter=MiscPlug:InteriorEquipment:Electricity [J]
+
+ Meters for 914,ZONE-VAV-123A MISCPLUG EQUIP:Electric Equipment Electric Energy [J]
+  OnMeter=Electricity:Facility [J]
+  OnMeter=Electricity:Building [J]
+  OnMeter=Electricity:Zone:ZONE-VAV-123A [J]
+  OnMeter=InteriorEquipment:Electricity [J]
+  OnMeter=InteriorEquipment:Electricity:Zone:ZONE-VAV-123A [J]
+  OnMeter=MiscPlug:InteriorEquipment:Electricity [J]
+
+ Meters for 925,ZONE-VAV-123B MISCPLUG EQUIP:Electric Equipment Electric Energy [J]
+  OnMeter=Electricity:Facility [J]
+  OnMeter=Electricity:Building [J]
+  OnMeter=Electricity:Zone:ZONE-VAV-123B [J]
+  OnMeter=InteriorEquipment:Electricity [J]
+  OnMeter=InteriorEquipment:Electricity:Zone:ZONE-VAV-123B [J]
+  OnMeter=MiscPlug:InteriorEquipment:Electricity [J]
+
+ Meters for 936,ZONE-VAV-127A MISCPLUG EQUIP:Electric Equipment Electric Energy [J]
+  OnMeter=Electricity:Facility [J]
+  OnMeter=Electricity:Building [J]
+  OnMeter=Electricity:Zone:ZONE-VAV-127A [J]
+  OnMeter=InteriorEquipment:Electricity [J]
+  OnMeter=InteriorEquipment:Electricity:Zone:ZONE-VAV-127A [J]
+  OnMeter=MiscPlug:InteriorEquipment:Electricity [J]
+
+ Meters for 947,ZONE-VAV-127B MISCPLUG EQUIP:Electric Equipment Electric Energy [J]
+  OnMeter=Electricity:Facility [J]
+  OnMeter=Electricity:Building [J]
+  OnMeter=Electricity:Zone:ZONE-VAV-127B [J]
+  OnMeter=InteriorEquipment:Electricity [J]
+  OnMeter=InteriorEquipment:Electricity:Zone:ZONE-VAV-127B [J]
+  OnMeter=MiscPlug:InteriorEquipment:Electricity [J]
+
+ Meters for 958,ZONE-VAV-129 MISCPLUG EQUIP:Electric Equipment Electric Energy [J]
+  OnMeter=Electricity:Facility [J]
+  OnMeter=Electricity:Building [J]
+  OnMeter=Electricity:Zone:ZONE-VAV-129 [J]
+  OnMeter=InteriorEquipment:Electricity [J]
+  OnMeter=InteriorEquipment:Electricity:Zone:ZONE-VAV-129 [J]
+  OnMeter=MiscPlug:InteriorEquipment:Electricity [J]
+
+ Meters for 969,ZONE-VAV-131 MISCPLUG EQUIP:Electric Equipment Electric Energy [J]
+  OnMeter=Electricity:Facility [J]
+  OnMeter=Electricity:Building [J]
+  OnMeter=Electricity:Zone:ZONE-VAV-131 [J]
+  OnMeter=InteriorEquipment:Electricity [J]
+  OnMeter=InteriorEquipment:Electricity:Zone:ZONE-VAV-131 [J]
+  OnMeter=MiscPlug:InteriorEquipment:Electricity [J]
+
+ Meters for 980,ZONE-VAV-133 MISCPLUG EQUIP:Electric Equipment Electric Energy [J]
+  OnMeter=Electricity:Facility [J]
+  OnMeter=Electricity:Building [J]
+  OnMeter=Electricity:Zone:ZONE-VAV-133 [J]
+  OnMeter=InteriorEquipment:Electricity [J]
+  OnMeter=InteriorEquipment:Electricity:Zone:ZONE-VAV-133 [J]
+  OnMeter=MiscPlug:InteriorEquipment:Electricity [J]
+
+ Meters for 991,ZONE-VAV-142 MISCPLUG EQUIP:Electric Equipment Electric Energy [J]
+  OnMeter=Electricity:Facility [J]
+  OnMeter=Electricity:Building [J]
+  OnMeter=Electricity:Zone:ZONE-VAV-142 [J]
+  OnMeter=InteriorEquipment:Electricity [J]
+  OnMeter=InteriorEquipment:Electricity:Zone:ZONE-VAV-142 [J]
+  OnMeter=MiscPlug:InteriorEquipment:Electricity [J]
+
+ Meters for 1002,ZONE-VAV-143 MISCPLUG EQUIP:Electric Equipment Electric Energy [J]
+  OnMeter=Electricity:Facility [J]
+  OnMeter=Electricity:Building [J]
+  OnMeter=Electricity:Zone:ZONE-VAV-143 [J]
+  OnMeter=InteriorEquipment:Electricity [J]
+  OnMeter=InteriorEquipment:Electricity:Zone:ZONE-VAV-143 [J]
+  OnMeter=MiscPlug:InteriorEquipment:Electricity [J]
+
+ Meters for 1013,ZONE-VAV-150 MISCPLUG EQUIP:Electric Equipment Electric Energy [J]
+  OnMeter=Electricity:Facility [J]
+  OnMeter=Electricity:Building [J]
+  OnMeter=Electricity:Zone:ZONE-VAV-150 [J]
+  OnMeter=InteriorEquipment:Electricity [J]
+  OnMeter=InteriorEquipment:Electricity:Zone:ZONE-VAV-150 [J]
+  OnMeter=MiscPlug:InteriorEquipment:Electricity [J]
+
+ Meters for 1024,ZONE-AHU-002 MISCPLUG EQUIP:Electric Equipment Electric Energy [J]
+  OnMeter=Electricity:Facility [J]
+  OnMeter=Electricity:Building [J]
+  OnMeter=Electricity:Zone:ZONE-AHU-002 [J]
+  OnMeter=InteriorEquipment:Electricity [J]
+  OnMeter=InteriorEquipment:Electricity:Zone:ZONE-AHU-002 [J]
+  OnMeter=MiscPlug:InteriorEquipment:Electricity [J]
+
+ Meters for 1035,ZONE-AHU-004 MISCPLUG EQUIP:Electric Equipment Electric Energy [J]
+  OnMeter=Electricity:Facility [J]
+  OnMeter=Electricity:Building [J]
+  OnMeter=Electricity:Zone:ZONE-AHU-004 [J]
+  OnMeter=InteriorEquipment:Electricity [J]
+  OnMeter=InteriorEquipment:Electricity:Zone:ZONE-AHU-004 [J]
+  OnMeter=MiscPlug:InteriorEquipment:Electricity [J]
+
+ Meters for 1046,ZONE-AHU-005 MISCPLUG EQUIP:Electric Equipment Electric Energy [J]
+  OnMeter=Electricity:Facility [J]
+  OnMeter=Electricity:Building [J]
+  OnMeter=Electricity:Zone:ZONE-AHU-005 [J]
+  OnMeter=InteriorEquipment:Electricity [J]
+  OnMeter=InteriorEquipment:Electricity:Zone:ZONE-AHU-005 [J]
+  OnMeter=MiscPlug:InteriorEquipment:Electricity [J]
+
+ Meters for 1057,ZONE-FCU-001 MISCPLUG EQUIP:Electric Equipment Electric Energy [J]
+  OnMeter=Electricity:Facility [J]
+  OnMeter=Electricity:Building [J]
+  OnMeter=Electricity:Zone:ZONE-FCU-001 [J]
+  OnMeter=InteriorEquipment:Electricity [J]
+  OnMeter=InteriorEquipment:Electricity:Zone:ZONE-FCU-001 [J]
+  OnMeter=MiscPlug:InteriorEquipment:Electricity [J]
+
+ Meters for 1068,ZONE-FCU-002 MISCPLUG EQUIP:Electric Equipment Electric Energy [J]
+  OnMeter=Electricity:Facility [J]
+  OnMeter=Electricity:Building [J]
+  OnMeter=Electricity:Zone:ZONE-FCU-002 [J]
+  OnMeter=InteriorEquipment:Electricity [J]
+  OnMeter=InteriorEquipment:Electricity:Zone:ZONE-FCU-002 [J]
+  OnMeter=MiscPlug:InteriorEquipment:Electricity [J]
+
+ Meters for 1079,ZONE-FCU-003 MISCPLUG EQUIP:Electric Equipment Electric Energy [J]
+  OnMeter=Electricity:Facility [J]
+  OnMeter=Electricity:Building [J]
+  OnMeter=Electricity:Zone:ZONE-FCU-003 [J]
+  OnMeter=InteriorEquipment:Electricity [J]
+  OnMeter=InteriorEquipment:Electricity:Zone:ZONE-FCU-003 [J]
+  OnMeter=MiscPlug:InteriorEquipment:Electricity [J]
+
+ Meters for 1090,ZONE-HTR-001 MISCPLUG EQUIP:Electric Equipment Electric Energy [J]
+  OnMeter=Electricity:Facility [J]
+  OnMeter=Electricity:Building [J]
+  OnMeter=Electricity:Zone:ZONE-HTR-001 [J]
+  OnMeter=InteriorEquipment:Electricity [J]
+  OnMeter=InteriorEquipment:Electricity:Zone:ZONE-HTR-001 [J]
+  OnMeter=MiscPlug:InteriorEquipment:Electricity [J]
+
+ Meters for 1101,ZONE-HTR-002 MISCPLUG EQUIP:Electric Equipment Electric Energy [J]
+  OnMeter=Electricity:Facility [J]
+  OnMeter=Electricity:Building [J]
+  OnMeter=Electricity:Zone:ZONE-HTR-002 [J]
+  OnMeter=InteriorEquipment:Electricity [J]
+  OnMeter=InteriorEquipment:Electricity:Zone:ZONE-HTR-002 [J]
+  OnMeter=MiscPlug:InteriorEquipment:Electricity [J]
+
+ Meters for 1112,ZONE-HTR-003 MISCPLUG EQUIP:Electric Equipment Electric Energy [J]
+  OnMeter=Electricity:Facility [J]
+  OnMeter=Electricity:Building [J]
+  OnMeter=Electricity:Zone:ZONE-HTR-003 [J]
+  OnMeter=InteriorEquipment:Electricity [J]
+  OnMeter=InteriorEquipment:Electricity:Zone:ZONE-HTR-003 [J]
+  OnMeter=MiscPlug:InteriorEquipment:Electricity [J]
+
+ Meters for 1123,ZONE-HTR-004 MISCPLUG EQUIP:Electric Equipment Electric Energy [J]
+  OnMeter=Electricity:Facility [J]
+  OnMeter=Electricity:Building [J]
+  OnMeter=Electricity:Zone:ZONE-HTR-004 [J]
+  OnMeter=InteriorEquipment:Electricity [J]
+  OnMeter=InteriorEquipment:Electricity:Zone:ZONE-HTR-004 [J]
+  OnMeter=MiscPlug:InteriorEquipment:Electricity [J]
+
+ Meters for 1134,ZONE-VAV-RESTROOM MISCPLUG EQUIP:Electric Equipment Electric Energy [J]
+  OnMeter=Electricity:Facility [J]
+  OnMeter=Electricity:Building [J]
+  OnMeter=Electricity:Zone:ZONE-VAV-RESTROOM [J]
+  OnMeter=InteriorEquipment:Electricity [J]
+  OnMeter=InteriorEquipment:Electricity:Zone:ZONE-VAV-RESTROOM [J]
+  OnMeter=MiscPlug:InteriorEquipment:Electricity [J]
+
+ Meters for 1145,ZONE-VAV-136 MISCPLUG EQUIP:Electric Equipment Electric Energy [J]
+  OnMeter=Electricity:Facility [J]
+  OnMeter=Electricity:Building [J]
+  OnMeter=Electricity:Zone:ZONE-VAV-136 [J]
+  OnMeter=InteriorEquipment:Electricity [J]
+  OnMeter=InteriorEquipment:Electricity:Zone:ZONE-VAV-136 [J]
+  OnMeter=MiscPlug:InteriorEquipment:Electricity [J]
+
+ Meters for 1195,ZONE-VAV-143:Zone Air System Sensible Heating Energy [J]
+  OnMeter=EnergyTransfer:Facility [J]
+  OnMeter=EnergyTransfer:Building [J]
+  OnMeter=EnergyTransfer:Zone:ZONE-VAV-143 [J]
+  OnMeter=Heating:EnergyTransfer [J]
+  OnMeter=Heating:EnergyTransfer:Zone:ZONE-VAV-143 [J]
+
+ Meters for 1246,ZONE-VAV-143:Zone Air System Sensible Cooling Energy [J]
+  OnMeter=EnergyTransfer:Facility [J]
+  OnMeter=EnergyTransfer:Building [J]
+  OnMeter=EnergyTransfer:Zone:ZONE-VAV-143 [J]
+  OnMeter=Cooling:EnergyTransfer [J]
+  OnMeter=Cooling:EnergyTransfer:Zone:ZONE-VAV-143 [J]
+
+ Meters for 1269,ZONE-VAV-142:Zone Air System Sensible Heating Energy [J]
+  OnMeter=EnergyTransfer:Facility [J]
+  OnMeter=EnergyTransfer:Building [J]
+  OnMeter=EnergyTransfer:Zone:ZONE-VAV-142 [J]
+  OnMeter=Heating:EnergyTransfer [J]
+  OnMeter=Heating:EnergyTransfer:Zone:ZONE-VAV-142 [J]
+
+ Meters for 1290,ZONE-VAV-142:Zone Air System Sensible Cooling Energy [J]
+  OnMeter=EnergyTransfer:Facility [J]
+  OnMeter=EnergyTransfer:Building [J]
+  OnMeter=EnergyTransfer:Zone:ZONE-VAV-142 [J]
+  OnMeter=Cooling:EnergyTransfer [J]
+  OnMeter=Cooling:EnergyTransfer:Zone:ZONE-VAV-142 [J]
+
+ Meters for 1303,ZONE-HTR-001:Zone Air System Sensible Heating Energy [J]
+  OnMeter=EnergyTransfer:Facility [J]
+  OnMeter=EnergyTransfer:Building [J]
+  OnMeter=EnergyTransfer:Zone:ZONE-HTR-001 [J]
+  OnMeter=Heating:EnergyTransfer [J]
+  OnMeter=Heating:EnergyTransfer:Zone:ZONE-HTR-001 [J]
+
+ Meters for 1324,ZONE-HTR-001:Zone Air System Sensible Cooling Energy [J]
+  OnMeter=EnergyTransfer:Facility [J]
+  OnMeter=EnergyTransfer:Building [J]
+  OnMeter=EnergyTransfer:Zone:ZONE-HTR-001 [J]
+  OnMeter=Cooling:EnergyTransfer [J]
+  OnMeter=Cooling:EnergyTransfer:Zone:ZONE-HTR-001 [J]
+
+ Meters for 1335,ZONE-VAV-136:Zone Air System Sensible Heating Energy [J]
+  OnMeter=EnergyTransfer:Facility [J]
+  OnMeter=EnergyTransfer:Building [J]
+  OnMeter=EnergyTransfer:Zone:ZONE-VAV-136 [J]
+  OnMeter=Heating:EnergyTransfer [J]
+  OnMeter=Heating:EnergyTransfer:Zone:ZONE-VAV-136 [J]
+
+ Meters for 1356,ZONE-VAV-136:Zone Air System Sensible Cooling Energy [J]
+  OnMeter=EnergyTransfer:Facility [J]
+  OnMeter=EnergyTransfer:Building [J]
+  OnMeter=EnergyTransfer:Zone:ZONE-VAV-136 [J]
+  OnMeter=Cooling:EnergyTransfer [J]
+  OnMeter=Cooling:EnergyTransfer:Zone:ZONE-VAV-136 [J]
+
+ Meters for 1369,ZONE-VAV-127B:Zone Air System Sensible Heating Energy [J]
+  OnMeter=EnergyTransfer:Facility [J]
+  OnMeter=EnergyTransfer:Building [J]
+  OnMeter=EnergyTransfer:Zone:ZONE-VAV-127B [J]
+  OnMeter=Heating:EnergyTransfer [J]
+  OnMeter=Heating:EnergyTransfer:Zone:ZONE-VAV-127B [J]
+
+ Meters for 1390,ZONE-VAV-127B:Zone Air System Sensible Cooling Energy [J]
+  OnMeter=EnergyTransfer:Facility [J]
+  OnMeter=EnergyTransfer:Building [J]
+  OnMeter=EnergyTransfer:Zone:ZONE-VAV-127B [J]
+  OnMeter=Cooling:EnergyTransfer [J]
+  OnMeter=Cooling:EnergyTransfer:Zone:ZONE-VAV-127B [J]
+
+ Meters for 1403,ZONE-VAV-127A:Zone Air System Sensible Heating Energy [J]
+  OnMeter=EnergyTransfer:Facility [J]
+  OnMeter=EnergyTransfer:Building [J]
+  OnMeter=EnergyTransfer:Zone:ZONE-VAV-127A [J]
+  OnMeter=Heating:EnergyTransfer [J]
+  OnMeter=Heating:EnergyTransfer:Zone:ZONE-VAV-127A [J]
+
+ Meters for 1424,ZONE-VAV-127A:Zone Air System Sensible Cooling Energy [J]
+  OnMeter=EnergyTransfer:Facility [J]
+  OnMeter=EnergyTransfer:Building [J]
+  OnMeter=EnergyTransfer:Zone:ZONE-VAV-127A [J]
+  OnMeter=Cooling:EnergyTransfer [J]
+  OnMeter=Cooling:EnergyTransfer:Zone:ZONE-VAV-127A [J]
+
+ Meters for 1437,ZONE-VAV-131:Zone Air System Sensible Heating Energy [J]
+  OnMeter=EnergyTransfer:Facility [J]
+  OnMeter=EnergyTransfer:Building [J]
+  OnMeter=EnergyTransfer:Zone:ZONE-VAV-131 [J]
+  OnMeter=Heating:EnergyTransfer [J]
+  OnMeter=Heating:EnergyTransfer:Zone:ZONE-VAV-131 [J]
+
+ Meters for 1458,ZONE-VAV-131:Zone Air System Sensible Cooling Energy [J]
+  OnMeter=EnergyTransfer:Facility [J]
+  OnMeter=EnergyTransfer:Building [J]
+  OnMeter=EnergyTransfer:Zone:ZONE-VAV-131 [J]
+  OnMeter=Cooling:EnergyTransfer [J]
+  OnMeter=Cooling:EnergyTransfer:Zone:ZONE-VAV-131 [J]
+
+ Meters for 1471,ZONE-VAV-129:Zone Air System Sensible Heating Energy [J]
+  OnMeter=EnergyTransfer:Facility [J]
+  OnMeter=EnergyTransfer:Building [J]
+  OnMeter=EnergyTransfer:Zone:ZONE-VAV-129 [J]
+  OnMeter=Heating:EnergyTransfer [J]
+  OnMeter=Heating:EnergyTransfer:Zone:ZONE-VAV-129 [J]
+
+ Meters for 1492,ZONE-VAV-129:Zone Air System Sensible Cooling Energy [J]
+  OnMeter=EnergyTransfer:Facility [J]
+  OnMeter=EnergyTransfer:Building [J]
+  OnMeter=EnergyTransfer:Zone:ZONE-VAV-129 [J]
+  OnMeter=Cooling:EnergyTransfer [J]
+  OnMeter=Cooling:EnergyTransfer:Zone:ZONE-VAV-129 [J]
+
+ Meters for 1505,ZONE-VAV-150:Zone Air System Sensible Heating Energy [J]
+  OnMeter=EnergyTransfer:Facility [J]
+  OnMeter=EnergyTransfer:Building [J]
+  OnMeter=EnergyTransfer:Zone:ZONE-VAV-150 [J]
+  OnMeter=Heating:EnergyTransfer [J]
+  OnMeter=Heating:EnergyTransfer:Zone:ZONE-VAV-150 [J]
+
+ Meters for 1526,ZONE-VAV-150:Zone Air System Sensible Cooling Energy [J]
+  OnMeter=EnergyTransfer:Facility [J]
+  OnMeter=EnergyTransfer:Building [J]
+  OnMeter=EnergyTransfer:Zone:ZONE-VAV-150 [J]
+  OnMeter=Cooling:EnergyTransfer [J]
+  OnMeter=Cooling:EnergyTransfer:Zone:ZONE-VAV-150 [J]
+
+ Meters for 1539,ZONE-VAV-123A:Zone Air System Sensible Heating Energy [J]
+  OnMeter=EnergyTransfer:Facility [J]
+  OnMeter=EnergyTransfer:Building [J]
+  OnMeter=EnergyTransfer:Zone:ZONE-VAV-123A [J]
+  OnMeter=Heating:EnergyTransfer [J]
+  OnMeter=Heating:EnergyTransfer:Zone:ZONE-VAV-123A [J]
+
+ Meters for 1560,ZONE-VAV-123A:Zone Air System Sensible Cooling Energy [J]
+  OnMeter=EnergyTransfer:Facility [J]
+  OnMeter=EnergyTransfer:Building [J]
+  OnMeter=EnergyTransfer:Zone:ZONE-VAV-123A [J]
+  OnMeter=Cooling:EnergyTransfer [J]
+  OnMeter=Cooling:EnergyTransfer:Zone:ZONE-VAV-123A [J]
+
+ Meters for 1573,ZONE-VAV-123B:Zone Air System Sensible Heating Energy [J]
+  OnMeter=EnergyTransfer:Facility [J]
+  OnMeter=EnergyTransfer:Building [J]
+  OnMeter=EnergyTransfer:Zone:ZONE-VAV-123B [J]
+  OnMeter=Heating:EnergyTransfer [J]
+  OnMeter=Heating:EnergyTransfer:Zone:ZONE-VAV-123B [J]
+
+ Meters for 1594,ZONE-VAV-123B:Zone Air System Sensible Cooling Energy [J]
+  OnMeter=EnergyTransfer:Facility [J]
+  OnMeter=EnergyTransfer:Building [J]
+  OnMeter=EnergyTransfer:Zone:ZONE-VAV-123B [J]
+  OnMeter=Cooling:EnergyTransfer [J]
+  OnMeter=Cooling:EnergyTransfer:Zone:ZONE-VAV-123B [J]
+
+ Meters for 1607,ZONE-AHU-005:Zone Air System Sensible Heating Energy [J]
+  OnMeter=EnergyTransfer:Facility [J]
+  OnMeter=EnergyTransfer:Building [J]
+  OnMeter=EnergyTransfer:Zone:ZONE-AHU-005 [J]
+  OnMeter=Heating:EnergyTransfer [J]
+  OnMeter=Heating:EnergyTransfer:Zone:ZONE-AHU-005 [J]
+
+ Meters for 1628,ZONE-AHU-005:Zone Air System Sensible Cooling Energy [J]
+  OnMeter=EnergyTransfer:Facility [J]
+  OnMeter=EnergyTransfer:Building [J]
+  OnMeter=EnergyTransfer:Zone:ZONE-AHU-005 [J]
+  OnMeter=Cooling:EnergyTransfer [J]
+  OnMeter=Cooling:EnergyTransfer:Zone:ZONE-AHU-005 [J]
+
+ Meters for 1639,ZONE-VAV-118:Zone Air System Sensible Heating Energy [J]
+  OnMeter=EnergyTransfer:Facility [J]
+  OnMeter=EnergyTransfer:Building [J]
+  OnMeter=EnergyTransfer:Zone:ZONE-VAV-118 [J]
+  OnMeter=Heating:EnergyTransfer [J]
+  OnMeter=Heating:EnergyTransfer:Zone:ZONE-VAV-118 [J]
+
+ Meters for 1660,ZONE-VAV-118:Zone Air System Sensible Cooling Energy [J]
+  OnMeter=EnergyTransfer:Facility [J]
+  OnMeter=EnergyTransfer:Building [J]
+  OnMeter=EnergyTransfer:Zone:ZONE-VAV-118 [J]
+  OnMeter=Cooling:EnergyTransfer [J]
+  OnMeter=Cooling:EnergyTransfer:Zone:ZONE-VAV-118 [J]
+
+ Meters for 1673,ZONE-VAV-120:Zone Air System Sensible Heating Energy [J]
+  OnMeter=EnergyTransfer:Facility [J]
+  OnMeter=EnergyTransfer:Building [J]
+  OnMeter=EnergyTransfer:Zone:ZONE-VAV-120 [J]
+  OnMeter=Heating:EnergyTransfer [J]
+  OnMeter=Heating:EnergyTransfer:Zone:ZONE-VAV-120 [J]
+
+ Meters for 1694,ZONE-VAV-120:Zone Air System Sensible Cooling Energy [J]
+  OnMeter=EnergyTransfer:Facility [J]
+  OnMeter=EnergyTransfer:Building [J]
+  OnMeter=EnergyTransfer:Zone:ZONE-VAV-120 [J]
+  OnMeter=Cooling:EnergyTransfer [J]
+  OnMeter=Cooling:EnergyTransfer:Zone:ZONE-VAV-120 [J]
+
+ Meters for 1707,ZONE-VAV-119:Zone Air System Sensible Heating Energy [J]
+  OnMeter=EnergyTransfer:Facility [J]
+  OnMeter=EnergyTransfer:Building [J]
+  OnMeter=EnergyTransfer:Zone:ZONE-VAV-119 [J]
+  OnMeter=Heating:EnergyTransfer [J]
+  OnMeter=Heating:EnergyTransfer:Zone:ZONE-VAV-119 [J]
+
+ Meters for 1728,ZONE-VAV-119:Zone Air System Sensible Cooling Energy [J]
+  OnMeter=EnergyTransfer:Facility [J]
+  OnMeter=EnergyTransfer:Building [J]
+  OnMeter=EnergyTransfer:Zone:ZONE-VAV-119 [J]
+  OnMeter=Cooling:EnergyTransfer [J]
+  OnMeter=Cooling:EnergyTransfer:Zone:ZONE-VAV-119 [J]
+
+ Meters for 1741,ZONE-VAV-RESTROOM:Zone Air System Sensible Heating Energy [J]
+  OnMeter=EnergyTransfer:Facility [J]
+  OnMeter=EnergyTransfer:Building [J]
+  OnMeter=EnergyTransfer:Zone:ZONE-VAV-RESTROOM [J]
+  OnMeter=Heating:EnergyTransfer [J]
+  OnMeter=Heating:EnergyTransfer:Zone:ZONE-VAV-RESTROOM [J]
+
+ Meters for 1762,ZONE-VAV-RESTROOM:Zone Air System Sensible Cooling Energy [J]
+  OnMeter=EnergyTransfer:Facility [J]
+  OnMeter=EnergyTransfer:Building [J]
+  OnMeter=EnergyTransfer:Zone:ZONE-VAV-RESTROOM [J]
+  OnMeter=Cooling:EnergyTransfer [J]
+  OnMeter=Cooling:EnergyTransfer:Zone:ZONE-VAV-RESTROOM [J]
+
+ Meters for 1775,ZONE-AHU-004:Zone Air System Sensible Heating Energy [J]
+  OnMeter=EnergyTransfer:Facility [J]
+  OnMeter=EnergyTransfer:Building [J]
+  OnMeter=EnergyTransfer:Zone:ZONE-AHU-004 [J]
+  OnMeter=Heating:EnergyTransfer [J]
+  OnMeter=Heating:EnergyTransfer:Zone:ZONE-AHU-004 [J]
+
+ Meters for 1796,ZONE-AHU-004:Zone Air System Sensible Cooling Energy [J]
+  OnMeter=EnergyTransfer:Facility [J]
+  OnMeter=EnergyTransfer:Building [J]
+  OnMeter=EnergyTransfer:Zone:ZONE-AHU-004 [J]
+  OnMeter=Cooling:EnergyTransfer [J]
+  OnMeter=Cooling:EnergyTransfer:Zone:ZONE-AHU-004 [J]
+
+ Meters for 1809,ZONE-VAV-102:Zone Air System Sensible Heating Energy [J]
+  OnMeter=EnergyTransfer:Facility [J]
+  OnMeter=EnergyTransfer:Building [J]
+  OnMeter=EnergyTransfer:Zone:ZONE-VAV-102 [J]
+  OnMeter=Heating:EnergyTransfer [J]
+  OnMeter=Heating:EnergyTransfer:Zone:ZONE-VAV-102 [J]
+
+ Meters for 1830,ZONE-VAV-102:Zone Air System Sensible Cooling Energy [J]
+  OnMeter=EnergyTransfer:Facility [J]
+  OnMeter=EnergyTransfer:Building [J]
+  OnMeter=EnergyTransfer:Zone:ZONE-VAV-102 [J]
+  OnMeter=Cooling:EnergyTransfer [J]
+  OnMeter=Cooling:EnergyTransfer:Zone:ZONE-VAV-102 [J]
+
+ Meters for 1843,ZONE-FCU-001:Zone Air System Sensible Heating Energy [J]
+  OnMeter=EnergyTransfer:Facility [J]
+  OnMeter=EnergyTransfer:Building [J]
+  OnMeter=EnergyTransfer:Zone:ZONE-FCU-001 [J]
+  OnMeter=Heating:EnergyTransfer [J]
+  OnMeter=Heating:EnergyTransfer:Zone:ZONE-FCU-001 [J]
+
+ Meters for 1864,ZONE-FCU-001:Zone Air System Sensible Cooling Energy [J]
+  OnMeter=EnergyTransfer:Facility [J]
+  OnMeter=EnergyTransfer:Building [J]
+  OnMeter=EnergyTransfer:Zone:ZONE-FCU-001 [J]
+  OnMeter=Cooling:EnergyTransfer [J]
+  OnMeter=Cooling:EnergyTransfer:Zone:ZONE-FCU-001 [J]
+
+ Meters for 1875,ZONE-AHU-002:Zone Air System Sensible Heating Energy [J]
+  OnMeter=EnergyTransfer:Facility [J]
+  OnMeter=EnergyTransfer:Building [J]
+  OnMeter=EnergyTransfer:Zone:ZONE-AHU-002 [J]
+  OnMeter=Heating:EnergyTransfer [J]
+  OnMeter=Heating:EnergyTransfer:Zone:ZONE-AHU-002 [J]
+
+ Meters for 1896,ZONE-AHU-002:Zone Air System Sensible Cooling Energy [J]
+  OnMeter=EnergyTransfer:Facility [J]
+  OnMeter=EnergyTransfer:Building [J]
+  OnMeter=EnergyTransfer:Zone:ZONE-AHU-002 [J]
+  OnMeter=Cooling:EnergyTransfer [J]
+  OnMeter=Cooling:EnergyTransfer:Zone:ZONE-AHU-002 [J]
+
+ Meters for 1909,ZONE-VAV-105:Zone Air System Sensible Heating Energy [J]
+  OnMeter=EnergyTransfer:Facility [J]
+  OnMeter=EnergyTransfer:Building [J]
+  OnMeter=EnergyTransfer:Zone:ZONE-VAV-105 [J]
+  OnMeter=Heating:EnergyTransfer [J]
+  OnMeter=Heating:EnergyTransfer:Zone:ZONE-VAV-105 [J]
+
+ Meters for 1930,ZONE-VAV-105:Zone Air System Sensible Cooling Energy [J]
+  OnMeter=EnergyTransfer:Facility [J]
+  OnMeter=EnergyTransfer:Building [J]
+  OnMeter=EnergyTransfer:Zone:ZONE-VAV-105 [J]
+  OnMeter=Cooling:EnergyTransfer [J]
+  OnMeter=Cooling:EnergyTransfer:Zone:ZONE-VAV-105 [J]
+
+ Meters for 1943,ZONE-FCU-003:Zone Air System Sensible Heating Energy [J]
+  OnMeter=EnergyTransfer:Facility [J]
+  OnMeter=EnergyTransfer:Building [J]
+  OnMeter=EnergyTransfer:Zone:ZONE-FCU-003 [J]
+  OnMeter=Heating:EnergyTransfer [J]
+  OnMeter=Heating:EnergyTransfer:Zone:ZONE-FCU-003 [J]
+
+ Meters for 1964,ZONE-FCU-003:Zone Air System Sensible Cooling Energy [J]
+  OnMeter=EnergyTransfer:Facility [J]
+  OnMeter=EnergyTransfer:Building [J]
+  OnMeter=EnergyTransfer:Zone:ZONE-FCU-003 [J]
+  OnMeter=Cooling:EnergyTransfer [J]
+  OnMeter=Cooling:EnergyTransfer:Zone:ZONE-FCU-003 [J]
+
+ Meters for 1975,ZONE-VAV-112:Zone Air System Sensible Heating Energy [J]
+  OnMeter=EnergyTransfer:Facility [J]
+  OnMeter=EnergyTransfer:Building [J]
+  OnMeter=EnergyTransfer:Zone:ZONE-VAV-112 [J]
+  OnMeter=Heating:EnergyTransfer [J]
+  OnMeter=Heating:EnergyTransfer:Zone:ZONE-VAV-112 [J]
+
+ Meters for 1996,ZONE-VAV-112:Zone Air System Sensible Cooling Energy [J]
+  OnMeter=EnergyTransfer:Facility [J]
+  OnMeter=EnergyTransfer:Building [J]
+  OnMeter=EnergyTransfer:Zone:ZONE-VAV-112 [J]
+  OnMeter=Cooling:EnergyTransfer [J]
+  OnMeter=Cooling:EnergyTransfer:Zone:ZONE-VAV-112 [J]
+
+ Meters for 2009,ZONE-HTR-002:Zone Air System Sensible Heating Energy [J]
+  OnMeter=EnergyTransfer:Facility [J]
+  OnMeter=EnergyTransfer:Building [J]
+  OnMeter=EnergyTransfer:Zone:ZONE-HTR-002 [J]
+  OnMeter=Heating:EnergyTransfer [J]
+  OnMeter=Heating:EnergyTransfer:Zone:ZONE-HTR-002 [J]
+
+ Meters for 2030,ZONE-HTR-002:Zone Air System Sensible Cooling Energy [J]
+  OnMeter=EnergyTransfer:Facility [J]
+  OnMeter=EnergyTransfer:Building [J]
+  OnMeter=EnergyTransfer:Zone:ZONE-HTR-002 [J]
+  OnMeter=Cooling:EnergyTransfer [J]
+  OnMeter=Cooling:EnergyTransfer:Zone:ZONE-HTR-002 [J]
+
+ Meters for 2041,ZONE-HTR-003:Zone Air System Sensible Heating Energy [J]
+  OnMeter=EnergyTransfer:Facility [J]
+  OnMeter=EnergyTransfer:Building [J]
+  OnMeter=EnergyTransfer:Zone:ZONE-HTR-003 [J]
+  OnMeter=Heating:EnergyTransfer [J]
+  OnMeter=Heating:EnergyTransfer:Zone:ZONE-HTR-003 [J]
+
+ Meters for 2062,ZONE-HTR-003:Zone Air System Sensible Cooling Energy [J]
+  OnMeter=EnergyTransfer:Facility [J]
+  OnMeter=EnergyTransfer:Building [J]
+  OnMeter=EnergyTransfer:Zone:ZONE-HTR-003 [J]
+  OnMeter=Cooling:EnergyTransfer [J]
+  OnMeter=Cooling:EnergyTransfer:Zone:ZONE-HTR-003 [J]
+
+ Meters for 2073,ZONE-VAV-104:Zone Air System Sensible Heating Energy [J]
+  OnMeter=EnergyTransfer:Facility [J]
+  OnMeter=EnergyTransfer:Building [J]
+  OnMeter=EnergyTransfer:Zone:ZONE-VAV-104 [J]
+  OnMeter=Heating:EnergyTransfer [J]
+  OnMeter=Heating:EnergyTransfer:Zone:ZONE-VAV-104 [J]
+
+ Meters for 2094,ZONE-VAV-104:Zone Air System Sensible Cooling Energy [J]
+  OnMeter=EnergyTransfer:Facility [J]
+  OnMeter=EnergyTransfer:Building [J]
+  OnMeter=EnergyTransfer:Zone:ZONE-VAV-104 [J]
+  OnMeter=Cooling:EnergyTransfer [J]
+  OnMeter=Cooling:EnergyTransfer:Zone:ZONE-VAV-104 [J]
+
+ Meters for 2107,ZONE-VAV-116:Zone Air System Sensible Heating Energy [J]
+  OnMeter=EnergyTransfer:Facility [J]
+  OnMeter=EnergyTransfer:Building [J]
+  OnMeter=EnergyTransfer:Zone:ZONE-VAV-116 [J]
+  OnMeter=Heating:EnergyTransfer [J]
+  OnMeter=Heating:EnergyTransfer:Zone:ZONE-VAV-116 [J]
+
+ Meters for 2128,ZONE-VAV-116:Zone Air System Sensible Cooling Energy [J]
+  OnMeter=EnergyTransfer:Facility [J]
+  OnMeter=EnergyTransfer:Building [J]
+  OnMeter=EnergyTransfer:Zone:ZONE-VAV-116 [J]
+  OnMeter=Cooling:EnergyTransfer [J]
+  OnMeter=Cooling:EnergyTransfer:Zone:ZONE-VAV-116 [J]
+
+ Meters for 2141,ZONE-VAV-108:Zone Air System Sensible Heating Energy [J]
+  OnMeter=EnergyTransfer:Facility [J]
+  OnMeter=EnergyTransfer:Building [J]
+  OnMeter=EnergyTransfer:Zone:ZONE-VAV-108 [J]
+  OnMeter=Heating:EnergyTransfer [J]
+  OnMeter=Heating:EnergyTransfer:Zone:ZONE-VAV-108 [J]
+
+ Meters for 2162,ZONE-VAV-108:Zone Air System Sensible Cooling Energy [J]
+  OnMeter=EnergyTransfer:Facility [J]
+  OnMeter=EnergyTransfer:Building [J]
+  OnMeter=EnergyTransfer:Zone:ZONE-VAV-108 [J]
+  OnMeter=Cooling:EnergyTransfer [J]
+  OnMeter=Cooling:EnergyTransfer:Zone:ZONE-VAV-108 [J]
+
+ Meters for 2175,ZONE-FCU-002:Zone Air System Sensible Heating Energy [J]
+  OnMeter=EnergyTransfer:Facility [J]
+  OnMeter=EnergyTransfer:Building [J]
+  OnMeter=EnergyTransfer:Zone:ZONE-FCU-002 [J]
+  OnMeter=Heating:EnergyTransfer [J]
+  OnMeter=Heating:EnergyTransfer:Zone:ZONE-FCU-002 [J]
+
+ Meters for 2196,ZONE-FCU-002:Zone Air System Sensible Cooling Energy [J]
+  OnMeter=EnergyTransfer:Facility [J]
+  OnMeter=EnergyTransfer:Building [J]
+  OnMeter=EnergyTransfer:Zone:ZONE-FCU-002 [J]
+  OnMeter=Cooling:EnergyTransfer [J]
+  OnMeter=Cooling:EnergyTransfer:Zone:ZONE-FCU-002 [J]
+
+ Meters for 2207,ZONE-HTR-004:Zone Air System Sensible Heating Energy [J]
+  OnMeter=EnergyTransfer:Facility [J]
+  OnMeter=EnergyTransfer:Building [J]
+  OnMeter=EnergyTransfer:Zone:ZONE-HTR-004 [J]
+  OnMeter=Heating:EnergyTransfer [J]
+  OnMeter=Heating:EnergyTransfer:Zone:ZONE-HTR-004 [J]
+
+ Meters for 2228,ZONE-HTR-004:Zone Air System Sensible Cooling Energy [J]
+  OnMeter=EnergyTransfer:Facility [J]
+  OnMeter=EnergyTransfer:Building [J]
+  OnMeter=EnergyTransfer:Zone:ZONE-HTR-004 [J]
+  OnMeter=Cooling:EnergyTransfer [J]
+  OnMeter=Cooling:EnergyTransfer:Zone:ZONE-HTR-004 [J]
+
+ Meters for 2239,ZONE-VAV-CORRIDOR:Zone Air System Sensible Heating Energy [J]
+  OnMeter=EnergyTransfer:Facility [J]
+  OnMeter=EnergyTransfer:Building [J]
+  OnMeter=EnergyTransfer:Zone:ZONE-VAV-CORRIDOR [J]
+  OnMeter=Heating:EnergyTransfer [J]
+  OnMeter=Heating:EnergyTransfer:Zone:ZONE-VAV-CORRIDOR [J]
+
+ Meters for 2260,ZONE-VAV-CORRIDOR:Zone Air System Sensible Cooling Energy [J]
+  OnMeter=EnergyTransfer:Facility [J]
+  OnMeter=EnergyTransfer:Building [J]
+  OnMeter=EnergyTransfer:Zone:ZONE-VAV-CORRIDOR [J]
+  OnMeter=Cooling:EnergyTransfer [J]
+  OnMeter=Cooling:EnergyTransfer:Zone:ZONE-VAV-CORRIDOR [J]
+
+ Meters for 2273,ZONE-VAV-133:Zone Air System Sensible Heating Energy [J]
+  OnMeter=EnergyTransfer:Facility [J]
+  OnMeter=EnergyTransfer:Building [J]
+  OnMeter=EnergyTransfer:Zone:ZONE-VAV-133 [J]
+  OnMeter=Heating:EnergyTransfer [J]
+  OnMeter=Heating:EnergyTransfer:Zone:ZONE-VAV-133 [J]
+
+ Meters for 2294,ZONE-VAV-133:Zone Air System Sensible Cooling Energy [J]
+  OnMeter=EnergyTransfer:Facility [J]
+  OnMeter=EnergyTransfer:Building [J]
+  OnMeter=EnergyTransfer:Zone:ZONE-VAV-133 [J]
+  OnMeter=Cooling:EnergyTransfer [J]
+  OnMeter=Cooling:EnergyTransfer:Zone:ZONE-VAV-133 [J]
+
+ Meters for 2307,ZONE-VAV-107:Zone Air System Sensible Heating Energy [J]
+  OnMeter=EnergyTransfer:Facility [J]
+  OnMeter=EnergyTransfer:Building [J]
+  OnMeter=EnergyTransfer:Zone:ZONE-VAV-107 [J]
+  OnMeter=Heating:EnergyTransfer [J]
+  OnMeter=Heating:EnergyTransfer:Zone:ZONE-VAV-107 [J]
+
+ Meters for 2328,ZONE-VAV-107:Zone Air System Sensible Cooling Energy [J]
+  OnMeter=EnergyTransfer:Facility [J]
+  OnMeter=EnergyTransfer:Building [J]
+  OnMeter=EnergyTransfer:Zone:ZONE-VAV-107 [J]
+  OnMeter=Cooling:EnergyTransfer [J]
+  OnMeter=Cooling:EnergyTransfer:Zone:ZONE-VAV-107 [J]
+
+ Meters for 2341,Whole Building:Facility Total Purchased Electric Energy [J]
+  OnMeter=ElectricityPurchased:Facility [J]
+  OnMeter=ElectricityPurchased:Plant [J]
+  OnMeter=Cogeneration:ElectricityPurchased [J]
+
+ Meters for 2372,Whole Building:Facility Total Surplus Electric Energy [J]
+  OnMeter=ElectricitySurplusSold:Facility [J]
+  OnMeter=ElectricitySurplusSold:Plant [J]
+  OnMeter=Cogeneration:ElectricitySurplusSold [J]
+
+ Meters for 2403,Whole Building:Facility Net Purchased Electric Energy [J]
+  OnMeter=ElectricityNet:Facility [J]
+  OnMeter=ElectricityNet:Plant [J]
+  OnMeter=Cogeneration:ElectricityNet [J]
+
+ Meters for 2523,AHU-001 HEATC:Heating Coil Heating Energy [J]
+  OnMeter=EnergyTransfer:Facility [J]
+  OnMeter=EnergyTransfer:HVAC [J]
+  OnMeter=HeatingCoils:EnergyTransfer [J]
+
+ Meters for 2544,AHU-001 HEATC:Heating Coil Source Side Heat Transfer Energy [J]
+  OnMeter=PlantLoopHeatingDemand:Facility [J]
+  OnMeter=PlantLoopHeatingDemand:HVAC [J]
+  OnMeter=HeatingCoils:PlantLoopHeatingDemand [J]
+
+ Meters for 2575,AHU-002 HEATC:Heating Coil Heating Energy [J]
+  OnMeter=EnergyTransfer:Facility [J]
+  OnMeter=EnergyTransfer:HVAC [J]
+  OnMeter=HeatingCoils:EnergyTransfer [J]
+
+ Meters for 2576,AHU-002 HEATC:Heating Coil Source Side Heat Transfer Energy [J]
+  OnMeter=PlantLoopHeatingDemand:Facility [J]
+  OnMeter=PlantLoopHeatingDemand:HVAC [J]
+  OnMeter=HeatingCoils:PlantLoopHeatingDemand [J]
+
+ Meters for 2577,AHU-003 HEATC:Heating Coil Heating Energy [J]
+  OnMeter=EnergyTransfer:Facility [J]
+  OnMeter=EnergyTransfer:HVAC [J]
+  OnMeter=HeatingCoils:EnergyTransfer [J]
+
+ Meters for 2578,AHU-003 HEATC:Heating Coil Source Side Heat Transfer Energy [J]
+  OnMeter=PlantLoopHeatingDemand:Facility [J]
+  OnMeter=PlantLoopHeatingDemand:HVAC [J]
+  OnMeter=HeatingCoils:PlantLoopHeatingDemand [J]
+
+ Meters for 2579,AHU-004 HEATC:Heating Coil Heating Energy [J]
+  OnMeter=EnergyTransfer:Facility [J]
+  OnMeter=EnergyTransfer:HVAC [J]
+  OnMeter=HeatingCoils:EnergyTransfer [J]
+
+ Meters for 2580,AHU-004 HEATC:Heating Coil Source Side Heat Transfer Energy [J]
+  OnMeter=PlantLoopHeatingDemand:Facility [J]
+  OnMeter=PlantLoopHeatingDemand:HVAC [J]
+  OnMeter=HeatingCoils:PlantLoopHeatingDemand [J]
+
+ Meters for 2581,ZONE-VAV-CORRIDOR VAV BOX REHEAT COIL:Heating Coil Heating Energy [J]
+  OnMeter=EnergyTransfer:Facility [J]
+  OnMeter=EnergyTransfer:HVAC [J]
+  OnMeter=HeatingCoils:EnergyTransfer [J]
+
+ Meters for 2582,ZONE-VAV-CORRIDOR VAV BOX REHEAT COIL:Heating Coil Source Side Heat Transfer Energy [J]
+  OnMeter=PlantLoopHeatingDemand:Facility [J]
+  OnMeter=PlantLoopHeatingDemand:HVAC [J]
+  OnMeter=HeatingCoils:PlantLoopHeatingDemand [J]
+
+ Meters for 2583,ZONE-VAV-102 VAV BOX REHEAT COIL:Heating Coil Heating Energy [J]
+  OnMeter=EnergyTransfer:Facility [J]
+  OnMeter=EnergyTransfer:HVAC [J]
+  OnMeter=HeatingCoils:EnergyTransfer [J]
+
+ Meters for 2584,ZONE-VAV-102 VAV BOX REHEAT COIL:Heating Coil Source Side Heat Transfer Energy [J]
+  OnMeter=PlantLoopHeatingDemand:Facility [J]
+  OnMeter=PlantLoopHeatingDemand:HVAC [J]
+  OnMeter=HeatingCoils:PlantLoopHeatingDemand [J]
+
+ Meters for 2585,ZONE-VAV-104 VAV BOX REHEAT COIL:Heating Coil Heating Energy [J]
+  OnMeter=EnergyTransfer:Facility [J]
+  OnMeter=EnergyTransfer:HVAC [J]
+  OnMeter=HeatingCoils:EnergyTransfer [J]
+
+ Meters for 2586,ZONE-VAV-104 VAV BOX REHEAT COIL:Heating Coil Source Side Heat Transfer Energy [J]
+  OnMeter=PlantLoopHeatingDemand:Facility [J]
+  OnMeter=PlantLoopHeatingDemand:HVAC [J]
+  OnMeter=HeatingCoils:PlantLoopHeatingDemand [J]
+
+ Meters for 2587,ZONE-VAV-105 VAV BOX REHEAT COIL:Heating Coil Heating Energy [J]
+  OnMeter=EnergyTransfer:Facility [J]
+  OnMeter=EnergyTransfer:HVAC [J]
+  OnMeter=HeatingCoils:EnergyTransfer [J]
+
+ Meters for 2588,ZONE-VAV-105 VAV BOX REHEAT COIL:Heating Coil Source Side Heat Transfer Energy [J]
+  OnMeter=PlantLoopHeatingDemand:Facility [J]
+  OnMeter=PlantLoopHeatingDemand:HVAC [J]
+  OnMeter=HeatingCoils:PlantLoopHeatingDemand [J]
+
+ Meters for 2589,ZONE-VAV-107 VAV BOX REHEAT COIL:Heating Coil Heating Energy [J]
+  OnMeter=EnergyTransfer:Facility [J]
+  OnMeter=EnergyTransfer:HVAC [J]
+  OnMeter=HeatingCoils:EnergyTransfer [J]
+
+ Meters for 2590,ZONE-VAV-107 VAV BOX REHEAT COIL:Heating Coil Source Side Heat Transfer Energy [J]
+  OnMeter=PlantLoopHeatingDemand:Facility [J]
+  OnMeter=PlantLoopHeatingDemand:HVAC [J]
+  OnMeter=HeatingCoils:PlantLoopHeatingDemand [J]
+
+ Meters for 2591,ZONE-VAV-108 VAV BOX REHEAT COIL:Heating Coil Heating Energy [J]
+  OnMeter=EnergyTransfer:Facility [J]
+  OnMeter=EnergyTransfer:HVAC [J]
+  OnMeter=HeatingCoils:EnergyTransfer [J]
+
+ Meters for 2592,ZONE-VAV-108 VAV BOX REHEAT COIL:Heating Coil Source Side Heat Transfer Energy [J]
+  OnMeter=PlantLoopHeatingDemand:Facility [J]
+  OnMeter=PlantLoopHeatingDemand:HVAC [J]
+  OnMeter=HeatingCoils:PlantLoopHeatingDemand [J]
+
+ Meters for 2593,ZONE-VAV-112 VAV BOX REHEAT COIL:Heating Coil Heating Energy [J]
+  OnMeter=EnergyTransfer:Facility [J]
+  OnMeter=EnergyTransfer:HVAC [J]
+  OnMeter=HeatingCoils:EnergyTransfer [J]
+
+ Meters for 2594,ZONE-VAV-112 VAV BOX REHEAT COIL:Heating Coil Source Side Heat Transfer Energy [J]
+  OnMeter=PlantLoopHeatingDemand:Facility [J]
+  OnMeter=PlantLoopHeatingDemand:HVAC [J]
+  OnMeter=HeatingCoils:PlantLoopHeatingDemand [J]
+
+ Meters for 2595,ZONE-VAV-116 VAV BOX REHEAT COIL:Heating Coil Heating Energy [J]
+  OnMeter=EnergyTransfer:Facility [J]
+  OnMeter=EnergyTransfer:HVAC [J]
+  OnMeter=HeatingCoils:EnergyTransfer [J]
+
+ Meters for 2596,ZONE-VAV-116 VAV BOX REHEAT COIL:Heating Coil Source Side Heat Transfer Energy [J]
+  OnMeter=PlantLoopHeatingDemand:Facility [J]
+  OnMeter=PlantLoopHeatingDemand:HVAC [J]
+  OnMeter=HeatingCoils:PlantLoopHeatingDemand [J]
+
+ Meters for 2597,ZONE-VAV-118 VAV BOX REHEAT COIL:Heating Coil Heating Energy [J]
+  OnMeter=EnergyTransfer:Facility [J]
+  OnMeter=EnergyTransfer:HVAC [J]
+  OnMeter=HeatingCoils:EnergyTransfer [J]
+
+ Meters for 2598,ZONE-VAV-118 VAV BOX REHEAT COIL:Heating Coil Source Side Heat Transfer Energy [J]
+  OnMeter=PlantLoopHeatingDemand:Facility [J]
+  OnMeter=PlantLoopHeatingDemand:HVAC [J]
+  OnMeter=HeatingCoils:PlantLoopHeatingDemand [J]
+
+ Meters for 2599,ZONE-VAV-119 VAV BOX REHEAT COIL:Heating Coil Heating Energy [J]
+  OnMeter=EnergyTransfer:Facility [J]
+  OnMeter=EnergyTransfer:HVAC [J]
+  OnMeter=HeatingCoils:EnergyTransfer [J]
+
+ Meters for 2600,ZONE-VAV-119 VAV BOX REHEAT COIL:Heating Coil Source Side Heat Transfer Energy [J]
+  OnMeter=PlantLoopHeatingDemand:Facility [J]
+  OnMeter=PlantLoopHeatingDemand:HVAC [J]
+  OnMeter=HeatingCoils:PlantLoopHeatingDemand [J]
+
+ Meters for 2601,ZONE-VAV-120 VAV BOX REHEAT COIL:Heating Coil Heating Energy [J]
+  OnMeter=EnergyTransfer:Facility [J]
+  OnMeter=EnergyTransfer:HVAC [J]
+  OnMeter=HeatingCoils:EnergyTransfer [J]
+
+ Meters for 2602,ZONE-VAV-120 VAV BOX REHEAT COIL:Heating Coil Source Side Heat Transfer Energy [J]
+  OnMeter=PlantLoopHeatingDemand:Facility [J]
+  OnMeter=PlantLoopHeatingDemand:HVAC [J]
+  OnMeter=HeatingCoils:PlantLoopHeatingDemand [J]
+
+ Meters for 2603,ZONE-VAV-123A VAV BOX REHEAT COIL:Heating Coil Heating Energy [J]
+  OnMeter=EnergyTransfer:Facility [J]
+  OnMeter=EnergyTransfer:HVAC [J]
+  OnMeter=HeatingCoils:EnergyTransfer [J]
+
+ Meters for 2604,ZONE-VAV-123A VAV BOX REHEAT COIL:Heating Coil Source Side Heat Transfer Energy [J]
+  OnMeter=PlantLoopHeatingDemand:Facility [J]
+  OnMeter=PlantLoopHeatingDemand:HVAC [J]
+  OnMeter=HeatingCoils:PlantLoopHeatingDemand [J]
+
+ Meters for 2605,ZONE-VAV-123B VAV BOX REHEAT COIL:Heating Coil Heating Energy [J]
+  OnMeter=EnergyTransfer:Facility [J]
+  OnMeter=EnergyTransfer:HVAC [J]
+  OnMeter=HeatingCoils:EnergyTransfer [J]
+
+ Meters for 2606,ZONE-VAV-123B VAV BOX REHEAT COIL:Heating Coil Source Side Heat Transfer Energy [J]
+  OnMeter=PlantLoopHeatingDemand:Facility [J]
+  OnMeter=PlantLoopHeatingDemand:HVAC [J]
+  OnMeter=HeatingCoils:PlantLoopHeatingDemand [J]
+
+ Meters for 2607,ZONE-VAV-127A VAV BOX REHEAT COIL:Heating Coil Heating Energy [J]
+  OnMeter=EnergyTransfer:Facility [J]
+  OnMeter=EnergyTransfer:HVAC [J]
+  OnMeter=HeatingCoils:EnergyTransfer [J]
+
+ Meters for 2608,ZONE-VAV-127A VAV BOX REHEAT COIL:Heating Coil Source Side Heat Transfer Energy [J]
+  OnMeter=PlantLoopHeatingDemand:Facility [J]
+  OnMeter=PlantLoopHeatingDemand:HVAC [J]
+  OnMeter=HeatingCoils:PlantLoopHeatingDemand [J]
+
+ Meters for 2609,ZONE-VAV-127B VAV BOX REHEAT COIL:Heating Coil Heating Energy [J]
+  OnMeter=EnergyTransfer:Facility [J]
+  OnMeter=EnergyTransfer:HVAC [J]
+  OnMeter=HeatingCoils:EnergyTransfer [J]
+
+ Meters for 2610,ZONE-VAV-127B VAV BOX REHEAT COIL:Heating Coil Source Side Heat Transfer Energy [J]
+  OnMeter=PlantLoopHeatingDemand:Facility [J]
+  OnMeter=PlantLoopHeatingDemand:HVAC [J]
+  OnMeter=HeatingCoils:PlantLoopHeatingDemand [J]
+
+ Meters for 2611,ZONE-VAV-129 VAV BOX REHEAT COIL:Heating Coil Heating Energy [J]
+  OnMeter=EnergyTransfer:Facility [J]
+  OnMeter=EnergyTransfer:HVAC [J]
+  OnMeter=HeatingCoils:EnergyTransfer [J]
+
+ Meters for 2612,ZONE-VAV-129 VAV BOX REHEAT COIL:Heating Coil Source Side Heat Transfer Energy [J]
+  OnMeter=PlantLoopHeatingDemand:Facility [J]
+  OnMeter=PlantLoopHeatingDemand:HVAC [J]
+  OnMeter=HeatingCoils:PlantLoopHeatingDemand [J]
+
+ Meters for 2613,ZONE-VAV-131 VAV BOX REHEAT COIL:Heating Coil Heating Energy [J]
+  OnMeter=EnergyTransfer:Facility [J]
+  OnMeter=EnergyTransfer:HVAC [J]
+  OnMeter=HeatingCoils:EnergyTransfer [J]
+
+ Meters for 2614,ZONE-VAV-131 VAV BOX REHEAT COIL:Heating Coil Source Side Heat Transfer Energy [J]
+  OnMeter=PlantLoopHeatingDemand:Facility [J]
+  OnMeter=PlantLoopHeatingDemand:HVAC [J]
+  OnMeter=HeatingCoils:PlantLoopHeatingDemand [J]
+
+ Meters for 2615,ZONE-VAV-136 VAV BOX REHEAT COIL:Heating Coil Heating Energy [J]
+  OnMeter=EnergyTransfer:Facility [J]
+  OnMeter=EnergyTransfer:HVAC [J]
+  OnMeter=HeatingCoils:EnergyTransfer [J]
+
+ Meters for 2616,ZONE-VAV-136 VAV BOX REHEAT COIL:Heating Coil Source Side Heat Transfer Energy [J]
+  OnMeter=PlantLoopHeatingDemand:Facility [J]
+  OnMeter=PlantLoopHeatingDemand:HVAC [J]
+  OnMeter=HeatingCoils:PlantLoopHeatingDemand [J]
+
+ Meters for 2617,ZONE-VAV-133 VAV BOX REHEAT COIL:Heating Coil Heating Energy [J]
+  OnMeter=EnergyTransfer:Facility [J]
+  OnMeter=EnergyTransfer:HVAC [J]
+  OnMeter=HeatingCoils:EnergyTransfer [J]
+
+ Meters for 2618,ZONE-VAV-133 VAV BOX REHEAT COIL:Heating Coil Source Side Heat Transfer Energy [J]
+  OnMeter=PlantLoopHeatingDemand:Facility [J]
+  OnMeter=PlantLoopHeatingDemand:HVAC [J]
+  OnMeter=HeatingCoils:PlantLoopHeatingDemand [J]
+
+ Meters for 2619,ZONE-VAV-142 VAV BOX REHEAT COIL:Heating Coil Heating Energy [J]
+  OnMeter=EnergyTransfer:Facility [J]
+  OnMeter=EnergyTransfer:HVAC [J]
+  OnMeter=HeatingCoils:EnergyTransfer [J]
+
+ Meters for 2620,ZONE-VAV-142 VAV BOX REHEAT COIL:Heating Coil Source Side Heat Transfer Energy [J]
+  OnMeter=PlantLoopHeatingDemand:Facility [J]
+  OnMeter=PlantLoopHeatingDemand:HVAC [J]
+  OnMeter=HeatingCoils:PlantLoopHeatingDemand [J]
+
+ Meters for 2621,ZONE-VAV-143 VAV BOX REHEAT COIL:Heating Coil Heating Energy [J]
+  OnMeter=EnergyTransfer:Facility [J]
+  OnMeter=EnergyTransfer:HVAC [J]
+  OnMeter=HeatingCoils:EnergyTransfer [J]
+
+ Meters for 2622,ZONE-VAV-143 VAV BOX REHEAT COIL:Heating Coil Source Side Heat Transfer Energy [J]
+  OnMeter=PlantLoopHeatingDemand:Facility [J]
+  OnMeter=PlantLoopHeatingDemand:HVAC [J]
+  OnMeter=HeatingCoils:PlantLoopHeatingDemand [J]
+
+ Meters for 2623,ZONE-VAV-150 VAV BOX REHEAT COIL:Heating Coil Heating Energy [J]
+  OnMeter=EnergyTransfer:Facility [J]
+  OnMeter=EnergyTransfer:HVAC [J]
+  OnMeter=HeatingCoils:EnergyTransfer [J]
+
+ Meters for 2624,ZONE-VAV-150 VAV BOX REHEAT COIL:Heating Coil Source Side Heat Transfer Energy [J]
+  OnMeter=PlantLoopHeatingDemand:Facility [J]
+  OnMeter=PlantLoopHeatingDemand:HVAC [J]
+  OnMeter=HeatingCoils:PlantLoopHeatingDemand [J]
+
+ Meters for 2625,ZONE-VAV-RESTROOM VAV BOX REHEAT COIL:Heating Coil Heating Energy [J]
+  OnMeter=EnergyTransfer:Facility [J]
+  OnMeter=EnergyTransfer:HVAC [J]
+  OnMeter=HeatingCoils:EnergyTransfer [J]
+
+ Meters for 2626,ZONE-VAV-RESTROOM VAV BOX REHEAT COIL:Heating Coil Source Side Heat Transfer Energy [J]
+  OnMeter=PlantLoopHeatingDemand:Facility [J]
+  OnMeter=PlantLoopHeatingDemand:HVAC [J]
+  OnMeter=HeatingCoils:PlantLoopHeatingDemand [J]
+
+ Meters for 2627,AHU-003 COOLC:Cooling Coil Total Cooling Energy [J]
+  OnMeter=EnergyTransfer:Facility [J]
+  OnMeter=EnergyTransfer:HVAC [J]
+  OnMeter=CoolingCoils:EnergyTransfer [J]
+
+ Meters for 2638,AHU-003 COOLC:Cooling Coil Source Side Heat Transfer Energy [J]
+  OnMeter=PlantLoopCoolingDemand:Facility [J]
+  OnMeter=PlantLoopCoolingDemand:HVAC [J]
+  OnMeter=CoolingCoils:PlantLoopCoolingDemand [J]
+
+ Meters for 2669,AHU-002 COOLC:Cooling Coil Total Cooling Energy [J]
+  OnMeter=EnergyTransfer:Facility [J]
+  OnMeter=EnergyTransfer:HVAC [J]
+  OnMeter=CoolingCoils:EnergyTransfer [J]
+
+ Meters for 2670,AHU-002 COOLC:Cooling Coil Source Side Heat Transfer Energy [J]
+  OnMeter=PlantLoopCoolingDemand:Facility [J]
+  OnMeter=PlantLoopCoolingDemand:HVAC [J]
+  OnMeter=CoolingCoils:PlantLoopCoolingDemand [J]
+
+ Meters for 2671,AHU-004 COOLC:Cooling Coil Total Cooling Energy [J]
+  OnMeter=EnergyTransfer:Facility [J]
+  OnMeter=EnergyTransfer:HVAC [J]
+  OnMeter=CoolingCoils:EnergyTransfer [J]
+
+ Meters for 2672,AHU-004 COOLC:Cooling Coil Source Side Heat Transfer Energy [J]
+  OnMeter=PlantLoopCoolingDemand:Facility [J]
+  OnMeter=PlantLoopCoolingDemand:HVAC [J]
+  OnMeter=CoolingCoils:PlantLoopCoolingDemand [J]
+
+ Meters for 2673,AHU-001 COOLC:Cooling Coil Total Cooling Energy [J]
+  OnMeter=EnergyTransfer:Facility [J]
+  OnMeter=EnergyTransfer:HVAC [J]
+  OnMeter=CoolingCoils:EnergyTransfer [J]
+
+ Meters for 2674,AHU-001 COOLC:Cooling Coil Source Side Heat Transfer Energy [J]
+  OnMeter=PlantLoopCoolingDemand:Facility [J]
+  OnMeter=PlantLoopCoolingDemand:HVAC [J]
+  OnMeter=CoolingCoils:PlantLoopCoolingDemand [J]
+
+ Meters for 2698,ZONE-HTR-001 UNIT HEATERFAN:Fan Electric Energy [J]
+  OnMeter=Electricity:Facility [J]
+  OnMeter=Electricity:HVAC [J]
+  OnMeter=Fans:Electricity [J]
+  OnMeter=Unit Heater Fans:Fans:Electricity [J]
+
+ Meters for 2729,ZONE-HTR-002 UNIT HEATERFAN:Fan Electric Energy [J]
+  OnMeter=Electricity:Facility [J]
+  OnMeter=Electricity:HVAC [J]
+  OnMeter=Fans:Electricity [J]
+  OnMeter=Unit Heater Fans:Fans:Electricity [J]
+
+ Meters for 2730,ZONE-HTR-003 UNIT HEATERFAN:Fan Electric Energy [J]
+  OnMeter=Electricity:Facility [J]
+  OnMeter=Electricity:HVAC [J]
+  OnMeter=Fans:Electricity [J]
+  OnMeter=Unit Heater Fans:Fans:Electricity [J]
+
+ Meters for 2731,ZONE-HTR-004 UNIT HEATERFAN:Fan Electric Energy [J]
+  OnMeter=Electricity:Facility [J]
+  OnMeter=Electricity:HVAC [J]
+  OnMeter=Fans:Electricity [J]
+  OnMeter=Unit Heater Fans:Fans:Electricity [J]
+
+ Meters for 2733,AHU-001 FAN:Fan Electric Energy [J]
+  OnMeter=Electricity:Facility [J]
+  OnMeter=Electricity:HVAC [J]
+  OnMeter=Fans:Electricity [J]
+  OnMeter=General:Fans:Electricity [J]
+
+ Meters for 2745,AHU-002 FAN:Fan Electric Energy [J]
+  OnMeter=Electricity:Facility [J]
+  OnMeter=Electricity:HVAC [J]
+  OnMeter=Fans:Electricity [J]
+  OnMeter=General:Fans:Electricity [J]
+
+ Meters for 2747,AHU-003 FAN:Fan Electric Energy [J]
+  OnMeter=Electricity:Facility [J]
+  OnMeter=Electricity:HVAC [J]
+  OnMeter=Fans:Electricity [J]
+  OnMeter=General:Fans:Electricity [J]
+
+ Meters for 2749,AHU-004 FAN:Fan Electric Energy [J]
+  OnMeter=Electricity:Facility [J]
+  OnMeter=Electricity:HVAC [J]
+  OnMeter=Fans:Electricity [J]
+  OnMeter=General:Fans:Electricity [J]
+
+ Meters for 2750,AHU-005 FAN:Fan Electric Energy [J]
+  OnMeter=Electricity:Facility [J]
+  OnMeter=Electricity:HVAC [J]
+  OnMeter=Fans:Electricity [J]
+  OnMeter=General:Fans:Electricity [J]
+
+ Meters for 2751,FCU-001 FAN:Fan Electric Energy [J]
+  OnMeter=Electricity:Facility [J]
+  OnMeter=Electricity:HVAC [J]
+  OnMeter=Fans:Electricity [J]
+  OnMeter=General:Fans:Electricity [J]
+
+ Meters for 2752,FCU-002 FAN:Fan Electric Energy [J]
+  OnMeter=Electricity:Facility [J]
+  OnMeter=Electricity:HVAC [J]
+  OnMeter=Fans:Electricity [J]
+  OnMeter=General:Fans:Electricity [J]
+
+ Meters for 2753,FCU-003 FAN:Fan Electric Energy [J]
+  OnMeter=Electricity:Facility [J]
+  OnMeter=Electricity:HVAC [J]
+  OnMeter=Fans:Electricity [J]
+  OnMeter=General:Fans:Electricity [J]
+
+ Meters for 2754,ZONE-HTR-001 UNIT HEATER COIL:Heating Coil Air Heating Energy [J]
+  OnMeter=EnergyTransfer:Facility [J]
+  OnMeter=EnergyTransfer:HVAC [J]
+  OnMeter=HeatingCoils:EnergyTransfer [J]
+
+ Meters for 2755,ZONE-HTR-001 UNIT HEATER COIL:Heating Coil Electric Energy [J]
+  OnMeter=Electricity:Facility [J]
+  OnMeter=Electricity:HVAC [J]
+  OnMeter=Heating:Electricity [J]
+
+ Meters for 2766,ZONE-HTR-002 UNIT HEATER COIL:Heating Coil Air Heating Energy [J]
+  OnMeter=EnergyTransfer:Facility [J]
+  OnMeter=EnergyTransfer:HVAC [J]
+  OnMeter=HeatingCoils:EnergyTransfer [J]
+
+ Meters for 2767,ZONE-HTR-002 UNIT HEATER COIL:Heating Coil Electric Energy [J]
+  OnMeter=Electricity:Facility [J]
+  OnMeter=Electricity:HVAC [J]
+  OnMeter=Heating:Electricity [J]
+
+ Meters for 2768,ZONE-HTR-003 UNIT HEATER COIL:Heating Coil Air Heating Energy [J]
+  OnMeter=EnergyTransfer:Facility [J]
+  OnMeter=EnergyTransfer:HVAC [J]
+  OnMeter=HeatingCoils:EnergyTransfer [J]
+
+ Meters for 2769,ZONE-HTR-003 UNIT HEATER COIL:Heating Coil Electric Energy [J]
+  OnMeter=Electricity:Facility [J]
+  OnMeter=Electricity:HVAC [J]
+  OnMeter=Heating:Electricity [J]
+
+ Meters for 2770,ZONE-HTR-004 UNIT HEATER COIL:Heating Coil Air Heating Energy [J]
+  OnMeter=EnergyTransfer:Facility [J]
+  OnMeter=EnergyTransfer:HVAC [J]
+  OnMeter=HeatingCoils:EnergyTransfer [J]
+
+ Meters for 2771,ZONE-HTR-004 UNIT HEATER COIL:Heating Coil Electric Energy [J]
+  OnMeter=Electricity:Facility [J]
+  OnMeter=Electricity:HVAC [J]
+  OnMeter=Heating:Electricity [J]
+
+ Meters for 2772,FCU-001 HEAT PUMP DX SUPP HEATING COIL:Heating Coil Air Heating Energy [J]
+  OnMeter=EnergyTransfer:Facility [J]
+  OnMeter=EnergyTransfer:HVAC [J]
+  OnMeter=HeatingCoils:EnergyTransfer [J]
+
+ Meters for 2773,FCU-001 HEAT PUMP DX SUPP HEATING COIL:Heating Coil Electric Energy [J]
+  OnMeter=Electricity:Facility [J]
+  OnMeter=Electricity:HVAC [J]
+  OnMeter=Heating:Electricity [J]
+
+ Meters for 2774,FCU-002 HEAT PUMP DX SUPP HEATING COIL:Heating Coil Air Heating Energy [J]
+  OnMeter=EnergyTransfer:Facility [J]
+  OnMeter=EnergyTransfer:HVAC [J]
+  OnMeter=HeatingCoils:EnergyTransfer [J]
+
+ Meters for 2775,FCU-002 HEAT PUMP DX SUPP HEATING COIL:Heating Coil Electric Energy [J]
+  OnMeter=Electricity:Facility [J]
+  OnMeter=Electricity:HVAC [J]
+  OnMeter=Heating:Electricity [J]
+
+ Meters for 2776,FCU-003 HEAT PUMP DX SUPP HEATING COIL:Heating Coil Air Heating Energy [J]
+  OnMeter=EnergyTransfer:Facility [J]
+  OnMeter=EnergyTransfer:HVAC [J]
+  OnMeter=HeatingCoils:EnergyTransfer [J]
+
+ Meters for 2777,FCU-003 HEAT PUMP DX SUPP HEATING COIL:Heating Coil Electric Energy [J]
+  OnMeter=Electricity:Facility [J]
+  OnMeter=Electricity:HVAC [J]
+  OnMeter=Heating:Electricity [J]
+
+ Meters for 2778,AHU-001 OA HEAT RECOVERY:Heat Exchanger Total Heating Energy [J]
+  OnMeter=EnergyTransfer:Facility [J]
+  OnMeter=EnergyTransfer:HVAC [J]
+  OnMeter=HeatRecoveryForHeating:EnergyTransfer [J]
+
+ Meters for 2789,AHU-001 OA HEAT RECOVERY:Heat Exchanger Total Cooling Energy [J]
+  OnMeter=EnergyTransfer:Facility [J]
+  OnMeter=EnergyTransfer:HVAC [J]
+  OnMeter=HeatRecoveryForCooling:EnergyTransfer [J]
+
+ Meters for 2800,AHU-001 OA HEAT RECOVERY:Heat Exchanger Electric Energy [J]
+  OnMeter=Electricity:Facility [J]
+  OnMeter=Electricity:HVAC [J]
+  OnMeter=HeatRecovery:Electricity [J]
+
+ Meters for 2811,AHU-003 OA HEAT RECOVERY:Heat Exchanger Total Heating Energy [J]
+  OnMeter=EnergyTransfer:Facility [J]
+  OnMeter=EnergyTransfer:HVAC [J]
+  OnMeter=HeatRecoveryForHeating:EnergyTransfer [J]
+
+ Meters for 2812,AHU-003 OA HEAT RECOVERY:Heat Exchanger Total Cooling Energy [J]
+  OnMeter=EnergyTransfer:Facility [J]
+  OnMeter=EnergyTransfer:HVAC [J]
+  OnMeter=HeatRecoveryForCooling:EnergyTransfer [J]
+
+ Meters for 2813,AHU-003 OA HEAT RECOVERY:Heat Exchanger Electric Energy [J]
+  OnMeter=Electricity:Facility [J]
+  OnMeter=Electricity:HVAC [J]
+  OnMeter=HeatRecovery:Electricity [J]
+
+ Meters for 2814,AHU-004 OA HEAT RECOVERY:Heat Exchanger Total Heating Energy [J]
+  OnMeter=EnergyTransfer:Facility [J]
+  OnMeter=EnergyTransfer:HVAC [J]
+  OnMeter=HeatRecoveryForHeating:EnergyTransfer [J]
+
+ Meters for 2815,AHU-004 OA HEAT RECOVERY:Heat Exchanger Total Cooling Energy [J]
+  OnMeter=EnergyTransfer:Facility [J]
+  OnMeter=EnergyTransfer:HVAC [J]
+  OnMeter=HeatRecoveryForCooling:EnergyTransfer [J]
+
+ Meters for 2816,AHU-004 OA HEAT RECOVERY:Heat Exchanger Electric Energy [J]
+  OnMeter=Electricity:Facility [J]
+  OnMeter=Electricity:HVAC [J]
+  OnMeter=HeatRecovery:Electricity [J]
+
+ Meters for 2817,FCU-001 COOLC:Cooling Coil Total Cooling Energy [J]
+  OnMeter=EnergyTransfer:Facility [J]
+  OnMeter=EnergyTransfer:HVAC [J]
+  OnMeter=CoolingCoils:EnergyTransfer [J]
+
+ Meters for 2818,FCU-001 COOLC:Cooling Coil Electric Energy [J]
+  OnMeter=Electricity:Facility [J]
+  OnMeter=Electricity:HVAC [J]
+  OnMeter=Cooling:Electricity [J]
+
+ Meters for 2829,FCU-002 COOLC:Cooling Coil Total Cooling Energy [J]
+  OnMeter=EnergyTransfer:Facility [J]
+  OnMeter=EnergyTransfer:HVAC [J]
+  OnMeter=CoolingCoils:EnergyTransfer [J]
+
+ Meters for 2830,FCU-002 COOLC:Cooling Coil Electric Energy [J]
+  OnMeter=Electricity:Facility [J]
+  OnMeter=Electricity:HVAC [J]
+  OnMeter=Cooling:Electricity [J]
+
+ Meters for 2831,FCU-003 COOLC:Cooling Coil Total Cooling Energy [J]
+  OnMeter=EnergyTransfer:Facility [J]
+  OnMeter=EnergyTransfer:HVAC [J]
+  OnMeter=CoolingCoils:EnergyTransfer [J]
+
+ Meters for 2832,FCU-003 COOLC:Cooling Coil Electric Energy [J]
+  OnMeter=Electricity:Facility [J]
+  OnMeter=Electricity:HVAC [J]
+  OnMeter=Cooling:Electricity [J]
+
+ Meters for 2833,AHU-005 COOLC DXCOIL:Cooling Coil Total Cooling Energy [J]
+  OnMeter=EnergyTransfer:Facility [J]
+  OnMeter=EnergyTransfer:HVAC [J]
+  OnMeter=CoolingCoils:EnergyTransfer [J]
+
+ Meters for 2834,AHU-005 COOLC DXCOIL:Cooling Coil Electric Energy [J]
+  OnMeter=Electricity:Facility [J]
+  OnMeter=Electricity:HVAC [J]
+  OnMeter=Cooling:Electricity [J]
+
+ Meters for 2835,FCU-001 HEATC:Heating Coil Total Heating Energy [J]
+  OnMeter=EnergyTransfer:Facility [J]
+  OnMeter=EnergyTransfer:HVAC [J]
+  OnMeter=HeatingCoils:EnergyTransfer [J]
+
+ Meters for 2836,FCU-001 HEATC:Heating Coil Electric Energy [J]
+  OnMeter=Electricity:Facility [J]
+  OnMeter=Electricity:HVAC [J]
+  OnMeter=Heating:Electricity [J]
+
+ Meters for 2837,FCU-001 HEATC:Heating Coil Defrost Electric Energy [J]
+  OnMeter=Electricity:Facility [J]
+  OnMeter=Electricity:HVAC [J]
+  OnMeter=Heating:Electricity [J]
+
+ Meters for 2838,FCU-001 HEATC:Heating Coil Crankcase Heater Electric Energy [J]
+  OnMeter=Electricity:Facility [J]
+  OnMeter=Electricity:HVAC [J]
+  OnMeter=Heating:Electricity [J]
+
+ Meters for 2839,FCU-002 HEATC:Heating Coil Total Heating Energy [J]
+  OnMeter=EnergyTransfer:Facility [J]
+  OnMeter=EnergyTransfer:HVAC [J]
+  OnMeter=HeatingCoils:EnergyTransfer [J]
+
+ Meters for 2840,FCU-002 HEATC:Heating Coil Electric Energy [J]
+  OnMeter=Electricity:Facility [J]
+  OnMeter=Electricity:HVAC [J]
+  OnMeter=Heating:Electricity [J]
+
+ Meters for 2841,FCU-002 HEATC:Heating Coil Defrost Electric Energy [J]
+  OnMeter=Electricity:Facility [J]
+  OnMeter=Electricity:HVAC [J]
+  OnMeter=Heating:Electricity [J]
+
+ Meters for 2842,FCU-002 HEATC:Heating Coil Crankcase Heater Electric Energy [J]
+  OnMeter=Electricity:Facility [J]
+  OnMeter=Electricity:HVAC [J]
+  OnMeter=Heating:Electricity [J]
+
+ Meters for 2843,FCU-003 HEATC:Heating Coil Total Heating Energy [J]
+  OnMeter=EnergyTransfer:Facility [J]
+  OnMeter=EnergyTransfer:HVAC [J]
+  OnMeter=HeatingCoils:EnergyTransfer [J]
+
+ Meters for 2844,FCU-003 HEATC:Heating Coil Electric Energy [J]
+  OnMeter=Electricity:Facility [J]
+  OnMeter=Electricity:HVAC [J]
+  OnMeter=Heating:Electricity [J]
+
+ Meters for 2845,FCU-003 HEATC:Heating Coil Defrost Electric Energy [J]
+  OnMeter=Electricity:Facility [J]
+  OnMeter=Electricity:HVAC [J]
+  OnMeter=Heating:Electricity [J]
+
+ Meters for 2846,FCU-003 HEATC:Heating Coil Crankcase Heater Electric Energy [J]
+  OnMeter=Electricity:Facility [J]
+  OnMeter=Electricity:HVAC [J]
+  OnMeter=Heating:Electricity [J]
+
+ Meters for 2847,HEATSYS1 BOILER:Boiler Heating Energy [J]
+  OnMeter=EnergyTransfer:Facility [J]
+  OnMeter=EnergyTransfer:Plant [J]
+  OnMeter=Boilers:EnergyTransfer [J]
+
+ Meters for 2868,HEATSYS1 BOILER:Boiler Gas Energy [J]
+  OnMeter=Gas:Facility [J]
+  OnMeter=Gas:Plant [J]
+  OnMeter=Heating:Gas [J]
+  OnMeter=Boiler:Heating:Gas [J]
+
+ Meters for 2909,HEATSYS1 BOILER:Boiler Ancillary Electric Energy [J]
+  OnMeter=Electricity:Facility [J]
+  OnMeter=Electricity:Plant [J]
+  OnMeter=Heating:Electricity [J]
+  OnMeter=Boiler Parasitic:Heating:Electricity [J]
+
+ Meters for 2930,DISTRICT COOLING:District Cooling Chilled Water Energy [J]
+  OnMeter=DistrictCooling:Facility [J]
+  OnMeter=DistrictCooling:Plant [J]
+  OnMeter=Cooling:DistrictCooling [J]
+
+ Meters for 2962,HEATSYS1 PUMP:Pump Electric Energy [J]
+  OnMeter=Electricity:Facility [J]
+  OnMeter=Electricity:Plant [J]
+  OnMeter=Pumps:Electricity [J]
+
+ Meters for 2973,COOLSYS1 PUMP SECONDARY:Pump Electric Energy [J]
+  OnMeter=Electricity:Facility [J]
+  OnMeter=Electricity:Plant [J]
+  OnMeter=Pumps:Electricity [J]
+
+ Meters for 2974,COOLSYS1 CHILLER1 PUMP:Pump Electric Energy [J]
+  OnMeter=Electricity:Facility [J]
+  OnMeter=Electricity:Plant [J]
+  OnMeter=Pumps:Electricity [J]
+
+ Meters for 2975,AHU-005 COOLC DXCOIL:Cooling Coil Crankcase Heater Electric Energy [J]
+  OnMeter=Electricity:Facility [J]
+  OnMeter=Electricity:Plant [J]
+  OnMeter=Cooling:Electricity [J]
+
+ Meters for 3042,Site:Environmental Impact Total N2O Emissions Carbon Equivalent Mass [kg]
+  OnMeter=Carbon Equivalent:Facility [kg]
+  OnMeter=CarbonEquivalentEmissions:Carbon Equivalent [kg]
+
+ Meters for 3063,Site:Environmental Impact Total CH4 Emissions Carbon Equivalent Mass [kg]
+  OnMeter=Carbon Equivalent:Facility [kg]
+  OnMeter=CarbonEquivalentEmissions:Carbon Equivalent [kg]
+
+ Meters for 3064,Site:Environmental Impact Total CO2 Emissions Carbon Equivalent Mass [kg]
+  OnMeter=Carbon Equivalent:Facility [kg]
+  OnMeter=CarbonEquivalentEmissions:Carbon Equivalent [kg]
+
+ For Meter=Electricity:Facility [J], ResourceType=Electricity, contents are:
+  ZONE-VAV-CORRIDOR LIGHTS:Lights Electric Energy
+  ZONE-VAV-102 LIGHTS:Lights Electric Energy
+  ZONE-VAV-104 LIGHTS:Lights Electric Energy
+  ZONE-VAV-105 LIGHTS:Lights Electric Energy
+  ZONE-VAV-107 LIGHTS:Lights Electric Energy
+  ZONE-VAV-108 LIGHTS:Lights Electric Energy
+  ZONE-VAV-112 LIGHTS:Lights Electric Energy
+  ZONE-VAV-116 LIGHTS:Lights Electric Energy
+  ZONE-VAV-118 LIGHTS:Lights Electric Energy
+  ZONE-VAV-119 LIGHTS:Lights Electric Energy
+  ZONE-VAV-120 LIGHTS:Lights Electric Energy
+  ZONE-VAV-123A LIGHTS:Lights Electric Energy
+  ZONE-VAV-123B LIGHTS:Lights Electric Energy
+  ZONE-VAV-127A LIGHTS:Lights Electric Energy
+  ZONE-VAV-127B LIGHTS:Lights Electric Energy
+  ZONE-VAV-129 LIGHTS:Lights Electric Energy
+  ZONE-VAV-131 LIGHTS:Lights Electric Energy
+  ZONE-VAV-133 LIGHTS:Lights Electric Energy
+  ZONE-VAV-142 LIGHTS:Lights Electric Energy
+  ZONE-VAV-143 LIGHTS:Lights Electric Energy
+  ZONE-VAV-150 LIGHTS:Lights Electric Energy
+  ZONE-AHU-002 LIGHTS:Lights Electric Energy
+  ZONE-AHU-004 LIGHTS:Lights Electric Energy
+  ZONE-AHU-005 LIGHTS:Lights Electric Energy
+  ZONE-FCU-001 LIGHTS:Lights Electric Energy
+  ZONE-FCU-002 LIGHTS:Lights Electric Energy
+  ZONE-FCU-003 LIGHTS:Lights Electric Energy
+  ZONE-HTR-001 LIGHTS:Lights Electric Energy
+  ZONE-HTR-002 LIGHTS:Lights Electric Energy
+  ZONE-HTR-003 LIGHTS:Lights Electric Energy
+  ZONE-HTR-004 LIGHTS:Lights Electric Energy
+  ZONE-VAV-RESTROOM LIGHTS:Lights Electric Energy
+  ZONE-VAV-136 LIGHTS:Lights Electric Energy
+  ZONE-VAV-CORRIDOR MISCPLUG EQUIP:Electric Equipment Electric Energy
+  ZONE-VAV-102 MISCPLUG EQUIP:Electric Equipment Electric Energy
+  ZONE-VAV-104 MISCPLUG EQUIP:Electric Equipment Electric Energy
+  ZONE-VAV-105 MISCPLUG EQUIP:Electric Equipment Electric Energy
+  ZONE-VAV-107 MISCPLUG EQUIP:Electric Equipment Electric Energy
+  ZONE-VAV-108 MISCPLUG EQUIP:Electric Equipment Electric Energy
+  ZONE-VAV-112 MISCPLUG EQUIP:Electric Equipment Electric Energy
+  ZONE-VAV-116 MISCPLUG EQUIP:Electric Equipment Electric Energy
+  ZONE-VAV-118 MISCPLUG EQUIP:Electric Equipment Electric Energy
+  ZONE-VAV-119 MISCPLUG EQUIP:Electric Equipment Electric Energy
+  ZONE-VAV-120 MISCPLUG EQUIP:Electric Equipment Electric Energy
+  ZONE-VAV-123A MISCPLUG EQUIP:Electric Equipment Electric Energy
+  ZONE-VAV-123B MISCPLUG EQUIP:Electric Equipment Electric Energy
+  ZONE-VAV-127A MISCPLUG EQUIP:Electric Equipment Electric Energy
+  ZONE-VAV-127B MISCPLUG EQUIP:Electric Equipment Electric Energy
+  ZONE-VAV-129 MISCPLUG EQUIP:Electric Equipment Electric Energy
+  ZONE-VAV-131 MISCPLUG EQUIP:Electric Equipment Electric Energy
+  ZONE-VAV-133 MISCPLUG EQUIP:Electric Equipment Electric Energy
+  ZONE-VAV-142 MISCPLUG EQUIP:Electric Equipment Electric Energy
+  ZONE-VAV-143 MISCPLUG EQUIP:Electric Equipment Electric Energy
+  ZONE-VAV-150 MISCPLUG EQUIP:Electric Equipment Electric Energy
+  ZONE-AHU-002 MISCPLUG EQUIP:Electric Equipment Electric Energy
+  ZONE-AHU-004 MISCPLUG EQUIP:Electric Equipment Electric Energy
+  ZONE-AHU-005 MISCPLUG EQUIP:Electric Equipment Electric Energy
+  ZONE-FCU-001 MISCPLUG EQUIP:Electric Equipment Electric Energy
+  ZONE-FCU-002 MISCPLUG EQUIP:Electric Equipment Electric Energy
+  ZONE-FCU-003 MISCPLUG EQUIP:Electric Equipment Electric Energy
+  ZONE-HTR-001 MISCPLUG EQUIP:Electric Equipment Electric Energy
+  ZONE-HTR-002 MISCPLUG EQUIP:Electric Equipment Electric Energy
+  ZONE-HTR-003 MISCPLUG EQUIP:Electric Equipment Electric Energy
+  ZONE-HTR-004 MISCPLUG EQUIP:Electric Equipment Electric Energy
+  ZONE-VAV-RESTROOM MISCPLUG EQUIP:Electric Equipment Electric Energy
+  ZONE-VAV-136 MISCPLUG EQUIP:Electric Equipment Electric Energy
+  ZONE-HTR-001 UNIT HEATERFAN:Fan Electric Energy
+  ZONE-HTR-002 UNIT HEATERFAN:Fan Electric Energy
+  ZONE-HTR-003 UNIT HEATERFAN:Fan Electric Energy
+  ZONE-HTR-004 UNIT HEATERFAN:Fan Electric Energy
+  AHU-001 FAN:Fan Electric Energy
+  AHU-002 FAN:Fan Electric Energy
+  AHU-003 FAN:Fan Electric Energy
+  AHU-004 FAN:Fan Electric Energy
+  AHU-005 FAN:Fan Electric Energy
+  FCU-001 FAN:Fan Electric Energy
+  FCU-002 FAN:Fan Electric Energy
+  FCU-003 FAN:Fan Electric Energy
+  ZONE-HTR-001 UNIT HEATER COIL:Heating Coil Electric Energy
+  ZONE-HTR-002 UNIT HEATER COIL:Heating Coil Electric Energy
+  ZONE-HTR-003 UNIT HEATER COIL:Heating Coil Electric Energy
+  ZONE-HTR-004 UNIT HEATER COIL:Heating Coil Electric Energy
+  FCU-001 HEAT PUMP DX SUPP HEATING COIL:Heating Coil Electric Energy
+  FCU-002 HEAT PUMP DX SUPP HEATING COIL:Heating Coil Electric Energy
+  FCU-003 HEAT PUMP DX SUPP HEATING COIL:Heating Coil Electric Energy
+  AHU-001 OA HEAT RECOVERY:Heat Exchanger Electric Energy
+  AHU-003 OA HEAT RECOVERY:Heat Exchanger Electric Energy
+  AHU-004 OA HEAT RECOVERY:Heat Exchanger Electric Energy
+  FCU-001 COOLC:Cooling Coil Electric Energy
+  FCU-002 COOLC:Cooling Coil Electric Energy
+  FCU-003 COOLC:Cooling Coil Electric Energy
+  AHU-005 COOLC DXCOIL:Cooling Coil Electric Energy
+  FCU-001 HEATC:Heating Coil Electric Energy
+  FCU-001 HEATC:Heating Coil Defrost Electric Energy
+  FCU-001 HEATC:Heating Coil Crankcase Heater Electric Energy
+  FCU-002 HEATC:Heating Coil Electric Energy
+  FCU-002 HEATC:Heating Coil Defrost Electric Energy
+  FCU-002 HEATC:Heating Coil Crankcase Heater Electric Energy
+  FCU-003 HEATC:Heating Coil Electric Energy
+  FCU-003 HEATC:Heating Coil Defrost Electric Energy
+  FCU-003 HEATC:Heating Coil Crankcase Heater Electric Energy
+  HEATSYS1 BOILER:Boiler Ancillary Electric Energy
+  HEATSYS1 PUMP:Pump Electric Energy
+  COOLSYS1 PUMP SECONDARY:Pump Electric Energy
+  COOLSYS1 CHILLER1 PUMP:Pump Electric Energy
+  AHU-005 COOLC DXCOIL:Cooling Coil Crankcase Heater Electric Energy
+
+ For Meter=Electricity:Building [J], ResourceType=Electricity, Group=Building, contents are:
+  ZONE-VAV-CORRIDOR LIGHTS:Lights Electric Energy
+  ZONE-VAV-102 LIGHTS:Lights Electric Energy
+  ZONE-VAV-104 LIGHTS:Lights Electric Energy
+  ZONE-VAV-105 LIGHTS:Lights Electric Energy
+  ZONE-VAV-107 LIGHTS:Lights Electric Energy
+  ZONE-VAV-108 LIGHTS:Lights Electric Energy
+  ZONE-VAV-112 LIGHTS:Lights Electric Energy
+  ZONE-VAV-116 LIGHTS:Lights Electric Energy
+  ZONE-VAV-118 LIGHTS:Lights Electric Energy
+  ZONE-VAV-119 LIGHTS:Lights Electric Energy
+  ZONE-VAV-120 LIGHTS:Lights Electric Energy
+  ZONE-VAV-123A LIGHTS:Lights Electric Energy
+  ZONE-VAV-123B LIGHTS:Lights Electric Energy
+  ZONE-VAV-127A LIGHTS:Lights Electric Energy
+  ZONE-VAV-127B LIGHTS:Lights Electric Energy
+  ZONE-VAV-129 LIGHTS:Lights Electric Energy
+  ZONE-VAV-131 LIGHTS:Lights Electric Energy
+  ZONE-VAV-133 LIGHTS:Lights Electric Energy
+  ZONE-VAV-142 LIGHTS:Lights Electric Energy
+  ZONE-VAV-143 LIGHTS:Lights Electric Energy
+  ZONE-VAV-150 LIGHTS:Lights Electric Energy
+  ZONE-AHU-002 LIGHTS:Lights Electric Energy
+  ZONE-AHU-004 LIGHTS:Lights Electric Energy
+  ZONE-AHU-005 LIGHTS:Lights Electric Energy
+  ZONE-FCU-001 LIGHTS:Lights Electric Energy
+  ZONE-FCU-002 LIGHTS:Lights Electric Energy
+  ZONE-FCU-003 LIGHTS:Lights Electric Energy
+  ZONE-HTR-001 LIGHTS:Lights Electric Energy
+  ZONE-HTR-002 LIGHTS:Lights Electric Energy
+  ZONE-HTR-003 LIGHTS:Lights Electric Energy
+  ZONE-HTR-004 LIGHTS:Lights Electric Energy
+  ZONE-VAV-RESTROOM LIGHTS:Lights Electric Energy
+  ZONE-VAV-136 LIGHTS:Lights Electric Energy
+  ZONE-VAV-CORRIDOR MISCPLUG EQUIP:Electric Equipment Electric Energy
+  ZONE-VAV-102 MISCPLUG EQUIP:Electric Equipment Electric Energy
+  ZONE-VAV-104 MISCPLUG EQUIP:Electric Equipment Electric Energy
+  ZONE-VAV-105 MISCPLUG EQUIP:Electric Equipment Electric Energy
+  ZONE-VAV-107 MISCPLUG EQUIP:Electric Equipment Electric Energy
+  ZONE-VAV-108 MISCPLUG EQUIP:Electric Equipment Electric Energy
+  ZONE-VAV-112 MISCPLUG EQUIP:Electric Equipment Electric Energy
+  ZONE-VAV-116 MISCPLUG EQUIP:Electric Equipment Electric Energy
+  ZONE-VAV-118 MISCPLUG EQUIP:Electric Equipment Electric Energy
+  ZONE-VAV-119 MISCPLUG EQUIP:Electric Equipment Electric Energy
+  ZONE-VAV-120 MISCPLUG EQUIP:Electric Equipment Electric Energy
+  ZONE-VAV-123A MISCPLUG EQUIP:Electric Equipment Electric Energy
+  ZONE-VAV-123B MISCPLUG EQUIP:Electric Equipment Electric Energy
+  ZONE-VAV-127A MISCPLUG EQUIP:Electric Equipment Electric Energy
+  ZONE-VAV-127B MISCPLUG EQUIP:Electric Equipment Electric Energy
+  ZONE-VAV-129 MISCPLUG EQUIP:Electric Equipment Electric Energy
+  ZONE-VAV-131 MISCPLUG EQUIP:Electric Equipment Electric Energy
+  ZONE-VAV-133 MISCPLUG EQUIP:Electric Equipment Electric Energy
+  ZONE-VAV-142 MISCPLUG EQUIP:Electric Equipment Electric Energy
+  ZONE-VAV-143 MISCPLUG EQUIP:Electric Equipment Electric Energy
+  ZONE-VAV-150 MISCPLUG EQUIP:Electric Equipment Electric Energy
+  ZONE-AHU-002 MISCPLUG EQUIP:Electric Equipment Electric Energy
+  ZONE-AHU-004 MISCPLUG EQUIP:Electric Equipment Electric Energy
+  ZONE-AHU-005 MISCPLUG EQUIP:Electric Equipment Electric Energy
+  ZONE-FCU-001 MISCPLUG EQUIP:Electric Equipment Electric Energy
+  ZONE-FCU-002 MISCPLUG EQUIP:Electric Equipment Electric Energy
+  ZONE-FCU-003 MISCPLUG EQUIP:Electric Equipment Electric Energy
+  ZONE-HTR-001 MISCPLUG EQUIP:Electric Equipment Electric Energy
+  ZONE-HTR-002 MISCPLUG EQUIP:Electric Equipment Electric Energy
+  ZONE-HTR-003 MISCPLUG EQUIP:Electric Equipment Electric Energy
+  ZONE-HTR-004 MISCPLUG EQUIP:Electric Equipment Electric Energy
+  ZONE-VAV-RESTROOM MISCPLUG EQUIP:Electric Equipment Electric Energy
+  ZONE-VAV-136 MISCPLUG EQUIP:Electric Equipment Electric Energy
+
+ For Meter=Electricity:Zone:ZONE-VAV-CORRIDOR [J], ResourceType=Electricity, Group=Zone, contents are:
+  ZONE-VAV-CORRIDOR LIGHTS:Lights Electric Energy
+  ZONE-VAV-CORRIDOR MISCPLUG EQUIP:Electric Equipment Electric Energy
+
+ For Meter=InteriorLights:Electricity [J], ResourceType=Electricity, EndUse=InteriorLights, contents are:
+  ZONE-VAV-CORRIDOR LIGHTS:Lights Electric Energy
+  ZONE-VAV-102 LIGHTS:Lights Electric Energy
+  ZONE-VAV-104 LIGHTS:Lights Electric Energy
+  ZONE-VAV-105 LIGHTS:Lights Electric Energy
+  ZONE-VAV-107 LIGHTS:Lights Electric Energy
+  ZONE-VAV-108 LIGHTS:Lights Electric Energy
+  ZONE-VAV-112 LIGHTS:Lights Electric Energy
+  ZONE-VAV-116 LIGHTS:Lights Electric Energy
+  ZONE-VAV-118 LIGHTS:Lights Electric Energy
+  ZONE-VAV-119 LIGHTS:Lights Electric Energy
+  ZONE-VAV-120 LIGHTS:Lights Electric Energy
+  ZONE-VAV-123A LIGHTS:Lights Electric Energy
+  ZONE-VAV-123B LIGHTS:Lights Electric Energy
+  ZONE-VAV-127A LIGHTS:Lights Electric Energy
+  ZONE-VAV-127B LIGHTS:Lights Electric Energy
+  ZONE-VAV-129 LIGHTS:Lights Electric Energy
+  ZONE-VAV-131 LIGHTS:Lights Electric Energy
+  ZONE-VAV-133 LIGHTS:Lights Electric Energy
+  ZONE-VAV-142 LIGHTS:Lights Electric Energy
+  ZONE-VAV-143 LIGHTS:Lights Electric Energy
+  ZONE-VAV-150 LIGHTS:Lights Electric Energy
+  ZONE-AHU-002 LIGHTS:Lights Electric Energy
+  ZONE-AHU-004 LIGHTS:Lights Electric Energy
+  ZONE-AHU-005 LIGHTS:Lights Electric Energy
+  ZONE-FCU-001 LIGHTS:Lights Electric Energy
+  ZONE-FCU-002 LIGHTS:Lights Electric Energy
+  ZONE-FCU-003 LIGHTS:Lights Electric Energy
+  ZONE-HTR-001 LIGHTS:Lights Electric Energy
+  ZONE-HTR-002 LIGHTS:Lights Electric Energy
+  ZONE-HTR-003 LIGHTS:Lights Electric Energy
+  ZONE-HTR-004 LIGHTS:Lights Electric Energy
+  ZONE-VAV-RESTROOM LIGHTS:Lights Electric Energy
+  ZONE-VAV-136 LIGHTS:Lights Electric Energy
+
+ For Meter=InteriorLights:Electricity:Zone:ZONE-VAV-CORRIDOR [J], ResourceType=Electricity, EndUse=InteriorLights, Group=Zone, contents are:
+  ZONE-VAV-CORRIDOR LIGHTS:Lights Electric Energy
+
+ For Meter=General Lights:InteriorLights:Electricity [J], ResourceType=Electricity, EndUse=InteriorLights, contents are:
+  ZONE-VAV-CORRIDOR LIGHTS:Lights Electric Energy
+  ZONE-VAV-102 LIGHTS:Lights Electric Energy
+  ZONE-VAV-104 LIGHTS:Lights Electric Energy
+  ZONE-VAV-105 LIGHTS:Lights Electric Energy
+  ZONE-VAV-107 LIGHTS:Lights Electric Energy
+  ZONE-VAV-108 LIGHTS:Lights Electric Energy
+  ZONE-VAV-112 LIGHTS:Lights Electric Energy
+  ZONE-VAV-116 LIGHTS:Lights Electric Energy
+  ZONE-VAV-118 LIGHTS:Lights Electric Energy
+  ZONE-VAV-119 LIGHTS:Lights Electric Energy
+  ZONE-VAV-120 LIGHTS:Lights Electric Energy
+  ZONE-VAV-123A LIGHTS:Lights Electric Energy
+  ZONE-VAV-123B LIGHTS:Lights Electric Energy
+  ZONE-VAV-127A LIGHTS:Lights Electric Energy
+  ZONE-VAV-127B LIGHTS:Lights Electric Energy
+  ZONE-VAV-129 LIGHTS:Lights Electric Energy
+  ZONE-VAV-131 LIGHTS:Lights Electric Energy
+  ZONE-VAV-133 LIGHTS:Lights Electric Energy
+  ZONE-VAV-142 LIGHTS:Lights Electric Energy
+  ZONE-VAV-143 LIGHTS:Lights Electric Energy
+  ZONE-VAV-150 LIGHTS:Lights Electric Energy
+  ZONE-AHU-002 LIGHTS:Lights Electric Energy
+  ZONE-AHU-004 LIGHTS:Lights Electric Energy
+  ZONE-AHU-005 LIGHTS:Lights Electric Energy
+  ZONE-FCU-001 LIGHTS:Lights Electric Energy
+  ZONE-FCU-002 LIGHTS:Lights Electric Energy
+  ZONE-FCU-003 LIGHTS:Lights Electric Energy
+  ZONE-HTR-001 LIGHTS:Lights Electric Energy
+  ZONE-HTR-002 LIGHTS:Lights Electric Energy
+  ZONE-HTR-003 LIGHTS:Lights Electric Energy
+  ZONE-HTR-004 LIGHTS:Lights Electric Energy
+  ZONE-VAV-RESTROOM LIGHTS:Lights Electric Energy
+  ZONE-VAV-136 LIGHTS:Lights Electric Energy
+
+ For Meter=Electricity:Zone:ZONE-VAV-102 [J], ResourceType=Electricity, Group=Zone, contents are:
+  ZONE-VAV-102 LIGHTS:Lights Electric Energy
+  ZONE-VAV-102 MISCPLUG EQUIP:Electric Equipment Electric Energy
+
+ For Meter=InteriorLights:Electricity:Zone:ZONE-VAV-102 [J], ResourceType=Electricity, EndUse=InteriorLights, Group=Zone, contents are:
+  ZONE-VAV-102 LIGHTS:Lights Electric Energy
+
+ For Meter=Electricity:Zone:ZONE-VAV-104 [J], ResourceType=Electricity, Group=Zone, contents are:
+  ZONE-VAV-104 LIGHTS:Lights Electric Energy
+  ZONE-VAV-104 MISCPLUG EQUIP:Electric Equipment Electric Energy
+
+ For Meter=InteriorLights:Electricity:Zone:ZONE-VAV-104 [J], ResourceType=Electricity, EndUse=InteriorLights, Group=Zone, contents are:
+  ZONE-VAV-104 LIGHTS:Lights Electric Energy
+
+ For Meter=Electricity:Zone:ZONE-VAV-105 [J], ResourceType=Electricity, Group=Zone, contents are:
+  ZONE-VAV-105 LIGHTS:Lights Electric Energy
+  ZONE-VAV-105 MISCPLUG EQUIP:Electric Equipment Electric Energy
+
+ For Meter=InteriorLights:Electricity:Zone:ZONE-VAV-105 [J], ResourceType=Electricity, EndUse=InteriorLights, Group=Zone, contents are:
+  ZONE-VAV-105 LIGHTS:Lights Electric Energy
+
+ For Meter=Electricity:Zone:ZONE-VAV-107 [J], ResourceType=Electricity, Group=Zone, contents are:
+  ZONE-VAV-107 LIGHTS:Lights Electric Energy
+  ZONE-VAV-107 MISCPLUG EQUIP:Electric Equipment Electric Energy
+
+ For Meter=InteriorLights:Electricity:Zone:ZONE-VAV-107 [J], ResourceType=Electricity, EndUse=InteriorLights, Group=Zone, contents are:
+  ZONE-VAV-107 LIGHTS:Lights Electric Energy
+
+ For Meter=Electricity:Zone:ZONE-VAV-108 [J], ResourceType=Electricity, Group=Zone, contents are:
+  ZONE-VAV-108 LIGHTS:Lights Electric Energy
+  ZONE-VAV-108 MISCPLUG EQUIP:Electric Equipment Electric Energy
+
+ For Meter=InteriorLights:Electricity:Zone:ZONE-VAV-108 [J], ResourceType=Electricity, EndUse=InteriorLights, Group=Zone, contents are:
+  ZONE-VAV-108 LIGHTS:Lights Electric Energy
+
+ For Meter=Electricity:Zone:ZONE-VAV-112 [J], ResourceType=Electricity, Group=Zone, contents are:
+  ZONE-VAV-112 LIGHTS:Lights Electric Energy
+  ZONE-VAV-112 MISCPLUG EQUIP:Electric Equipment Electric Energy
+
+ For Meter=InteriorLights:Electricity:Zone:ZONE-VAV-112 [J], ResourceType=Electricity, EndUse=InteriorLights, Group=Zone, contents are:
+  ZONE-VAV-112 LIGHTS:Lights Electric Energy
+
+ For Meter=Electricity:Zone:ZONE-VAV-116 [J], ResourceType=Electricity, Group=Zone, contents are:
+  ZONE-VAV-116 LIGHTS:Lights Electric Energy
+  ZONE-VAV-116 MISCPLUG EQUIP:Electric Equipment Electric Energy
+
+ For Meter=InteriorLights:Electricity:Zone:ZONE-VAV-116 [J], ResourceType=Electricity, EndUse=InteriorLights, Group=Zone, contents are:
+  ZONE-VAV-116 LIGHTS:Lights Electric Energy
+
+ For Meter=Electricity:Zone:ZONE-VAV-118 [J], ResourceType=Electricity, Group=Zone, contents are:
+  ZONE-VAV-118 LIGHTS:Lights Electric Energy
+  ZONE-VAV-118 MISCPLUG EQUIP:Electric Equipment Electric Energy
+
+ For Meter=InteriorLights:Electricity:Zone:ZONE-VAV-118 [J], ResourceType=Electricity, EndUse=InteriorLights, Group=Zone, contents are:
+  ZONE-VAV-118 LIGHTS:Lights Electric Energy
+
+ For Meter=Electricity:Zone:ZONE-VAV-119 [J], ResourceType=Electricity, Group=Zone, contents are:
+  ZONE-VAV-119 LIGHTS:Lights Electric Energy
+  ZONE-VAV-119 MISCPLUG EQUIP:Electric Equipment Electric Energy
+
+ For Meter=InteriorLights:Electricity:Zone:ZONE-VAV-119 [J], ResourceType=Electricity, EndUse=InteriorLights, Group=Zone, contents are:
+  ZONE-VAV-119 LIGHTS:Lights Electric Energy
+
+ For Meter=Electricity:Zone:ZONE-VAV-120 [J], ResourceType=Electricity, Group=Zone, contents are:
+  ZONE-VAV-120 LIGHTS:Lights Electric Energy
+  ZONE-VAV-120 MISCPLUG EQUIP:Electric Equipment Electric Energy
+
+ For Meter=InteriorLights:Electricity:Zone:ZONE-VAV-120 [J], ResourceType=Electricity, EndUse=InteriorLights, Group=Zone, contents are:
+  ZONE-VAV-120 LIGHTS:Lights Electric Energy
+
+ For Meter=Electricity:Zone:ZONE-VAV-123A [J], ResourceType=Electricity, Group=Zone, contents are:
+  ZONE-VAV-123A LIGHTS:Lights Electric Energy
+  ZONE-VAV-123A MISCPLUG EQUIP:Electric Equipment Electric Energy
+
+ For Meter=InteriorLights:Electricity:Zone:ZONE-VAV-123A [J], ResourceType=Electricity, EndUse=InteriorLights, Group=Zone, contents are:
+  ZONE-VAV-123A LIGHTS:Lights Electric Energy
+
+ For Meter=Electricity:Zone:ZONE-VAV-123B [J], ResourceType=Electricity, Group=Zone, contents are:
+  ZONE-VAV-123B LIGHTS:Lights Electric Energy
+  ZONE-VAV-123B MISCPLUG EQUIP:Electric Equipment Electric Energy
+
+ For Meter=InteriorLights:Electricity:Zone:ZONE-VAV-123B [J], ResourceType=Electricity, EndUse=InteriorLights, Group=Zone, contents are:
+  ZONE-VAV-123B LIGHTS:Lights Electric Energy
+
+ For Meter=Electricity:Zone:ZONE-VAV-127A [J], ResourceType=Electricity, Group=Zone, contents are:
+  ZONE-VAV-127A LIGHTS:Lights Electric Energy
+  ZONE-VAV-127A MISCPLUG EQUIP:Electric Equipment Electric Energy
+
+ For Meter=InteriorLights:Electricity:Zone:ZONE-VAV-127A [J], ResourceType=Electricity, EndUse=InteriorLights, Group=Zone, contents are:
+  ZONE-VAV-127A LIGHTS:Lights Electric Energy
+
+ For Meter=Electricity:Zone:ZONE-VAV-127B [J], ResourceType=Electricity, Group=Zone, contents are:
+  ZONE-VAV-127B LIGHTS:Lights Electric Energy
+  ZONE-VAV-127B MISCPLUG EQUIP:Electric Equipment Electric Energy
+
+ For Meter=InteriorLights:Electricity:Zone:ZONE-VAV-127B [J], ResourceType=Electricity, EndUse=InteriorLights, Group=Zone, contents are:
+  ZONE-VAV-127B LIGHTS:Lights Electric Energy
+
+ For Meter=Electricity:Zone:ZONE-VAV-129 [J], ResourceType=Electricity, Group=Zone, contents are:
+  ZONE-VAV-129 LIGHTS:Lights Electric Energy
+  ZONE-VAV-129 MISCPLUG EQUIP:Electric Equipment Electric Energy
+
+ For Meter=InteriorLights:Electricity:Zone:ZONE-VAV-129 [J], ResourceType=Electricity, EndUse=InteriorLights, Group=Zone, contents are:
+  ZONE-VAV-129 LIGHTS:Lights Electric Energy
+
+ For Meter=Electricity:Zone:ZONE-VAV-131 [J], ResourceType=Electricity, Group=Zone, contents are:
+  ZONE-VAV-131 LIGHTS:Lights Electric Energy
+  ZONE-VAV-131 MISCPLUG EQUIP:Electric Equipment Electric Energy
+
+ For Meter=InteriorLights:Electricity:Zone:ZONE-VAV-131 [J], ResourceType=Electricity, EndUse=InteriorLights, Group=Zone, contents are:
+  ZONE-VAV-131 LIGHTS:Lights Electric Energy
+
+ For Meter=Electricity:Zone:ZONE-VAV-133 [J], ResourceType=Electricity, Group=Zone, contents are:
+  ZONE-VAV-133 LIGHTS:Lights Electric Energy
+  ZONE-VAV-133 MISCPLUG EQUIP:Electric Equipment Electric Energy
+
+ For Meter=InteriorLights:Electricity:Zone:ZONE-VAV-133 [J], ResourceType=Electricity, EndUse=InteriorLights, Group=Zone, contents are:
+  ZONE-VAV-133 LIGHTS:Lights Electric Energy
+
+ For Meter=Electricity:Zone:ZONE-VAV-142 [J], ResourceType=Electricity, Group=Zone, contents are:
+  ZONE-VAV-142 LIGHTS:Lights Electric Energy
+  ZONE-VAV-142 MISCPLUG EQUIP:Electric Equipment Electric Energy
+
+ For Meter=InteriorLights:Electricity:Zone:ZONE-VAV-142 [J], ResourceType=Electricity, EndUse=InteriorLights, Group=Zone, contents are:
+  ZONE-VAV-142 LIGHTS:Lights Electric Energy
+
+ For Meter=Electricity:Zone:ZONE-VAV-143 [J], ResourceType=Electricity, Group=Zone, contents are:
+  ZONE-VAV-143 LIGHTS:Lights Electric Energy
+  ZONE-VAV-143 MISCPLUG EQUIP:Electric Equipment Electric Energy
+
+ For Meter=InteriorLights:Electricity:Zone:ZONE-VAV-143 [J], ResourceType=Electricity, EndUse=InteriorLights, Group=Zone, contents are:
+  ZONE-VAV-143 LIGHTS:Lights Electric Energy
+
+ For Meter=Electricity:Zone:ZONE-VAV-150 [J], ResourceType=Electricity, Group=Zone, contents are:
+  ZONE-VAV-150 LIGHTS:Lights Electric Energy
+  ZONE-VAV-150 MISCPLUG EQUIP:Electric Equipment Electric Energy
+
+ For Meter=InteriorLights:Electricity:Zone:ZONE-VAV-150 [J], ResourceType=Electricity, EndUse=InteriorLights, Group=Zone, contents are:
+  ZONE-VAV-150 LIGHTS:Lights Electric Energy
+
+ For Meter=Electricity:Zone:ZONE-AHU-002 [J], ResourceType=Electricity, Group=Zone, contents are:
+  ZONE-AHU-002 LIGHTS:Lights Electric Energy
+  ZONE-AHU-002 MISCPLUG EQUIP:Electric Equipment Electric Energy
+
+ For Meter=InteriorLights:Electricity:Zone:ZONE-AHU-002 [J], ResourceType=Electricity, EndUse=InteriorLights, Group=Zone, contents are:
+  ZONE-AHU-002 LIGHTS:Lights Electric Energy
+
+ For Meter=Electricity:Zone:ZONE-AHU-004 [J], ResourceType=Electricity, Group=Zone, contents are:
+  ZONE-AHU-004 LIGHTS:Lights Electric Energy
+  ZONE-AHU-004 MISCPLUG EQUIP:Electric Equipment Electric Energy
+
+ For Meter=InteriorLights:Electricity:Zone:ZONE-AHU-004 [J], ResourceType=Electricity, EndUse=InteriorLights, Group=Zone, contents are:
+  ZONE-AHU-004 LIGHTS:Lights Electric Energy
+
+ For Meter=Electricity:Zone:ZONE-AHU-005 [J], ResourceType=Electricity, Group=Zone, contents are:
+  ZONE-AHU-005 LIGHTS:Lights Electric Energy
+  ZONE-AHU-005 MISCPLUG EQUIP:Electric Equipment Electric Energy
+
+ For Meter=InteriorLights:Electricity:Zone:ZONE-AHU-005 [J], ResourceType=Electricity, EndUse=InteriorLights, Group=Zone, contents are:
+  ZONE-AHU-005 LIGHTS:Lights Electric Energy
+
+ For Meter=Electricity:Zone:ZONE-FCU-001 [J], ResourceType=Electricity, Group=Zone, contents are:
+  ZONE-FCU-001 LIGHTS:Lights Electric Energy
+  ZONE-FCU-001 MISCPLUG EQUIP:Electric Equipment Electric Energy
+
+ For Meter=InteriorLights:Electricity:Zone:ZONE-FCU-001 [J], ResourceType=Electricity, EndUse=InteriorLights, Group=Zone, contents are:
+  ZONE-FCU-001 LIGHTS:Lights Electric Energy
+
+ For Meter=Electricity:Zone:ZONE-FCU-002 [J], ResourceType=Electricity, Group=Zone, contents are:
+  ZONE-FCU-002 LIGHTS:Lights Electric Energy
+  ZONE-FCU-002 MISCPLUG EQUIP:Electric Equipment Electric Energy
+
+ For Meter=InteriorLights:Electricity:Zone:ZONE-FCU-002 [J], ResourceType=Electricity, EndUse=InteriorLights, Group=Zone, contents are:
+  ZONE-FCU-002 LIGHTS:Lights Electric Energy
+
+ For Meter=Electricity:Zone:ZONE-FCU-003 [J], ResourceType=Electricity, Group=Zone, contents are:
+  ZONE-FCU-003 LIGHTS:Lights Electric Energy
+  ZONE-FCU-003 MISCPLUG EQUIP:Electric Equipment Electric Energy
+
+ For Meter=InteriorLights:Electricity:Zone:ZONE-FCU-003 [J], ResourceType=Electricity, EndUse=InteriorLights, Group=Zone, contents are:
+  ZONE-FCU-003 LIGHTS:Lights Electric Energy
+
+ For Meter=Electricity:Zone:ZONE-HTR-001 [J], ResourceType=Electricity, Group=Zone, contents are:
+  ZONE-HTR-001 LIGHTS:Lights Electric Energy
+  ZONE-HTR-001 MISCPLUG EQUIP:Electric Equipment Electric Energy
+
+ For Meter=InteriorLights:Electricity:Zone:ZONE-HTR-001 [J], ResourceType=Electricity, EndUse=InteriorLights, Group=Zone, contents are:
+  ZONE-HTR-001 LIGHTS:Lights Electric Energy
+
+ For Meter=Electricity:Zone:ZONE-HTR-002 [J], ResourceType=Electricity, Group=Zone, contents are:
+  ZONE-HTR-002 LIGHTS:Lights Electric Energy
+  ZONE-HTR-002 MISCPLUG EQUIP:Electric Equipment Electric Energy
+
+ For Meter=InteriorLights:Electricity:Zone:ZONE-HTR-002 [J], ResourceType=Electricity, EndUse=InteriorLights, Group=Zone, contents are:
+  ZONE-HTR-002 LIGHTS:Lights Electric Energy
+
+ For Meter=Electricity:Zone:ZONE-HTR-003 [J], ResourceType=Electricity, Group=Zone, contents are:
+  ZONE-HTR-003 LIGHTS:Lights Electric Energy
+  ZONE-HTR-003 MISCPLUG EQUIP:Electric Equipment Electric Energy
+
+ For Meter=InteriorLights:Electricity:Zone:ZONE-HTR-003 [J], ResourceType=Electricity, EndUse=InteriorLights, Group=Zone, contents are:
+  ZONE-HTR-003 LIGHTS:Lights Electric Energy
+
+ For Meter=Electricity:Zone:ZONE-HTR-004 [J], ResourceType=Electricity, Group=Zone, contents are:
+  ZONE-HTR-004 LIGHTS:Lights Electric Energy
+  ZONE-HTR-004 MISCPLUG EQUIP:Electric Equipment Electric Energy
+
+ For Meter=InteriorLights:Electricity:Zone:ZONE-HTR-004 [J], ResourceType=Electricity, EndUse=InteriorLights, Group=Zone, contents are:
+  ZONE-HTR-004 LIGHTS:Lights Electric Energy
+
+ For Meter=Electricity:Zone:ZONE-VAV-RESTROOM [J], ResourceType=Electricity, Group=Zone, contents are:
+  ZONE-VAV-RESTROOM LIGHTS:Lights Electric Energy
+  ZONE-VAV-RESTROOM MISCPLUG EQUIP:Electric Equipment Electric Energy
+
+ For Meter=InteriorLights:Electricity:Zone:ZONE-VAV-RESTROOM [J], ResourceType=Electricity, EndUse=InteriorLights, Group=Zone, contents are:
+  ZONE-VAV-RESTROOM LIGHTS:Lights Electric Energy
+
+ For Meter=Electricity:Zone:ZONE-VAV-136 [J], ResourceType=Electricity, Group=Zone, contents are:
+  ZONE-VAV-136 LIGHTS:Lights Electric Energy
+  ZONE-VAV-136 MISCPLUG EQUIP:Electric Equipment Electric Energy
+
+ For Meter=InteriorLights:Electricity:Zone:ZONE-VAV-136 [J], ResourceType=Electricity, EndUse=InteriorLights, Group=Zone, contents are:
+  ZONE-VAV-136 LIGHTS:Lights Electric Energy
+
+ For Meter=InteriorEquipment:Electricity [J], ResourceType=Electricity, EndUse=InteriorEquipment, contents are:
+  ZONE-VAV-CORRIDOR MISCPLUG EQUIP:Electric Equipment Electric Energy
+  ZONE-VAV-102 MISCPLUG EQUIP:Electric Equipment Electric Energy
+  ZONE-VAV-104 MISCPLUG EQUIP:Electric Equipment Electric Energy
+  ZONE-VAV-105 MISCPLUG EQUIP:Electric Equipment Electric Energy
+  ZONE-VAV-107 MISCPLUG EQUIP:Electric Equipment Electric Energy
+  ZONE-VAV-108 MISCPLUG EQUIP:Electric Equipment Electric Energy
+  ZONE-VAV-112 MISCPLUG EQUIP:Electric Equipment Electric Energy
+  ZONE-VAV-116 MISCPLUG EQUIP:Electric Equipment Electric Energy
+  ZONE-VAV-118 MISCPLUG EQUIP:Electric Equipment Electric Energy
+  ZONE-VAV-119 MISCPLUG EQUIP:Electric Equipment Electric Energy
+  ZONE-VAV-120 MISCPLUG EQUIP:Electric Equipment Electric Energy
+  ZONE-VAV-123A MISCPLUG EQUIP:Electric Equipment Electric Energy
+  ZONE-VAV-123B MISCPLUG EQUIP:Electric Equipment Electric Energy
+  ZONE-VAV-127A MISCPLUG EQUIP:Electric Equipment Electric Energy
+  ZONE-VAV-127B MISCPLUG EQUIP:Electric Equipment Electric Energy
+  ZONE-VAV-129 MISCPLUG EQUIP:Electric Equipment Electric Energy
+  ZONE-VAV-131 MISCPLUG EQUIP:Electric Equipment Electric Energy
+  ZONE-VAV-133 MISCPLUG EQUIP:Electric Equipment Electric Energy
+  ZONE-VAV-142 MISCPLUG EQUIP:Electric Equipment Electric Energy
+  ZONE-VAV-143 MISCPLUG EQUIP:Electric Equipment Electric Energy
+  ZONE-VAV-150 MISCPLUG EQUIP:Electric Equipment Electric Energy
+  ZONE-AHU-002 MISCPLUG EQUIP:Electric Equipment Electric Energy
+  ZONE-AHU-004 MISCPLUG EQUIP:Electric Equipment Electric Energy
+  ZONE-AHU-005 MISCPLUG EQUIP:Electric Equipment Electric Energy
+  ZONE-FCU-001 MISCPLUG EQUIP:Electric Equipment Electric Energy
+  ZONE-FCU-002 MISCPLUG EQUIP:Electric Equipment Electric Energy
+  ZONE-FCU-003 MISCPLUG EQUIP:Electric Equipment Electric Energy
+  ZONE-HTR-001 MISCPLUG EQUIP:Electric Equipment Electric Energy
+  ZONE-HTR-002 MISCPLUG EQUIP:Electric Equipment Electric Energy
+  ZONE-HTR-003 MISCPLUG EQUIP:Electric Equipment Electric Energy
+  ZONE-HTR-004 MISCPLUG EQUIP:Electric Equipment Electric Energy
+  ZONE-VAV-RESTROOM MISCPLUG EQUIP:Electric Equipment Electric Energy
+  ZONE-VAV-136 MISCPLUG EQUIP:Electric Equipment Electric Energy
+
+ For Meter=InteriorEquipment:Electricity:Zone:ZONE-VAV-CORRIDOR [J], ResourceType=Electricity, EndUse=InteriorEquipment, Group=Zone, contents are:
+  ZONE-VAV-CORRIDOR MISCPLUG EQUIP:Electric Equipment Electric Energy
+
+ For Meter=MiscPlug:InteriorEquipment:Electricity [J], ResourceType=Electricity, EndUse=InteriorEquipment, contents are:
+  ZONE-VAV-CORRIDOR MISCPLUG EQUIP:Electric Equipment Electric Energy
+  ZONE-VAV-102 MISCPLUG EQUIP:Electric Equipment Electric Energy
+  ZONE-VAV-104 MISCPLUG EQUIP:Electric Equipment Electric Energy
+  ZONE-VAV-105 MISCPLUG EQUIP:Electric Equipment Electric Energy
+  ZONE-VAV-107 MISCPLUG EQUIP:Electric Equipment Electric Energy
+  ZONE-VAV-108 MISCPLUG EQUIP:Electric Equipment Electric Energy
+  ZONE-VAV-112 MISCPLUG EQUIP:Electric Equipment Electric Energy
+  ZONE-VAV-116 MISCPLUG EQUIP:Electric Equipment Electric Energy
+  ZONE-VAV-118 MISCPLUG EQUIP:Electric Equipment Electric Energy
+  ZONE-VAV-119 MISCPLUG EQUIP:Electric Equipment Electric Energy
+  ZONE-VAV-120 MISCPLUG EQUIP:Electric Equipment Electric Energy
+  ZONE-VAV-123A MISCPLUG EQUIP:Electric Equipment Electric Energy
+  ZONE-VAV-123B MISCPLUG EQUIP:Electric Equipment Electric Energy
+  ZONE-VAV-127A MISCPLUG EQUIP:Electric Equipment Electric Energy
+  ZONE-VAV-127B MISCPLUG EQUIP:Electric Equipment Electric Energy
+  ZONE-VAV-129 MISCPLUG EQUIP:Electric Equipment Electric Energy
+  ZONE-VAV-131 MISCPLUG EQUIP:Electric Equipment Electric Energy
+  ZONE-VAV-133 MISCPLUG EQUIP:Electric Equipment Electric Energy
+  ZONE-VAV-142 MISCPLUG EQUIP:Electric Equipment Electric Energy
+  ZONE-VAV-143 MISCPLUG EQUIP:Electric Equipment Electric Energy
+  ZONE-VAV-150 MISCPLUG EQUIP:Electric Equipment Electric Energy
+  ZONE-AHU-002 MISCPLUG EQUIP:Electric Equipment Electric Energy
+  ZONE-AHU-004 MISCPLUG EQUIP:Electric Equipment Electric Energy
+  ZONE-AHU-005 MISCPLUG EQUIP:Electric Equipment Electric Energy
+  ZONE-FCU-001 MISCPLUG EQUIP:Electric Equipment Electric Energy
+  ZONE-FCU-002 MISCPLUG EQUIP:Electric Equipment Electric Energy
+  ZONE-FCU-003 MISCPLUG EQUIP:Electric Equipment Electric Energy
+  ZONE-HTR-001 MISCPLUG EQUIP:Electric Equipment Electric Energy
+  ZONE-HTR-002 MISCPLUG EQUIP:Electric Equipment Electric Energy
+  ZONE-HTR-003 MISCPLUG EQUIP:Electric Equipment Electric Energy
+  ZONE-HTR-004 MISCPLUG EQUIP:Electric Equipment Electric Energy
+  ZONE-VAV-RESTROOM MISCPLUG EQUIP:Electric Equipment Electric Energy
+  ZONE-VAV-136 MISCPLUG EQUIP:Electric Equipment Electric Energy
+
+ For Meter=InteriorEquipment:Electricity:Zone:ZONE-VAV-102 [J], ResourceType=Electricity, EndUse=InteriorEquipment, Group=Zone, contents are:
+  ZONE-VAV-102 MISCPLUG EQUIP:Electric Equipment Electric Energy
+
+ For Meter=InteriorEquipment:Electricity:Zone:ZONE-VAV-104 [J], ResourceType=Electricity, EndUse=InteriorEquipment, Group=Zone, contents are:
+  ZONE-VAV-104 MISCPLUG EQUIP:Electric Equipment Electric Energy
+
+ For Meter=InteriorEquipment:Electricity:Zone:ZONE-VAV-105 [J], ResourceType=Electricity, EndUse=InteriorEquipment, Group=Zone, contents are:
+  ZONE-VAV-105 MISCPLUG EQUIP:Electric Equipment Electric Energy
+
+ For Meter=InteriorEquipment:Electricity:Zone:ZONE-VAV-107 [J], ResourceType=Electricity, EndUse=InteriorEquipment, Group=Zone, contents are:
+  ZONE-VAV-107 MISCPLUG EQUIP:Electric Equipment Electric Energy
+
+ For Meter=InteriorEquipment:Electricity:Zone:ZONE-VAV-108 [J], ResourceType=Electricity, EndUse=InteriorEquipment, Group=Zone, contents are:
+  ZONE-VAV-108 MISCPLUG EQUIP:Electric Equipment Electric Energy
+
+ For Meter=InteriorEquipment:Electricity:Zone:ZONE-VAV-112 [J], ResourceType=Electricity, EndUse=InteriorEquipment, Group=Zone, contents are:
+  ZONE-VAV-112 MISCPLUG EQUIP:Electric Equipment Electric Energy
+
+ For Meter=InteriorEquipment:Electricity:Zone:ZONE-VAV-116 [J], ResourceType=Electricity, EndUse=InteriorEquipment, Group=Zone, contents are:
+  ZONE-VAV-116 MISCPLUG EQUIP:Electric Equipment Electric Energy
+
+ For Meter=InteriorEquipment:Electricity:Zone:ZONE-VAV-118 [J], ResourceType=Electricity, EndUse=InteriorEquipment, Group=Zone, contents are:
+  ZONE-VAV-118 MISCPLUG EQUIP:Electric Equipment Electric Energy
+
+ For Meter=InteriorEquipment:Electricity:Zone:ZONE-VAV-119 [J], ResourceType=Electricity, EndUse=InteriorEquipment, Group=Zone, contents are:
+  ZONE-VAV-119 MISCPLUG EQUIP:Electric Equipment Electric Energy
+
+ For Meter=InteriorEquipment:Electricity:Zone:ZONE-VAV-120 [J], ResourceType=Electricity, EndUse=InteriorEquipment, Group=Zone, contents are:
+  ZONE-VAV-120 MISCPLUG EQUIP:Electric Equipment Electric Energy
+
+ For Meter=InteriorEquipment:Electricity:Zone:ZONE-VAV-123A [J], ResourceType=Electricity, EndUse=InteriorEquipment, Group=Zone, contents are:
+  ZONE-VAV-123A MISCPLUG EQUIP:Electric Equipment Electric Energy
+
+ For Meter=InteriorEquipment:Electricity:Zone:ZONE-VAV-123B [J], ResourceType=Electricity, EndUse=InteriorEquipment, Group=Zone, contents are:
+  ZONE-VAV-123B MISCPLUG EQUIP:Electric Equipment Electric Energy
+
+ For Meter=InteriorEquipment:Electricity:Zone:ZONE-VAV-127A [J], ResourceType=Electricity, EndUse=InteriorEquipment, Group=Zone, contents are:
+  ZONE-VAV-127A MISCPLUG EQUIP:Electric Equipment Electric Energy
+
+ For Meter=InteriorEquipment:Electricity:Zone:ZONE-VAV-127B [J], ResourceType=Electricity, EndUse=InteriorEquipment, Group=Zone, contents are:
+  ZONE-VAV-127B MISCPLUG EQUIP:Electric Equipment Electric Energy
+
+ For Meter=InteriorEquipment:Electricity:Zone:ZONE-VAV-129 [J], ResourceType=Electricity, EndUse=InteriorEquipment, Group=Zone, contents are:
+  ZONE-VAV-129 MISCPLUG EQUIP:Electric Equipment Electric Energy
+
+ For Meter=InteriorEquipment:Electricity:Zone:ZONE-VAV-131 [J], ResourceType=Electricity, EndUse=InteriorEquipment, Group=Zone, contents are:
+  ZONE-VAV-131 MISCPLUG EQUIP:Electric Equipment Electric Energy
+
+ For Meter=InteriorEquipment:Electricity:Zone:ZONE-VAV-133 [J], ResourceType=Electricity, EndUse=InteriorEquipment, Group=Zone, contents are:
+  ZONE-VAV-133 MISCPLUG EQUIP:Electric Equipment Electric Energy
+
+ For Meter=InteriorEquipment:Electricity:Zone:ZONE-VAV-142 [J], ResourceType=Electricity, EndUse=InteriorEquipment, Group=Zone, contents are:
+  ZONE-VAV-142 MISCPLUG EQUIP:Electric Equipment Electric Energy
+
+ For Meter=InteriorEquipment:Electricity:Zone:ZONE-VAV-143 [J], ResourceType=Electricity, EndUse=InteriorEquipment, Group=Zone, contents are:
+  ZONE-VAV-143 MISCPLUG EQUIP:Electric Equipment Electric Energy
+
+ For Meter=InteriorEquipment:Electricity:Zone:ZONE-VAV-150 [J], ResourceType=Electricity, EndUse=InteriorEquipment, Group=Zone, contents are:
+  ZONE-VAV-150 MISCPLUG EQUIP:Electric Equipment Electric Energy
+
+ For Meter=InteriorEquipment:Electricity:Zone:ZONE-AHU-002 [J], ResourceType=Electricity, EndUse=InteriorEquipment, Group=Zone, contents are:
+  ZONE-AHU-002 MISCPLUG EQUIP:Electric Equipment Electric Energy
+
+ For Meter=InteriorEquipment:Electricity:Zone:ZONE-AHU-004 [J], ResourceType=Electricity, EndUse=InteriorEquipment, Group=Zone, contents are:
+  ZONE-AHU-004 MISCPLUG EQUIP:Electric Equipment Electric Energy
+
+ For Meter=InteriorEquipment:Electricity:Zone:ZONE-AHU-005 [J], ResourceType=Electricity, EndUse=InteriorEquipment, Group=Zone, contents are:
+  ZONE-AHU-005 MISCPLUG EQUIP:Electric Equipment Electric Energy
+
+ For Meter=InteriorEquipment:Electricity:Zone:ZONE-FCU-001 [J], ResourceType=Electricity, EndUse=InteriorEquipment, Group=Zone, contents are:
+  ZONE-FCU-001 MISCPLUG EQUIP:Electric Equipment Electric Energy
+
+ For Meter=InteriorEquipment:Electricity:Zone:ZONE-FCU-002 [J], ResourceType=Electricity, EndUse=InteriorEquipment, Group=Zone, contents are:
+  ZONE-FCU-002 MISCPLUG EQUIP:Electric Equipment Electric Energy
+
+ For Meter=InteriorEquipment:Electricity:Zone:ZONE-FCU-003 [J], ResourceType=Electricity, EndUse=InteriorEquipment, Group=Zone, contents are:
+  ZONE-FCU-003 MISCPLUG EQUIP:Electric Equipment Electric Energy
+
+ For Meter=InteriorEquipment:Electricity:Zone:ZONE-HTR-001 [J], ResourceType=Electricity, EndUse=InteriorEquipment, Group=Zone, contents are:
+  ZONE-HTR-001 MISCPLUG EQUIP:Electric Equipment Electric Energy
+
+ For Meter=InteriorEquipment:Electricity:Zone:ZONE-HTR-002 [J], ResourceType=Electricity, EndUse=InteriorEquipment, Group=Zone, contents are:
+  ZONE-HTR-002 MISCPLUG EQUIP:Electric Equipment Electric Energy
+
+ For Meter=InteriorEquipment:Electricity:Zone:ZONE-HTR-003 [J], ResourceType=Electricity, EndUse=InteriorEquipment, Group=Zone, contents are:
+  ZONE-HTR-003 MISCPLUG EQUIP:Electric Equipment Electric Energy
+
+ For Meter=InteriorEquipment:Electricity:Zone:ZONE-HTR-004 [J], ResourceType=Electricity, EndUse=InteriorEquipment, Group=Zone, contents are:
+  ZONE-HTR-004 MISCPLUG EQUIP:Electric Equipment Electric Energy
+
+ For Meter=InteriorEquipment:Electricity:Zone:ZONE-VAV-RESTROOM [J], ResourceType=Electricity, EndUse=InteriorEquipment, Group=Zone, contents are:
+  ZONE-VAV-RESTROOM MISCPLUG EQUIP:Electric Equipment Electric Energy
+
+ For Meter=InteriorEquipment:Electricity:Zone:ZONE-VAV-136 [J], ResourceType=Electricity, EndUse=InteriorEquipment, Group=Zone, contents are:
+  ZONE-VAV-136 MISCPLUG EQUIP:Electric Equipment Electric Energy
+
+ For Meter=EnergyTransfer:Facility [J], ResourceType=EnergyTransfer, contents are:
+  ZONE-VAV-143:Zone Air System Sensible Heating Energy
+  ZONE-VAV-143:Zone Air System Sensible Cooling Energy
+  ZONE-VAV-142:Zone Air System Sensible Heating Energy
+  ZONE-VAV-142:Zone Air System Sensible Cooling Energy
+  ZONE-HTR-001:Zone Air System Sensible Heating Energy
+  ZONE-HTR-001:Zone Air System Sensible Cooling Energy
+  ZONE-VAV-136:Zone Air System Sensible Heating Energy
+  ZONE-VAV-136:Zone Air System Sensible Cooling Energy
+  ZONE-VAV-127B:Zone Air System Sensible Heating Energy
+  ZONE-VAV-127B:Zone Air System Sensible Cooling Energy
+  ZONE-VAV-127A:Zone Air System Sensible Heating Energy
+  ZONE-VAV-127A:Zone Air System Sensible Cooling Energy
+  ZONE-VAV-131:Zone Air System Sensible Heating Energy
+  ZONE-VAV-131:Zone Air System Sensible Cooling Energy
+  ZONE-VAV-129:Zone Air System Sensible Heating Energy
+  ZONE-VAV-129:Zone Air System Sensible Cooling Energy
+  ZONE-VAV-150:Zone Air System Sensible Heating Energy
+  ZONE-VAV-150:Zone Air System Sensible Cooling Energy
+  ZONE-VAV-123A:Zone Air System Sensible Heating Energy
+  ZONE-VAV-123A:Zone Air System Sensible Cooling Energy
+  ZONE-VAV-123B:Zone Air System Sensible Heating Energy
+  ZONE-VAV-123B:Zone Air System Sensible Cooling Energy
+  ZONE-AHU-005:Zone Air System Sensible Heating Energy
+  ZONE-AHU-005:Zone Air System Sensible Cooling Energy
+  ZONE-VAV-118:Zone Air System Sensible Heating Energy
+  ZONE-VAV-118:Zone Air System Sensible Cooling Energy
+  ZONE-VAV-120:Zone Air System Sensible Heating Energy
+  ZONE-VAV-120:Zone Air System Sensible Cooling Energy
+  ZONE-VAV-119:Zone Air System Sensible Heating Energy
+  ZONE-VAV-119:Zone Air System Sensible Cooling Energy
+  ZONE-VAV-RESTROOM:Zone Air System Sensible Heating Energy
+  ZONE-VAV-RESTROOM:Zone Air System Sensible Cooling Energy
+  ZONE-AHU-004:Zone Air System Sensible Heating Energy
+  ZONE-AHU-004:Zone Air System Sensible Cooling Energy
+  ZONE-VAV-102:Zone Air System Sensible Heating Energy
+  ZONE-VAV-102:Zone Air System Sensible Cooling Energy
+  ZONE-FCU-001:Zone Air System Sensible Heating Energy
+  ZONE-FCU-001:Zone Air System Sensible Cooling Energy
+  ZONE-AHU-002:Zone Air System Sensible Heating Energy
+  ZONE-AHU-002:Zone Air System Sensible Cooling Energy
+  ZONE-VAV-105:Zone Air System Sensible Heating Energy
+  ZONE-VAV-105:Zone Air System Sensible Cooling Energy
+  ZONE-FCU-003:Zone Air System Sensible Heating Energy
+  ZONE-FCU-003:Zone Air System Sensible Cooling Energy
+  ZONE-VAV-112:Zone Air System Sensible Heating Energy
+  ZONE-VAV-112:Zone Air System Sensible Cooling Energy
+  ZONE-HTR-002:Zone Air System Sensible Heating Energy
+  ZONE-HTR-002:Zone Air System Sensible Cooling Energy
+  ZONE-HTR-003:Zone Air System Sensible Heating Energy
+  ZONE-HTR-003:Zone Air System Sensible Cooling Energy
+  ZONE-VAV-104:Zone Air System Sensible Heating Energy
+  ZONE-VAV-104:Zone Air System Sensible Cooling Energy
+  ZONE-VAV-116:Zone Air System Sensible Heating Energy
+  ZONE-VAV-116:Zone Air System Sensible Cooling Energy
+  ZONE-VAV-108:Zone Air System Sensible Heating Energy
+  ZONE-VAV-108:Zone Air System Sensible Cooling Energy
+  ZONE-FCU-002:Zone Air System Sensible Heating Energy
+  ZONE-FCU-002:Zone Air System Sensible Cooling Energy
+  ZONE-HTR-004:Zone Air System Sensible Heating Energy
+  ZONE-HTR-004:Zone Air System Sensible Cooling Energy
+  ZONE-VAV-CORRIDOR:Zone Air System Sensible Heating Energy
+  ZONE-VAV-CORRIDOR:Zone Air System Sensible Cooling Energy
+  ZONE-VAV-133:Zone Air System Sensible Heating Energy
+  ZONE-VAV-133:Zone Air System Sensible Cooling Energy
+  ZONE-VAV-107:Zone Air System Sensible Heating Energy
+  ZONE-VAV-107:Zone Air System Sensible Cooling Energy
+  AHU-001 HEATC:Heating Coil Heating Energy
+  AHU-002 HEATC:Heating Coil Heating Energy
+  AHU-003 HEATC:Heating Coil Heating Energy
+  AHU-004 HEATC:Heating Coil Heating Energy
+  ZONE-VAV-CORRIDOR VAV BOX REHEAT COIL:Heating Coil Heating Energy
+  ZONE-VAV-102 VAV BOX REHEAT COIL:Heating Coil Heating Energy
+  ZONE-VAV-104 VAV BOX REHEAT COIL:Heating Coil Heating Energy
+  ZONE-VAV-105 VAV BOX REHEAT COIL:Heating Coil Heating Energy
+  ZONE-VAV-107 VAV BOX REHEAT COIL:Heating Coil Heating Energy
+  ZONE-VAV-108 VAV BOX REHEAT COIL:Heating Coil Heating Energy
+  ZONE-VAV-112 VAV BOX REHEAT COIL:Heating Coil Heating Energy
+  ZONE-VAV-116 VAV BOX REHEAT COIL:Heating Coil Heating Energy
+  ZONE-VAV-118 VAV BOX REHEAT COIL:Heating Coil Heating Energy
+  ZONE-VAV-119 VAV BOX REHEAT COIL:Heating Coil Heating Energy
+  ZONE-VAV-120 VAV BOX REHEAT COIL:Heating Coil Heating Energy
+  ZONE-VAV-123A VAV BOX REHEAT COIL:Heating Coil Heating Energy
+  ZONE-VAV-123B VAV BOX REHEAT COIL:Heating Coil Heating Energy
+  ZONE-VAV-127A VAV BOX REHEAT COIL:Heating Coil Heating Energy
+  ZONE-VAV-127B VAV BOX REHEAT COIL:Heating Coil Heating Energy
+  ZONE-VAV-129 VAV BOX REHEAT COIL:Heating Coil Heating Energy
+  ZONE-VAV-131 VAV BOX REHEAT COIL:Heating Coil Heating Energy
+  ZONE-VAV-136 VAV BOX REHEAT COIL:Heating Coil Heating Energy
+  ZONE-VAV-133 VAV BOX REHEAT COIL:Heating Coil Heating Energy
+  ZONE-VAV-142 VAV BOX REHEAT COIL:Heating Coil Heating Energy
+  ZONE-VAV-143 VAV BOX REHEAT COIL:Heating Coil Heating Energy
+  ZONE-VAV-150 VAV BOX REHEAT COIL:Heating Coil Heating Energy
+  ZONE-VAV-RESTROOM VAV BOX REHEAT COIL:Heating Coil Heating Energy
+  AHU-003 COOLC:Cooling Coil Total Cooling Energy
+  AHU-002 COOLC:Cooling Coil Total Cooling Energy
+  AHU-004 COOLC:Cooling Coil Total Cooling Energy
+  AHU-001 COOLC:Cooling Coil Total Cooling Energy
+  ZONE-HTR-001 UNIT HEATER COIL:Heating Coil Air Heating Energy
+  ZONE-HTR-002 UNIT HEATER COIL:Heating Coil Air Heating Energy
+  ZONE-HTR-003 UNIT HEATER COIL:Heating Coil Air Heating Energy
+  ZONE-HTR-004 UNIT HEATER COIL:Heating Coil Air Heating Energy
+  FCU-001 HEAT PUMP DX SUPP HEATING COIL:Heating Coil Air Heating Energy
+  FCU-002 HEAT PUMP DX SUPP HEATING COIL:Heating Coil Air Heating Energy
+  FCU-003 HEAT PUMP DX SUPP HEATING COIL:Heating Coil Air Heating Energy
+  AHU-001 OA HEAT RECOVERY:Heat Exchanger Total Heating Energy
+  AHU-001 OA HEAT RECOVERY:Heat Exchanger Total Cooling Energy
+  AHU-003 OA HEAT RECOVERY:Heat Exchanger Total Heating Energy
+  AHU-003 OA HEAT RECOVERY:Heat Exchanger Total Cooling Energy
+  AHU-004 OA HEAT RECOVERY:Heat Exchanger Total Heating Energy
+  AHU-004 OA HEAT RECOVERY:Heat Exchanger Total Cooling Energy
+  FCU-001 COOLC:Cooling Coil Total Cooling Energy
+  FCU-002 COOLC:Cooling Coil Total Cooling Energy
+  FCU-003 COOLC:Cooling Coil Total Cooling Energy
+  AHU-005 COOLC DXCOIL:Cooling Coil Total Cooling Energy
+  FCU-001 HEATC:Heating Coil Total Heating Energy
+  FCU-002 HEATC:Heating Coil Total Heating Energy
+  FCU-003 HEATC:Heating Coil Total Heating Energy
+  HEATSYS1 BOILER:Boiler Heating Energy
+
+ For Meter=EnergyTransfer:Building [J], ResourceType=EnergyTransfer, Group=Building, contents are:
+  ZONE-VAV-143:Zone Air System Sensible Heating Energy
+  ZONE-VAV-143:Zone Air System Sensible Cooling Energy
+  ZONE-VAV-142:Zone Air System Sensible Heating Energy
+  ZONE-VAV-142:Zone Air System Sensible Cooling Energy
+  ZONE-HTR-001:Zone Air System Sensible Heating Energy
+  ZONE-HTR-001:Zone Air System Sensible Cooling Energy
+  ZONE-VAV-136:Zone Air System Sensible Heating Energy
+  ZONE-VAV-136:Zone Air System Sensible Cooling Energy
+  ZONE-VAV-127B:Zone Air System Sensible Heating Energy
+  ZONE-VAV-127B:Zone Air System Sensible Cooling Energy
+  ZONE-VAV-127A:Zone Air System Sensible Heating Energy
+  ZONE-VAV-127A:Zone Air System Sensible Cooling Energy
+  ZONE-VAV-131:Zone Air System Sensible Heating Energy
+  ZONE-VAV-131:Zone Air System Sensible Cooling Energy
+  ZONE-VAV-129:Zone Air System Sensible Heating Energy
+  ZONE-VAV-129:Zone Air System Sensible Cooling Energy
+  ZONE-VAV-150:Zone Air System Sensible Heating Energy
+  ZONE-VAV-150:Zone Air System Sensible Cooling Energy
+  ZONE-VAV-123A:Zone Air System Sensible Heating Energy
+  ZONE-VAV-123A:Zone Air System Sensible Cooling Energy
+  ZONE-VAV-123B:Zone Air System Sensible Heating Energy
+  ZONE-VAV-123B:Zone Air System Sensible Cooling Energy
+  ZONE-AHU-005:Zone Air System Sensible Heating Energy
+  ZONE-AHU-005:Zone Air System Sensible Cooling Energy
+  ZONE-VAV-118:Zone Air System Sensible Heating Energy
+  ZONE-VAV-118:Zone Air System Sensible Cooling Energy
+  ZONE-VAV-120:Zone Air System Sensible Heating Energy
+  ZONE-VAV-120:Zone Air System Sensible Cooling Energy
+  ZONE-VAV-119:Zone Air System Sensible Heating Energy
+  ZONE-VAV-119:Zone Air System Sensible Cooling Energy
+  ZONE-VAV-RESTROOM:Zone Air System Sensible Heating Energy
+  ZONE-VAV-RESTROOM:Zone Air System Sensible Cooling Energy
+  ZONE-AHU-004:Zone Air System Sensible Heating Energy
+  ZONE-AHU-004:Zone Air System Sensible Cooling Energy
+  ZONE-VAV-102:Zone Air System Sensible Heating Energy
+  ZONE-VAV-102:Zone Air System Sensible Cooling Energy
+  ZONE-FCU-001:Zone Air System Sensible Heating Energy
+  ZONE-FCU-001:Zone Air System Sensible Cooling Energy
+  ZONE-AHU-002:Zone Air System Sensible Heating Energy
+  ZONE-AHU-002:Zone Air System Sensible Cooling Energy
+  ZONE-VAV-105:Zone Air System Sensible Heating Energy
+  ZONE-VAV-105:Zone Air System Sensible Cooling Energy
+  ZONE-FCU-003:Zone Air System Sensible Heating Energy
+  ZONE-FCU-003:Zone Air System Sensible Cooling Energy
+  ZONE-VAV-112:Zone Air System Sensible Heating Energy
+  ZONE-VAV-112:Zone Air System Sensible Cooling Energy
+  ZONE-HTR-002:Zone Air System Sensible Heating Energy
+  ZONE-HTR-002:Zone Air System Sensible Cooling Energy
+  ZONE-HTR-003:Zone Air System Sensible Heating Energy
+  ZONE-HTR-003:Zone Air System Sensible Cooling Energy
+  ZONE-VAV-104:Zone Air System Sensible Heating Energy
+  ZONE-VAV-104:Zone Air System Sensible Cooling Energy
+  ZONE-VAV-116:Zone Air System Sensible Heating Energy
+  ZONE-VAV-116:Zone Air System Sensible Cooling Energy
+  ZONE-VAV-108:Zone Air System Sensible Heating Energy
+  ZONE-VAV-108:Zone Air System Sensible Cooling Energy
+  ZONE-FCU-002:Zone Air System Sensible Heating Energy
+  ZONE-FCU-002:Zone Air System Sensible Cooling Energy
+  ZONE-HTR-004:Zone Air System Sensible Heating Energy
+  ZONE-HTR-004:Zone Air System Sensible Cooling Energy
+  ZONE-VAV-CORRIDOR:Zone Air System Sensible Heating Energy
+  ZONE-VAV-CORRIDOR:Zone Air System Sensible Cooling Energy
+  ZONE-VAV-133:Zone Air System Sensible Heating Energy
+  ZONE-VAV-133:Zone Air System Sensible Cooling Energy
+  ZONE-VAV-107:Zone Air System Sensible Heating Energy
+  ZONE-VAV-107:Zone Air System Sensible Cooling Energy
+
+ For Meter=EnergyTransfer:Zone:ZONE-VAV-143 [J], ResourceType=EnergyTransfer, Group=Zone, contents are:
+  ZONE-VAV-143:Zone Air System Sensible Heating Energy
+  ZONE-VAV-143:Zone Air System Sensible Cooling Energy
+
+ For Meter=Heating:EnergyTransfer [J], ResourceType=EnergyTransfer, EndUse=Heating, contents are:
+  ZONE-VAV-143:Zone Air System Sensible Heating Energy
+  ZONE-VAV-142:Zone Air System Sensible Heating Energy
+  ZONE-HTR-001:Zone Air System Sensible Heating Energy
+  ZONE-VAV-136:Zone Air System Sensible Heating Energy
+  ZONE-VAV-127B:Zone Air System Sensible Heating Energy
+  ZONE-VAV-127A:Zone Air System Sensible Heating Energy
+  ZONE-VAV-131:Zone Air System Sensible Heating Energy
+  ZONE-VAV-129:Zone Air System Sensible Heating Energy
+  ZONE-VAV-150:Zone Air System Sensible Heating Energy
+  ZONE-VAV-123A:Zone Air System Sensible Heating Energy
+  ZONE-VAV-123B:Zone Air System Sensible Heating Energy
+  ZONE-AHU-005:Zone Air System Sensible Heating Energy
+  ZONE-VAV-118:Zone Air System Sensible Heating Energy
+  ZONE-VAV-120:Zone Air System Sensible Heating Energy
+  ZONE-VAV-119:Zone Air System Sensible Heating Energy
+  ZONE-VAV-RESTROOM:Zone Air System Sensible Heating Energy
+  ZONE-AHU-004:Zone Air System Sensible Heating Energy
+  ZONE-VAV-102:Zone Air System Sensible Heating Energy
+  ZONE-FCU-001:Zone Air System Sensible Heating Energy
+  ZONE-AHU-002:Zone Air System Sensible Heating Energy
+  ZONE-VAV-105:Zone Air System Sensible Heating Energy
+  ZONE-FCU-003:Zone Air System Sensible Heating Energy
+  ZONE-VAV-112:Zone Air System Sensible Heating Energy
+  ZONE-HTR-002:Zone Air System Sensible Heating Energy
+  ZONE-HTR-003:Zone Air System Sensible Heating Energy
+  ZONE-VAV-104:Zone Air System Sensible Heating Energy
+  ZONE-VAV-116:Zone Air System Sensible Heating Energy
+  ZONE-VAV-108:Zone Air System Sensible Heating Energy
+  ZONE-FCU-002:Zone Air System Sensible Heating Energy
+  ZONE-HTR-004:Zone Air System Sensible Heating Energy
+  ZONE-VAV-CORRIDOR:Zone Air System Sensible Heating Energy
+  ZONE-VAV-133:Zone Air System Sensible Heating Energy
+  ZONE-VAV-107:Zone Air System Sensible Heating Energy
+
+ For Meter=Heating:EnergyTransfer:Zone:ZONE-VAV-143 [J], ResourceType=EnergyTransfer, EndUse=Heating, Group=Zone, contents are:
+  ZONE-VAV-143:Zone Air System Sensible Heating Energy
+
+ For Meter=Cooling:EnergyTransfer [J], ResourceType=EnergyTransfer, EndUse=Cooling, contents are:
+  ZONE-VAV-143:Zone Air System Sensible Cooling Energy
+  ZONE-VAV-142:Zone Air System Sensible Cooling Energy
+  ZONE-HTR-001:Zone Air System Sensible Cooling Energy
+  ZONE-VAV-136:Zone Air System Sensible Cooling Energy
+  ZONE-VAV-127B:Zone Air System Sensible Cooling Energy
+  ZONE-VAV-127A:Zone Air System Sensible Cooling Energy
+  ZONE-VAV-131:Zone Air System Sensible Cooling Energy
+  ZONE-VAV-129:Zone Air System Sensible Cooling Energy
+  ZONE-VAV-150:Zone Air System Sensible Cooling Energy
+  ZONE-VAV-123A:Zone Air System Sensible Cooling Energy
+  ZONE-VAV-123B:Zone Air System Sensible Cooling Energy
+  ZONE-AHU-005:Zone Air System Sensible Cooling Energy
+  ZONE-VAV-118:Zone Air System Sensible Cooling Energy
+  ZONE-VAV-120:Zone Air System Sensible Cooling Energy
+  ZONE-VAV-119:Zone Air System Sensible Cooling Energy
+  ZONE-VAV-RESTROOM:Zone Air System Sensible Cooling Energy
+  ZONE-AHU-004:Zone Air System Sensible Cooling Energy
+  ZONE-VAV-102:Zone Air System Sensible Cooling Energy
+  ZONE-FCU-001:Zone Air System Sensible Cooling Energy
+  ZONE-AHU-002:Zone Air System Sensible Cooling Energy
+  ZONE-VAV-105:Zone Air System Sensible Cooling Energy
+  ZONE-FCU-003:Zone Air System Sensible Cooling Energy
+  ZONE-VAV-112:Zone Air System Sensible Cooling Energy
+  ZONE-HTR-002:Zone Air System Sensible Cooling Energy
+  ZONE-HTR-003:Zone Air System Sensible Cooling Energy
+  ZONE-VAV-104:Zone Air System Sensible Cooling Energy
+  ZONE-VAV-116:Zone Air System Sensible Cooling Energy
+  ZONE-VAV-108:Zone Air System Sensible Cooling Energy
+  ZONE-FCU-002:Zone Air System Sensible Cooling Energy
+  ZONE-HTR-004:Zone Air System Sensible Cooling Energy
+  ZONE-VAV-CORRIDOR:Zone Air System Sensible Cooling Energy
+  ZONE-VAV-133:Zone Air System Sensible Cooling Energy
+  ZONE-VAV-107:Zone Air System Sensible Cooling Energy
+
+ For Meter=Cooling:EnergyTransfer:Zone:ZONE-VAV-143 [J], ResourceType=EnergyTransfer, EndUse=Cooling, Group=Zone, contents are:
+  ZONE-VAV-143:Zone Air System Sensible Cooling Energy
+
+ For Meter=EnergyTransfer:Zone:ZONE-VAV-142 [J], ResourceType=EnergyTransfer, Group=Zone, contents are:
+  ZONE-VAV-142:Zone Air System Sensible Heating Energy
+  ZONE-VAV-142:Zone Air System Sensible Cooling Energy
+
+ For Meter=Heating:EnergyTransfer:Zone:ZONE-VAV-142 [J], ResourceType=EnergyTransfer, EndUse=Heating, Group=Zone, contents are:
+  ZONE-VAV-142:Zone Air System Sensible Heating Energy
+
+ For Meter=Cooling:EnergyTransfer:Zone:ZONE-VAV-142 [J], ResourceType=EnergyTransfer, EndUse=Cooling, Group=Zone, contents are:
+  ZONE-VAV-142:Zone Air System Sensible Cooling Energy
+
+ For Meter=EnergyTransfer:Zone:ZONE-HTR-001 [J], ResourceType=EnergyTransfer, Group=Zone, contents are:
+  ZONE-HTR-001:Zone Air System Sensible Heating Energy
+  ZONE-HTR-001:Zone Air System Sensible Cooling Energy
+
+ For Meter=Heating:EnergyTransfer:Zone:ZONE-HTR-001 [J], ResourceType=EnergyTransfer, EndUse=Heating, Group=Zone, contents are:
+  ZONE-HTR-001:Zone Air System Sensible Heating Energy
+
+ For Meter=Cooling:EnergyTransfer:Zone:ZONE-HTR-001 [J], ResourceType=EnergyTransfer, EndUse=Cooling, Group=Zone, contents are:
+  ZONE-HTR-001:Zone Air System Sensible Cooling Energy
+
+ For Meter=EnergyTransfer:Zone:ZONE-VAV-136 [J], ResourceType=EnergyTransfer, Group=Zone, contents are:
+  ZONE-VAV-136:Zone Air System Sensible Heating Energy
+  ZONE-VAV-136:Zone Air System Sensible Cooling Energy
+
+ For Meter=Heating:EnergyTransfer:Zone:ZONE-VAV-136 [J], ResourceType=EnergyTransfer, EndUse=Heating, Group=Zone, contents are:
+  ZONE-VAV-136:Zone Air System Sensible Heating Energy
+
+ For Meter=Cooling:EnergyTransfer:Zone:ZONE-VAV-136 [J], ResourceType=EnergyTransfer, EndUse=Cooling, Group=Zone, contents are:
+  ZONE-VAV-136:Zone Air System Sensible Cooling Energy
+
+ For Meter=EnergyTransfer:Zone:ZONE-VAV-127B [J], ResourceType=EnergyTransfer, Group=Zone, contents are:
+  ZONE-VAV-127B:Zone Air System Sensible Heating Energy
+  ZONE-VAV-127B:Zone Air System Sensible Cooling Energy
+
+ For Meter=Heating:EnergyTransfer:Zone:ZONE-VAV-127B [J], ResourceType=EnergyTransfer, EndUse=Heating, Group=Zone, contents are:
+  ZONE-VAV-127B:Zone Air System Sensible Heating Energy
+
+ For Meter=Cooling:EnergyTransfer:Zone:ZONE-VAV-127B [J], ResourceType=EnergyTransfer, EndUse=Cooling, Group=Zone, contents are:
+  ZONE-VAV-127B:Zone Air System Sensible Cooling Energy
+
+ For Meter=EnergyTransfer:Zone:ZONE-VAV-127A [J], ResourceType=EnergyTransfer, Group=Zone, contents are:
+  ZONE-VAV-127A:Zone Air System Sensible Heating Energy
+  ZONE-VAV-127A:Zone Air System Sensible Cooling Energy
+
+ For Meter=Heating:EnergyTransfer:Zone:ZONE-VAV-127A [J], ResourceType=EnergyTransfer, EndUse=Heating, Group=Zone, contents are:
+  ZONE-VAV-127A:Zone Air System Sensible Heating Energy
+
+ For Meter=Cooling:EnergyTransfer:Zone:ZONE-VAV-127A [J], ResourceType=EnergyTransfer, EndUse=Cooling, Group=Zone, contents are:
+  ZONE-VAV-127A:Zone Air System Sensible Cooling Energy
+
+ For Meter=EnergyTransfer:Zone:ZONE-VAV-131 [J], ResourceType=EnergyTransfer, Group=Zone, contents are:
+  ZONE-VAV-131:Zone Air System Sensible Heating Energy
+  ZONE-VAV-131:Zone Air System Sensible Cooling Energy
+
+ For Meter=Heating:EnergyTransfer:Zone:ZONE-VAV-131 [J], ResourceType=EnergyTransfer, EndUse=Heating, Group=Zone, contents are:
+  ZONE-VAV-131:Zone Air System Sensible Heating Energy
+
+ For Meter=Cooling:EnergyTransfer:Zone:ZONE-VAV-131 [J], ResourceType=EnergyTransfer, EndUse=Cooling, Group=Zone, contents are:
+  ZONE-VAV-131:Zone Air System Sensible Cooling Energy
+
+ For Meter=EnergyTransfer:Zone:ZONE-VAV-129 [J], ResourceType=EnergyTransfer, Group=Zone, contents are:
+  ZONE-VAV-129:Zone Air System Sensible Heating Energy
+  ZONE-VAV-129:Zone Air System Sensible Cooling Energy
+
+ For Meter=Heating:EnergyTransfer:Zone:ZONE-VAV-129 [J], ResourceType=EnergyTransfer, EndUse=Heating, Group=Zone, contents are:
+  ZONE-VAV-129:Zone Air System Sensible Heating Energy
+
+ For Meter=Cooling:EnergyTransfer:Zone:ZONE-VAV-129 [J], ResourceType=EnergyTransfer, EndUse=Cooling, Group=Zone, contents are:
+  ZONE-VAV-129:Zone Air System Sensible Cooling Energy
+
+ For Meter=EnergyTransfer:Zone:ZONE-VAV-150 [J], ResourceType=EnergyTransfer, Group=Zone, contents are:
+  ZONE-VAV-150:Zone Air System Sensible Heating Energy
+  ZONE-VAV-150:Zone Air System Sensible Cooling Energy
+
+ For Meter=Heating:EnergyTransfer:Zone:ZONE-VAV-150 [J], ResourceType=EnergyTransfer, EndUse=Heating, Group=Zone, contents are:
+  ZONE-VAV-150:Zone Air System Sensible Heating Energy
+
+ For Meter=Cooling:EnergyTransfer:Zone:ZONE-VAV-150 [J], ResourceType=EnergyTransfer, EndUse=Cooling, Group=Zone, contents are:
+  ZONE-VAV-150:Zone Air System Sensible Cooling Energy
+
+ For Meter=EnergyTransfer:Zone:ZONE-VAV-123A [J], ResourceType=EnergyTransfer, Group=Zone, contents are:
+  ZONE-VAV-123A:Zone Air System Sensible Heating Energy
+  ZONE-VAV-123A:Zone Air System Sensible Cooling Energy
+
+ For Meter=Heating:EnergyTransfer:Zone:ZONE-VAV-123A [J], ResourceType=EnergyTransfer, EndUse=Heating, Group=Zone, contents are:
+  ZONE-VAV-123A:Zone Air System Sensible Heating Energy
+
+ For Meter=Cooling:EnergyTransfer:Zone:ZONE-VAV-123A [J], ResourceType=EnergyTransfer, EndUse=Cooling, Group=Zone, contents are:
+  ZONE-VAV-123A:Zone Air System Sensible Cooling Energy
+
+ For Meter=EnergyTransfer:Zone:ZONE-VAV-123B [J], ResourceType=EnergyTransfer, Group=Zone, contents are:
+  ZONE-VAV-123B:Zone Air System Sensible Heating Energy
+  ZONE-VAV-123B:Zone Air System Sensible Cooling Energy
+
+ For Meter=Heating:EnergyTransfer:Zone:ZONE-VAV-123B [J], ResourceType=EnergyTransfer, EndUse=Heating, Group=Zone, contents are:
+  ZONE-VAV-123B:Zone Air System Sensible Heating Energy
+
+ For Meter=Cooling:EnergyTransfer:Zone:ZONE-VAV-123B [J], ResourceType=EnergyTransfer, EndUse=Cooling, Group=Zone, contents are:
+  ZONE-VAV-123B:Zone Air System Sensible Cooling Energy
+
+ For Meter=EnergyTransfer:Zone:ZONE-AHU-005 [J], ResourceType=EnergyTransfer, Group=Zone, contents are:
+  ZONE-AHU-005:Zone Air System Sensible Heating Energy
+  ZONE-AHU-005:Zone Air System Sensible Cooling Energy
+
+ For Meter=Heating:EnergyTransfer:Zone:ZONE-AHU-005 [J], ResourceType=EnergyTransfer, EndUse=Heating, Group=Zone, contents are:
+  ZONE-AHU-005:Zone Air System Sensible Heating Energy
+
+ For Meter=Cooling:EnergyTransfer:Zone:ZONE-AHU-005 [J], ResourceType=EnergyTransfer, EndUse=Cooling, Group=Zone, contents are:
+  ZONE-AHU-005:Zone Air System Sensible Cooling Energy
+
+ For Meter=EnergyTransfer:Zone:ZONE-VAV-118 [J], ResourceType=EnergyTransfer, Group=Zone, contents are:
+  ZONE-VAV-118:Zone Air System Sensible Heating Energy
+  ZONE-VAV-118:Zone Air System Sensible Cooling Energy
+
+ For Meter=Heating:EnergyTransfer:Zone:ZONE-VAV-118 [J], ResourceType=EnergyTransfer, EndUse=Heating, Group=Zone, contents are:
+  ZONE-VAV-118:Zone Air System Sensible Heating Energy
+
+ For Meter=Cooling:EnergyTransfer:Zone:ZONE-VAV-118 [J], ResourceType=EnergyTransfer, EndUse=Cooling, Group=Zone, contents are:
+  ZONE-VAV-118:Zone Air System Sensible Cooling Energy
+
+ For Meter=EnergyTransfer:Zone:ZONE-VAV-120 [J], ResourceType=EnergyTransfer, Group=Zone, contents are:
+  ZONE-VAV-120:Zone Air System Sensible Heating Energy
+  ZONE-VAV-120:Zone Air System Sensible Cooling Energy
+
+ For Meter=Heating:EnergyTransfer:Zone:ZONE-VAV-120 [J], ResourceType=EnergyTransfer, EndUse=Heating, Group=Zone, contents are:
+  ZONE-VAV-120:Zone Air System Sensible Heating Energy
+
+ For Meter=Cooling:EnergyTransfer:Zone:ZONE-VAV-120 [J], ResourceType=EnergyTransfer, EndUse=Cooling, Group=Zone, contents are:
+  ZONE-VAV-120:Zone Air System Sensible Cooling Energy
+
+ For Meter=EnergyTransfer:Zone:ZONE-VAV-119 [J], ResourceType=EnergyTransfer, Group=Zone, contents are:
+  ZONE-VAV-119:Zone Air System Sensible Heating Energy
+  ZONE-VAV-119:Zone Air System Sensible Cooling Energy
+
+ For Meter=Heating:EnergyTransfer:Zone:ZONE-VAV-119 [J], ResourceType=EnergyTransfer, EndUse=Heating, Group=Zone, contents are:
+  ZONE-VAV-119:Zone Air System Sensible Heating Energy
+
+ For Meter=Cooling:EnergyTransfer:Zone:ZONE-VAV-119 [J], ResourceType=EnergyTransfer, EndUse=Cooling, Group=Zone, contents are:
+  ZONE-VAV-119:Zone Air System Sensible Cooling Energy
+
+ For Meter=EnergyTransfer:Zone:ZONE-VAV-RESTROOM [J], ResourceType=EnergyTransfer, Group=Zone, contents are:
+  ZONE-VAV-RESTROOM:Zone Air System Sensible Heating Energy
+  ZONE-VAV-RESTROOM:Zone Air System Sensible Cooling Energy
+
+ For Meter=Heating:EnergyTransfer:Zone:ZONE-VAV-RESTROOM [J], ResourceType=EnergyTransfer, EndUse=Heating, Group=Zone, contents are:
+  ZONE-VAV-RESTROOM:Zone Air System Sensible Heating Energy
+
+ For Meter=Cooling:EnergyTransfer:Zone:ZONE-VAV-RESTROOM [J], ResourceType=EnergyTransfer, EndUse=Cooling, Group=Zone, contents are:
+  ZONE-VAV-RESTROOM:Zone Air System Sensible Cooling Energy
+
+ For Meter=EnergyTransfer:Zone:ZONE-AHU-004 [J], ResourceType=EnergyTransfer, Group=Zone, contents are:
+  ZONE-AHU-004:Zone Air System Sensible Heating Energy
+  ZONE-AHU-004:Zone Air System Sensible Cooling Energy
+
+ For Meter=Heating:EnergyTransfer:Zone:ZONE-AHU-004 [J], ResourceType=EnergyTransfer, EndUse=Heating, Group=Zone, contents are:
+  ZONE-AHU-004:Zone Air System Sensible Heating Energy
+
+ For Meter=Cooling:EnergyTransfer:Zone:ZONE-AHU-004 [J], ResourceType=EnergyTransfer, EndUse=Cooling, Group=Zone, contents are:
+  ZONE-AHU-004:Zone Air System Sensible Cooling Energy
+
+ For Meter=EnergyTransfer:Zone:ZONE-VAV-102 [J], ResourceType=EnergyTransfer, Group=Zone, contents are:
+  ZONE-VAV-102:Zone Air System Sensible Heating Energy
+  ZONE-VAV-102:Zone Air System Sensible Cooling Energy
+
+ For Meter=Heating:EnergyTransfer:Zone:ZONE-VAV-102 [J], ResourceType=EnergyTransfer, EndUse=Heating, Group=Zone, contents are:
+  ZONE-VAV-102:Zone Air System Sensible Heating Energy
+
+ For Meter=Cooling:EnergyTransfer:Zone:ZONE-VAV-102 [J], ResourceType=EnergyTransfer, EndUse=Cooling, Group=Zone, contents are:
+  ZONE-VAV-102:Zone Air System Sensible Cooling Energy
+
+ For Meter=EnergyTransfer:Zone:ZONE-FCU-001 [J], ResourceType=EnergyTransfer, Group=Zone, contents are:
+  ZONE-FCU-001:Zone Air System Sensible Heating Energy
+  ZONE-FCU-001:Zone Air System Sensible Cooling Energy
+
+ For Meter=Heating:EnergyTransfer:Zone:ZONE-FCU-001 [J], ResourceType=EnergyTransfer, EndUse=Heating, Group=Zone, contents are:
+  ZONE-FCU-001:Zone Air System Sensible Heating Energy
+
+ For Meter=Cooling:EnergyTransfer:Zone:ZONE-FCU-001 [J], ResourceType=EnergyTransfer, EndUse=Cooling, Group=Zone, contents are:
+  ZONE-FCU-001:Zone Air System Sensible Cooling Energy
+
+ For Meter=EnergyTransfer:Zone:ZONE-AHU-002 [J], ResourceType=EnergyTransfer, Group=Zone, contents are:
+  ZONE-AHU-002:Zone Air System Sensible Heating Energy
+  ZONE-AHU-002:Zone Air System Sensible Cooling Energy
+
+ For Meter=Heating:EnergyTransfer:Zone:ZONE-AHU-002 [J], ResourceType=EnergyTransfer, EndUse=Heating, Group=Zone, contents are:
+  ZONE-AHU-002:Zone Air System Sensible Heating Energy
+
+ For Meter=Cooling:EnergyTransfer:Zone:ZONE-AHU-002 [J], ResourceType=EnergyTransfer, EndUse=Cooling, Group=Zone, contents are:
+  ZONE-AHU-002:Zone Air System Sensible Cooling Energy
+
+ For Meter=EnergyTransfer:Zone:ZONE-VAV-105 [J], ResourceType=EnergyTransfer, Group=Zone, contents are:
+  ZONE-VAV-105:Zone Air System Sensible Heating Energy
+  ZONE-VAV-105:Zone Air System Sensible Cooling Energy
+
+ For Meter=Heating:EnergyTransfer:Zone:ZONE-VAV-105 [J], ResourceType=EnergyTransfer, EndUse=Heating, Group=Zone, contents are:
+  ZONE-VAV-105:Zone Air System Sensible Heating Energy
+
+ For Meter=Cooling:EnergyTransfer:Zone:ZONE-VAV-105 [J], ResourceType=EnergyTransfer, EndUse=Cooling, Group=Zone, contents are:
+  ZONE-VAV-105:Zone Air System Sensible Cooling Energy
+
+ For Meter=EnergyTransfer:Zone:ZONE-FCU-003 [J], ResourceType=EnergyTransfer, Group=Zone, contents are:
+  ZONE-FCU-003:Zone Air System Sensible Heating Energy
+  ZONE-FCU-003:Zone Air System Sensible Cooling Energy
+
+ For Meter=Heating:EnergyTransfer:Zone:ZONE-FCU-003 [J], ResourceType=EnergyTransfer, EndUse=Heating, Group=Zone, contents are:
+  ZONE-FCU-003:Zone Air System Sensible Heating Energy
+
+ For Meter=Cooling:EnergyTransfer:Zone:ZONE-FCU-003 [J], ResourceType=EnergyTransfer, EndUse=Cooling, Group=Zone, contents are:
+  ZONE-FCU-003:Zone Air System Sensible Cooling Energy
+
+ For Meter=EnergyTransfer:Zone:ZONE-VAV-112 [J], ResourceType=EnergyTransfer, Group=Zone, contents are:
+  ZONE-VAV-112:Zone Air System Sensible Heating Energy
+  ZONE-VAV-112:Zone Air System Sensible Cooling Energy
+
+ For Meter=Heating:EnergyTransfer:Zone:ZONE-VAV-112 [J], ResourceType=EnergyTransfer, EndUse=Heating, Group=Zone, contents are:
+  ZONE-VAV-112:Zone Air System Sensible Heating Energy
+
+ For Meter=Cooling:EnergyTransfer:Zone:ZONE-VAV-112 [J], ResourceType=EnergyTransfer, EndUse=Cooling, Group=Zone, contents are:
+  ZONE-VAV-112:Zone Air System Sensible Cooling Energy
+
+ For Meter=EnergyTransfer:Zone:ZONE-HTR-002 [J], ResourceType=EnergyTransfer, Group=Zone, contents are:
+  ZONE-HTR-002:Zone Air System Sensible Heating Energy
+  ZONE-HTR-002:Zone Air System Sensible Cooling Energy
+
+ For Meter=Heating:EnergyTransfer:Zone:ZONE-HTR-002 [J], ResourceType=EnergyTransfer, EndUse=Heating, Group=Zone, contents are:
+  ZONE-HTR-002:Zone Air System Sensible Heating Energy
+
+ For Meter=Cooling:EnergyTransfer:Zone:ZONE-HTR-002 [J], ResourceType=EnergyTransfer, EndUse=Cooling, Group=Zone, contents are:
+  ZONE-HTR-002:Zone Air System Sensible Cooling Energy
+
+ For Meter=EnergyTransfer:Zone:ZONE-HTR-003 [J], ResourceType=EnergyTransfer, Group=Zone, contents are:
+  ZONE-HTR-003:Zone Air System Sensible Heating Energy
+  ZONE-HTR-003:Zone Air System Sensible Cooling Energy
+
+ For Meter=Heating:EnergyTransfer:Zone:ZONE-HTR-003 [J], ResourceType=EnergyTransfer, EndUse=Heating, Group=Zone, contents are:
+  ZONE-HTR-003:Zone Air System Sensible Heating Energy
+
+ For Meter=Cooling:EnergyTransfer:Zone:ZONE-HTR-003 [J], ResourceType=EnergyTransfer, EndUse=Cooling, Group=Zone, contents are:
+  ZONE-HTR-003:Zone Air System Sensible Cooling Energy
+
+ For Meter=EnergyTransfer:Zone:ZONE-VAV-104 [J], ResourceType=EnergyTransfer, Group=Zone, contents are:
+  ZONE-VAV-104:Zone Air System Sensible Heating Energy
+  ZONE-VAV-104:Zone Air System Sensible Cooling Energy
+
+ For Meter=Heating:EnergyTransfer:Zone:ZONE-VAV-104 [J], ResourceType=EnergyTransfer, EndUse=Heating, Group=Zone, contents are:
+  ZONE-VAV-104:Zone Air System Sensible Heating Energy
+
+ For Meter=Cooling:EnergyTransfer:Zone:ZONE-VAV-104 [J], ResourceType=EnergyTransfer, EndUse=Cooling, Group=Zone, contents are:
+  ZONE-VAV-104:Zone Air System Sensible Cooling Energy
+
+ For Meter=EnergyTransfer:Zone:ZONE-VAV-116 [J], ResourceType=EnergyTransfer, Group=Zone, contents are:
+  ZONE-VAV-116:Zone Air System Sensible Heating Energy
+  ZONE-VAV-116:Zone Air System Sensible Cooling Energy
+
+ For Meter=Heating:EnergyTransfer:Zone:ZONE-VAV-116 [J], ResourceType=EnergyTransfer, EndUse=Heating, Group=Zone, contents are:
+  ZONE-VAV-116:Zone Air System Sensible Heating Energy
+
+ For Meter=Cooling:EnergyTransfer:Zone:ZONE-VAV-116 [J], ResourceType=EnergyTransfer, EndUse=Cooling, Group=Zone, contents are:
+  ZONE-VAV-116:Zone Air System Sensible Cooling Energy
+
+ For Meter=EnergyTransfer:Zone:ZONE-VAV-108 [J], ResourceType=EnergyTransfer, Group=Zone, contents are:
+  ZONE-VAV-108:Zone Air System Sensible Heating Energy
+  ZONE-VAV-108:Zone Air System Sensible Cooling Energy
+
+ For Meter=Heating:EnergyTransfer:Zone:ZONE-VAV-108 [J], ResourceType=EnergyTransfer, EndUse=Heating, Group=Zone, contents are:
+  ZONE-VAV-108:Zone Air System Sensible Heating Energy
+
+ For Meter=Cooling:EnergyTransfer:Zone:ZONE-VAV-108 [J], ResourceType=EnergyTransfer, EndUse=Cooling, Group=Zone, contents are:
+  ZONE-VAV-108:Zone Air System Sensible Cooling Energy
+
+ For Meter=EnergyTransfer:Zone:ZONE-FCU-002 [J], ResourceType=EnergyTransfer, Group=Zone, contents are:
+  ZONE-FCU-002:Zone Air System Sensible Heating Energy
+  ZONE-FCU-002:Zone Air System Sensible Cooling Energy
+
+ For Meter=Heating:EnergyTransfer:Zone:ZONE-FCU-002 [J], ResourceType=EnergyTransfer, EndUse=Heating, Group=Zone, contents are:
+  ZONE-FCU-002:Zone Air System Sensible Heating Energy
+
+ For Meter=Cooling:EnergyTransfer:Zone:ZONE-FCU-002 [J], ResourceType=EnergyTransfer, EndUse=Cooling, Group=Zone, contents are:
+  ZONE-FCU-002:Zone Air System Sensible Cooling Energy
+
+ For Meter=EnergyTransfer:Zone:ZONE-HTR-004 [J], ResourceType=EnergyTransfer, Group=Zone, contents are:
+  ZONE-HTR-004:Zone Air System Sensible Heating Energy
+  ZONE-HTR-004:Zone Air System Sensible Cooling Energy
+
+ For Meter=Heating:EnergyTransfer:Zone:ZONE-HTR-004 [J], ResourceType=EnergyTransfer, EndUse=Heating, Group=Zone, contents are:
+  ZONE-HTR-004:Zone Air System Sensible Heating Energy
+
+ For Meter=Cooling:EnergyTransfer:Zone:ZONE-HTR-004 [J], ResourceType=EnergyTransfer, EndUse=Cooling, Group=Zone, contents are:
+  ZONE-HTR-004:Zone Air System Sensible Cooling Energy
+
+ For Meter=EnergyTransfer:Zone:ZONE-VAV-CORRIDOR [J], ResourceType=EnergyTransfer, Group=Zone, contents are:
+  ZONE-VAV-CORRIDOR:Zone Air System Sensible Heating Energy
+  ZONE-VAV-CORRIDOR:Zone Air System Sensible Cooling Energy
+
+ For Meter=Heating:EnergyTransfer:Zone:ZONE-VAV-CORRIDOR [J], ResourceType=EnergyTransfer, EndUse=Heating, Group=Zone, contents are:
+  ZONE-VAV-CORRIDOR:Zone Air System Sensible Heating Energy
+
+ For Meter=Cooling:EnergyTransfer:Zone:ZONE-VAV-CORRIDOR [J], ResourceType=EnergyTransfer, EndUse=Cooling, Group=Zone, contents are:
+  ZONE-VAV-CORRIDOR:Zone Air System Sensible Cooling Energy
+
+ For Meter=EnergyTransfer:Zone:ZONE-VAV-133 [J], ResourceType=EnergyTransfer, Group=Zone, contents are:
+  ZONE-VAV-133:Zone Air System Sensible Heating Energy
+  ZONE-VAV-133:Zone Air System Sensible Cooling Energy
+
+ For Meter=Heating:EnergyTransfer:Zone:ZONE-VAV-133 [J], ResourceType=EnergyTransfer, EndUse=Heating, Group=Zone, contents are:
+  ZONE-VAV-133:Zone Air System Sensible Heating Energy
+
+ For Meter=Cooling:EnergyTransfer:Zone:ZONE-VAV-133 [J], ResourceType=EnergyTransfer, EndUse=Cooling, Group=Zone, contents are:
+  ZONE-VAV-133:Zone Air System Sensible Cooling Energy
+
+ For Meter=EnergyTransfer:Zone:ZONE-VAV-107 [J], ResourceType=EnergyTransfer, Group=Zone, contents are:
+  ZONE-VAV-107:Zone Air System Sensible Heating Energy
+  ZONE-VAV-107:Zone Air System Sensible Cooling Energy
+
+ For Meter=Heating:EnergyTransfer:Zone:ZONE-VAV-107 [J], ResourceType=EnergyTransfer, EndUse=Heating, Group=Zone, contents are:
+  ZONE-VAV-107:Zone Air System Sensible Heating Energy
+
+ For Meter=Cooling:EnergyTransfer:Zone:ZONE-VAV-107 [J], ResourceType=EnergyTransfer, EndUse=Cooling, Group=Zone, contents are:
+  ZONE-VAV-107:Zone Air System Sensible Cooling Energy
+
+ For Meter=ElectricityPurchased:Facility [J], ResourceType=ElectricityPurchased, contents are:
+  Whole Building:Facility Total Purchased Electric Energy
+
+ For Meter=ElectricityPurchased:Plant [J], ResourceType=ElectricityPurchased, Group=Plant, contents are:
+  Whole Building:Facility Total Purchased Electric Energy
+
+ For Meter=Cogeneration:ElectricityPurchased [J], ResourceType=ElectricityPurchased, EndUse=Cogeneration, contents are:
+  Whole Building:Facility Total Purchased Electric Energy
+
+ For Meter=ElectricitySurplusSold:Facility [J], ResourceType=ElectricitySurplusSold, contents are:
+  Whole Building:Facility Total Surplus Electric Energy
+
+ For Meter=ElectricitySurplusSold:Plant [J], ResourceType=ElectricitySurplusSold, Group=Plant, contents are:
+  Whole Building:Facility Total Surplus Electric Energy
+
+ For Meter=Cogeneration:ElectricitySurplusSold [J], ResourceType=ElectricitySurplusSold, EndUse=Cogeneration, contents are:
+  Whole Building:Facility Total Surplus Electric Energy
+
+ For Meter=ElectricityNet:Facility [J], ResourceType=ElectricityNet, contents are:
+  Whole Building:Facility Net Purchased Electric Energy
+
+ For Meter=ElectricityNet:Plant [J], ResourceType=ElectricityNet, Group=Plant, contents are:
+  Whole Building:Facility Net Purchased Electric Energy
+
+ For Meter=Cogeneration:ElectricityNet [J], ResourceType=ElectricityNet, EndUse=Cogeneration, contents are:
+  Whole Building:Facility Net Purchased Electric Energy
+
+ For Meter=EnergyTransfer:HVAC [J], ResourceType=EnergyTransfer, Group=HVAC, contents are:
+  AHU-001 HEATC:Heating Coil Heating Energy
+  AHU-002 HEATC:Heating Coil Heating Energy
+  AHU-003 HEATC:Heating Coil Heating Energy
+  AHU-004 HEATC:Heating Coil Heating Energy
+  ZONE-VAV-CORRIDOR VAV BOX REHEAT COIL:Heating Coil Heating Energy
+  ZONE-VAV-102 VAV BOX REHEAT COIL:Heating Coil Heating Energy
+  ZONE-VAV-104 VAV BOX REHEAT COIL:Heating Coil Heating Energy
+  ZONE-VAV-105 VAV BOX REHEAT COIL:Heating Coil Heating Energy
+  ZONE-VAV-107 VAV BOX REHEAT COIL:Heating Coil Heating Energy
+  ZONE-VAV-108 VAV BOX REHEAT COIL:Heating Coil Heating Energy
+  ZONE-VAV-112 VAV BOX REHEAT COIL:Heating Coil Heating Energy
+  ZONE-VAV-116 VAV BOX REHEAT COIL:Heating Coil Heating Energy
+  ZONE-VAV-118 VAV BOX REHEAT COIL:Heating Coil Heating Energy
+  ZONE-VAV-119 VAV BOX REHEAT COIL:Heating Coil Heating Energy
+  ZONE-VAV-120 VAV BOX REHEAT COIL:Heating Coil Heating Energy
+  ZONE-VAV-123A VAV BOX REHEAT COIL:Heating Coil Heating Energy
+  ZONE-VAV-123B VAV BOX REHEAT COIL:Heating Coil Heating Energy
+  ZONE-VAV-127A VAV BOX REHEAT COIL:Heating Coil Heating Energy
+  ZONE-VAV-127B VAV BOX REHEAT COIL:Heating Coil Heating Energy
+  ZONE-VAV-129 VAV BOX REHEAT COIL:Heating Coil Heating Energy
+  ZONE-VAV-131 VAV BOX REHEAT COIL:Heating Coil Heating Energy
+  ZONE-VAV-136 VAV BOX REHEAT COIL:Heating Coil Heating Energy
+  ZONE-VAV-133 VAV BOX REHEAT COIL:Heating Coil Heating Energy
+  ZONE-VAV-142 VAV BOX REHEAT COIL:Heating Coil Heating Energy
+  ZONE-VAV-143 VAV BOX REHEAT COIL:Heating Coil Heating Energy
+  ZONE-VAV-150 VAV BOX REHEAT COIL:Heating Coil Heating Energy
+  ZONE-VAV-RESTROOM VAV BOX REHEAT COIL:Heating Coil Heating Energy
+  AHU-003 COOLC:Cooling Coil Total Cooling Energy
+  AHU-002 COOLC:Cooling Coil Total Cooling Energy
+  AHU-004 COOLC:Cooling Coil Total Cooling Energy
+  AHU-001 COOLC:Cooling Coil Total Cooling Energy
+  ZONE-HTR-001 UNIT HEATER COIL:Heating Coil Air Heating Energy
+  ZONE-HTR-002 UNIT HEATER COIL:Heating Coil Air Heating Energy
+  ZONE-HTR-003 UNIT HEATER COIL:Heating Coil Air Heating Energy
+  ZONE-HTR-004 UNIT HEATER COIL:Heating Coil Air Heating Energy
+  FCU-001 HEAT PUMP DX SUPP HEATING COIL:Heating Coil Air Heating Energy
+  FCU-002 HEAT PUMP DX SUPP HEATING COIL:Heating Coil Air Heating Energy
+  FCU-003 HEAT PUMP DX SUPP HEATING COIL:Heating Coil Air Heating Energy
+  AHU-001 OA HEAT RECOVERY:Heat Exchanger Total Heating Energy
+  AHU-001 OA HEAT RECOVERY:Heat Exchanger Total Cooling Energy
+  AHU-003 OA HEAT RECOVERY:Heat Exchanger Total Heating Energy
+  AHU-003 OA HEAT RECOVERY:Heat Exchanger Total Cooling Energy
+  AHU-004 OA HEAT RECOVERY:Heat Exchanger Total Heating Energy
+  AHU-004 OA HEAT RECOVERY:Heat Exchanger Total Cooling Energy
+  FCU-001 COOLC:Cooling Coil Total Cooling Energy
+  FCU-002 COOLC:Cooling Coil Total Cooling Energy
+  FCU-003 COOLC:Cooling Coil Total Cooling Energy
+  AHU-005 COOLC DXCOIL:Cooling Coil Total Cooling Energy
+  FCU-001 HEATC:Heating Coil Total Heating Energy
+  FCU-002 HEATC:Heating Coil Total Heating Energy
+  FCU-003 HEATC:Heating Coil Total Heating Energy
+
+ For Meter=HeatingCoils:EnergyTransfer [J], ResourceType=EnergyTransfer, EndUse=HeatingCoils, contents are:
+  AHU-001 HEATC:Heating Coil Heating Energy
+  AHU-002 HEATC:Heating Coil Heating Energy
+  AHU-003 HEATC:Heating Coil Heating Energy
+  AHU-004 HEATC:Heating Coil Heating Energy
+  ZONE-VAV-CORRIDOR VAV BOX REHEAT COIL:Heating Coil Heating Energy
+  ZONE-VAV-102 VAV BOX REHEAT COIL:Heating Coil Heating Energy
+  ZONE-VAV-104 VAV BOX REHEAT COIL:Heating Coil Heating Energy
+  ZONE-VAV-105 VAV BOX REHEAT COIL:Heating Coil Heating Energy
+  ZONE-VAV-107 VAV BOX REHEAT COIL:Heating Coil Heating Energy
+  ZONE-VAV-108 VAV BOX REHEAT COIL:Heating Coil Heating Energy
+  ZONE-VAV-112 VAV BOX REHEAT COIL:Heating Coil Heating Energy
+  ZONE-VAV-116 VAV BOX REHEAT COIL:Heating Coil Heating Energy
+  ZONE-VAV-118 VAV BOX REHEAT COIL:Heating Coil Heating Energy
+  ZONE-VAV-119 VAV BOX REHEAT COIL:Heating Coil Heating Energy
+  ZONE-VAV-120 VAV BOX REHEAT COIL:Heating Coil Heating Energy
+  ZONE-VAV-123A VAV BOX REHEAT COIL:Heating Coil Heating Energy
+  ZONE-VAV-123B VAV BOX REHEAT COIL:Heating Coil Heating Energy
+  ZONE-VAV-127A VAV BOX REHEAT COIL:Heating Coil Heating Energy
+  ZONE-VAV-127B VAV BOX REHEAT COIL:Heating Coil Heating Energy
+  ZONE-VAV-129 VAV BOX REHEAT COIL:Heating Coil Heating Energy
+  ZONE-VAV-131 VAV BOX REHEAT COIL:Heating Coil Heating Energy
+  ZONE-VAV-136 VAV BOX REHEAT COIL:Heating Coil Heating Energy
+  ZONE-VAV-133 VAV BOX REHEAT COIL:Heating Coil Heating Energy
+  ZONE-VAV-142 VAV BOX REHEAT COIL:Heating Coil Heating Energy
+  ZONE-VAV-143 VAV BOX REHEAT COIL:Heating Coil Heating Energy
+  ZONE-VAV-150 VAV BOX REHEAT COIL:Heating Coil Heating Energy
+  ZONE-VAV-RESTROOM VAV BOX REHEAT COIL:Heating Coil Heating Energy
+  ZONE-HTR-001 UNIT HEATER COIL:Heating Coil Air Heating Energy
+  ZONE-HTR-002 UNIT HEATER COIL:Heating Coil Air Heating Energy
+  ZONE-HTR-003 UNIT HEATER COIL:Heating Coil Air Heating Energy
+  ZONE-HTR-004 UNIT HEATER COIL:Heating Coil Air Heating Energy
+  FCU-001 HEAT PUMP DX SUPP HEATING COIL:Heating Coil Air Heating Energy
+  FCU-002 HEAT PUMP DX SUPP HEATING COIL:Heating Coil Air Heating Energy
+  FCU-003 HEAT PUMP DX SUPP HEATING COIL:Heating Coil Air Heating Energy
+  FCU-001 HEATC:Heating Coil Total Heating Energy
+  FCU-002 HEATC:Heating Coil Total Heating Energy
+  FCU-003 HEATC:Heating Coil Total Heating Energy
+
+ For Meter=PlantLoopHeatingDemand:Facility [J], ResourceType=PlantLoopHeatingDemand, contents are:
+  AHU-001 HEATC:Heating Coil Source Side Heat Transfer Energy
+  AHU-002 HEATC:Heating Coil Source Side Heat Transfer Energy
+  AHU-003 HEATC:Heating Coil Source Side Heat Transfer Energy
+  AHU-004 HEATC:Heating Coil Source Side Heat Transfer Energy
+  ZONE-VAV-CORRIDOR VAV BOX REHEAT COIL:Heating Coil Source Side Heat Transfer Energy
+  ZONE-VAV-102 VAV BOX REHEAT COIL:Heating Coil Source Side Heat Transfer Energy
+  ZONE-VAV-104 VAV BOX REHEAT COIL:Heating Coil Source Side Heat Transfer Energy
+  ZONE-VAV-105 VAV BOX REHEAT COIL:Heating Coil Source Side Heat Transfer Energy
+  ZONE-VAV-107 VAV BOX REHEAT COIL:Heating Coil Source Side Heat Transfer Energy
+  ZONE-VAV-108 VAV BOX REHEAT COIL:Heating Coil Source Side Heat Transfer Energy
+  ZONE-VAV-112 VAV BOX REHEAT COIL:Heating Coil Source Side Heat Transfer Energy
+  ZONE-VAV-116 VAV BOX REHEAT COIL:Heating Coil Source Side Heat Transfer Energy
+  ZONE-VAV-118 VAV BOX REHEAT COIL:Heating Coil Source Side Heat Transfer Energy
+  ZONE-VAV-119 VAV BOX REHEAT COIL:Heating Coil Source Side Heat Transfer Energy
+  ZONE-VAV-120 VAV BOX REHEAT COIL:Heating Coil Source Side Heat Transfer Energy
+  ZONE-VAV-123A VAV BOX REHEAT COIL:Heating Coil Source Side Heat Transfer Energy
+  ZONE-VAV-123B VAV BOX REHEAT COIL:Heating Coil Source Side Heat Transfer Energy
+  ZONE-VAV-127A VAV BOX REHEAT COIL:Heating Coil Source Side Heat Transfer Energy
+  ZONE-VAV-127B VAV BOX REHEAT COIL:Heating Coil Source Side Heat Transfer Energy
+  ZONE-VAV-129 VAV BOX REHEAT COIL:Heating Coil Source Side Heat Transfer Energy
+  ZONE-VAV-131 VAV BOX REHEAT COIL:Heating Coil Source Side Heat Transfer Energy
+  ZONE-VAV-136 VAV BOX REHEAT COIL:Heating Coil Source Side Heat Transfer Energy
+  ZONE-VAV-133 VAV BOX REHEAT COIL:Heating Coil Source Side Heat Transfer Energy
+  ZONE-VAV-142 VAV BOX REHEAT COIL:Heating Coil Source Side Heat Transfer Energy
+  ZONE-VAV-143 VAV BOX REHEAT COIL:Heating Coil Source Side Heat Transfer Energy
+  ZONE-VAV-150 VAV BOX REHEAT COIL:Heating Coil Source Side Heat Transfer Energy
+  ZONE-VAV-RESTROOM VAV BOX REHEAT COIL:Heating Coil Source Side Heat Transfer Energy
+
+ For Meter=PlantLoopHeatingDemand:HVAC [J], ResourceType=PlantLoopHeatingDemand, Group=HVAC, contents are:
+  AHU-001 HEATC:Heating Coil Source Side Heat Transfer Energy
+  AHU-002 HEATC:Heating Coil Source Side Heat Transfer Energy
+  AHU-003 HEATC:Heating Coil Source Side Heat Transfer Energy
+  AHU-004 HEATC:Heating Coil Source Side Heat Transfer Energy
+  ZONE-VAV-CORRIDOR VAV BOX REHEAT COIL:Heating Coil Source Side Heat Transfer Energy
+  ZONE-VAV-102 VAV BOX REHEAT COIL:Heating Coil Source Side Heat Transfer Energy
+  ZONE-VAV-104 VAV BOX REHEAT COIL:Heating Coil Source Side Heat Transfer Energy
+  ZONE-VAV-105 VAV BOX REHEAT COIL:Heating Coil Source Side Heat Transfer Energy
+  ZONE-VAV-107 VAV BOX REHEAT COIL:Heating Coil Source Side Heat Transfer Energy
+  ZONE-VAV-108 VAV BOX REHEAT COIL:Heating Coil Source Side Heat Transfer Energy
+  ZONE-VAV-112 VAV BOX REHEAT COIL:Heating Coil Source Side Heat Transfer Energy
+  ZONE-VAV-116 VAV BOX REHEAT COIL:Heating Coil Source Side Heat Transfer Energy
+  ZONE-VAV-118 VAV BOX REHEAT COIL:Heating Coil Source Side Heat Transfer Energy
+  ZONE-VAV-119 VAV BOX REHEAT COIL:Heating Coil Source Side Heat Transfer Energy
+  ZONE-VAV-120 VAV BOX REHEAT COIL:Heating Coil Source Side Heat Transfer Energy
+  ZONE-VAV-123A VAV BOX REHEAT COIL:Heating Coil Source Side Heat Transfer Energy
+  ZONE-VAV-123B VAV BOX REHEAT COIL:Heating Coil Source Side Heat Transfer Energy
+  ZONE-VAV-127A VAV BOX REHEAT COIL:Heating Coil Source Side Heat Transfer Energy
+  ZONE-VAV-127B VAV BOX REHEAT COIL:Heating Coil Source Side Heat Transfer Energy
+  ZONE-VAV-129 VAV BOX REHEAT COIL:Heating Coil Source Side Heat Transfer Energy
+  ZONE-VAV-131 VAV BOX REHEAT COIL:Heating Coil Source Side Heat Transfer Energy
+  ZONE-VAV-136 VAV BOX REHEAT COIL:Heating Coil Source Side Heat Transfer Energy
+  ZONE-VAV-133 VAV BOX REHEAT COIL:Heating Coil Source Side Heat Transfer Energy
+  ZONE-VAV-142 VAV BOX REHEAT COIL:Heating Coil Source Side Heat Transfer Energy
+  ZONE-VAV-143 VAV BOX REHEAT COIL:Heating Coil Source Side Heat Transfer Energy
+  ZONE-VAV-150 VAV BOX REHEAT COIL:Heating Coil Source Side Heat Transfer Energy
+  ZONE-VAV-RESTROOM VAV BOX REHEAT COIL:Heating Coil Source Side Heat Transfer Energy
+
+ For Meter=HeatingCoils:PlantLoopHeatingDemand [J], ResourceType=PlantLoopHeatingDemand, EndUse=HeatingCoils, contents are:
+  AHU-001 HEATC:Heating Coil Source Side Heat Transfer Energy
+  AHU-002 HEATC:Heating Coil Source Side Heat Transfer Energy
+  AHU-003 HEATC:Heating Coil Source Side Heat Transfer Energy
+  AHU-004 HEATC:Heating Coil Source Side Heat Transfer Energy
+  ZONE-VAV-CORRIDOR VAV BOX REHEAT COIL:Heating Coil Source Side Heat Transfer Energy
+  ZONE-VAV-102 VAV BOX REHEAT COIL:Heating Coil Source Side Heat Transfer Energy
+  ZONE-VAV-104 VAV BOX REHEAT COIL:Heating Coil Source Side Heat Transfer Energy
+  ZONE-VAV-105 VAV BOX REHEAT COIL:Heating Coil Source Side Heat Transfer Energy
+  ZONE-VAV-107 VAV BOX REHEAT COIL:Heating Coil Source Side Heat Transfer Energy
+  ZONE-VAV-108 VAV BOX REHEAT COIL:Heating Coil Source Side Heat Transfer Energy
+  ZONE-VAV-112 VAV BOX REHEAT COIL:Heating Coil Source Side Heat Transfer Energy
+  ZONE-VAV-116 VAV BOX REHEAT COIL:Heating Coil Source Side Heat Transfer Energy
+  ZONE-VAV-118 VAV BOX REHEAT COIL:Heating Coil Source Side Heat Transfer Energy
+  ZONE-VAV-119 VAV BOX REHEAT COIL:Heating Coil Source Side Heat Transfer Energy
+  ZONE-VAV-120 VAV BOX REHEAT COIL:Heating Coil Source Side Heat Transfer Energy
+  ZONE-VAV-123A VAV BOX REHEAT COIL:Heating Coil Source Side Heat Transfer Energy
+  ZONE-VAV-123B VAV BOX REHEAT COIL:Heating Coil Source Side Heat Transfer Energy
+  ZONE-VAV-127A VAV BOX REHEAT COIL:Heating Coil Source Side Heat Transfer Energy
+  ZONE-VAV-127B VAV BOX REHEAT COIL:Heating Coil Source Side Heat Transfer Energy
+  ZONE-VAV-129 VAV BOX REHEAT COIL:Heating Coil Source Side Heat Transfer Energy
+  ZONE-VAV-131 VAV BOX REHEAT COIL:Heating Coil Source Side Heat Transfer Energy
+  ZONE-VAV-136 VAV BOX REHEAT COIL:Heating Coil Source Side Heat Transfer Energy
+  ZONE-VAV-133 VAV BOX REHEAT COIL:Heating Coil Source Side Heat Transfer Energy
+  ZONE-VAV-142 VAV BOX REHEAT COIL:Heating Coil Source Side Heat Transfer Energy
+  ZONE-VAV-143 VAV BOX REHEAT COIL:Heating Coil Source Side Heat Transfer Energy
+  ZONE-VAV-150 VAV BOX REHEAT COIL:Heating Coil Source Side Heat Transfer Energy
+  ZONE-VAV-RESTROOM VAV BOX REHEAT COIL:Heating Coil Source Side Heat Transfer Energy
+
+ For Meter=CoolingCoils:EnergyTransfer [J], ResourceType=EnergyTransfer, EndUse=CoolingCoils, contents are:
+  AHU-003 COOLC:Cooling Coil Total Cooling Energy
+  AHU-002 COOLC:Cooling Coil Total Cooling Energy
+  AHU-004 COOLC:Cooling Coil Total Cooling Energy
+  AHU-001 COOLC:Cooling Coil Total Cooling Energy
+  FCU-001 COOLC:Cooling Coil Total Cooling Energy
+  FCU-002 COOLC:Cooling Coil Total Cooling Energy
+  FCU-003 COOLC:Cooling Coil Total Cooling Energy
+  AHU-005 COOLC DXCOIL:Cooling Coil Total Cooling Energy
+
+ For Meter=PlantLoopCoolingDemand:Facility [J], ResourceType=PlantLoopCoolingDemand, contents are:
+  AHU-003 COOLC:Cooling Coil Source Side Heat Transfer Energy
+  AHU-002 COOLC:Cooling Coil Source Side Heat Transfer Energy
+  AHU-004 COOLC:Cooling Coil Source Side Heat Transfer Energy
+  AHU-001 COOLC:Cooling Coil Source Side Heat Transfer Energy
+
+ For Meter=PlantLoopCoolingDemand:HVAC [J], ResourceType=PlantLoopCoolingDemand, Group=HVAC, contents are:
+  AHU-003 COOLC:Cooling Coil Source Side Heat Transfer Energy
+  AHU-002 COOLC:Cooling Coil Source Side Heat Transfer Energy
+  AHU-004 COOLC:Cooling Coil Source Side Heat Transfer Energy
+  AHU-001 COOLC:Cooling Coil Source Side Heat Transfer Energy
+
+ For Meter=CoolingCoils:PlantLoopCoolingDemand [J], ResourceType=PlantLoopCoolingDemand, EndUse=CoolingCoils, contents are:
+  AHU-003 COOLC:Cooling Coil Source Side Heat Transfer Energy
+  AHU-002 COOLC:Cooling Coil Source Side Heat Transfer Energy
+  AHU-004 COOLC:Cooling Coil Source Side Heat Transfer Energy
+  AHU-001 COOLC:Cooling Coil Source Side Heat Transfer Energy
+
+ For Meter=Electricity:HVAC [J], ResourceType=Electricity, Group=HVAC, contents are:
+  ZONE-HTR-001 UNIT HEATERFAN:Fan Electric Energy
+  ZONE-HTR-002 UNIT HEATERFAN:Fan Electric Energy
+  ZONE-HTR-003 UNIT HEATERFAN:Fan Electric Energy
+  ZONE-HTR-004 UNIT HEATERFAN:Fan Electric Energy
+  AHU-001 FAN:Fan Electric Energy
+  AHU-002 FAN:Fan Electric Energy
+  AHU-003 FAN:Fan Electric Energy
+  AHU-004 FAN:Fan Electric Energy
+  AHU-005 FAN:Fan Electric Energy
+  FCU-001 FAN:Fan Electric Energy
+  FCU-002 FAN:Fan Electric Energy
+  FCU-003 FAN:Fan Electric Energy
+  ZONE-HTR-001 UNIT HEATER COIL:Heating Coil Electric Energy
+  ZONE-HTR-002 UNIT HEATER COIL:Heating Coil Electric Energy
+  ZONE-HTR-003 UNIT HEATER COIL:Heating Coil Electric Energy
+  ZONE-HTR-004 UNIT HEATER COIL:Heating Coil Electric Energy
+  FCU-001 HEAT PUMP DX SUPP HEATING COIL:Heating Coil Electric Energy
+  FCU-002 HEAT PUMP DX SUPP HEATING COIL:Heating Coil Electric Energy
+  FCU-003 HEAT PUMP DX SUPP HEATING COIL:Heating Coil Electric Energy
+  AHU-001 OA HEAT RECOVERY:Heat Exchanger Electric Energy
+  AHU-003 OA HEAT RECOVERY:Heat Exchanger Electric Energy
+  AHU-004 OA HEAT RECOVERY:Heat Exchanger Electric Energy
+  FCU-001 COOLC:Cooling Coil Electric Energy
+  FCU-002 COOLC:Cooling Coil Electric Energy
+  FCU-003 COOLC:Cooling Coil Electric Energy
+  AHU-005 COOLC DXCOIL:Cooling Coil Electric Energy
+  FCU-001 HEATC:Heating Coil Electric Energy
+  FCU-001 HEATC:Heating Coil Defrost Electric Energy
+  FCU-001 HEATC:Heating Coil Crankcase Heater Electric Energy
+  FCU-002 HEATC:Heating Coil Electric Energy
+  FCU-002 HEATC:Heating Coil Defrost Electric Energy
+  FCU-002 HEATC:Heating Coil Crankcase Heater Electric Energy
+  FCU-003 HEATC:Heating Coil Electric Energy
+  FCU-003 HEATC:Heating Coil Defrost Electric Energy
+  FCU-003 HEATC:Heating Coil Crankcase Heater Electric Energy
+
+ For Meter=Fans:Electricity [J], ResourceType=Electricity, EndUse=Fans, contents are:
+  ZONE-HTR-001 UNIT HEATERFAN:Fan Electric Energy
+  ZONE-HTR-002 UNIT HEATERFAN:Fan Electric Energy
+  ZONE-HTR-003 UNIT HEATERFAN:Fan Electric Energy
+  ZONE-HTR-004 UNIT HEATERFAN:Fan Electric Energy
+  AHU-001 FAN:Fan Electric Energy
+  AHU-002 FAN:Fan Electric Energy
+  AHU-003 FAN:Fan Electric Energy
+  AHU-004 FAN:Fan Electric Energy
+  AHU-005 FAN:Fan Electric Energy
+  FCU-001 FAN:Fan Electric Energy
+  FCU-002 FAN:Fan Electric Energy
+  FCU-003 FAN:Fan Electric Energy
+
+ For Meter=Unit Heater Fans:Fans:Electricity [J], ResourceType=Electricity, EndUse=Fans, contents are:
+  ZONE-HTR-001 UNIT HEATERFAN:Fan Electric Energy
+  ZONE-HTR-002 UNIT HEATERFAN:Fan Electric Energy
+  ZONE-HTR-003 UNIT HEATERFAN:Fan Electric Energy
+  ZONE-HTR-004 UNIT HEATERFAN:Fan Electric Energy
+
+ For Meter=General:Fans:Electricity [J], ResourceType=Electricity, EndUse=Fans, contents are:
+  AHU-001 FAN:Fan Electric Energy
+  AHU-002 FAN:Fan Electric Energy
+  AHU-003 FAN:Fan Electric Energy
+  AHU-004 FAN:Fan Electric Energy
+  AHU-005 FAN:Fan Electric Energy
+  FCU-001 FAN:Fan Electric Energy
+  FCU-002 FAN:Fan Electric Energy
+  FCU-003 FAN:Fan Electric Energy
+
+ For Meter=Heating:Electricity [J], ResourceType=Electricity, EndUse=Heating, contents are:
+  ZONE-HTR-001 UNIT HEATER COIL:Heating Coil Electric Energy
+  ZONE-HTR-002 UNIT HEATER COIL:Heating Coil Electric Energy
+  ZONE-HTR-003 UNIT HEATER COIL:Heating Coil Electric Energy
+  ZONE-HTR-004 UNIT HEATER COIL:Heating Coil Electric Energy
+  FCU-001 HEAT PUMP DX SUPP HEATING COIL:Heating Coil Electric Energy
+  FCU-002 HEAT PUMP DX SUPP HEATING COIL:Heating Coil Electric Energy
+  FCU-003 HEAT PUMP DX SUPP HEATING COIL:Heating Coil Electric Energy
+  FCU-001 HEATC:Heating Coil Electric Energy
+  FCU-001 HEATC:Heating Coil Defrost Electric Energy
+  FCU-001 HEATC:Heating Coil Crankcase Heater Electric Energy
+  FCU-002 HEATC:Heating Coil Electric Energy
+  FCU-002 HEATC:Heating Coil Defrost Electric Energy
+  FCU-002 HEATC:Heating Coil Crankcase Heater Electric Energy
+  FCU-003 HEATC:Heating Coil Electric Energy
+  FCU-003 HEATC:Heating Coil Defrost Electric Energy
+  FCU-003 HEATC:Heating Coil Crankcase Heater Electric Energy
+  HEATSYS1 BOILER:Boiler Ancillary Electric Energy
+
+ For Meter=HeatRecoveryForHeating:EnergyTransfer [J], ResourceType=EnergyTransfer, EndUse=HeatRecoveryForHeating, contents are:
+  AHU-001 OA HEAT RECOVERY:Heat Exchanger Total Heating Energy
+  AHU-003 OA HEAT RECOVERY:Heat Exchanger Total Heating Energy
+  AHU-004 OA HEAT RECOVERY:Heat Exchanger Total Heating Energy
+
+ For Meter=HeatRecoveryForCooling:EnergyTransfer [J], ResourceType=EnergyTransfer, EndUse=HeatRecoveryForCooling, contents are:
+  AHU-001 OA HEAT RECOVERY:Heat Exchanger Total Cooling Energy
+  AHU-003 OA HEAT RECOVERY:Heat Exchanger Total Cooling Energy
+  AHU-004 OA HEAT RECOVERY:Heat Exchanger Total Cooling Energy
+
+ For Meter=HeatRecovery:Electricity [J], ResourceType=Electricity, EndUse=HeatRecovery, contents are:
+  AHU-001 OA HEAT RECOVERY:Heat Exchanger Electric Energy
+  AHU-003 OA HEAT RECOVERY:Heat Exchanger Electric Energy
+  AHU-004 OA HEAT RECOVERY:Heat Exchanger Electric Energy
+
+ For Meter=Cooling:Electricity [J], ResourceType=Electricity, EndUse=Cooling, contents are:
+  FCU-001 COOLC:Cooling Coil Electric Energy
+  FCU-002 COOLC:Cooling Coil Electric Energy
+  FCU-003 COOLC:Cooling Coil Electric Energy
+  AHU-005 COOLC DXCOIL:Cooling Coil Electric Energy
+  AHU-005 COOLC DXCOIL:Cooling Coil Crankcase Heater Electric Energy
+
+ For Meter=EnergyTransfer:Plant [J], ResourceType=EnergyTransfer, Group=Plant, contents are:
+  HEATSYS1 BOILER:Boiler Heating Energy
+
+ For Meter=Boilers:EnergyTransfer [J], ResourceType=EnergyTransfer, EndUse=Boilers, contents are:
+  HEATSYS1 BOILER:Boiler Heating Energy
+
+ For Meter=Gas:Facility [J], ResourceType=Gas, contents are:
+  HEATSYS1 BOILER:Boiler Gas Energy
+
+ For Meter=Gas:Plant [J], ResourceType=Gas, Group=Plant, contents are:
+  HEATSYS1 BOILER:Boiler Gas Energy
+
+ For Meter=Heating:Gas [J], ResourceType=Gas, EndUse=Heating, contents are:
+  HEATSYS1 BOILER:Boiler Gas Energy
+
+ For Meter=Boiler:Heating:Gas [J], ResourceType=Gas, EndUse=Heating, contents are:
+  HEATSYS1 BOILER:Boiler Gas Energy
+
+ For Meter=Electricity:Plant [J], ResourceType=Electricity, Group=Plant, contents are:
+  HEATSYS1 BOILER:Boiler Ancillary Electric Energy
+  HEATSYS1 PUMP:Pump Electric Energy
+  COOLSYS1 PUMP SECONDARY:Pump Electric Energy
+  COOLSYS1 CHILLER1 PUMP:Pump Electric Energy
+  AHU-005 COOLC DXCOIL:Cooling Coil Crankcase Heater Electric Energy
+
+ For Meter=Boiler Parasitic:Heating:Electricity [J], ResourceType=Electricity, EndUse=Heating, contents are:
+  HEATSYS1 BOILER:Boiler Ancillary Electric Energy
+
+ For Meter=DistrictCooling:Facility [J], ResourceType=DistrictCooling, contents are:
+  DISTRICT COOLING:District Cooling Chilled Water Energy
+
+ For Meter=DistrictCooling:Plant [J], ResourceType=DistrictCooling, Group=Plant, contents are:
+  DISTRICT COOLING:District Cooling Chilled Water Energy
+
+ For Meter=Cooling:DistrictCooling [J], ResourceType=DistrictCooling, EndUse=Cooling, contents are:
+  DISTRICT COOLING:District Cooling Chilled Water Energy
+
+ For Meter=Pumps:Electricity [J], ResourceType=Electricity, EndUse=Pumps, contents are:
+  HEATSYS1 PUMP:Pump Electric Energy
+  COOLSYS1 PUMP SECONDARY:Pump Electric Energy
+  COOLSYS1 CHILLER1 PUMP:Pump Electric Energy
+
+ For Meter=Carbon Equivalent:Facility [kg], ResourceType=Carbon Equivalent, contents are:
+  Site:Environmental Impact Total N2O Emissions Carbon Equivalent Mass
+  Site:Environmental Impact Total CH4 Emissions Carbon Equivalent Mass
+  Site:Environmental Impact Total CO2 Emissions Carbon Equivalent Mass
+
+ For Meter=CarbonEquivalentEmissions:Carbon Equivalent [kg], ResourceType=Carbon Equivalent, EndUse=CarbonEquivalentEmissions, contents are:
+  Site:Environmental Impact Total N2O Emissions Carbon Equivalent Mass
+  Site:Environmental Impact Total CH4 Emissions Carbon Equivalent Mass
+  Site:Environmental Impact Total CO2 Emissions Carbon Equivalent Mass

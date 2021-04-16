@@ -1,0 +1,116 @@
+{
+	"market_name": "electric",
+	"campus": "PNNL",
+	"building": "BUILDING1",
+	"agent_name": "uncontrol",
+	"devices": {
+		"LIGHTING/ZONE102": {
+			"points": ["Power"],
+			"conversion": "Power*(0.001)"
+		},
+		"LIGHTING/ZONE104": {
+			"points": ["Power"],
+			"conversion": "Power*(0.001)"
+		},
+		"LIGHTING/ZONE105": {
+			"points": ["Power"],
+			"conversion": "Power*(0.001)"
+		},
+		"LIGHTING/ZONE107": {
+			"points": ["Power"],
+			"conversion": "Power*(0.001)"
+		},
+		"LIGHTING/ZONE108": {
+			"points": ["Power"],
+			"conversion": "Power*(0.001)"
+		},
+		"LIGHTING/ZONE112": {
+			"points": ["Power"],
+			"conversion": "Power*(0.001)"
+		},
+		"LIGHTING/ZONE116": {
+			"points": ["Power"],
+			"conversion": "Power*(0.001)"
+		},
+		"LIGHTING/ZONE118": {
+			"points": ["Power"],
+			"conversion": "Power*(0.001)"
+		},
+		"LIGHTING/ZONE119": {
+			"points": ["Power"],
+			"conversion": "Power*(0.001)"
+		},
+		"LIGHTING/ZONE120": {
+			"points": ["Power"],
+			"conversion": "Power*(0.001)"
+		},
+		"LIGHTING/ZONE123A": {
+			"points": ["Power"],
+			"conversion": "Power*(0.001)"
+		},
+		"LIGHTING/ZONE123B": {
+			"points": ["Power"],
+			"conversion": "Power*(0.001)"
+		},
+		"LIGHTING/ZONE127A": {
+			"points": ["Power"],
+			"conversion": "Power*(0.001)"
+		},
+		"LIGHTING/ZONE127B": {
+			"points": ["Power"],
+			"conversion": "Power*(0.001)"
+		},
+		"LIGHTING/ZONE129": {
+			"points": ["Power"],
+			"conversion": "Power*(0.001)"
+		},
+		"LIGHTING/ZONE131": {
+			"points": ["Power"],
+			"conversion": "Power*(0.001)"
+		},
+		"LIGHTING/ZONE133": {
+			"points": ["Power"],
+			"conversion": "Power*(0.001)"
+		},
+		"LIGHTING/ZONE136": {
+			"points": ["Power"],
+			"conversion": "Power*(0.001)"
+		},
+		"LIGHTING/ZONE142": {
+			"points": ["Power"],
+			"conversion": "Power*(0.001)"
+		},
+		"LIGHTING/ZONE143": {
+			"points": ["Power"],
+			"conversion": "Power*(0.001)"
+		},
+		"LIGHTING/ZONE150": {
+			"points": ["Power"],
+			"conversion": "Power*(0.001)"
+		},
+		"AHU1": {
+			"points": ["SupplyFanPower"],
+			"conversion": "SupplyFanPower*(0.001)"
+		},
+		"AHU2": {
+			"points": ["SupplyFanPower"],
+			"conversion": "SupplyFanPower*(-0.001)"
+		},
+		"AHU3": {
+			"points": ["SupplyFanPower"],
+			"conversion": "SupplyFanPower*(0.001)"
+		},
+		"AHU4": {
+			"points": ["SupplyFanPower"],
+			"conversion": "SupplyFanPower*(0.001)"
+		},
+		"Chiller": {
+			"points": ["Power"],
+			"conversion": "Power/6160"
+		},
+		"METER": {
+			"points": ["WholeBuildingPower"],
+			"conversion": "WholeBuildingPower*(-0.001)"
+		}
+	}
+}

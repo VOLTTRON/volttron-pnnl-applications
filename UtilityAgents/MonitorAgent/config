@@ -1,0 +1,405 @@
+{   "email_list": ["robert.lutes@pnnl.gov"],
+    "rules": [
+        {
+            "condition": "(ZoneTemperatureRm127>75.5) & (OccupancyMode)",
+            "inputs": {
+                "devices/PNNL/350_BUILDING/HP1A/all": ["ZoneTemperatureRm127", "OutdoorAirTemperature", "OccupancyMode"]
+            },
+            "duration": 20,
+            "alert_message": "350_BUILDING - High zone temperature HP1A Room 127",
+            "disable_actuation": true,
+            "disable_actuation_payload": {"topic": "tnc/PNNL/350_BUILDING/HP1A", "message": 0, "header": {}}
+        },
+        {
+            "condition": "(ZoneTemperatureRm123>75.0) & (OccupancyMode)",
+            "inputs": {
+                "devices/PNNL/350_BUILDING/HP1A/all": ["ZoneTemperatureRm123", "OutdoorAirTemperature", "OccupancyMode"]
+            },
+            "duration": 20,
+            "disable_actuation": true,
+            "disable_actuation_payload": {"topic": "tnc/PNNL/350_BUILDING/HP1A", "message": 0, "header": {}},
+            "alert_message": "350_BUILDING - High zone temperature HP1A Room 123"
+        },
+        {
+            "condition": "(ZoneTemperatureRm121>75) & (OccupancyMode)",
+            "inputs": {
+                "devices/PNNL/350_BUILDING/HP1A/all": ["ZoneTemperatureRm121", "OutdoorAirTemperature", "OccupancyMode"]
+            },
+            "duration": 20,
+            "disable_actuation": true,
+            "disable_actuation_payload": {"topic": "tnc/PNNL/350_BUILDING/HP1A", "message": 0, "header": {}},
+            "alert_message": "350_BUILDING - High zone temperature HP1A Room 121"
+        },
+        {
+            "condition": "(ZoneTemperatureRm119>75) & (OccupancyMode)",
+            "inputs": {
+                "devices/PNNL/350_BUILDING/HP1A/all": ["ZoneTemperatureRm119", "OutdoorAirTemperature", "OccupancyMode"]
+            },
+            "duration": 20,
+            "disable_actuation": true,
+            "disable_actuation_payload": {"topic": "tnc/PNNL/350_BUILDING/HP1A", "message": 0, "header": {}},
+            "alert_message": "350_BUILDING - High zone temperature HP1A Room 119"
+        },
+        {
+            "condition": "(ZoneTemperature>75) & (OccupancyMode)",
+            "inputs": {
+                "devices/PNNL/350_BUILDING/HP1A/all": ["ZoneTemperature", "OutdoorAirTemperature", "OccupancyMode"]
+            },
+            "duration": 20,
+            "disable_actuation": true,
+            "disable_actuation_payload": {"topic": "tnc/PNNL/350_BUILDING/HP1A", "message": 0, "header": {}},
+            "alert_message": "350_BUILDING - High zone temperature HP1A Room 115"
+        },
+         {
+            "condition": "(DischargeAirTemperature>65) & (OccupancyMode) & (FirstStageCooling)",
+            "inputs": {
+                "devices/PNNL/350_BUILDING/HP1A/all": ["DischargeAirTemperature", "FirstStageCooling", "OccupancyMode"]
+            },
+            "duration": 20,
+            "alert_message": "350_BUILDING - High discharge-air temperature HP1A"
+        },
+        ################################################################################################################
+        {
+            "condition": "(ZoneTemperatureRm105>75) & (OccupancyMode)",
+            "inputs": {
+                "devices/PNNL/350_BUILDING/HP1B/all": ["ZoneTemperatureRm105", "OutdoorAirTemperature", "OccupancyMode"]
+            },
+            "duration": 20,
+            "disable_actuation": true,
+            "disable_actuation_payload": {"topic": "tnc/PNNL/350_BUILDING/HP1B", "message": 0, "header": {}},
+            "alert_message": "350_BUILDING - High zone temperature HP1B Room 105"
+        },
+        {
+            "condition": "(ZoneTemperatureRm101>75) & (OccupancyMode)",
+            "inputs": {
+                "devices/PNNL/350_BUILDING/HP1B/all": ["ZoneTemperatureRm101", "OutdoorAirTemperature", "OccupancyMode"]
+            },
+            "duration": 20,
+            "disable_actuation": true,
+            "disable_actuation_payload": {"topic": "tnc/PNNL/350_BUILDING/HP1B", "message": 0, "header": {}},
+            "alert_message": "350_BUILDING - High zone temperature HP1B Room 101"
+        },
+        {
+            "condition": "(ZoneTemperature>75) & (OccupancyMode)",
+            "inputs": {
+                "devices/PNNL/350_BUILDING/HP1B/all": ["ZoneTemperature", "OutdoorAirTemperature", "OccupancyMode"]
+            },
+            "duration": 20,
+            "disable_actuation": true,
+            "disable_actuation_payload": {"topic": "tnc/PNNL/350_BUILDING/HP1B", "message": 0, "header": {}},
+            "alert_message": "350_BUILDING - High zone temperature HP1A Room 103"
+        },
+         {
+            "condition": "(DischargeAirTemperature>65) & (OccupancyMode) & (FirstStageCooling)",
+            "inputs": {
+                "devices/PNNL/350_BUILDING/HP1B/all": ["DischargeAirTemperature", "FirstStageCooling", "OccupancyMode"]
+            },
+            "duration": 20,
+            "alert_message": "350_BUILDING - High discharge-air temperature HP1B"
+        },
+        ################################################################################################################
+        {
+            "condition": "(ZoneTemperatureRm125>75) & (OccupancyMode)",
+            "inputs": {
+                "devices/PNNL/350_BUILDING/HP2/all": ["ZoneTemperatureRm125", "OutdoorAirTemperature", "OccupancyMode"]
+            },
+            "duration": 20,
+            "disable_actuation": true,
+            "disable_actuation_payload": {"topic": "tnc/PNNL/350_BUILDING/HP2", "message": 0, "header": {}},
+            "alert_message": "350_BUILDING - High zone temperature HP2 Room 125"
+        },
+        {
+            "condition": "(ZoneTemperatureRm135>75) & (OccupancyMode)",
+            "inputs": {
+                "devices/PNNL/350_BUILDING/HP2/all": ["ZoneTemperatureRm135", "OutdoorAirTemperature", "OccupancyMode"]
+            },
+            "duration": 20,
+            "disable_actuation": true,
+            "disable_actuation_payload": {"topic": "tnc/PNNL/350_BUILDING/HP2", "message": 0, "header": {}},
+            "alert_message": "350_BUILDING - High zone temperature HP2 Room 135"
+        },
+        {
+            "condition": "(ZoneTemperatureRm137>75) & (OccupancyMode)",
+            "inputs": {
+                "devices/PNNL/350_BUILDING/HP2/all": ["ZoneTemperatureRm137", "OutdoorAirTemperature", "OccupancyMode"]
+            },
+            "duration": 20,
+            "disable_actuation": true,
+            "disable_actuation_payload": {"topic": "tnc/PNNL/350_BUILDING/HP2", "message": 0, "header": {}},
+            "alert_message": "350_BUILDING - High zone temperature HP2 Room 137"
+        },
+        {
+            "condition": "(ZoneTemperature>75) & (OccupancyMode)",
+            "inputs": {
+                "devices/PNNL/350_BUILDING/HP2/all": ["ZoneTemperature", "OutdoorAirTemperature", "OccupancyMode"]
+            },
+            "duration": 20,
+            "disable_actuation": true,
+            "disable_actuation_payload": {"topic": "tnc/PNNL/350_BUILDING/HP2", "message": 0, "header": {}},
+            "alert_message": "350_BUILDING - High zone temperature HP1A Room 131"
+        },
+         {
+            "condition": "(DischargeAirTemperature>65) & (OccupancyMode) & (FirstStageCooling)",
+            "inputs": {
+                "devices/PNNL/350_BUILDING/HP2/all": ["DischargeAirTemperature", "FirstStageCooling", "OccupancyMode"]
+            },
+            "duration": 20,
+            "alert_message": "350_BUILDING - High discharge-air temperature HP2"
+        },
+        ################################################################################################################
+        {
+            "condition": "(ZoneTemperatureRm108>75) & (OccupancyMode)",
+            "inputs": {
+                "devices/PNNL/350_BUILDING/HP3/all": ["ZoneTemperatureRm108", "OutdoorAirTemperature", "OccupancyMode"]
+            },
+            "duration": 20,
+            "disable_actuation": true,
+            "disable_actuation_payload": {"topic": "tnc/PNNL/350_BUILDING/HP3", "message": 0, "header": {}},
+            "alert_message": "350_BUILDING - High zone temperature HP3 Room 108"
+        },
+        {
+            "condition": "(ZoneTemperatureRm141B>75) & (OccupancyMode)",
+            "inputs": {
+                "devices/PNNL/350_BUILDING/HP3/all": ["ZoneTemperatureRm141B", "OutdoorAirTemperature", "OccupancyMode"]
+            },
+            "duration": 20,
+            "disable_actuation": true,
+            "disable_actuation_payload": {"topic": "tnc/PNNL/350_BUILDING/HP3", "message": 0, "header": {}},
+            "alert_message": "350_BUILDING - High zone temperature HP3 Room 141B"
+        },
+        {
+            "condition": "(ZoneTemperatureRm141>75) & (OccupancyMode)",
+            "inputs": {
+                "devices/PNNL/350_BUILDING/HP3/all": ["ZoneTemperatureRm141", "OutdoorAirTemperature", "OccupancyMode"]
+            },
+            "duration": 20,
+            "disable_actuation": true,
+            "disable_actuation_payload": {"topic": "tnc/PNNL/350_BUILDING/HP3", "message": 0, "header": {}},
+            "alert_message": "350_BUILDING - High zone temperature HP3 Room 141"
+        },
+        {
+            "condition": "(ZoneTemperatureRm145>75) & (OccupancyMode)",
+            "inputs": {
+                "devices/PNNL/350_BUILDING/HP3/all": ["ZoneTemperatureRm145", "OutdoorAirTemperature", "OccupancyMode"]
+            },
+            "duration": 20,
+            "disable_actuation": true,
+            "disable_actuation_payload": {"topic": "tnc/PNNL/350_BUILDING/HP3", "message": 0, "header": {}},
+            "alert_message": "350_BUILDING - High zone temperature HP3 Room 145"
+        },
+        {
+            "condition": "(ZoneTemperatureRm146>75) & (OccupancyMode)",
+            "inputs": {
+                "devices/PNNL/350_BUILDING/HP3/all": ["ZoneTemperatureRm146", "OutdoorAirTemperature", "OccupancyMode"]
+            },
+            "duration": 20,
+            "disable_actuation": true,
+            "disable_actuation_payload": {"topic": "tnc/PNNL/350_BUILDING/HP3", "message": 0, "header": {}},
+            "alert_message": "350_BUILDING - High zone temperature HP3 Room 146"
+        },
+        {
+            "condition": "(ZoneTemperatureRm147>75) & (OccupancyMode)",
+            "inputs": {
+                "devices/PNNL/350_BUILDING/HP3/all": ["ZoneTemperatureRm147", "OutdoorAirTemperature", "OccupancyMode"]
+            },
+            "duration": 20,
+            "disable_actuation": true,
+            "disable_actuation_payload": {"topic": "tnc/PNNL/350_BUILDING/HP3", "message": 0, "header": {}},
+            "alert_message": "350_BUILDING - High zone temperature HP3 Room 147"
+        },
+        {
+            "condition": "(ZoneTemperatureRm148>75) & (OccupancyMode)",
+            "inputs": {
+                "devices/PNNL/350_BUILDING/HP3/all": ["ZoneTemperatureRm148", "OutdoorAirTemperature", "OccupancyMode"]
+            },
+            "duration": 20,
+            "disable_actuation": true,
+            "disable_actuation_payload": {"topic": "tnc/PNNL/350_BUILDING/HP3", "message": 0, "header": {}},
+            "alert_message": "350_BUILDING - High zone temperature HP3 Room 148"
+        },
+        {
+            "condition": "(ZoneTemperature>75) & (OccupancyMode)",
+            "inputs": {
+                "devices/PNNL/350_BUILDING/HP3/all": ["ZoneTemperature", "OutdoorAirTemperature", "OccupancyMode"]
+            },
+            "duration": 20,
+            "disable_actuation": true,
+            "disable_actuation_payload": {"topic": "tnc/PNNL/350_BUILDING/HP3", "message": 0, "header": {}},
+            "alert_message": "350_BUILDING - High zone temperature HP3 average zone temperature"
+        },
+         {
+            "condition": "(DischargeAirTemperature>65) & (OccupancyMode) & (FirstStageCooling)",
+            "inputs": {
+                "devices/PNNL/350_BUILDING/HP3/all": ["DischargeAirTemperature", "FirstStageCooling", "OccupancyMode"]
+            },
+            "duration": 20,
+            "alert_message": "350_BUILDING - High discharge-air temperature HP3"
+        },
+        ################################################################################################################
+        {
+            "condition": "(ZoneTemperatureRm151>75) & (OccupancyMode)",
+            "inputs": {
+                "devices/PNNL/350_BUILDING/HP4/all": ["ZoneTemperatureRm151", "OutdoorAirTemperature", "OccupancyMode"]
+            },
+            "duration": 20,
+            "disable_actuation": true,
+            "disable_actuation_payload": {"topic": "tnc/PNNL/350_BUILDING/HP4", "message": 0, "header": {}},
+            "alert_message": "350_BUILDING - High zone temperature HP4 Room 151"
+        },
+        {
+            "condition": "(ZoneTemperature>75) & (OccupancyMode)",
+            "inputs": {
+                "devices/PNNL/350_BUILDING/HP4/all": ["ZoneTemperature", "OutdoorAirTemperature", "OccupancyMode"]
+            },
+            "duration": 20,
+            "disable_actuation": true,
+            "disable_actuation_payload": {"topic": "tnc/PNNL/350_BUILDING/HP4", "message": 0, "header": {}},
+            "alert_message": "350_BUILDING - High zone temperature HP4 average zone temperature"
+        },
+         {
+            "condition": "(DischargeAirTemperature>65) & (OccupancyMode) & (FirstStageCooling)",
+            "inputs": {
+                "devices/PNNL/350_BUILDING/HP4/all": ["DischargeAirTemperature", "FirstStageCooling", "OccupancyMode"]
+            },
+            "duration": 20,
+            "alert_message": "350_BUILDING - High discharge-air temperature HP4"
+        },
+        ################################################################################################################
+        {
+            "condition": "(ZoneTemperatureRmShopSW>75) & (OccupancyMode)",
+            "inputs": {
+                "devices/PNNL/350_BUILDING/HP6/all": ["ZoneTemperatureRmShopSW", "OutdoorAirTemperature", "OccupancyMode"]
+            },
+            "duration": 20,
+            "disable_actuation": true,
+            "disable_actuation_payload": {"topic": "tnc/PNNL/350_BUILDING/HP6", "message": 0, "header": {}},
+            "alert_message": "350_BUILDING - High zone temperature HP4 Room ShopSW"
+        },
+        {
+            "condition": "(ZoneTemperature>75) & (OccupancyMode)",
+            "inputs": {
+                "devices/PNNL/350_BUILDING/HP6/all": ["ZoneTemperature", "OutdoorAirTemperature", "OccupancyMode"]
+            },
+            "duration": 20,
+            "disable_actuation": true,
+            "disable_actuation_payload": {"topic": "tnc/PNNL/350_BUILDING/HP6", "message": 0, "header": {}},
+            "alert_message": "350_BUILDING - High zone temperature HP6 average zone temperature"
+        },
+         {
+            "condition": "(DischargeAirTemperature>68.0) & (OccupancyMode) & (FirstStageCooling)",
+            "inputs": {
+                "devices/PNNL/350_BUILDING/HP6/all": ["DischargeAirTemperature", "FirstStageCooling", "OccupancyMode"]
+            },
+            "duration": 20,
+            "alert_message": "350_BUILDING - High discharge-air temperature HP6"
+        },
+        ################################################################################################################
+        {
+            "condition": "(ZoneTemperatureRm161>75) & (OccupancyMode)",
+            "inputs": {
+                "devices/PNNL/350_BUILDING/HP7/all": ["ZoneTemperatureRm161", "OutdoorAirTemperature", "OccupancyMode"]
+            },
+            "duration": 20,
+            "disable_actuation": true,
+            "disable_actuation_payload": {"topic": "tnc/PNNL/350_BUILDING/HP7", "message": 0, "header": {}},
+            "alert_message": "350_BUILDING - High zone temperature HP7 Room 161"
+        },
+        {
+            "condition": "(ZoneTemperatureRm163>75) & (OccupancyMode)",
+            "inputs": {
+                "devices/PNNL/350_BUILDING/HP7/all": ["ZoneTemperatureRm163", "OutdoorAirTemperature", "OccupancyMode"]
+            },
+            "duration": 20,
+            "disable_actuation": true,
+            "disable_actuation_payload": {"topic": "tnc/PNNL/350_BUILDING/HP7", "message": 0, "header": {}},
+            "alert_message": "350_BUILDING - High zone temperature HP7 Room 163"
+        },
+        {
+            "condition": "(ZoneTemperatureRm164>75) & (OccupancyMode)",
+            "inputs": {
+                "devices/PNNL/350_BUILDING/HP7/all": ["ZoneTemperatureRm164", "OutdoorAirTemperature", "OccupancyMode"]
+            },
+            "duration": 20,
+            "disable_actuation": true,
+            "disable_actuation_payload": {"topic": "tnc/PNNL/350_BUILDING/HP7", "message": 0, "header": {}},
+            "alert_message": "350_BUILDING - High zone temperature HP7 Room 164"
+        },
+        {
+            "condition": "(ZoneTemperatureRm165>75) & (OccupancyMode)",
+            "inputs": {
+                "devices/PNNL/350_BUILDING/HP7/all": ["ZoneTemperatureRm165", "OutdoorAirTemperature", "OccupancyMode"]
+            },
+            "duration": 20,
+            "disable_actuation": true,
+            "disable_actuation_payload": {"topic": "tnc/PNNL/350_BUILDING/HP7", "message": 0, "header": {}},
+            "alert_message": "350_BUILDING - High zone temperature HP7 Room 165"
+        },
+        {
+            "condition": "(ZoneTemperatureRm166>75) & (OccupancyMode)",
+            "inputs": {
+                "devices/PNNL/350_BUILDING/HP7/all": ["ZoneTemperatureRm166", "OutdoorAirTemperature", "OccupancyMode"]
+            },
+            "duration": 20,
+            "disable_actuation": true,
+            "disable_actuation_payload": {"topic": "tnc/PNNL/350_BUILDING/HP7", "message": 0, "header": {}},
+            "alert_message": "350_BUILDING - High zone temperature HP7 Room 166"
+        },
+        {
+            "condition": "(ZoneTemperatureRm167>75) & (OccupancyMode)",
+            "inputs": {
+                "devices/PNNL/350_BUILDING/HP7/all": ["ZoneTemperatureRm167", "OutdoorAirTemperature", "OccupancyMode"]
+            },
+            "duration": 20,
+            "disable_actuation": true,
+            "disable_actuation_payload": {"topic": "tnc/PNNL/350_BUILDING/HP7", "message": 0, "header": {}},
+            "alert_message": "350_BUILDING - High zone temperature HP7 Room 167"
+        },
+        {
+            "condition": "(ZoneTemperatureRm168>75) & (OccupancyMode)",
+            "inputs": {
+                "devices/PNNL/350_BUILDING/HP7/all": ["ZoneTemperatureRm168", "OutdoorAirTemperature", "OccupancyMode"]
+            },
+            "duration": 20,
+            "disable_actuation": true,
+            "disable_actuation_payload": {"topic": "tnc/PNNL/350_BUILDING/HP7", "message": 0, "header": {}},
+            "alert_message": "350_BUILDING - High zone temperature HP7 Room 168"
+        },
+        {
+            "condition": "(ZoneTemperature>75) & (OccupancyMode)",
+            "inputs": {
+                "devices/PNNL/350_BUILDING/HP7/all": ["ZoneTemperature", "OutdoorAirTemperature", "OccupancyMode"]
+            },
+            "duration": 20,
+            "disable_actuation": true,
+            "disable_actuation_payload": {"topic": "tnc/PNNL/350_BUILDING/HP7", "message": 0, "header": {}},
+            "alert_message": "350_BUILDING - High zone temperature HP7 average zone temperature"
+        },
+         {
+            "condition": "(DischargeAirTemperature>65.0) & (OccupancyMode) & (FirstStageCooling)",
+            "inputs": {
+                "devices/PNNL/350_BUILDING/HP7/all": ["DischargeAirTemperature", "FirstStageCooling", "OccupancyMode"]
+            },
+            "duration": 20,
+            "alert_message": "350_BUILDING - High discharge-air temperature HP7"
+        },
+        ################################################################################################################
+        {
+            "condition": "(ZoneTemperature>75) & (OccupancyMode)",
+            "inputs": {
+                "devices/PNNL/350_BUILDING/HP8/all": ["ZoneTemperature", "OutdoorAirTemperature", "OccupancyMode"]
+            },
+            "duration": 20,
+            "disable_actuation": true,
+            "disable_actuation_payload": {"topic": "tnc/PNNL/350_BUILDING/HP8", "message": 0, "header": {}},
+            "alert_message": "350_BUILDING - High zone temperature HP8 average zone temperature"
+        },
+        {
+            "condition": "(DischargeAirTemperature>65.0) & (OccupancyMode) & (FirstStageCooling>50)",
+            "inputs": {
+                "devices/PNNL/350_BUILDING/HP8/all": ["DischargeAirTemperature", "FirstStageCooling", "OccupancyMode"]
+            },
+            "duration": 20,
+            "alert_message": "350_BUILDING - High discharge-air temperature HP8"
+        }
+    ]
+}

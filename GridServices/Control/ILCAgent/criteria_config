@@ -1,0 +1,356 @@
+{
+    "HP1": {
+        "FirstStageCooling": {
+            "curtail": {
+                "device_topic": "CAMPUS/BUILDING/HP1",
+                "zonetemperature-setpoint":{
+                    "operation": "1/(AverageZoneTemperature-CoolingTemperatureSetPoint)",
+                    "operation_type": "formula",
+                    "operation_args": {
+                                        "always": ["CoolingTemperatureSetPoint", "AverageZoneTemperature"]
+                                      },
+                    "minimum": 0,
+                    "maximum": 10
+                },
+                "rated-power": {
+                    "on_value": 6.0,
+                    "off_value": 0.0,
+                    "operation_type": "status",
+                    "point_name": "FirstStageCooling"
+                },
+                "room-type": {
+                    "map_key": "Office",
+                    "operation_type": "mapper",
+                    "dict_name": "zone_type"
+                },
+                "stage": {
+                    "value": 1.0,
+                    "operation_type": "constant"
+                },
+                "history-zonetemperature": {
+                    "comparison_type": "direct",
+                    "operation_type": "history",
+                    "point_name": "AverageZoneTemperature",
+                    "previous_time": 15,
+                    "minimum": 0,
+                    "maximum": 10
+                }
+            },
+            "augment": {
+                "device_topic": "CAMPUS/BUILDING/HP1",
+                "zonetemperature-setpoint":{
+                    "operation": "1/(CoolingTemperatureSetPoint-AverageZoneTemperature)",
+                    "operation_type": "formula",
+                    "operation_args": {
+                                        "always": ["CoolingTemperatureSetPoint", "AverageZoneTemperature"]
+                                      },
+                    "minimum": 0,
+                    "maximum": 10
+                },
+                "rated-power": {
+                    "on_value": 0.0,
+                    "off_value": 6.0,
+                    "operation_type": "status",
+                    "point_name": "FirstStageCooling"
+                },
+                "room-type": {
+                    "map_key": "Office",
+                    "operation_type": "mapper",
+                    "dict_name": "zone_type"
+                },
+                "stage": {
+                    "value": 1.0,
+                    "operation_type": "constant"
+                },
+                "history-zonetemperature": {
+                    "comparison_type": "direct",
+                    "operation_type": "history",
+                    "point_name": "AverageZoneTemperature",
+                    "previous_time": 15,
+                    "minimum": 0,
+                    "maximum": 10
+                }
+            }
+        }
+    },
+    "HP2": {
+        "FirstStageCooling": {
+            "curtail": {
+                "device_topic": "CAMPUS/BUILDING/HP2",
+                "zonetemperature-setpoint":{
+                    "operation": "1/(AverageZoneTemperature-CoolingTemperatureSetPoint)",
+                    "operation_type": "formula",
+                    "operation_args": ["CoolingTemperatureSetPoint", "AverageZoneTemperature"],
+                    "minimum": 0,
+                    "maximum": 10
+                },
+                "rated-power": {
+                    "on_value": 4.4,
+                    "off_value": 0.0,
+                    "operation_type": "status",
+                    "point_name": "FirstStageCooling"
+                },
+                "room-type": {
+                    "map_key": "Office",
+                    "operation_type": "mapper",
+                    "dict_name": "zone_type"
+                },
+                "stage": {
+                    "value": 1.0,
+                    "operation_type": "constant"
+                },
+                "history-zonetemperature": {
+                    "comparison_type": "direct",
+                    "operation_type": "history",
+                    "point_name": "AverageZoneTemperature",
+                    "previous_time": 15,
+                    "minimum": 0,
+                    "maximum": 10
+                }
+            },
+            "augment": {
+                "device_topic": "CAMPUS/BUILDING/HP2",
+                "zonetemperature-setpoint":{
+                    "operation": "1/(CoolingTemperatureSetPoint-AverageZoneTemperature)",
+                    "operation_type": "formula",
+                    "operation_args": ["CoolingTemperatureSetPoint", "AverageZoneTemperature"],
+                    "minimum": 0,
+                    "maximum": 10
+                },
+                "rated-power": {
+                    "on_value": 0.0,
+                    "off_value": 4.4,
+                    "operation_type": "status",
+                    "point_name": "FirstStageCooling"
+                },
+                "room-type": {
+                    "map_key": "Office",
+                    "operation_type": "mapper",
+                    "dict_name": "zone_type"
+                },
+                "stage": {
+                    "value": 1.0,
+                    "operation_type": "constant"
+                },
+                "history-zonetemperature": {
+                    "comparison_type": "direct",
+                    "operation_type": "history",
+                    "point_name": "AverageZoneTemperature",
+                    "previous_time": 15,
+                    "minimum": 0,
+                    "maximum": 10
+                }
+            }
+        }
+    },
+    "HP3": {
+        "FirstStageCooling": {
+            "curtail": {
+                "device_topic": "CAMPUS/BUILDING/HP3",
+                "zonetemperature-setpoint":{
+                    "operation": "1/(AverageZoneTemperature-CoolingTemperatureSetPoint)",
+                    "operation_type": "formula",
+                    "operation_args": ["CoolingTemperatureSetPoint", "AverageZoneTemperature"],
+                    "minimum": 0,
+                    "maximum": 10
+                },
+                "rated-power": {
+                    "on_value": 6.5,
+                    "off_value": 0.0,
+                    "operation_type": "status",
+                    "point_name": "FirstStageCooling"
+                },
+                "room-type": {
+                    "map_key": "Office",
+                    "operation_type": "mapper",
+                    "dict_name": "zone_type"
+                },
+                "stage": {
+                    "value": 1.0,
+                    "operation_type": "constant"
+                },
+                "history-zonetemperature": {
+                    "comparison_type": "direct",
+                    "operation_type": "history",
+                    "point_name": "AverageZoneTemperature",
+                    "previous_time": 15,
+                    "minimum": 0,
+                    "maximum": 10
+                }
+            },
+            "augment": {
+                "device_topic": "CAMPUS/BUILDING/HP3",
+                "zonetemperature-setpoint":{
+                    "operation": "1/(CoolingTemperatureSetPoint-AverageZoneTemperature)",
+                    "operation_type": "formula",
+                    "operation_args": ["CoolingTemperatureSetPoint", "AverageZoneTemperature"],
+                    "minimum": 0,
+                    "maximum": 10
+                },
+                "rated-power": {
+                    "on_value": 0.0,
+                    "off_value": 6.5,
+                    "operation_type": "status",
+                    "point_name": "FirstStageCooling"
+                },
+                "room-type": {
+                    "map_key": "Office",
+                    "operation_type": "mapper",
+                    "dict_name": "zone_type"
+                },
+                "stage": {
+                    "value": 1.0,
+                    "operation_type": "constant"
+                },
+                "history-zonetemperature": {
+                    "comparison_type": "direct",
+                    "operation_type": "history",
+                    "point_name": "AverageZoneTemperature",
+                    "previous_time": 15,
+                    "minimum": 0,
+                    "maximum": 10
+                }
+            }
+        }
+    },    
+    "HP4": {
+        "FirstStageCooling": {
+            "curtail": {
+                "device_topic": "CAMPUS/BUILDING/HP4",
+                "zonetemperature-setpoint":{
+                    "operation": "1/(AverageZoneTemperature-CoolingTemperatureSetPoint)",
+                    "operation_type": "formula",
+                    "operation_args": ["CoolingTemperatureSetPoint", "AverageZoneTemperature"],
+                    "minimum": 0,
+                    "maximum": 10
+                },
+                "rated-power": {
+                    "on_value": 6.0,
+                    "off_value": 0.0,
+                    "operation_type": "status",
+                    "point_name": "FirstStageCooling"
+                },
+                "room-type": {
+                    "map_key": "Office",
+                    "operation_type": "mapper",
+                    "dict_name": "zone_type"
+                },
+                "stage": {
+                    "value": 1.0,
+                    "operation_type": "constant"
+                },
+                "history-zonetemperature": {
+                    "comparison_type": "direct",
+                    "operation_type": "history",
+                    "point_name": "AverageZoneTemperature",
+                    "previous_time": 15,
+                    "minimum": 0,
+                    "maximum": 10
+                }
+            },
+            "augment": {
+                "device_topic": "CAMPUS/BUILDING/HP4",
+                "zonetemperature-setpoint":{
+                    "operation": "1/(CoolingTemperatureSetPoint-AverageZoneTemperature)",
+                    "operation_type": "formula",
+                    "operation_args": ["CoolingTemperatureSetPoint", "AverageZoneTemperature"],
+                    "minimum": 0,
+                    "maximum": 10
+                },
+                "rated-power": {
+                    "on_value": 0.0,
+                    "off_value": 6.0,
+                    "operation_type": "status",
+                    "point_name": "FirstStageCooling"
+                },
+                "room-type": {
+                    "map_key": "Office",
+                    "operation_type": "mapper",
+                    "dict_name": "zone_type"
+                },
+                "stage": {
+                    "value": 1.0,
+                    "operation_type": "constant"
+                },
+                "history-zonetemperature": {
+                    "comparison_type": "direct",
+                    "operation_type": "history",
+                    "point_name": "AverageZoneTemperature",
+                    "previous_time": 15,
+                    "minimum": 0,
+                    "maximum": 10
+                }
+            }
+        }
+    },
+    "HP5": {
+        "FirstStageCooling": {
+            "curtail": {
+                "device_topic": "CAMPUS/BUILDING/HP5",
+                "zonetemperature-setpoint":{
+                    "operation": "1/(AverageZoneTemperature-CoolingTemperatureSetPoint)",
+                    "operation_type": "formula",
+                    "operation_args": ["CoolingTemperatureSetPoint", "AverageZoneTemperature"],
+                    "minimum": 0,
+                    "maximum": 10
+                },
+                "rated-power": {
+                    "on_value": 4.0,
+                    "off_value": 0.0,
+                    "operation_type": "status",
+                    "point_name": "CompressorCommand"
+                },
+                "room-type": {
+                    "map_key": "Office",
+                    "operation_type": "mapper",
+                    "dict_name": "zone_type"
+                },
+                "stage": {
+                    "value": 1,
+                    "operation_type": "constant"
+                },
+                "history-zonetemperature": {
+                    "comparison_type": "direct",
+                    "operation_type": "history",
+                    "point_name": "AverageZoneTemperature",
+                    "previous_time": 15,
+                    "minimum": 0,
+                    "maximum": 10
+                }
+            },
+            "augment": {
+                "device_topic": "CAMPUS/BUILDING/HP5",
+                "zonetemperature-setpoint":{
+                    "operation": "1/(CoolingTemperatureSetPoint-AverageZoneTemperature)",
+                    "operation_type": "formula",
+                    "operation_args": ["CoolingTemperatureSetPoint", "AverageZoneTemperature"],
+                    "minimum": 0,
+                    "maximum": 10
+                },
+                "rated-power": {
+                    "on_value": 0.0,
+                    "off_value": 4.0,
+                    "operation_type": "status",
+                    "point_name": "CompressorCommand"
+                },
+                "room-type": {
+                    "map_key": "Office",
+                    "operation_type": "mapper",
+                    "dict_name": "zone_type"
+                },
+                "stage": {
+                    "value": 1,
+                    "operation_type": "constant"
+                },
+                "history-zonetemperature": {
+                    "comparison_type": "direct",
+                    "operation_type": "history",
+                    "point_name": "AverageZoneTemperature",
+                    "previous_time": 15,
+                    "minimum": 0,
+                    "maximum": 10
+                }
+            }
+        }
+    }
+}

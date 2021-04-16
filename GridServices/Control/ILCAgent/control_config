@@ -1,0 +1,148 @@
+{
+    "HP1": {
+        "FirstStageCooling": {
+            "device_topic": "CAMPUS/BUILDING/HP1",
+            "device_status": {
+                "curtail": {
+                    "condition": "FirstStageCooling", 
+                    "device_status_args": ["FirstStageCooling"]
+                },
+                "augment": {
+                    "condition": "FirstStageCooling < 1",
+                    "device_status_args": ["FirstStageCooling"]
+                }
+            },
+            "curtail_settings": {
+                "point": "ZoneTemperatureSetPoint",
+                "curtailment_method": "offset",
+                "offset": 2.0,
+                "load": 6.0
+            },
+            "augment_settings": {
+                "point": "ZoneTemperatureSetPoint",
+                "curtailment_method": "offset",
+                "offset": -2.0,
+                "load": 6.0
+            }
+        }
+    },
+    "HP2": {
+        "FirstStageCooling": {
+            "device_topic": "CAMPUS/BUILDING/HP2",
+            "device_status": {
+                "curtail": {
+                    "condition": "FirstStageCooling",
+                    "device_status_args": ["FirstStageCooling"]
+                },
+                "augment": {
+                    "condition": "FirstStageCooling < 1",
+                    "device_status_args": ["FirstStageCooling"]
+                }
+            },
+            "curtail_settings": {
+                "point": "ZoneTemperatureSetPoint",
+                "curtailment_method": "equation",
+                "equation": {
+                    "operation": "ZoneTemperature+0.5",
+                    "equation_args": ["ZoneTemperature"],
+                    "minimum": 69.0,
+                    "maximum": 77.0
+                },
+                "load": 6.5
+            },
+            "augment_settings": {
+                "point": "ZoneTemperatureSetPoint",
+                "curtailment_method": "value",
+                "value": 69.0,
+                "load": 6.5
+            }
+        }
+    },
+    "HP3": {
+        "FirstStageCooling": {
+            "device_topic": "CAMPUS/BUILDING/HP3",
+            "device_status": {
+                "curtail": {
+                    "condition": "FirstStageCooling",
+                    "device_status_args": ["FirstStageCooling"]
+                },
+                "augment": {
+                    "condition": "FirstStageCooling < 1",
+                    "device_status_args": ["FirstStageCooling"]
+                }
+            },
+            "curtail_settings": {
+                "point": "ZoneTemperatureSetPoint",
+                "curtailment_method": "offset",
+                "offset": 2.0,
+                "load": 6.5
+            },
+            "augment_settings": {
+                "point": "ZoneTemperatureSetPoint",
+                "curtailment_method": "offset",
+                "offset": -2.0,
+                "load": 6.5
+            }
+        }
+    },    
+    "HP4": {
+        "FirstStageCooling": {
+            "device_topic": "CAMPUS/BUILDING/HP4",
+            "device_status": {
+                "curtail": {
+                    "condition": "FirstStageCooling",
+                    "device_status_args": ["FirstStageCooling"]
+                },
+                "augment": {
+                    "condition": "FirstStageCooling < 1",
+                    "device_status_args": ["FirstStageCooling"]
+                }
+            },
+            "curtail_settings": {
+                "point": "ZoneTemperatureSetPoint",
+                "curtailment_method": "offset",
+                "offset": 2.0,
+                "load": {
+                    "equation_args": [["CAMPUS/BUILDING/HP4", "FirstStageCooling"]],
+                    "operation": "2809.8*FirstStageCooling-500.0"
+                }
+            },
+            "augment_settings": {
+                "point": "ZoneTemperatureSetPoint",
+                "curtailment_method": "offset",
+                "offset": -2.0,
+                "load": {
+                    "equation_args": [["CAMPUS/BUILDING/HP4", "FirstStageCooling"]],
+                    "operation": "2809.8-500.0"
+                }
+            }
+        }
+    },
+    "HP5": {
+        "FirstStageCooling": {
+            "device_topic": "CAMPUS/BUILDING/HP5",
+            "device_status": {
+                "curtail": {
+                    "condition": "Eq(CompressorCommand,1) & Eq(ReversingValve,0)",
+                    "device_status_args": ["CompressorCommand", "ReversingValve"]
+                 },
+                 "augment": {
+                    "condition": "CompressorCommand<1 & Eq(ReversingValve,0)",
+                    "device_status_args": ["CompressorCommand", "ReversingValve"]
+                 }
+            },
+            "curtail_settings": {
+                "point": "ZoneTemperatureSetPoint",
+                "curtailment_method": "offset",
+                "offset": 2.0,
+                "load": 4.0
+            },
+            "augment_settings": {
+                "point": "ZoneTemperatureSetPoint",
+                "curtailment_method": "offset",
+                "offset": -2.0,
+                "load": 4.0
+            }
+        }
+    }
+}

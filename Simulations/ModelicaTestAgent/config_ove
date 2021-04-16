@@ -1,0 +1,11 @@
+{
+    'inputs' : {
+        'control' : {
+            'name' : 'control',
+            'topic' : 'building/device',
+            'field' : 'control'
+
+        }
+    },
+     'outputs' : {}
+}

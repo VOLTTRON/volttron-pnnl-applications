@@ -1,0 +1,15 @@
+{
+  "agentid": "city_agent",
+  "name": "City_Of_Richland",
+
+  "T": 24,
+  "iteration_threshold": 2000,
+  "alpha_reserve": 1,
+  "alpha_energy": 1,
+  "error_energy_threshold": 0.01,
+  "error_reserve_threshold": 0.01,
+
+  "simulation": true,
+  "simulation_start_time": "2019-09-01 00:00:00",
+  "simulation_one_hour_in_seconds": 1200
+}

@@ -1,0 +1,37 @@
+{
+  "agentid": "pnnl_agent",
+  "name": "PNNL_Campus",
+
+  "market_cycle_in_min": 60,
+  "market_reservation_in_hours": 1440,
+  "buildings": ["BUILDING1"],  # ["SEB", "350_BUILDING"],  # The names here should match the names in building config files
+  "building_powers": {
+    "SEB": [0.0, -300.0, -70.0],
+    "350_BUILDING": [0.0, -600.0, -90.0],
+    "SIGMA1": [0.0, -800.0, -150.0],
+    "SMALL_OFFICE": [0.0, -120.0, -45.0],
+    "BUILDING1": [0.0, -120.0, -35.0]
+  },
+  "PV_max_kW": 120.0,
+  "city_loss_factor": 0.01,
+  "duality_gap_threshold": 0.1,
+  "demand_threshold_coef": 1,
+  "monthly_peak_power": 20,
+
+  "ts_name": "Date",
+  "weather_forecast": {
+      "weather_file": "/home/volttron/volttron/transactivecontrol/TNT_Version3/weather_data/energyplus.csv"
+  },
+  # For real buildings use forecast service in the following format
+  # "weather_forecast": {
+  #       "data_key": "OutdoorAirTemperature"
+  #       "location": {lat: 46.2804, long: -119.2752},
+  #       "remote_platform: my_remote_instance",
+  #       "weather_vip": "platform.weather_service"
+  #},
+
+
+  "simulation": true,
+  "simulation_start_time": "2018-06-22 00:00:00",
+  "simulation_one_hour_in_seconds": 1200
+}

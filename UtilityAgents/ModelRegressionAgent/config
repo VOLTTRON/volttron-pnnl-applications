@@ -1,0 +1,82 @@
+{
+    "campus": "",
+    "building": "",
+    "device": "",
+    "subdevices": [],
+
+    "subdevice_points": {
+        "temp_stpt": "ZoneCoolingTemperatureSetPoint",
+        "temp": "ZoneTemperature",
+        "m": "ZoneAirFlow"
+    },
+    "device_points": {
+        "oat": "OutdoorAirTemperature"
+    },
+
+    "historian_vip": "crate.prod",
+    "run_schedule":  "/10080 * * * *",
+    "run_onstart": True,
+
+    # For each regregression (device/subdevice) data
+    # With different timestamps will be merged and averaged
+    # to the following timescale.
+    # Options:  "1Min", "5Min", "15Min", "h"
+    # for hourly_regression set data_aggregation_frequency='h'
+    "data_aggregation_frequency": "h",
+
+    "exclude_weekends_holidays": true,
+
+    # Option to create hourly regression result.
+    "regress_hourly": true,
+
+    # When making predictions for zone temperature (ZT)
+    # ZT(t+dt) = f(ZT(t), . . . )
+    # For this case it is necessary to shift the dependent variable.
+    # The shift is equal to the data_aggregation_frequency.
+    # To enable this, set shift_dependent_data to true (default is false).
+    "shift_dependent_data": false,
+
+    # Number of days of data to use for training
+    # Option is only valid if one_shot is set to false
+    # For cron scheduled regression the end of the training data
+    # will be midnight of the current day
+    "training_interval": 5,
+
+    # if one_shot is true specify start and end time for regression
+    "one_shot": false,
+    "start": "07/01/2019 00:00:00",
+    "end": "07/15/2019 00:00:00",
+    "local_tz": "US/Pacific",
+
+    "model_structure": "M = (oat - temp) + (temp - temp_stpt)",
+
+    # key should be left side of model_structure.  Value is evaluated based on
+    # keys in subdevice_points and device_points.
+    # a more complicated example could be {"ZT": "temp-temp_stpt"}
+    "model_dependent": {
+        "M": "m"
+    },
+    "model_independent": {
+        "(oat - temp)": {
+            "coefficient_name": "a1",
+            "lower_bound": 0,
+            "upper_bound": "infinity"
+        },
+        "(temp - temp_stpt)": {
+            "coefficient_name": "a2",
+            "lower_bound": 0,
+            "upper_bound": "infinity"
+        },
+        "intercept": {
+            "coefficient_name": "a3",
+            "lower_bound": 0,
+            "upper_bound": "infinity"
+        }
+    },
+    "post_processing": {
+          "a1": "-a2",
+          "a2": "a2 - a1",
+          "a3": "a1",
+          "a4": "a3"
+    }
+}

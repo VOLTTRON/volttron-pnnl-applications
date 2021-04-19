@@ -169,7 +169,7 @@ class BuildingAgent(MarketAgent, myTransactiveNode):
             #     for line in fh:
             #         self.ep_lines.append(line)
 
-        _log2.debug("Mixmarket for agent {}:".format(self.name))
+        #_log2.debug("Mixmarket for agent {}:".format(self.name))
 
     @Core.receiver('onstart')
     def onstart(self, sender, **kwargs):

@@ -1,0 +1,54 @@
+{
+    "application": "economizer.economizer_rcx.Application",
+    "device": {
+        "campus": "campus",
+        "building": "building",
+        "unit": {
+            "rtu4": {
+                "subdevices": []
+            }
+        }
+    },
+    "analysis_name": "Economizer_AIRCx",
+    "actuation_mode": "PASSIVE",
+    "arguments": {
+        "point_mapping": {
+            "supply_fan_status": "FanStatus",
+            "outdoor_air_temperature": "outsideairtemp",
+            "return_air_temperature": "ReturnAirTemp",
+            "mixed_air_temperature": "MixedAirTemp",
+            "outdoor_damper_signal": "Damper",
+            "cool_call": "CompressorStatus",
+            "supply_fan_speed": "SupplyFanSpeed"
+        },
+        "device_type": "rtu",
+        "data_window": 1,
+        "no_required_data": 1,
+        "open_damper_time": 0,
+        "low_supply_fan_threshold": 20.0,
+        "mat_low_threshold": 50.0,
+        "mat_high_threshold": 90.0,
+        "oat_low_threshold": 30.0,
+        "oat_high_threshold": 100.0,
+        "rat_low_threshold": 50.0,
+        "rat_high_threshold": 90.0,
+        "temp_difference_threshold": 4.0,
+        "open_damper_threshold": 90.0,
+        "oaf_temperature_threshold": 4.0,
+        "cooling_enabled_threshold": 5.0,
+        "minimum_damper_setpoint": 10.0,
+        "desired_oaf": 10.0,
+        "rated_cfm": 1000.0,
+        "eer": 10.0,
+        "economizer_type": "DDB",
+        "temp_band": 1.0
+    },
+    "conversion_map": {
+        ".*Temperature": "float",
+        ".*Command": "float",
+        ".*Signal": "float",
+        "SupplyFanStatus": "int",
+        "Cooling.*": "float",
+        "SupplyFanSpeed": "int"
+    }
+}

@@ -1,0 +1,122 @@
+{
+    "HP1": {
+        "FirstStageCooling": { 
+            "parameters": {
+                "discreet_on_condition": ["FirstStageCooling"],
+                "discreet_on_condition_args": ["FirstStageCooling"],
+                "pos_sop": "(ZoneTemperature - ZoneCoolingTemperatureSetPoint + 1.1)/2.2",
+                "neg_sop": "(ZoneCoolingTemperatureSetPoint + 1.1 - ZoneTemperature)/2.2",
+                "sop_args":  ["ZoneCoolingTemperatureSetPoint", "ZoneTemperature"]
+            },
+            "rated_power": 2800.0
+        }
+    },
+    "HP2": {
+        "FirstStageCooling": {
+            "parameters": {
+                "discreet_on_condition": ["FirstStageCooling"],
+                "discreet_on_condition_args": ["FirstStageCooling"],
+                "pos_sop": "(ZoneTemperature - ZoneCoolingTemperatureSetPoint + 1.1)/2.2",
+                "neg_sop": "(ZoneCoolingTemperatureSetPoint + 1.1 - ZoneTemperature)/2.2",
+                "sop_args":  ["ZoneCoolingTemperatureSetPoint", "ZoneTemperature"]
+            },
+            "rated_power": 3800.0
+        }
+    },
+    "HP3": {
+        "FirstStageCooling": {
+            "parameters": {
+                "discreet_on_condition": ["FirstStageCooling"],
+                "discreet_on_condition_args": ["FirstStageCooling"],
+                "pos_sop": "(ZoneTemperature - ZoneCoolingTemperatureSetPoint + 1.1)/2.2",
+                "neg_sop": "(ZoneCoolingTemperatureSetPoint + 1.1 - ZoneTemperature)/2.2",
+                "sop_args":  ["ZoneCoolingTemperatureSetPoint", "ZoneTemperature"]
+            },
+            "rated_power": 2600.0
+        }
+    },
+    "HP4": {
+        "FirstStageCooling": {
+            "parameters": {
+                "discreet_on_condition": ["FirstStageCooling"],
+                "discreet_on_condition_args": ["FirstStageCooling"],
+                "pos_sop": "(ZoneTemperature - ZoneCoolingTemperatureSetPoint + 1.1)/2.2",
+                "neg_sop": "(ZoneCoolingTemperatureSetPoint + 1.1 - ZoneTemperature)/2.2",
+                "sop_args":  ["ZoneCoolingTemperatureSetPoint", "ZoneTemperature"]
+            },
+            "rated_power": 4000.0
+        }
+    },
+    "HP5": {
+        "FirstStageCooling": {
+            "parameters": {
+                "discreet_on_condition": ["FirstStageCooling"],
+                "discreet_on_condition_args": ["FirstStageCooling"],
+                "pos_sop": "(ZoneTemperature - ZoneCoolingTemperatureSetPoint + 1.1)/2.2",
+                "neg_sop": "(ZoneCoolingTemperatureSetPoint + 1.1 - ZoneTemperature)/2.2",
+                "sop_args":  ["ZoneCoolingTemperatureSetPoint", "ZoneTemperature"]
+            },
+            "rated_power": 12000.0
+        }
+    },
+    "HP6": {
+        "FirstStageCooling": {
+            "parameters": {
+                "discreet_on_condition": ["FirstStageCooling"],
+                "discreet_on_condition_args": ["FirstStageCooling"],
+                "pos_sop": "(ZoneTemperature - ZoneCoolingTemperatureSetPoint + 1.1)/2.2",
+                "neg_sop": "(ZoneCoolingTemperatureSetPoint + 1.1 - ZoneTemperature)/2.2",
+                "sop_args":  ["ZoneCoolingTemperatureSetPoint", "ZoneTemperature"]
+            },
+            "rated_power": 2100.0
+        }
+    },
+    "HP7": {
+        "FirstStageCooling": {
+            "parameters": {
+                "discreet_on_condition": ["FirstStageCooling"],
+                "discreet_on_condition_args": ["FirstStageCooling"],
+                "pos_sop": "(ZoneTemperature - ZoneCoolingTemperatureSetPoint + 1.1)/2.2",
+                "neg_sop": "(ZoneCoolingTemperatureSetPoint + 1.1 - ZoneTemperature)/2.2",
+                "sop_args":  ["ZoneCoolingTemperatureSetPoint", "ZoneTemperature"]
+            },
+            "rated_power": 2800.0
+        }
+    },
+    "HP8": {
+        "FirstStageCooling": {
+            "parameters": {
+                "discreet_on_condition": ["FirstStageCooling>20.0"],
+                "discreet_on_condition_args": ["FirstStageCooling"],
+                "pos_sop": "(ZoneTemperature - ZoneCoolingTemperatureSetPoint + 1.1)/2.2",
+                "neg_sop": "(ZoneCoolingTemperatureSetPoint + 1.1 - ZoneTemperature)/2.2",
+                "sop_args":  ["ZoneCoolingTemperatureSetPoint", "ZoneTemperature"]
+            },
+            "rated_power": 1700.0
+        }
+    },
+    "HP9": {
+        "FirstStageCooling": {
+            "parameters": {
+                "discreet_on_condition": ["FirstStageCooling>20.0"],
+                "discreet_on_condition_args": ["FirstStageCooling"],
+                "pos_sop": "(ZoneTemperature - ZoneCoolingTemperatureSetPoint + 1.1)/2.2",
+                "neg_sop": "(ZoneCoolingTemperatureSetPoint + 1.1 - ZoneTemperature)/2.2",
+                "sop_args":  ["ZoneCoolingTemperatureSetPoint", "ZoneTemperature"]
+            },
+            "rated_power": 2900.0
+        }
+    },
+    "HP10": {
+        "FirstStageCooling": {
+            "parameters": {
+                "discreet_on_condition": ["FirstStageCooling>20.0"],
+                "discreet_on_condition_args": ["FirstStageCooling"],
+                "pos_sop": "(ZoneTemperature - ZoneCoolingTemperatureSetPoint + 1.1)/2.2",
+                "neg_sop": "(ZoneCoolingTemperatureSetPoint + 1.1 - ZoneTemperature)/2.2",
+                "sop_args":  ["ZoneCoolingTemperatureSetPoint", "ZoneTemperature"]
+            },
+            "rated_power": 7900.0
+        }
+    }
+}

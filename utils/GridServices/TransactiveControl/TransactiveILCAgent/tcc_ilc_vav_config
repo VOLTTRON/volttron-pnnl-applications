@@ -1,0 +1,28 @@
+{
+    "campus": "PNNL",
+    "building": "3860_BUILDING",
+        "power_meter": {
+            "device": "METERS",
+            "point": "WholeBuildingPower"
+        },
+    "agent_id": "TCC_ILC",
+    "demand_price": 70.0,
+    "minimum_demand_limit": 25.0,
+    "occupancy_schedule":{
+        "Monday": {"start": "7:00", "end": "18:00"},
+        "Tuesday": {"start": "7:00", "end": "18:00"},
+        "Wednesday": {"start": "7:00", "end": "18:00"},
+        "Thursday": {"start": "7:00", "end": "18:00"},
+        "Friday": {"start": "7:00", "end": "18:00"},
+        "Saturday": "always_off",
+        "Sunday": "always_off"
+    },
+    "prices_from": "file",
+    "price_file": "/home/vuzer/volttron/applications/pnnl/TCCILC/prices_march.csv",
+    "clusters": [ 
+        {
+            "device_cluster_file": "/home/vuzer/volttron/config/tcc_ilc/vav_cluster_config",
+            "load_type": "continuous"
+        }
+    ]
+ }

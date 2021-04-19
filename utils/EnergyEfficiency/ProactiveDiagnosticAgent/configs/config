@@ -1,0 +1,16 @@
+{
+    "campus": "campus",
+    "building": "building",
+    "device": ["AHU1"],
+    # all diagnostics in diagnostics array are run consecutively.
+    # this is initiated based on a cron scheduling string - https://crontab.guru
+    # example - "0 18 * * *" is every day at 6pm
+    "run_schedule": "*/3 * * * *",
+    "prerequisites": {
+        "conditions": ["Abs(OutdoorAirTemperature - ReturnAirTemperature)>5.0", "OutdoorAirTemperature>35.0"],
+        "condition_args": ["OutdoorAirTemperature", "ReturnAirTemperature"]
+    },
+    "diagnostics": [
+        "config://diagnostic1.config"
+    ]
+}

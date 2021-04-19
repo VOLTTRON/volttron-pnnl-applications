@@ -1,0 +1,19 @@
+{
+  "agentid": "SMALL_OFFICE_agent",
+  "name": "SMALL_OFFICE",
+
+  "market_cycle_in_min": 60,
+
+  "duality_gap_threshold": 0.1,
+  "campus_loss_factor": 0.01,
+
+  "max_deliver_capacity": 120,
+  "demand_threshold_coef": 0.8,
+  "monthly_peak_power": 60,
+  "power_topic": "devices/PNNL/BUILDING1/METERS/WholeBuildingPower",
+
+  "ts_name": "Date",
+  "weather_forecast": {
+      "weather_file": "/home/volttron/volttron/transactivecontrol/TNT_Version3/weather_data/energyplus.csv"
+  }
+}

@@ -1,0 +1,44 @@
+{
+    "curtail": {
+        "history-zonetemperature": {
+            "room-type": 5,
+            "rated-power": 3
+        },
+        "room-type": {},
+        "rated-power": {
+            "room-type": 3
+        },
+        "zonetemperature-setpoint": {
+            "history-zonetemperature": 5,
+            "room-type": 8,
+            "rated-power": 6,
+            "stage": 2
+        },
+        "stage": {
+            "history-zonetemperature": 3,
+            "room-type": 6,
+            "rated-power": 4
+        }
+    },
+    "augment": {
+        "history-zonetemperature": {
+            "room-type": 5,
+            "rated-power": 3
+        },
+        "room-type": {},
+        "rated-power": {
+            "room-type": 3
+        },
+        "zonetemperature-setpoint": {
+            "history-zonetemperature": 5,
+            "room-type": 8,
+            "rated-power": 6,
+            "stage": 2
+        },
+        "stage": {
+            "history-zonetemperature": 3,
+            "room-type": 6,
+            "rated-power": 4
+        }
+    }
+}

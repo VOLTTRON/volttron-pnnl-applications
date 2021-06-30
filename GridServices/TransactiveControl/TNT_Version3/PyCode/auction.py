@@ -208,9 +208,9 @@ class Auction(Market):
             # If any time intervals are found to be missing for this downstream agent,
             if len(missing_interval_names):
                 all_received = False
-                #_log.info("Market name: {} while_in_market_lead downstream_agent NAME: {}, missing_interval_names: {}".format(self.name,
-                #                                                                                                downstream_agent.name,
-                #                                                                                                missing_interval_names))
+                _log.info("Market name: {} while_in_market_lead downstream_agent NAME: {}, missing_interval_names: {}".format(self.name,
+                                                                                                                downstream_agent.name,
+                                                                                                                missing_interval_names))
                 # and call on the downstream agent model to try and receive the signal again:
                 _log.info(f"Before calling receive_transactive_signal: {missing_interval_names}, {downstream_agent.name}")
                 downstream_agent.receive_transactive_signal(my_transactive_node, self, downstream_agent.receivedCurves)
@@ -298,6 +298,7 @@ class Auction(Market):
 
             # Check whether any active market time intervals are not among the received record intervals.
             missing_time_intervals = [x.name for x in self.timeIntervals if x.name not in received_time_intervals]
+            _log.debug("Market name: {} while_in_delivery_lead Received all transactive signals from upstream agents".format(self.name))
 
             # If time intervals are missing among the upstream agent's transactive records,
             if missing_time_intervals:
@@ -315,11 +316,16 @@ class Auction(Market):
             # signal and its records.
             # 200702DJH: Why is this misspelling of "vertices" permitted here???????????????
             # upstream_agent.update_verices(self) #???????????????
+            _log.debug("while_in_delivery_lead: update vertices {}".format(self.name))
             upstream_agent.update_vertices(self)
             # Sum all the agent's active local asset and neighbor vertices and determine the LMP at which local power is
             # balanced.
+            _log.debug("while_in_delivery_lead: balance:{}".format(self.name))
+
             self.balance(my_transactive_node)
             # Have the upstream agent neighbor model now schedule its power, based on the local agent's calculated LMPs.
+            _log.debug("while_in_delivery_lead:  schedule_power()".format(self.name))
+
             upstream_agent.schedule_power(self)
             # Re-schedule local asset powers now that the local market price is cleared. This may affect flexible assets
             # if the cleared price differs from the predicted one. Inelastic assets will not be affected.
@@ -335,8 +341,10 @@ class Auction(Market):
                     power = production(local_asset, price[0], time_interval)
                     # 201012DJH: Shwetha discovered that teh list of powers was continuing to grow because this method
                     #            is called multiple times. Normally, the scheduled power should already exist and can
-                    #            simply have its value changed.
+                    #            simply have its value changed.                    
                     scheduled_power = [x for x in local_asset.scheduledPowers if x.timeInterval == time_interval]
+                    _log.debug("while_in_delivery_lead: local asset loop, name: {}, len: {}".format(local_assets[i].name, len(scheduled_power)))
+
                     if len(scheduled_power) == 0:
                         local_asset.scheduledPowers.append(IntervalValue(calling_object=self,
                                                                          time_interval=time_interval,

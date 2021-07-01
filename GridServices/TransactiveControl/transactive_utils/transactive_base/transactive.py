@@ -191,7 +191,7 @@ class TransactiveBase(MarketAgent, Model):
             self.init_input_subscriptions()
             market_name = config.get("market_name", "electric")
             self.market_type = config.get("market_type", "tns")
-            tns = False if self.market_type != "tns" else True
+            tent = False if self.market_type != "tent" else True
             #  VOLTTRON MarketService does not allow "leaving"
             #  markets.  Market participants can choose not to participate
             #  in the market process by sending False during the reservation
@@ -202,12 +202,12 @@ class TransactiveBase(MarketAgent, Model):
             _log.debug("CREATE MODEL")
             model_config = config.get("model_parameters", {})
             Model.__init__(self, model_config, **kwargs)
-            if not self.market_list and tns is not None:
+            if not self.market_list and tent is not None:
                 if self.aggregator is None:
                     _log.debug("%s is a transactive agent.", self.core.identity)
                     for i in range(24):
                         self.market_list.append('_'.join([market_name, str(i)]))
-                    if tns:
+                    if tent:
                         rtp_market_list = ["_".join(["refinement", market_name])]
                         self.day_ahead_market = DayAheadMarket(self.outputs, self.market_list, self, self.price_manager)
                         self.rtp_market = RealTimeMarket(self.outputs, rtp_market_list, self, self.price_manager)

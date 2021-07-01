@@ -116,7 +116,7 @@ class Aggregator(TransactiveBase):
                 self.setup()
 
     def init_markets(self):
-        if self.market_type == "tns":
+        if self.market_type == "tent":
             self.markets_initialized = True
             self.day_ahead_market = AggregatorMarket(self.supplier_markets, self.consumer_markets, False,
                                                      self.outputs, [], self, self.price_manager)

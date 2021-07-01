@@ -77,6 +77,12 @@ class TemperatureForecastModel(InformationServiceModel, object):
         self.weather_file = self.weather_config.get("weather_file")
 
         self.parent = parent
+        remote = self.weather_config.get("remote")
+        self.remote = None
+        if remote is not None:
+            address = remote.get("address")
+            serverkey = remote.get("severkey")
+            self.remote = self.parent.vip.auth.connect_remote_platform(address=address , serverkey=serverkey)
         self.predictedValues = []
         self.weather_data = []
         self.last_modified = None
@@ -131,10 +137,16 @@ class TemperatureForecastModel(InformationServiceModel, object):
         weather_results = None
         weather_data = None
         try:
-            result = self.parent.vip.rpc.call(self.weather_vip,
-                                              "get_hourly_forecast",
-                                              self.location,
-                                              external_platform=self.remote_platform).get(timeout=15)
+            if self.remote is not None:
+                result = self.remote.vip.rpc.call(self.weather_vip,
+                                                  "get_hourly_forecast",
+                                                  self.location,
+                                                  external_platform=self.remote_platform).get(timeout=15)
+            else:
+                result = self.parent.vip.rpc.call(self.weather_vip,
+                                                  "get_hourly_forecast",
+                                                  self.location,
+                                                  external_platform=self.remote_platform).get(timeout=15)
             weather_results = result[0]["weather_results"]
 
         except (gevent.Timeout, RemoteError) as ex:

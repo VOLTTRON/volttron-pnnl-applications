@@ -167,8 +167,6 @@ class TemperatureForecastModel(InformationServiceModel, object):
                     raise Exception("Exception {} processing weather data.".format(ex))
 
         # Copy weather data to predictedValues
-        market_intervals = [ti.startTime.replace(minute=0) for ti in mkt.timeIntervals]
-
         if weather_data is not None:
             self.predictedValues = []
             items = []

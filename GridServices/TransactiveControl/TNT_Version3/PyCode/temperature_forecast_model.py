@@ -81,8 +81,8 @@ class TemperatureForecastModel(InformationServiceModel, object):
         self.remote = None
         if remote is not None:
             address = remote.get("address")
-            serverkey = remote.get("severkey")
-            self.remote = self.parent.vip.auth.connect_remote_platform(address=address , serverkey=serverkey)
+            serverkey = remote.get("serverkey")
+            self.remote = self.parent.vip.auth.connect_remote_platform(address=address, serverkey=serverkey)
         self.predictedValues = []
         self.weather_data = []
         self.last_modified = None
@@ -90,7 +90,7 @@ class TemperatureForecastModel(InformationServiceModel, object):
            self.localtz = dateutil.tz.tzlocal()
         except:
             _log.warning("Problem automatically determining timezone! - Default to UTC.")
-            self.localtz = "UTC"
+            self.localtz = "US/Pacific"
 
         if self.weather_file is not None:
             self.init_weather_data()
@@ -156,6 +156,7 @@ class TemperatureForecastModel(InformationServiceModel, object):
             try:
                 weather_data = [[parser.parse(oat[0]).astimezone(self.localtz), oat[1][self.oat_point_name]] for oat in weather_results]
                 weather_data = [[oat[0].replace(tzinfo=None), oat[1]] for oat in weather_data]
+                _log.debug("Parsed WEATHER information: {}".format(weather_data))
             except KeyError:
                 if not self.predictedValues:
                     raise Exception("Measurement Point Name is not correct")
@@ -168,9 +169,11 @@ class TemperatureForecastModel(InformationServiceModel, object):
         # Copy weather data to predictedValues
         if weather_data is not None:
             self.predictedValues = []
+            items = []
             for ti in mkt.timeIntervals:
                 # Find item which has the same timestamp as ti.timeStamp
                 start_time = ti.startTime.replace(minute=0)
+                previous_measurement = items
                 items = [x[1] for x in weather_data if x[0] == start_time]
 
                 # Create interval value and add it to predicted values
@@ -178,6 +181,12 @@ class TemperatureForecastModel(InformationServiceModel, object):
                     temp = items[0]
                     interval_value = IntervalValue(self, ti, mkt, MeasurementType.PredictedValue, temp)
                     self.predictedValues.append(interval_value)
+                elif previous_measurement:
+                    temp = previous_measurement[0]
+                    interval_value = IntervalValue(self, ti, mkt, MeasurementType.PredictedValue, temp)
+                    self.predictedValues.append(interval_value)
+                else:
+                    _log.debug("Cannot assign WEATHER information for interval: {}".format(ti))
         elif self.predictedValues:
             hour_gap = mkt.timeIntervals[0].startTime - self.predictedValues[0].timeInterval.startTime
             max_hour_gap = timedelta(hours=4)

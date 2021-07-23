@@ -68,6 +68,7 @@ from TNT_Version3.PyCode.bulk_supplier_dc import BulkSupplier_dc
 from TNT_Version3.PyCode.vertex import Vertex
 from TNT_Version3.PyCode.timer import Timer
 from TNT_Version3.PyCode.direction import Direction
+from volttron.platform.messaging import headers as headers_mod
 
 # utils.setup_logging()
 _log = logging.getLogger(__name__)
@@ -118,6 +119,7 @@ class CityAgent(Agent, TransactiveNode):
         self.market_balanced_price_topic = "{}/{}/market_balanced_prices".format(self.db_topic, self.name)
         self.market_topic = "{}/{}/market".format(self.db_topic, self.name)
         self.real_time_duration = self.config.get('real_time_market_duration', 15)
+        self.start_tent_market_topic = "{}/start_tent".format(self.db_topic)
 
     def get_exp_start_time(self):
         one_second = timedelta(seconds=1)
@@ -172,9 +174,11 @@ class CityAgent(Agent, TransactiveNode):
         # self.core.schedule(next_exp_time, self.schedule_run,
         #                    format_timestamp(next_exp_time),
         #                    format_timestamp(next_analysis_time), True)
+        headers = {headers_mod.DATE: format_timestamp(Timer.get_cur_time())}
+        self.vip.pubsub.publish("pubsub", self.start_tent_market_topic, headers, "start").get()
 
         # SN: Added for new state machine based TNT implementation
-        self.core.spawn_later(5, self.state_machine_loop)
+        self.core.spawn_later(10, self.state_machine_loop)
 
     def schedule_run(self, cur_exp_time, cur_analysis_time, start_of_cycle=False):
         # 191218DJH: The logic in this section should be REPLACED by the new market state machine. See method go().

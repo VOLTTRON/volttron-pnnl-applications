@@ -130,6 +130,7 @@ class CampusAgent(Agent, TransactiveNode):
         self._stop_agent = False
         self.city = None
         self.real_time_duration = self.config.get('real_time_market_duration', 15)
+        self.start_tent_market_topic = "{}/start_tent".format(self.db_topic)
 
     @Core.receiver('onstart')
     def onstart(self, sender, **kwargs):
@@ -147,6 +148,14 @@ class CampusAgent(Agent, TransactiveNode):
                                       prefix=self.building_demand_topic.format(bldg),
                                       callback=self.new_demand_signal)
 
+        # SN: Added for new state machine based TNT implementation
+        #self.core.spawn_later(5, self.state_machine_loop)
+
+        self.vip.pubsub.subscribe(peer='pubsub',
+                                  prefix=self.start_tent_market_topic,
+                                  callback=self.start_tent_market_topic)
+
+    def start_tent_market_topic(self, peer, sender, bus, topic, headers, message):
         # SN: Added for new state machine based TNT implementation
         self.core.spawn_later(5, self.state_machine_loop)
 

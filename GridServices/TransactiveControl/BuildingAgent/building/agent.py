@@ -191,9 +191,10 @@ class BuildingAgent(MarketAgent, TransactiveNode):
         self.real_time_quantity = [None for i in range(2)]
         self.current_day_ahead_market_name = None
         self.day_ahead_mixmarket_running = False
-        self.day_ahead_clear_price_sent = False
-        self.real_time_clear_price_sent = False
+        self.day_ahead_clear_price_sent = {}
+        self.real_time_clear_price_sent = {}
         self.real_time_duration = self.config.get('real_time_market_duration', 15)
+        self.start_tent_market_topic = "{}/start_tent".format(self.db_topic)
 
     @Core.receiver('onstart')
     def onstart(self, sender, **kwargs):
@@ -221,6 +222,11 @@ class BuildingAgent(MarketAgent, TransactiveNode):
                                   prefix=self.market_balanced_price_topic,
                                   callback=self.send_cleared_price)
 
+        self.vip.pubsub.subscribe(peer='pubsub',
+                                  prefix=self.start_tent_market_topic,
+                                  callback=self.start_tent_market)
+
+    def start_tent_market(self, peer, sender, bus, topic, headers, message):
         # SN: Added for new state machine based TNT implementation
         self.core.spawn_later(5, self.state_machine_loop)
 
@@ -292,8 +298,9 @@ class BuildingAgent(MarketAgent, TransactiveNode):
                                                                                     self.prices,
                                                                                     self.day_ahead_clear_price_sent))
             now = Timer.get_cur_time()
-            if not self.day_ahead_clear_price_sent:
-                _log.info("Market for name: {}, publishing cleared price".format(self.day_ahead_clear_price_sent))
+            if not self.day_ahead_clear_price_sent[market.name]:
+                _log.info("Market for name: {}, publishing cleared price".format(market.name,
+                                                                                 self.day_ahead_clear_price_sent[market.name]))
                 self.vip.pubsub.publish(peer='pubsub',
                                     topic=self.cleared_price_topic,
                                     message={"prices": self.prices,
@@ -301,7 +308,7 @@ class BuildingAgent(MarketAgent, TransactiveNode):
                                              "market_intervals": time_intervals,
                                              "Date": format_timestamp(now),
                                              "correction_market": False})
-                self.day_ahead_clear_price_sent = True
+                self.day_ahead_clear_price_sent[market.name] = True
         elif market.name.startswith('Real-Time'):
             price = market.marginalPrices
             # Get real time price from Real time market
@@ -312,7 +319,7 @@ class BuildingAgent(MarketAgent, TransactiveNode):
                                                                                              self.real_time_price,
                                                                                              self.real_time_clear_price_sent))
             now = Timer.get_cur_time()
-            if not self.real_time_clear_price_sent:
+            if not self.real_time_clear_price_sent.get(market.name, False):
                 _log.info("Market for name: {}, publishing cleared price".format(self.real_time_clear_price_sent))
                 self.vip.pubsub.publish(peer='pubsub',
                                     topic=self.cleared_price_topic,
@@ -322,7 +329,7 @@ class BuildingAgent(MarketAgent, TransactiveNode):
                                              "Date": format_timestamp(now),
                                              "correction_market": True})
 
-                self.real_time_clear_price_sent = True
+                self.real_time_clear_price_sent[market.name] = True
 
     def new_demand_signal(self, peer, sender, bus, topic, headers, message):
         mtrs = self.campus.meterPoints
@@ -376,8 +383,8 @@ class BuildingAgent(MarketAgent, TransactiveNode):
         _log.debug("Building start_realtime_mixmarket for name: {}, marginal prices: {}".format(self.tnt_real_time_market.name,
                                                                                        self.tnt_real_time_market.marginalPrices))
         if not self.tnt_real_time_market.converged or resend_balanced_prices:
-            self.real_time_clear_price_sent = False
-            _log.info("Building start_realtime_mixmarket: here1: {}".format(self.real_time_clear_price_sent))
+            self.real_time_clear_price_sent[self.tnt_real_time_market.name] = False
+            _log.info("Building start_realtime_mixmarket: here1: {}".format(self.real_time_clear_price_sent[self.tnt_real_time_market.name]))
             # Get price of the hour
             price = self.tnt_real_time_market.marginalPrices
             _log.debug("Building start_realtime_mixmarket: price: {}".format(price[0].value))
@@ -473,8 +480,8 @@ class BuildingAgent(MarketAgent, TransactiveNode):
                                                                                        market.marginalPrices))
         if not market.converged or resend_balanced_prices:
             self.day_ahead_mixmarket_running = True
-            self.day_ahead_clear_price_sent = False
-            _log.info("Building start_mixMarket: here1, falg: {}".format(self.day_ahead_clear_price_sent))
+            self.day_ahead_clear_price_sent[market.name] = False
+            _log.info("Building start_mixMarket: here1, falg: {}".format(self.day_ahead_clear_price_sent[market.name]))
             prices = market.marginalPrices
             initial_prices = market.marginalPrices
             prices_tuple = list()
@@ -602,7 +609,8 @@ class BuildingAgent(MarketAgent, TransactiveNode):
         #_log.debug("BUILDING agent current_time: {}".format(current_time))
         # Presume first delivery hour starts at 10:00 each day:
         #delivery_start_time = current_time.replace(hour=10, minute=0, second=0, microsecond=0)
-        delivery_start_time = current_time.replace(hour=2, minute=0, second=0, microsecond=0)
+        new_hr = current_time.hour + 1
+        delivery_start_time = current_time.replace(hour=new_hr, minute=0, second=0, microsecond=0)
 
         # The market clearing time must occur a delivery lead time prior to delivery:
         market.marketClearingTime = delivery_start_time - market.deliveryLeadTime
@@ -710,7 +718,12 @@ class BuildingAgent(MarketAgent, TransactiveNode):
             for mkt in markets_to_remove:
                 _log.debug("Market name: {}, Market state: {}. It will be removed shortly".format(mkt.name,
                                                                                                   mkt.marketState))
+                if mkt.name.startswith('Day'):
+                    del self.day_ahead_clear_price_sent[mkt.name]
+                else:
+                    del self.real_time_clear_price_sent[mkt.name]
                 self.markets.remove(mkt)
+
 
     @Core.receiver('onstop')
     def onstop(self, sender, **kwargs):

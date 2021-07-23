@@ -222,9 +222,11 @@ class BuildingAgent(MarketAgent, TransactiveNode):
                                   prefix=self.market_balanced_price_topic,
                                   callback=self.send_cleared_price)
 
-        self.vip.pubsub.subscribe(peer='pubsub',
-                                  prefix=self.start_tent_market_topic,
-                                  callback=self.start_tent_market)
+        #self.vip.pubsub.subscribe(peer='pubsub',
+        #                          prefix=self.start_tent_market_topic,
+        #                          callback=self.start_tent_market)
+        # SN: Added for new state machine based TNT implementation
+        self.core.spawn_later(5, self.state_machine_loop)
 
     def start_tent_market(self, peer, sender, bus, topic, headers, message):
         # SN: Added for new state machine based TNT implementation

@@ -1293,9 +1293,8 @@ class Neighbor(object):
                                     )
 
             else:
-
-                assert len(vertices) == 1, (['Unexpected flexibility logic in module ' + self.name
-                                                 + ' method prep_transactive_signal()'])
+                if len(vertices) == 1:
+                    _log.warning('Unexpected flexibility logic in module {self.name} method prep_transactive_signal()')
                 vertices[0].marginalPrice = float('inf')
                 vertices[0].record = 0
 

@@ -174,11 +174,11 @@ class CityAgent(Agent, TransactiveNode):
         # self.core.schedule(next_exp_time, self.schedule_run,
         #                    format_timestamp(next_exp_time),
         #                    format_timestamp(next_analysis_time), True)
-        headers = {headers_mod.DATE: format_timestamp(Timer.get_cur_time())}
-        self.vip.pubsub.publish("pubsub", self.start_tent_market_topic, headers, "start").get()
+        #headers = {headers_mod.DATE: format_timestamp(Timer.get_cur_time())}
+        #self.vip.pubsub.publish("pubsub", self.start_tent_market_topic, headers, "start").get()
 
         # SN: Added for new state machine based TNT implementation
-        self.core.spawn_later(10, self.state_machine_loop)
+        self.core.spawn_later(5, self.state_machine_loop)
 
     def schedule_run(self, cur_exp_time, cur_analysis_time, start_of_cycle=False):
         # 191218DJH: The logic in this section should be REPLACED by the new market state machine. See method go().

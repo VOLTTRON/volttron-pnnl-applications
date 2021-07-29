@@ -161,6 +161,7 @@ class TransactiveBase(MarketAgent, Model):
             building = config.get("building", "")
             device = config.get("device", "")
             subdevice = config.get("subdevice", "")
+            self.demand_limiting = config.get("demand_limiting", False)
 
             base_record_list = ["tnc", campus, building, device, subdevice]
             base_record_list = list(filter(lambda a: a != "", base_record_list))
@@ -244,6 +245,19 @@ class TransactiveBase(MarketAgent, Model):
                                   prefix="/".join([self.record_topic,
                                                    "update_model"]),
                                   callback=self.update_model)
+
+    @Core.receiver("onstop")
+    def shutdown(self, sender, **kwargs):
+        _log.debug("Shutting down %s", self.core.identity)
+        if self.outputs and self.actuation_enabled:
+            for output_info in list(self.outputs.values()):
+                topic = output_info["topic"]
+                release = output_info["release"]
+                actuator = output_info["actuator"]
+                if self.actuation_obj is not None:
+                    self.actuation_obj.kill()
+                    self.actuation_obj = None
+                self.actuate(topic, release, actuator)
 
     def init_inputs(self, inputs):
         for input_info in inputs:
@@ -571,9 +585,9 @@ class TransactiveBase(MarketAgent, Model):
             return None
 
     def update_model(self, peer, sender, bus, topic, headers, message):
-        coefficients = message
+        config = self.store_model_config(message)
         if self.model is not None:
-            self.model.update_coefficients(coefficients)
+            self.model.configure(message)
 
     def clamp(self, value, x1, x2):
         min_value = min(abs(x1), abs(x2))

@@ -191,7 +191,7 @@ class TransactiveBase(MarketAgent, Model):
             self.init_actuation_state(self.actuate_topic, self.actuate_onstart)
             self.init_input_subscriptions()
             market_name = config.get("market_name", "electric")
-            self.market_type = config.get("market_type", "tns")
+            self.market_type = config.get("market_type", "tent")
             tent = False if self.market_type != "tent" else True
             #  VOLTTRON MarketService does not allow "leaving"
             #  markets.  Market participants can choose not to participate

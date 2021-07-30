@@ -226,7 +226,7 @@ class RealTimeMarket(Market):
         # implementation of transactive agent).
         if price is not None:
             prices = self.price_manager.get_price_array(market_time)
-            if self.parent.actuation_method == "market_clear":
+            if self.parent.actuation_method == "market_clear" and self.parent.market_type != "tent":
                 if self.parent.actuation_enabled and not self.parent.actuation_disabled:
                     self.parent.do_actuation(price)
 

@@ -78,11 +78,12 @@ class TemperatureForecastModel(InformationServiceModel, object):
 
         self.parent = parent
         remote = self.weather_config.get("remote")
-        self.remote = None
+        self.connection = parent
         if remote is not None:
             address = remote.get("address")
             serverkey = remote.get("serverkey")
-            self.remote = self.parent.vip.auth.connect_remote_platform(address=address, serverkey=serverkey)
+            self.connection = self.parent.vip.auth.connect_remote_platform(address=address, serverkey=serverkey)
+
         self.predictedValues = []
         self.weather_data = []
         self.last_modified = None
@@ -91,6 +92,7 @@ class TemperatureForecastModel(InformationServiceModel, object):
         except:
             _log.warning("Problem automatically determining timezone! - Default to UTC.")
             self.localtz = "US/Pacific"
+            self.localtz = dateutil.tz.gettz(self.localtz)
 
         if self.weather_file is not None:
             self.init_weather_data()
@@ -98,13 +100,13 @@ class TemperatureForecastModel(InformationServiceModel, object):
         else:
             self.update_information = self.get_forecast_weatherservice
             self.weather_vip = self.weather_config.get("weather_vip", "platform.weather_service")
-            self.remote_platform = self.weather_config.get("remote_platform")
+            self.remote_platform = self.weather_config.get("remote_platform", "")
             self.location = [self.weather_config.get("location")]
             self.oat_point_name = self.config.get("temperature_point_name", "OutdoorAirTemperature")
             self.weather_data = None
             # there is no easy way to check if weather service is running on a remote platform
             if self.weather_vip not in self.parent.vip.peerlist.list().get() and self.remote_platform is None:
-               _log.warning("Weather service is not running!")
+                _log.warning("Weather service is not running!")
 
     def init_weather_data(self):
         """
@@ -134,24 +136,27 @@ class TemperatureForecastModel(InformationServiceModel, object):
         :param mkt:
         :return:
         """
+        if mkt.name.startswith("Day"):
+            self.predictedValues = []
+            _log.debug("Starting Day Ahead Market reinitialize temperature predictions store.")
+        if mkt.name.startswith("Real") and self.predictedValues:
+            _log.debug("Realtime market, temperature predictions exist")
+            return
         weather_results = None
         weather_data = None
+        result = None
         try:
-            if self.remote is not None:
-                result = self.remote.vip.rpc.call(self.weather_vip,
+            result = self.connection.vip.rpc.call(self.weather_vip,
                                                   "get_hourly_forecast",
                                                   self.location,
                                                   external_platform=self.remote_platform).get(timeout=15)
-            else:
-                result = self.parent.vip.rpc.call(self.weather_vip,
-                                                  "get_hourly_forecast",
-                                                  self.location,
-                                                  external_platform=self.remote_platform).get(timeout=15)
+
             weather_results = result[0]["weather_results"]
 
         except (gevent.Timeout, RemoteError) as ex:
             _log.warning("RPC call to {} failed for weather forecast: {}".format(self.weather_vip, ex))
-
+        except KeyError as ex:
+            _log.debug("No Weather Results!: {} -- {}".format(result, ex))
         if weather_results is not None:
             try:
                 weather_data = [[parser.parse(oat[0]).astimezone(self.localtz), oat[1][self.oat_point_name]] for oat in weather_results]
@@ -160,7 +165,6 @@ class TemperatureForecastModel(InformationServiceModel, object):
             except KeyError:
                 if not self.predictedValues:
                     raise Exception("Measurement Point Name is not correct")
-
             # How do we deal with never getting weather information?  Exit?
             except Exception as ex:
                 if not self.predictedValues:
@@ -168,7 +172,6 @@ class TemperatureForecastModel(InformationServiceModel, object):
 
         # Copy weather data to predictedValues
         if weather_data is not None:
-            self.predictedValues = []
             items = []
             for ti in mkt.timeIntervals:
                 # Find item which has the same timestamp as ti.timeStamp

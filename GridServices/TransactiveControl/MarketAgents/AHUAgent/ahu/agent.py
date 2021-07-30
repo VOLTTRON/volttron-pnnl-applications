@@ -74,7 +74,7 @@ class AHUAgent(Aggregator):
 
     def translate_aggregate_demand(self, air_demand, index, market_time, realtime):
         electric_demand_curve = PolyLine()
-        oat = self.oat_predictions[market_time] if self.oat_predictions else None
+        oat = self.oat_predictions[market_time] if (self.oat_predictions and market_time in self.oat_predictions) else None
         for point in air_demand.points:
             electric_demand_curve.add(Point(price=point.y, quantity=self.model.calculate_load(point.x, oat, realtime)))
         _log.debug("{}: electric demand : {}".format(self.agent_name, electric_demand_curve.points))

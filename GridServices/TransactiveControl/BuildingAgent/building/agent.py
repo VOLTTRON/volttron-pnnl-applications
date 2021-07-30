@@ -388,7 +388,7 @@ class BuildingAgent(MarketAgent, TransactiveNode):
             prices_tuple = [(avg_price, std_dev)]
 
             self.real_time_price = [price[0].value]
-
+            market_start_hour = price[0].timeInterval.startTime.hour
             time_intervals = [price[0].timeInterval.startTime.strftime('%Y%m%dT%H%M%S')]
             # Signal to start mix market only if the previous market is done
             if not self.real_time_mix_market_running and not near_end_of_hour:
@@ -410,8 +410,8 @@ class BuildingAgent(MarketAgent, TransactiveNode):
                                                      "Date": format_timestamp(now),
                                                      "correction_market":True})
                 else:
-                    temps = [x.value for x in weather_service.predictedValues]
-                    temps = temps[-24:]
+                    temps = [x.value for x in weather_service.predictedValues if x.timeInterval.hour == market_start_hour]
+                    # temps = temps[-24:]
                     _log.debug("temps are {}".format(temps))
                     self.vip.pubsub.publish(peer='pubsub',
                                             topic='mixmarket/start_new_cycle',

@@ -414,7 +414,7 @@ class BuildingAgent(MarketAgent, TransactiveNode):
                                                      "Date": format_timestamp(now),
                                                      "correction_market":True})
                 else:
-                    temps = [x.value for x in weather_service.predictedValues if x.timeInterval.hour == market_start_hour]
+                    temps = [x.value for x in weather_service.predictedValues if x.timeInterval.startTime.hour == market_start_hour]
                     # temps = temps[-24:]
                     _log.debug("temps are {}".format(temps))
                     self.vip.pubsub.publish(peer='pubsub',

@@ -102,7 +102,7 @@ class TemperatureForecastModel(InformationServiceModel, object):
             self.weather_vip = self.weather_config.get("weather_vip", "platform.weather_service")
             self.remote_platform = self.weather_config.get("remote_platform", "")
             self.location = [self.weather_config.get("location")]
-            self.oat_point_name = self.config.get("temperature_point_name", "OutdoorAirTemperature")
+            self.oat_point_name = self.weather_config.get("temperature_point_name", "OutdoorAirTemperature")
             self.weather_data = None
             # there is no easy way to check if weather service is running on a remote platform
             if self.weather_vip not in self.parent.vip.peerlist.list().get() and self.remote_platform is None:

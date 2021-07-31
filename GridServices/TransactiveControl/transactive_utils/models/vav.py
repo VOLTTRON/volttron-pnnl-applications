@@ -120,9 +120,6 @@ class firstorderzone(object):
         topic_suffix = "MODEL_COEFFICIENTS"
         self.parent.publish_record(topic_suffix, message)
 
-    def update_data(self):
-        pass
-
     def update(self, _set, market_time):
         _log.debug("update_state: {} - {} - {}".format(_set, market_time, self.zt_predictions))
         index = market_time.hour

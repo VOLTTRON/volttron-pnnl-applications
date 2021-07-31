@@ -138,6 +138,7 @@ class TransactiveBase(MarketAgent, Model):
         self.actuation_rate = None
         self.actuate_topic = None
         self.price_manager = None
+        self.prediction_error = 1.0
         if config:
             default_config.update(config)
             self.default_config = default_config

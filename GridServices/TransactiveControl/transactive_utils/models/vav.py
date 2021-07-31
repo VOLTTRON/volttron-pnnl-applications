@@ -140,8 +140,10 @@ class firstorderzone(object):
             zt = self.zt_predictions[zt_index]
             oat = self.get_input_value(self.oat_name)
             if market_time in self.parent.oat_predictions:
-                _log.debug("OAT NOT IN PREDICTIONS! %s -- %s", market_time, self.parent.oat_predictions)
+                _log.debug("OAT  IN PREDICTIONS! %s -- %s", market_time, self.parent.oat_predictions[market_time])
                 oat = self.parent.oat_predictions[market_time]
+            if zt is None:
+                zt = self.get_input_value(self.zt_name)
         q = 0.0
         q_correct = 0
         if oat is not None and zt is not None:

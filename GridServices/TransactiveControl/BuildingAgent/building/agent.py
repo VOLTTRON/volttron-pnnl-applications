@@ -566,7 +566,6 @@ class BuildingAgent(MarketAgent, TransactiveNode):
 
         topics = []
 
-
     def make_day_ahead_market(self):
         # 191219DJH: It will be important that different agents' markets are similarly, if not identically,
         # instantiated. I.e., the day ahead market at the city must be defined just like the ones at the campus and
@@ -582,40 +581,44 @@ class BuildingAgent(MarketAgent, TransactiveNode):
         market.intervalsToClear = 24  # 24 hours are cleared altogether
         market.futureHorizon = timedelta(hours=24)  # Projects 24 hourly future intervals
         market.intervalDuration = timedelta(hours=1)  # [h] Intervals are 1 h long
-        #market.marketClearingInterval = timedelta(days=1)  # The market clears daily
+        # market.marketClearingInterval = timedelta(days=1)  # The market clears daily
         market.marketClearingInterval = timedelta(days=1)
         market.marketSeriesName = "Day-Ahead_Auction"  # Prepends future market object names
         market.method = 2  # Use simpler interpolation solver
 
         # This times must be defined the same for all network agents.
         market.deliveryLeadTime = timedelta(hours=1)
-    #    market.negotiationLeadTime = timedelta(minutes=15)
+        #    market.negotiationLeadTime = timedelta(minutes=15)
         market.negotiationLeadTime = timedelta(minutes=8)
 
         market.marketLeadTime = timedelta(minutes=15)
         market.activationLeadTime = timedelta(minutes=0)
         market.real_time_duration = self.real_time_duration
-        
+
         # Determine the current and next market clearing times in this market:
         current_time = Timer.get_cur_time()
+        current_hour = current_time.hour + 1
         current_time = current_time - timedelta(hours=24)
-        #_log.debug("BUILDING agent current_time: {}".format(current_time))
+        # _log.debug("BUILDING agent current_time: {}".format(current_time))
         # Presume first delivery hour starts at 10:00 each day:
-        #delivery_start_time = current_time.replace(hour=10, minute=0, second=0, microsecond=0)
-        delivery_start_time = current_time.replace(hour=2, minute=0, second=0, microsecond=0)
+        # delivery_start_time = current_time.replace(hour=10, minute=0, second=0, microsecond=0)
+        delivery_start_time = current_time.replace(hour=current_hour, minute=0, second=0, microsecond=0)
+        new_hr = current_time.hour + 1
+        delivery_start_time = current_time.replace(hour=new_hr, minute=0, second=0, microsecond=0)
 
         # The market clearing time must occur a delivery lead time prior to delivery:
+        while delivery_start_time - market.deliveryLeadTime - market.marketLeadTime - market.negotiationLeadTime - market.activationLeadTime < current_time:
+            delivery_start_time = delivery_start_time + timedelta(hours=1)
+            _log.debug("MAKE BUILDING DA MARKET LOOP: {}".format(delivery_start_time))
         market.marketClearingTime = delivery_start_time - market.deliveryLeadTime
-
+        _log.debug("MAKE BUILDING DA MARKET CLEARING TIME: {}".format(market.marketClearingTime))
         # If it's too late today to begin the market processes, according to all the defined lead times, skip to the
         # next market object:
-        if current_time > market.marketClearingTime - market.marketLeadTime \
-                - market.negotiationLeadTime - market.activationLeadTime:
-            market.marketClearingTime = market.marketClearingTime + market.marketClearingInterval
+        # if current_time > market.marketClearingTime - market.marketLeadTime \
+        #   market.marketClearingTime = market.marketClearingTime + market.marketClearingInterval
 
-        # Schedule the next market clearing for another market cycle later:
         market.nextMarketClearingTime = market.marketClearingTime + market.marketClearingInterval
-
+        _log.debug("MAKE BUILDING DA MARKET NEXT CLEARING TIME: {}".format(market.nextMarketClearingTime))
         dt = str(market.marketClearingTime)
         market.name = market.marketSeriesName.replace(' ', '_') + '_' + dt[:19]
 
@@ -631,9 +634,6 @@ class BuildingAgent(MarketAgent, TransactiveNode):
         for p in market.marginalPrices:
             _log.debug("Market name: {} Initial marginal prices: {}".format(market.name, p.value))
         return market
-
-        # IMPORTANT: The real-time correction markets are instantiated by the day-ahead markets as they become
-        # instantiated.
 
     def make_campus_neighbor(self):
         # 191219DJH: There are no longer separate object and model neighbor classes.

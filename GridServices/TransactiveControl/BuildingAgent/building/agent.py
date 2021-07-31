@@ -712,10 +712,11 @@ class BuildingAgent(MarketAgent, TransactiveNode):
             for mkt in markets_to_remove:
                 _log.debug("Market name: {}, Market state: {}. It will be removed shortly".format(mkt.name,
                                                                                                   mkt.marketState))
-                if mkt.name.startswith('Day-Ahead'):
+                if mkt.name in self.day_ahead_clear_price_sent:
                     del self.day_ahead_clear_price_sent[mkt.name]
                 else:
-                    del self.real_time_clear_price_sent[mkt.name]
+                    if mkt.name in self.real_time_clear_price_sent:
+                        del self.real_time_clear_price_sent[mkt.name]
                 self.markets.remove(mkt)
 
 

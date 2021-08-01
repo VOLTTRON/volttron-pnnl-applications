@@ -74,7 +74,7 @@ def get_duration_in_hour(dur):
 
 
 def find_objs_by_ti(items, ti):
-    found_items = [x for x in items if x.timeInterval == ti]
+    found_items = [x for x in items if x.timeInterval.startTime == ti.startTime]
     return found_items
 
 

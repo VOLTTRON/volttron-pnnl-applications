@@ -102,11 +102,15 @@ class TemperatureForecastModel(InformationServiceModel, object):
             self.weather_vip = self.weather_config.get("weather_vip", "platform.weather_service")
             self.remote_platform = self.weather_config.get("remote_platform", "")
             self.location = [self.weather_config.get("location")]
-            self.oat_point_name = self.weather_config.get("temperature_point_name", "OutdoorAirTemperature")
+            self.oat_point_name = self.weather_config.get("temperature_point_name", "air_temperature")
             self.weather_data = None
             # there is no easy way to check if weather service is running on a remote platform
             if self.weather_vip not in self.parent.vip.peerlist.list().get() and self.remote_platform is None:
                 _log.warning("Weather service is not running!")
+            tmy_fallback = self.weather_config.get("tmy_fallback")
+            if tmy_fallback is not None:
+                self.weather_file = tmy_fallback
+                self.init_weather_data()
 
     def init_weather_data(self):
         """
@@ -121,13 +125,84 @@ class TemperatureForecastModel(InformationServiceModel, object):
 
             # Clear weather_data for re-init
             self.weather_data = []
+            try:
+                with open(self.weather_file) as f:
+                    reader = csv.DictReader(f)
+                    self.weather_data = [r for r in reader]
+                    for rec in self.weather_data:
+                        rec['Timestamp'] = parser.parse(rec['Timestamp']).replace(minute=0, second=0, microsecond=0)
+                        rec['Value'] = float(rec['Value'])
+            except:
+                self.weather_data = []
+                _log.debug("WEATHER - problem parsing weather file!")
 
-            with open(self.weather_file) as f:
-                reader = csv.DictReader(f)
-                self.weather_data = [r for r in reader]
-                for rec in self.weather_data:
-                    rec['Timestamp'] = parser.parse(rec['Timestamp']).replace(minute=0, second=0, microsecond=0)
-                    rec['Value'] = float(rec['Value'])
+    def rpc_handler(self):
+        attempts = 0
+        success = False
+        result = []
+        weather_results = None
+        while not success and attempts < 10:
+            try:
+                result = self.connection.vip.rpc.call(self.weather_vip,
+                                                      "get_hourly_forecast",
+                                                      self.location,
+                                                      external_platform=self.remote_platform).get(timeout=15)
+
+                weather_results = result[0]["weather_results"]
+                success = True
+            except (gevent.Timeout, RemoteError) as ex:
+                _log.warning("RPC call to {} failed for WEATHER forecast: {}".format(self.weather_vip, ex))
+                attempts += 1
+            except KeyError as ex:
+                _log.debug("No WEATHER Results!: {} -- {}".format(result, ex))
+                attempts += 1
+        if attempts >= 10:
+            _log.debug("10 Failed attempts to get WEATHER forecast via RPC!!!")
+            return weather_results
+        return weather_results
+
+    def parse_rpc_data(self, weather_results):
+        weather_data = []
+        try:
+            weather_data = [[parser.parse(oat[0]).astimezone(self.localtz), oat[1][self.oat_point_name]] for oat in
+                            weather_results]
+            weather_data = [[oat[0].replace(tzinfo=None), oat[1]] for oat in weather_data]
+            _log.debug("Parsed WEATHER information: {}".format(weather_data))
+        except KeyError:
+            weather_data = []
+            _log.debug("Measurement WEATHER Point Name is not correct")
+        # How do we deal with never getting weather information?  Exit?
+        except Exception as ex:
+            weather_data = []
+            _log.debug("Exception {} processing WEATHER data.".format(ex))
+        return weather_data
+
+    def map_forecast_to_interval(self, weather_data):
+        items = []
+        predictedValues = []
+        for ti in mkt.timeIntervals:
+            # Find item which has the same timestamp as ti.timeStamp
+            start_time = ti.startTime.replace(minute=0)
+            previous_measurement = items
+            items = [x[1] for x in weather_data if x[0] == start_time]
+            # Create interval value and add it to predicted values
+            if items:
+                temp = items[0]
+                interval_value = IntervalValue(self, ti, mkt, MeasurementType.PredictedValue, temp)
+                predictedValues.append(interval_value)
+            elif previous_measurement:
+                temp = previous_measurement[0]
+                interval_value = IntervalValue(self, ti, mkt, MeasurementType.PredictedValue, temp)
+                predictedValues.append(interval_value)
+                items = previous_measurement
+            else:
+                _log.debug("Cannot assign WEATHER information for interval: {}".format(ti))
+        if len(mkt.timeIntervals) == len(predictedValues):
+            self.predictedValues = predictedValues
+            return True
+        else:
+            _log.debug("WEATHER data problem when assigning forecast {}".format(len(predictedValues)))
+            return False
 
     def get_forecast_weatherservice(self, mkt):
         """
@@ -137,74 +212,31 @@ class TemperatureForecastModel(InformationServiceModel, object):
         :return:
         """
         if mkt.name.startswith("Day"):
-            self.predictedValues = []
             _log.debug("Starting Day Ahead Market reinitialize temperature predictions store.")
         if mkt.name.startswith("Real") and self.predictedValues:
             _log.debug("Realtime market, temperature predictions exist")
             return
-        weather_results = None
-        weather_data = None
-        result = None
-        try:
-            result = self.connection.vip.rpc.call(self.weather_vip,
-                                                  "get_hourly_forecast",
-                                                  self.location,
-                                                  external_platform=self.remote_platform).get(timeout=15)
-
-            weather_results = result[0]["weather_results"]
-
-        except (gevent.Timeout, RemoteError) as ex:
-            _log.warning("RPC call to {} failed for weather forecast: {}".format(self.weather_vip, ex))
-        except KeyError as ex:
-            _log.debug("No Weather Results!: {} -- {}".format(result, ex))
-        if weather_results is not None:
-            try:
-                weather_data = [[parser.parse(oat[0]).astimezone(self.localtz), oat[1][self.oat_point_name]] for oat in weather_results]
-                weather_data = [[oat[0].replace(tzinfo=None), oat[1]] for oat in weather_data]
-                _log.debug("Parsed WEATHER information: {}".format(weather_data))
-            except KeyError:
-                if not self.predictedValues:
-                    raise Exception("Measurement Point Name is not correct")
-            # How do we deal with never getting weather information?  Exit?
-            except Exception as ex:
-                if not self.predictedValues:
-                    raise Exception("Exception {} processing weather data.".format(ex))
-
-        # Copy weather data to predictedValues
-        if weather_data is not None:
-            items = []
-            for ti in mkt.timeIntervals:
-                # Find item which has the same timestamp as ti.timeStamp
-                start_time = ti.startTime.replace(minute=0)
-                previous_measurement = items
-                items = [x[1] for x in weather_data if x[0] == start_time]
-
-                # Create interval value and add it to predicted values
-                if items:
-                    temp = items[0]
-                    interval_value = IntervalValue(self, ti, mkt, MeasurementType.PredictedValue, temp)
-                    self.predictedValues.append(interval_value)
-                elif previous_measurement:
-                    temp = previous_measurement[0]
-                    interval_value = IntervalValue(self, ti, mkt, MeasurementType.PredictedValue, temp)
-                    self.predictedValues.append(interval_value)
+        weather_results = self.rpc_handler()
+        weather_data = self.parse_rpc_data(weather_results)
+        if not self.map_forecast_to_interval(weather_data):
+            if self.predictedValues:
+                hour_gap = mkt.timeIntervals[0].startTime - self.predictedValues[0].timeInterval.startTime
+                max_hour_gap = timedelta(hours=72)
+                if hour_gap > max_hour_gap:
+                    self.predictedValues = []
+                    if self.weather_file is not None and self.weather_data:
+                        _log.debug("WEATHER using fallback1 tmy data for forecast!")
+                        self.get_forecast_file(mkt)
                 else:
-                    _log.debug("Cannot assign WEATHER information for interval: {}".format(ti))
-        elif self.predictedValues:
-            hour_gap = mkt.timeIntervals[0].startTime - self.predictedValues[0].timeInterval.startTime
-            max_hour_gap = timedelta(hours=4)
-            if hour_gap > max_hour_gap:
-                self.predictedValues = []
-                raise Exception('No weather data for time: {}'.format(utils.format_timestamp(mkt.timeIntervals[0].startTime)))
+                    predictedValues = []
+                    for i in range(1, len(mkt.timeIntervals)):
+                        interval_value = IntervalValue(self, mkt.timeIntervals[i], mkt, MeasurementType.PredictedValue, self.predictedValues[i].value)
+                        predictedValues.append(interval_value)
+                    self.predictedValues = predictedValues
             else:
-                predictedValues = []
-                for i in range(1, len(mkt.timeIntervals)):
-                    interval_value = IntervalValue(self, mkt.timeIntervals[i], mkt, MeasurementType.PredictedValue, self.predictedValues[i-1].value)
-                    predictedValues.append(interval_value)
-                self.predictedValues = predictedValues
-        else:
-            raise Exception(
-                'No weather data for time: {}'.format(utils.format_timestamp(mkt.timeIntervals[0].startTime)))
+                if self.weather_file is not None and self.weather_data:
+                    _log.debug("WEATHER using fallback2 tmy data for forecast!")
+                    self.get_forecast_file(mkt)
 
     def get_forecast_file(self, mkt):
         self.init_weather_data()

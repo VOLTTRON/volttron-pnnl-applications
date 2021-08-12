@@ -177,7 +177,7 @@ class TemperatureForecastModel(InformationServiceModel, object):
             _log.debug("Exception {} processing WEATHER data.".format(ex))
         return weather_data
 
-    def map_forecast_to_interval(self, weather_data):
+    def map_forecast_to_interval(self, mkt, weather_data):
         items = []
         predictedValues = []
         for ti in mkt.timeIntervals:
@@ -218,7 +218,7 @@ class TemperatureForecastModel(InformationServiceModel, object):
             return
         weather_results = self.rpc_handler()
         weather_data = self.parse_rpc_data(weather_results)
-        if not self.map_forecast_to_interval(weather_data):
+        if not self.map_forecast_to_interval(mkt, weather_data):
             if self.predictedValues:
                 hour_gap = mkt.timeIntervals[0].startTime - self.predictedValues[0].timeInterval.startTime
                 max_hour_gap = timedelta(hours=72)

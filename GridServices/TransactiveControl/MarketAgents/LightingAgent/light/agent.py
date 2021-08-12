@@ -73,6 +73,7 @@ class LightAgent(TransactiveBase):
         self.current_control = None
         self.default_lighting_schedule = config["model_parameters"].get("default_lighting_schedule", [0.9] * 24)
         self.decrease_load_only = config.get("decrease_load_only", False)
+        self.default_control = None
 
     def determine_control(self, sets, prices, price):
         """
@@ -87,19 +88,36 @@ class LightAgent(TransactiveBase):
         :return:
         """
         _log.debug("Updated determine_control! -- %s", self.current_datetime)
+        control_final = np.interp(price, prices, sets)
+        min_control_flex = min(sets)
         default_control = None
         if self.current_datetime is not None:
             _hour = self.current_datetime.hour
             default_control = self.default_lighting_schedule[_hour]
+            if self.default_control is not None and default_control != self.default_control:
+                self.current_control = default_control
+                self.default_control = default_control
+                return self.current_control
+            self.default_control = default_control
 
         if self.current_control is None:
-            if default_control is None:
+            if self.default_control is None:
                 self.current_control = np.mean(self.ct_flexibility)
             else:
-                self.current_control = default_control
-        
-        control_final = np.interp(price, prices, sets)
-        _log.debug("determine_control -- current - %s -- final - %s -- default - %s", self.current_control, control_final, default_control)
+                self.current_control = self.default_control
+
+        if self.default_control is not None:
+            if self.default_control < min_control_flex:
+                if self.decrease_load_only:
+                    self.current_control = self.default_control
+                else:
+                    if self.current_control is None:
+                        self.current_control = self.default_control
+                    self.current_control = min(self.ramp_rate + self.current_control, control_final)
+                _log.debug("determine_control1 -- current - %s -- final - %s -- default - %s", self.current_control, control_final, default_control)
+                return self.current_control
+
+        _log.debug("determine_control2 -- current - %s -- final - %s -- default - %s", self.current_control, control_final, default_control)
         if self.current_control is not None:
             if self.current_control < control_final:
                 self.current_control = min(self.ramp_rate + self.current_control, control_final)

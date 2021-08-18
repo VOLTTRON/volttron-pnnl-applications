@@ -116,20 +116,19 @@ class LightAgent(TransactiveBase):
         #             self.current_control = min(self.ramp_rate + self.current_control, control_final)
         #         _log.debug("determine_control1 -- current - %s -- final - %s -- default - %s", self.current_control, control_final, default_control)
         #         return self.current_control
-        _log.debug("determine_control2 -- current - %s -- final - %s -- default", self.current_control, control_final)
+        _log.debug("determine_control2 -- current - %s -- final - %s -- lastcontrol %s", current_control, control_final, self.current_control)
         if current_control is not None:
-            if current_control < control_final:
+            if current_control < control_final and not self.decrease_load_only:
                 self.current_control = min(self.ramp_rate + current_control, control_final)
+                _log.debug("determine_control3 -- current - %s -- ramp %s", self.current_control, self.ramp_rate)
             elif current_control > control_final:
                 self.current_control = max(current_control - self.ramp_rate, control_final)
+                _log.debug("determine_control4 -- current - %s -- ramp %s", self.current_control, self.ramp_rate)
             else:
                 self.current_control = control_final
         else:
             self.current_control = control_final
-        if self.decrease_load_only and current_control is not None:
-            if self.current_control > current_control:
-                self.current_control = current_control
-
+        _log.debug("determine_control2-1 -- current - %s -- final - %s -- lastcontrol %s", current_control, control_final, self.current_control)
         return self.current_control
 
     def init_predictions(self, output_info):

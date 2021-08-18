@@ -80,7 +80,7 @@ class TransactiveBase(MarketAgent, Model):
             "building": "",
             "device": "",
             "agent_name": "",
-            "actuation_method": "periodic",
+            "actuation_method": "tent",
             "control_interval": 900,
             "market_name": "electric",
             "input_data_timezone": "UTC",
@@ -458,7 +458,7 @@ class TransactiveBase(MarketAgent, Model):
             if self.actuation_method == "periodic":
                 _log.debug("Setup periodic actuation: %s -- %s", self.core.identity, self.actuation_rate)
                 #TODO: Must remediate prior to merge to main branch
-                # self.actuation_obj = self.core.periodic(self.actuation_rate, self.do_actuation, wait=self.actuation_rate)
+                self.actuation_obj = self.core.periodic(self.actuation_rate, self.do_actuation, wait=self.actuation_rate)
         self.actuation_enabled = state
 
     def update_outputs(self, name, price, prices):
@@ -694,8 +694,9 @@ class MessageManager(object):
             market_time = parse(market_time) if isinstance(market_time, str) else market_time
             market_time = market_time.replace(tzinfo=self.parent.input_data_tz)
             _log.debug("CORRECTION: {} -- {}".format(current_datetime, market_time))
-            #if current_datetime >= market_time:
-            self.parent.do_actuation(price, price_array)
+            # Do actuation when receiving RT cleared price
+            if self.parent.actuation_method == 'tent':
+                self.parent.do_actuation(price, price_array)
         self.cleared_prices = sort_dict(self.cleared_prices)
         self.price_info = sort_dict(self.price_info)
         self.prune_data()

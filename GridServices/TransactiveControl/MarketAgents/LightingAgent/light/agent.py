@@ -96,7 +96,7 @@ class LightAgent(TransactiveBase):
                 if not self.decrease_load_only:
                     self.current_control = min(self.ramp_rate + current_control, control_final)
                 else:
-                    self.current_control = current_control
+                    self.current_control = None
                 _log.debug("determine_control3 -- current - %s -- ramp %s", self.current_control, self.ramp_rate)
             elif current_control > control_final:
                 self.current_control = max(current_control - self.ramp_rate, control_final)

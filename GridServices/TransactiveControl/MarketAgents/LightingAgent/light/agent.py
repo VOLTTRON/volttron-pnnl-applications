@@ -91,7 +91,6 @@ class LightAgent(TransactiveBase):
         control_final = np.interp(price, prices, sets)
         current_control = self.get_input_value("dol")
         _log.debug("determine_control2 -- current - %s -- final - %s -- lastcontrol %s", current_control, control_final, self.current_control)
-        _log.debug("Updated determine_control! -- %s", self.current_datetime)
         default_control = None
         if self.current_datetime is not None:
             _hour = self.current_datetime.hour
@@ -99,22 +98,16 @@ class LightAgent(TransactiveBase):
 
         if current_control is not None:
             if current_control < control_final:
-                if not self.decrease_load_only:
-                    self.current_control = min(self.ramp_rate + current_control, control_final)
-                else:
-                    self.current_control = None
-                _log.debug("determine_control3 -- current - %s -- ramp %s", self.current_control, self.ramp_rate)
+                self.current_control = min(self.ramp_rate + current_control, control_final)
             elif current_control > control_final:
                 self.current_control = max(current_control - self.ramp_rate, control_final)
-                _log.debug("determine_control4 -- current - %s -- ramp %s", self.current_control, self.ramp_rate)
             else:
                 self.current_control = control_final
         else:
             self.current_control = control_final
 
-        if self.decrease_load_only and default_control is not None:
-            if self.current_control is not None and self.current_control > default_control:
-                self.current_control = default_control
+        if default_control is not None and self.decrease_load_only and self.current_control > default_control:
+            self.current_control = None
         _log.debug("determine_control2-1 -- current - %s -- final - %s -- lastcontrol %s", current_control, control_final, self.current_control)
         return self.current_control
 

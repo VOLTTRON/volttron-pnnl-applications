@@ -497,7 +497,8 @@ class TransactiveBase(MarketAgent, Model):
             offset = output_info["offset"]
             if self.occupied:
                 _log.debug("ACTUATE: %s -- %s", self.occupied, value)
-                value = value + offset
+                if value is not None:
+                    value = value + offset
                 self.actuate(topic, value, actuator)
 
     def actuate(self, point_topic, value, actuator):

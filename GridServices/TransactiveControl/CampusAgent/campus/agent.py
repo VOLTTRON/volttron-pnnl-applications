@@ -112,7 +112,7 @@ class CampusAgent(Agent, TransactiveNode):
         # self.campus_supply_topic = "/".join([self.db_topic, "campus/{}/supply"])
         self.campus_supply_topic = "/".join([self.db_topic, "{}".format(campus), "{}/supply"])
         # self.solar_topic = "/".join([self.db_topic, "campus/pv"])
-        self.solar_topic = "/".join([self.db_topic, "{}}/pv".format(campus)])
+        self.solar_topic = "/".join([self.db_topic, "{}/pv".format(campus)])
         self.system_loss_topic = "{}/{}/system_loss".format(self.db_topic, self.name)
         self.dc_threshold_topic = "{}/{}/dc_threshold_topic".format(self.db_topic, self.name)
 

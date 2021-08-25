@@ -83,6 +83,9 @@ class CityAgent(Agent, TransactiveNode):
         self.config_path = config_path
         self.config = utils.load_config(config_path)
         self.name = self.config.get('name')
+
+        city = self.config.get("city_name", "city")
+        campus = self.config.get("campus_name", "campus")
         self.market_cycle_in_min = int(self.config.get('market_cycle_in_min', 60))
         self.duality_gap_threshold = float(self.config.get('duality_gap_threshold', 0.01))
         self.supplier_loss_factor = float(self.config.get('supplier_loss_factor'))
@@ -93,9 +96,12 @@ class CityAgent(Agent, TransactiveNode):
         self.neighbors = []
 
         self.db_topic = self.config.get("db_topic", "tnc")
-        #self.db_topic = self.config.get("db_topic", "record")
-        self.campus_demand_topic = "{}/campus/city/demand".format(self.db_topic)
-        self.city_supply_topic = "{}/city/campus/supply".format(self.db_topic)
+        # self.db_topic = self.config.get("db_topic", "record")
+        # self.campus_demand_topic = "{}/campus/city/demand".format(self.db_topic)
+        # self.city_supply_topic = "{}/city/campus/supply".format(self.db_topic)
+
+        self.campus_demand_topic = "{}/{}/{}/demand".format(self.db_topic, campus, city)
+        self.city_supply_topic = "{}/{}/{}/supply".format(self.db_topic, city, campus)
         self.system_loss_topic = "{}/{}/system_loss".format(self.db_topic, self.name)
         self.dc_threshold_topic = "{}/{}/dc_threshold_topic".format(self.db_topic, self.name)
 

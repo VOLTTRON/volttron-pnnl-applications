@@ -180,7 +180,7 @@ class BuildingAgent(MarketAgent, TransactiveNode):
         self.elastic_load = None
         self._mix_market_done = [False]*24
         self._building_market_prices = [None]*24
-        self.cleared_price_topic = 'tnc/cleared_prices'
+        self.cleared_price_topic = 'tnc/cleared_prices/{}'.format(self.name)
         # New TNT db topics
         self.transactive_operation_topic = "{}/{}/transactive_operation".format(self.db_topic, self.name)
         self.local_asset_topic = "{}/{}/local_assets".format(self.db_topic, self.name)

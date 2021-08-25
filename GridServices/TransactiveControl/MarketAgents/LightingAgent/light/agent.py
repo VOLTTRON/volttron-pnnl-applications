@@ -106,7 +106,7 @@ class LightAgent(TransactiveBase):
         else:
             self.current_control = control_final
 
-        if default_control is not None and self.decrease_load_only and self.current_control > default_control:
+        if default_control is not None and self.decrease_load_only and control_final > default_control:
             self.current_control = None
         _log.debug("determine_control2-1 -- current - %s -- final - %s -- lastcontrol %s", current_control, control_final, self.current_control)
         return self.current_control

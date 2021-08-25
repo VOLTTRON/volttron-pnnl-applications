@@ -113,6 +113,8 @@ class BuildingAgent(MarketAgent, TransactiveNode):
         self.config_path = config_path
         self.config = utils.load_config(config_path)
         self.name = self.config.get('name')
+        city = self.config.get("city_name", "city")
+        campus = self.config.get("campus_name", "campus")
         self.agent_name = self.config.get('agentid', 'building_agent')
         self.db_topic = self.config.get("db_topic", "tnc")
         #self.db_topic = self.config.get("db_topic", "record")
@@ -128,8 +130,11 @@ class BuildingAgent(MarketAgent, TransactiveNode):
         self.demandThresholdCoef = float(self.config.get('demand_threshold_coef'))
         self.monthly_peak_power = float(self.config.get('monthly_peak_power'))
 
-        self.building_demand_topic = "{}/{}/campus/demand".format(self.db_topic, self.name)
-        self.campus_supply_topic = "{}/campus/{}/supply".format(self.db_topic, self.name)
+        #  self.building_demand_topic = "{}/{}/campus/demand".format(self.db_topic, self.name)
+        #  self.campus_supply_topic = "{}/campus/{}/supply".format(self.db_topic, self.name)
+
+        self.building_demand_topic = "{}/{}/{}/demand".format(self.db_topic, self.name, campus)
+        self.campus_supply_topic = "{}/{}/{}/supply".format(self.db_topic, campus, self.name)
         self.system_loss_topic = "{}/{}/system_loss".format(self.db_topic, self.name)
         self.dc_threshold_topic = "{}/{}/dc_threshold_topic".format(self.db_topic, self.name)
 

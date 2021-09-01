@@ -56,7 +56,7 @@ __all__ = ['Model']
 class Model(object):
     def __init__(self, config, **kwargs):
         self.model = None
-        config = self.store_model_config(config)
+        config = self.get_model_config(config)
         self.cleared_quantity = None
         if not config:
             return
@@ -75,17 +75,21 @@ class Model(object):
         q = self.model.predict(_set, market_time, occupied, realtime=realtime)
         return q
 
-    def store_model_config(self, _config):
+    def get_model_config(self, _config):
         try:
             config = self.vip.config.get("model")
         except KeyError:
             config = {}
+        if not config:
+            config = _config
+        return config
+
+    def store_model_config(self, config):
+        _log.debug("MODEL STORE: {}".format(config))
         try:
-            self.vip.config.set("model", _config, send_update=False)
+            self.vip.config.set("model", config, send_update=False)
         except RuntimeError:
             _log.debug("Cannot change config store on config callback!")
-        _config.update(config)
-        return _config
 
     def update_prediction(self, quantity):
         if self.model is not None:

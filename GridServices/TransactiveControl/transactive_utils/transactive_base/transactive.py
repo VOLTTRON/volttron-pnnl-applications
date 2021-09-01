@@ -93,6 +93,7 @@ class TransactiveBase(MarketAgent, Model):
             "model_parameters": {},
         }
         # Initialize run parameters
+        self.current_input_data = {}
         self.aggregator = aggregator
 
         self.actuation_enabled = False
@@ -486,7 +487,14 @@ class TransactiveBase(MarketAgent, Model):
     def do_actuation(self, price=None, prices=None):
         _log.debug("do_actuation {}".format(self.outputs))
         for name, output_info in self.outputs.items():
-            if not output_info["condition"]:
+            condition = output_info["condition"]
+            if isinstance(condition, str):
+                if self.current_input_data:
+                    try:
+                        condition = eval(condition, self.current_input_data)
+                    except:
+                        condition = False
+            if not condition:
                 continue
             _log.debug("call update_outputs - %s", self.core.identity)
             self.update_outputs(name, price, prices)
@@ -561,6 +569,7 @@ class TransactiveBase(MarketAgent, Model):
         :param data: dict; key value pairs from master driver.
         :return:
         """
+        self.current_input_data.update(data)
         to_publish = {}
         for name, input_data in self.inputs.items():
             for point, value in input_data.items():
@@ -587,9 +596,9 @@ class TransactiveBase(MarketAgent, Model):
             return None
 
     def update_model(self, peer, sender, bus, topic, headers, message):
-        config = self.store_model_config(message)
+        self.store_model_config(message)
         if self.model is not None:
-            self.model.configure(message)
+            self.model.update_coefficients(message)
 
     def clamp(self, value, x1, x2):
         min_value = min(abs(x1), abs(x2))

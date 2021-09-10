@@ -92,25 +92,7 @@ class firstorderzone(object):
         self.mhtg = self.get_input_value(self.mhtg_name)
         self.sfs = self.get_input_value(self.sfs_name)
         self.zt_predictions = [self.zt] * 24
-
-    def update_coefficients(self, coefficients):
-        if set(coefficients.keys()) != self.coefficients:
-            _log.warning("Missing required coefficient to update model")
-            _log.warning("Provided coefficients %s -- required %s",
-                         list(coefficients.keys()), self.coefficients)
-            return
-        self.c1 = coefficients["c1"]
-        self.c2 = coefficients["c2"]
-        self.c3 = coefficients["c3"]
-        self.c4 = coefficients["c4"]
-        message = {
-            "a1": self.c1,
-            "a2": self.c2,
-            "a3": self.c3,
-            "a4": self.c4
-        }
-        topic_suffix = "MODEL_COEFFICIENTS"
-        self.parent.publish_record(topic_suffix, message)
+        self.configure(config)
 
     def update_data(self):
         self.oat = self.get_input_value(self.oat_name)
@@ -135,6 +117,13 @@ class firstorderzone(object):
         _log.debug("update_state: {} - {} - {}".format(_set, market_time, self.zt_predictions))
         index = market_time.hour
         self.zt_predictions[index] = _set
+
+    def configure(self, config):
+        _log.debug("MODEL CONFIGURE: {}".format(config))
+        self.c1 = config.get("c1", 0)
+        self.c2 = config.get("c2", 0)
+        self.c3 = config.get("c3", 0)
+        self.c4 = config.get("c4", 0)
 
     def predict(self, _set, market_time, occupied, realtime=False):
         index = parse(market_time).hour

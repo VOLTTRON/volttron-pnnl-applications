@@ -80,7 +80,7 @@ class TransactiveBase(MarketAgent, Model):
             "building": "",
             "device": "",
             "agent_name": "",
-            "actuation_method": "periodic",
+            "actuation_method": "tent",
             "control_interval": 900,
             "market_name": "electric",
             "input_data_timezone": "UTC",
@@ -93,6 +93,7 @@ class TransactiveBase(MarketAgent, Model):
             "model_parameters": {},
         }
         # Initialize run parameters
+        self.current_input_data = {}
         self.aggregator = aggregator
 
         self.actuation_enabled = False
@@ -138,6 +139,7 @@ class TransactiveBase(MarketAgent, Model):
         self.actuation_rate = None
         self.actuate_topic = None
         self.price_manager = None
+        self.prediction_error = 1.0
         if config:
             default_config.update(config)
             self.default_config = default_config
@@ -161,6 +163,7 @@ class TransactiveBase(MarketAgent, Model):
             building = config.get("building", "")
             device = config.get("device", "")
             subdevice = config.get("subdevice", "")
+            self.demand_limiting = config.get("demand_limiting", False)
 
             base_record_list = ["tnc", campus, building, device, subdevice]
             base_record_list = list(filter(lambda a: a != "", base_record_list))
@@ -190,8 +193,8 @@ class TransactiveBase(MarketAgent, Model):
             self.init_actuation_state(self.actuate_topic, self.actuate_onstart)
             self.init_input_subscriptions()
             market_name = config.get("market_name", "electric")
-            self.market_type = config.get("market_type", "tns")
-            tns = False if self.market_type != "tns" else True
+            self.market_type = config.get("market_type", "tent")
+            tent = False if self.market_type != "tent" else True
             #  VOLTTRON MarketService does not allow "leaving"
             #  markets.  Market participants can choose not to participate
             #  in the market process by sending False during the reservation
@@ -202,12 +205,12 @@ class TransactiveBase(MarketAgent, Model):
             _log.debug("CREATE MODEL")
             model_config = config.get("model_parameters", {})
             Model.__init__(self, model_config, **kwargs)
-            if not self.market_list and tns is not None:
+            if not self.market_list and tent is not None:
                 if self.aggregator is None:
                     _log.debug("%s is a transactive agent.", self.core.identity)
                     for i in range(24):
                         self.market_list.append('_'.join([market_name, str(i)]))
-                    if tns:
+                    if tent:
                         rtp_market_list = ["_".join(["refinement", market_name])]
                         self.day_ahead_market = DayAheadMarket(self.outputs, self.market_list, self, self.price_manager)
                         self.rtp_market = RealTimeMarket(self.outputs, rtp_market_list, self, self.price_manager)
@@ -244,6 +247,19 @@ class TransactiveBase(MarketAgent, Model):
                                   prefix="/".join([self.record_topic,
                                                    "update_model"]),
                                   callback=self.update_model)
+
+    @Core.receiver("onstop")
+    def shutdown(self, sender, **kwargs):
+        _log.debug("Shutting down %s", self.core.identity)
+        if self.outputs and self.actuation_enabled:
+            for output_info in list(self.outputs.values()):
+                topic = output_info["topic"]
+                release = output_info["release"]
+                actuator = output_info["actuator"]
+                if self.actuation_obj is not None:
+                    self.actuation_obj.kill()
+                    self.actuation_obj = None
+                self.actuate(topic, release, actuator)
 
     def init_inputs(self, inputs):
         for input_info in inputs:
@@ -443,7 +459,7 @@ class TransactiveBase(MarketAgent, Model):
             if self.actuation_method == "periodic":
                 _log.debug("Setup periodic actuation: %s -- %s", self.core.identity, self.actuation_rate)
                 #TODO: Must remediate prior to merge to main branch
-                # self.actuation_obj = self.core.periodic(self.actuation_rate, self.do_actuation, wait=self.actuation_rate)
+                self.actuation_obj = self.core.periodic(self.actuation_rate, self.do_actuation, wait=self.actuation_rate)
         self.actuation_enabled = state
 
     def update_outputs(self, name, price, prices):
@@ -471,7 +487,14 @@ class TransactiveBase(MarketAgent, Model):
     def do_actuation(self, price=None, prices=None):
         _log.debug("do_actuation {}".format(self.outputs))
         for name, output_info in self.outputs.items():
-            if not output_info["condition"]:
+            condition = output_info["condition"]
+            if isinstance(condition, str):
+                if self.current_input_data:
+                    try:
+                        condition = eval(condition, self.current_input_data)
+                    except:
+                        condition = False
+            if not condition:
                 continue
             _log.debug("call update_outputs - %s", self.core.identity)
             self.update_outputs(name, price, prices)
@@ -480,9 +503,10 @@ class TransactiveBase(MarketAgent, Model):
             actuator = output_info["actuator"]
             value = output_info.get("value")
             offset = output_info["offset"]
-            if value is not None and self.occupied:
+            if self.occupied:
                 _log.debug("ACTUATE: %s -- %s", self.occupied, value)
-                value = value + offset
+                if value is not None:
+                    value = value + offset
                 self.actuate(topic, value, actuator)
 
     def actuate(self, point_topic, value, actuator):
@@ -545,6 +569,7 @@ class TransactiveBase(MarketAgent, Model):
         :param data: dict; key value pairs from master driver.
         :return:
         """
+        self.current_input_data.update(data)
         to_publish = {}
         for name, input_data in self.inputs.items():
             for point, value in input_data.items():
@@ -571,9 +596,9 @@ class TransactiveBase(MarketAgent, Model):
             return None
 
     def update_model(self, peer, sender, bus, topic, headers, message):
-        coefficients = message
+        self.store_model_config(message)
         if self.model is not None:
-            self.model.update_coefficients(coefficients)
+            self.model.update_coefficients(message)
 
     def clamp(self, value, x1, x2):
         min_value = min(abs(x1), abs(x2))
@@ -679,8 +704,9 @@ class MessageManager(object):
             market_time = parse(market_time) if isinstance(market_time, str) else market_time
             market_time = market_time.replace(tzinfo=self.parent.input_data_tz)
             _log.debug("CORRECTION: {} -- {}".format(current_datetime, market_time))
-            #if current_datetime >= market_time:
-            self.parent.do_actuation(price, price_array)
+            # Do actuation when receiving RT cleared price
+            if self.parent.actuation_method == 'tent':
+                self.parent.do_actuation(price, price_array)
         self.cleared_prices = sort_dict(self.cleared_prices)
         self.price_info = sort_dict(self.price_info)
         self.prune_data()

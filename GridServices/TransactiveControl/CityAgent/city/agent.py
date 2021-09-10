@@ -68,6 +68,7 @@ from TNT_Version3.PyCode.bulk_supplier_dc import BulkSupplier_dc
 from TNT_Version3.PyCode.vertex import Vertex
 from TNT_Version3.PyCode.timer import Timer
 from TNT_Version3.PyCode.direction import Direction
+from volttron.platform.messaging import headers as headers_mod
 
 # utils.setup_logging()
 _log = logging.getLogger(__name__)
@@ -82,6 +83,9 @@ class CityAgent(Agent, TransactiveNode):
         self.config_path = config_path
         self.config = utils.load_config(config_path)
         self.name = self.config.get('name')
+
+        city = self.config.get("city_name", "city")
+        campus = self.config.get("campus_name", "campus")
         self.market_cycle_in_min = int(self.config.get('market_cycle_in_min', 60))
         self.duality_gap_threshold = float(self.config.get('duality_gap_threshold', 0.01))
         self.supplier_loss_factor = float(self.config.get('supplier_loss_factor'))
@@ -92,9 +96,12 @@ class CityAgent(Agent, TransactiveNode):
         self.neighbors = []
 
         self.db_topic = self.config.get("db_topic", "tnc")
-        #self.db_topic = self.config.get("db_topic", "record")
-        self.campus_demand_topic = "{}/campus/city/demand".format(self.db_topic)
-        self.city_supply_topic = "{}/city/campus/supply".format(self.db_topic)
+        # self.db_topic = self.config.get("db_topic", "record")
+        # self.campus_demand_topic = "{}/campus/city/demand".format(self.db_topic)
+        # self.city_supply_topic = "{}/city/campus/supply".format(self.db_topic)
+
+        self.campus_demand_topic = "{}/{}/{}/demand".format(self.db_topic, campus, city)
+        self.city_supply_topic = "{}/{}/{}/supply".format(self.db_topic, city, campus)
         self.system_loss_topic = "{}/{}/system_loss".format(self.db_topic, self.name)
         self.dc_threshold_topic = "{}/{}/dc_threshold_topic".format(self.db_topic, self.name)
 
@@ -118,6 +125,7 @@ class CityAgent(Agent, TransactiveNode):
         self.market_balanced_price_topic = "{}/{}/market_balanced_prices".format(self.db_topic, self.name)
         self.market_topic = "{}/{}/market".format(self.db_topic, self.name)
         self.real_time_duration = self.config.get('real_time_market_duration', 15)
+        self.start_tent_market_topic = "{}/start_tent".format(self.db_topic)
 
     def get_exp_start_time(self):
         one_second = timedelta(seconds=1)
@@ -172,6 +180,8 @@ class CityAgent(Agent, TransactiveNode):
         # self.core.schedule(next_exp_time, self.schedule_run,
         #                    format_timestamp(next_exp_time),
         #                    format_timestamp(next_analysis_time), True)
+        #headers = {headers_mod.DATE: format_timestamp(Timer.get_cur_time())}
+        #self.vip.pubsub.publish("pubsub", self.start_tent_market_topic, headers, "start").get()
 
         # SN: Added for new state machine based TNT implementation
         self.core.spawn_later(5, self.state_machine_loop)
@@ -382,24 +392,24 @@ class CityAgent(Agent, TransactiveNode):
         # instantiated. I.e., the day ahead market at the city must be defined just like the ones at the campus and
         # building nodes. Otherwise, the negotiations between the network agents will probably not work within the
         # context of the new market state machines.
-        market = DayAheadAuction()                      # A child of class Auction.
-        market.commitment = True                        # To be corrected by 15-minute real-time auction markets
+        market = DayAheadAuction()  # A child of class Auction.
+        market.commitment = True  # To be corrected by 15-minute real-time auction markets
         market.converged = False
-        market.defaultPrice = 0.0428                    # [$/kWh]
+        market.defaultPrice = 0.0428  # [$/kWh]
         market.dualityGapThreshold = self.duality_gap_threshold  # [0.02 = 2#]
         market.initialMarketState = MarketState.Inactive
-        market.marketOrder = 1                          # This is first market
-        market.intervalsToClear = 24                    # 24 hours are cleared altogether
-        market.futureHorizon = timedelta(hours=24)      # Projects 24 hourly future intervals
-        market.intervalDuration = timedelta(hours=1)    # [h] Intervals are 1 h long
+        market.marketOrder = 1  # This is first market
+        market.intervalsToClear = 24  # 24 hours are cleared altogether
+        market.futureHorizon = timedelta(hours=24)  # Projects 24 hourly future intervals
+        market.intervalDuration = timedelta(hours=1)  # [h] Intervals are 1 h long
         market.marketClearingInterval = timedelta(days=1)
-        #market.marketClearingInterval = timedelta(days=1)  # The market clears daily
-        market.marketSeriesName = "Day-Ahead_Auction"   # Prepends future market object names
-        market.method = 2                               # Use simpler interpolation solver
+        # market.marketClearingInterval = timedelta(days=1)  # The market clears daily
+        market.marketSeriesName = "Day-Ahead_Auction"  # Prepends future market object names
+        market.method = 2  # Use simpler interpolation solver
 
         # This times must be defined the same for all network agents.
         market.deliveryLeadTime = timedelta(hours=1)
-#        market.negotiationLeadTime = timedelta(minutes=15)
+        #        market.negotiationLeadTime = timedelta(minutes=15)
         market.negotiationLeadTime = timedelta(minutes=8)
         market.marketLeadTime = timedelta(minutes=15)
         market.activationLeadTime = timedelta(minutes=0)
@@ -407,24 +417,26 @@ class CityAgent(Agent, TransactiveNode):
 
         # Determine the current and next market clearing times in this market:
         current_time = Timer.get_cur_time()
+        current_hour = current_time.hour + 1
         current_time = current_time - timedelta(hours=24)
         _log.debug("CITY agent current_time: {}".format(current_time))
         # Presume first delivery hour starts at 10:00 each day:
-        #delivery_start_time = current_time.replace(hour=10, minute=0, second=0, microsecond=0)
-        delivery_start_time = current_time.replace(hour=2, minute=0, second=0, microsecond=0)
+        # delivery_start_time = current_time.replace(hour=10, minute=0, second=0, microsecond=0)
+        delivery_start_time = current_time.replace(hour=current_hour, minute=0, second=0, microsecond=0)
 
         # The market clearing time must occur a delivery lead time prior to delivery:
+        while delivery_start_time - market.deliveryLeadTime - market.marketLeadTime - market.negotiationLeadTime - market.activationLeadTime < current_time:
+            delivery_start_time = delivery_start_time + timedelta(hours=1)
+            _log.debug("MAKE CITY DA MARKET LOOP: {}".format(delivery_start_time))
         market.marketClearingTime = delivery_start_time - market.deliveryLeadTime
-        _log.debug("market.marketClearingTime: {}".format(market.marketClearingTime))
+        _log.debug("MAKE CITY DA MARKET CLEARING TIME: {}".format(market.marketClearingTime))
         # If it's too late today to begin the market processes, according to all the defined lead times, skip to the
         # next market object:
-        if current_time > market.marketClearingTime - market.marketLeadTime \
-                                                            - market.negotiationLeadTime - market.activationLeadTime:
-            market.marketClearingTime = market.marketClearingTime + market.marketClearingInterval
+        # if current_time > market.marketClearingTime - market.marketLeadTime \
+        #   market.marketClearingTime = market.marketClearingTime + market.marketClearingInterval
 
-        # Schedule the next market clearing for another market cycle later:
         market.nextMarketClearingTime = market.marketClearingTime + market.marketClearingInterval
-        _log.debug("CITY: Market nextMarketClearingTime: {}".format(market.nextMarketClearingTime))
+        _log.debug("MAKE CITY DA MARKET NEXT CLEARING TIME: {}".format(market.nextMarketClearingTime))
 
         dt = str(market.marketClearingTime)
         market.name = market.marketSeriesName.replace(' ', '_') + '_' + dt[:19]

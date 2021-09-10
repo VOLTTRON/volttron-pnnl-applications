@@ -267,6 +267,20 @@ class BuildingAgent(MarketAgent, TransactiveNode):
 
         # for idx, p in enumerate(self.markets[0].marginalPrices):
         #     _log.debug("new_supply_signal: At {} Market marginal prices are: {}".format(self.name, p.value))
+        
+    def publish_message(self, topic, message, timestamp=None):
+
+        now = format_timestamp(timestamp) if timestamp else format_timestamp(Timer.get_cur_time())
+        message.update({"Date": now})
+        header = {headers_mod.DATE: now}
+        try:
+            _log.debug(f"message = {message}")
+            self.vip.pubsub.publish(peer='pubsub',
+                                    topic=topic,
+                                    message= message,
+                                    headers= header)
+        except Exception as e:
+            _log.error("In Publish: {}".format(str(e)))
 
     def send_cleared_price(self, peer, sender, bus, topic, headers, message):
         _log.info("At {}, {} receives new cleared prices: {}".format(Timer.get_cur_time(),
@@ -291,16 +305,18 @@ class BuildingAgent(MarketAgent, TransactiveNode):
             _log.info("Market for name: {} CLEARED marginal prices are: {}, flag: {}".format(market.name,
                                                                                     self.prices,
                                                                                     self.day_ahead_clear_price_sent))
-            now = Timer.get_cur_time()
+                      
             if not self.day_ahead_clear_price_sent:
                 _log.info("Market for name: {}, publishing cleared price".format(self.day_ahead_clear_price_sent))
-                self.vip.pubsub.publish(peer='pubsub',
-                                    topic=self.cleared_price_topic,
-                                    message={"prices": self.prices,
-                                             "price_info": prices_tuple,
-                                             "market_intervals": time_intervals,
-                                             "Date": format_timestamp(now),
-                                             "correction_market": False})
+                message = {"prices": self.prices,#[DAH1, DAH2]
+                           "price_info": prices_tuple,
+                           "market_intervals": time_intervals,#[T1, T2]
+                           "correction_market": False}
+                self.publish_message(self.cleared_price_topic, message)
+                for i, price in enumerate(self.prices):
+                    self.publish_message(f"{self.cleared_price_topic}/DayAheadPrice", {"day_ahead_price":price}, time_intervals[i])
+
+
                 self.day_ahead_clear_price_sent = True
         elif market.name.startswith('Real-Time'):
             price = market.marginalPrices
@@ -311,17 +327,13 @@ class BuildingAgent(MarketAgent, TransactiveNode):
             _log.info("Market for name: {} CLEARED marginal price are: {}, flag: {}".format(market.name,
                                                                                              self.real_time_price,
                                                                                              self.real_time_clear_price_sent))
-            now = Timer.get_cur_time()
             if not self.real_time_clear_price_sent:
                 _log.info("Market for name: {}, publishing cleared price".format(self.real_time_clear_price_sent))
-                self.vip.pubsub.publish(peer='pubsub',
-                                    topic=self.cleared_price_topic,
-                                    message={"prices": self.real_time_price,
-                                             "price_info": price_tuple,
-                                             "market_intervals": time_intervals,
-                                             "Date": format_timestamp(now),
-                                             "correction_market": True})
-
+                message = {"prices": self.real_time_price,
+                           "price_info": price_tuple,
+                           "market_intervals": time_intervals,
+                           "correction_market": True}
+                self.publish_message(self.cleared_price_topic, message)
                 self.real_time_clear_price_sent = True
 
     def new_demand_signal(self, peer, sender, bus, topic, headers, message):
@@ -345,7 +357,6 @@ class BuildingAgent(MarketAgent, TransactiveNode):
         if (now + self.mix_market_duration).hour != now.hour:
             near_end_of_hour = True
             _log.debug("{} did not start mixmarket because it's too late.".format(self.name))
-
         return near_end_of_hour
 
     def start_real_time_mixmarket(self, start_of_cycle, resend_balanced_prices=False, mkt=None):
@@ -402,26 +413,21 @@ class BuildingAgent(MarketAgent, TransactiveNode):
                 _log.info("Market name: {} start_realtime_mixmarket Building At market START Market marginal prices are: {}".format(mkt.name,
                                                                                                             self.real_time_price))
                 if weather_service is None:
-                    self.vip.pubsub.publish(peer='pubsub',
-                                            topic='mixmarket/start_new_cycle',
-                                            message={"prices": self.real_time_price,
-                                                     "price_info": prices_tuple,
-                                                     "market_intervals": time_intervals,
-                                                     "Date": format_timestamp(now),
-                                                     "correction_market":True})
+                    message = {"prices": self.real_time_price,
+                               "price_info": prices_tuple,
+                               "market_intervals": time_intervals,
+                               "correction_market": True}
+                    self.publish_message('mixmarket/start_new_cycle', message)
                 else:
                     temps = [x.value for x in weather_service.predictedValues]
                     temps = temps[-24:]
                     _log.debug("temps are {}".format(temps))
-                    self.vip.pubsub.publish(peer='pubsub',
-                                            topic='mixmarket/start_new_cycle',
-                                            message={"prices": self.real_time_price,
-                                                     "price_info": prices_tuple,
-                                                     "market_intervals": time_intervals,
-                                                     "temp": temps,
-                                                     "Date": format_timestamp(now),
-                                                     "correction_market":True})
-
+                    message = {"prices": self.real_time_price,
+                               "price_info": prices_tuple,
+                               "market_intervals": time_intervals,
+                               "temp": temps,
+                               "correction_market": True}
+                    self.publish_message('mixmarket/start_new_cycle', message)
 
 
     # 191219DJH: Consider the interactions of mixed market with the market state machine, please.
@@ -500,25 +506,21 @@ class BuildingAgent(MarketAgent, TransactiveNode):
                 _log.info("Market name: {} Building At market START Market marginal prices are: {}".format(mkt.name,
                                                                                                             self.prices))
                 if weather_service is None:
-                    self.vip.pubsub.publish(peer='pubsub',
-                                            topic='mixmarket/start_new_cycle',
-                                            message={"prices": self.prices,
-                                                     "price_info": prices_tuple,
-                                                     "market_intervals": time_intervals,
-                                                     "Date": format_timestamp(now),
-                                                     "correction_market": False})
+                    message = {"prices": self.prices,
+                               "price_info": prices_tuple,
+                               "market_intervals": time_intervals,
+                               "correction_market": False}
+                    self.publish_message('mixmarket/start_new_cycle', message)
                 else:
                     temps = [x.value for x in weather_service.predictedValues]
                     temps = temps[-24:]
                     _log.debug("temps are {}".format(temps))
-                    self.vip.pubsub.publish(peer='pubsub',
-                                            topic='mixmarket/start_new_cycle',
-                                            message={"prices": self.prices,
-                                                     "price_info": prices_tuple,
-                                                     "market_intervals": time_intervals,
-                                                     "temp": temps,
-                                                     "Date": format_timestamp(now),
-                                                     "correction_market": False})
+                    message = {"prices": self.prices,
+                               "price_info": prices_tuple,
+                               "market_intervals": time_intervals,
+                               "temp": temps,
+                               "correction_market": False}
+                    self.publish_message('mixmarket/start_new_cycle', message)
 
     # 191219DJH: The mix of markets will be hard to disentangle. I can't tell for certain which variables belong to each
     #            process. The network markets should all be driven by the new market state machine hereafter, so the
@@ -775,8 +777,7 @@ class BuildingAgent(MarketAgent, TransactiveNode):
                 "MarketName": market_name,
                 "Curve": aggregate_demand.points
             }
-            headers = {headers_mod.DATE: format_timestamp(Timer.get_cur_time())}
-            self.vip.pubsub.publish("pubsub", db_topic, headers, message).get()
+            self.publish_message(db_topic, message)
 
     def real_time_price_callback(self, timestamp, market_name, buyer_seller, price, quantity):
         _log.debug("{}: cleared price ({}, {}) for {} as {} at {}".format(Timer.get_cur_time(),
@@ -807,14 +808,7 @@ class BuildingAgent(MarketAgent, TransactiveNode):
 
         db_topic = "/".join([self.db_topic, self.name, "RealTimeDemand"])
         message = {"Timestamp": format_timestamp(timestamp), "Curves": self.real_time_building_demand_curve}
-        headers = {headers_mod.DATE: format_timestamp(Timer.get_cur_time())}
-        self.vip.pubsub.publish("pubsub", db_topic, headers, message).get()
-
-        # SN: Setting TCC curves in local asset model (TccModel)
-        self.elastic_load.set_scheduled_power(self.real_time_quantity,
-                                              self.real_time_price,
-                                              self.real_time_building_demand_curve,
-                                              self.markets[tnt_market_idx])
+        self.publish_message(db_topic, message)
 
 
     #########################################################################
@@ -876,6 +870,7 @@ class BuildingAgent(MarketAgent, TransactiveNode):
             return True
 
     def aggregate_callback(self, timestamp, market_name, buyer_seller, aggregate_demand):
+        #This Timestamp is 14 hr ahead of the realtime
         if buyer_seller == BUYER and market_name in self.market_names:  # self.base_market_name in market_name:
             _log.debug("{}: at ts {} min of aggregate curve : {}".format(self.agent_name,
                                                                          timestamp,
@@ -895,8 +890,7 @@ class BuildingAgent(MarketAgent, TransactiveNode):
                 "MarketName": market_name,
                 "Curve": aggregate_demand.points
             }
-            headers = {headers_mod.DATE: format_timestamp(Timer.get_cur_time())}
-            self.vip.pubsub.publish("pubsub", db_topic, headers, message).get()
+            self.publish_message(db_topic, message)
 
     def price_callback(self, timestamp, market_name, buyer_seller, price, quantity):
         _log.debug("{}: cleared price ({}, {}) for {} as {} at {}".format(Timer.get_cur_time(),
@@ -966,8 +960,7 @@ class BuildingAgent(MarketAgent, TransactiveNode):
 
             db_topic = "/".join([self.db_topic, self.name, "AggregateDemand"])
             message = {"Timestamp": format_timestamp(timestamp), "Curves": self.building_demand_curves}
-            headers = {headers_mod.DATE: format_timestamp(Timer.get_cur_time())}
-            self.vip.pubsub.publish("pubsub", db_topic, headers, message).get()
+            self.publish_message(db_topic, message)
 
             # Get TNT market index from current day ahead market name
             tnt_mkt_idx = self.find_tnt_market_index(self.current_day_ahead_market_name)

@@ -80,9 +80,9 @@ class Model(object):
             config = self.vip.config.get("model")
         except KeyError:
             config = {}
-        if not config:
-            config = _config
-        return config
+        if config:
+            _config.update(config)
+        return _config
 
     def store_model_config(self, config):
         _log.debug("MODEL STORE: {}".format(config))

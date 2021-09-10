@@ -99,7 +99,7 @@ class firstorderzone(object):
             _log.debug("Cannot update prediction error ratio!  No data!")
             return
         self.prediction_data.append(zaf)
-        _log.debug("Prediction data  zaf %s -- %s", zaf, self.prediction_data)
+        # _log.debug("Prediction data  zaf %s -- %s", zaf, self.prediction_data)
 
     def update_coefficients(self, coefficients):
         if set(coefficients.keys()) != self.coefficients:

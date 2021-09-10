@@ -209,7 +209,7 @@ class RealTimeMarket(Market):
         market_epoch = calculate_epoch(market_time)
         price = self.price_manager.cleared_prices[market_epoch]
         cleared_quantity = "None"
-        if self.demand_curve[market_time].points:
+        if market_time in self.demand_curve and self.demand_curve[market_time].points:
             cleared_quantity = self.demand_curve[market_time].x(price)
 
         _log.debug("%s RT price_callback - - price callback market: %s, price: %s, quantity: %s",

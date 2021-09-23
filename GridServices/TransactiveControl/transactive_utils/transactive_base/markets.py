@@ -191,6 +191,7 @@ class RealTimeMarket(Market):
 
     def offer_callback(self, timestamp, market_name, buyer_seller):
         output_info, mapped = self.parent.get_current_output()
+        self.parent.update_prediction_error()
         self.ct_flexibility = output_info["ct_flex"]
         self.off_setpoint = output_info["off_setpoint"]
         self.parent.flexibility = output_info["flex"]
@@ -211,7 +212,9 @@ class RealTimeMarket(Market):
         cleared_quantity = "None"
         if market_time in self.demand_curve and self.demand_curve[market_time].points:
             cleared_quantity = self.demand_curve[market_time].x(price)
+            self.update_prediction(cleared_quantity)
 
+        self.parent.model.prediction_data = []
         _log.debug("%s RT price_callback - - price callback market: %s, price: %s, quantity: %s",
                    self.identity, market_name, price, quantity)
         topic_suffix = "MarketClear"

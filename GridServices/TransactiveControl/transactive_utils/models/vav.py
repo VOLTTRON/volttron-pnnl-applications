@@ -99,7 +99,7 @@ class firstorderzone(object):
             _log.debug("Cannot update prediction error ratio!  No data!")
             return
         self.prediction_data.append(zaf)
-        # _log.debug("Prediction data  zaf %s -- %s", zaf, self.prediction_data)
+        _log.debug("Prediction data  zaf %s -- %s", zaf, self.prediction_data)
 
     def update_coefficients(self, coefficients):
         if set(coefficients.keys()) != self.coefficients:
@@ -132,7 +132,9 @@ class firstorderzone(object):
             sfs = self.get_input_value(self.sfs_name)
             zt = self.get_input_value(self.zt_name)
             occupied = sfs if sfs is not None else occupied
+            prediction_error = self.parent.prediction_error
         else:
+            prediction_error = 1.0
             zt_index = index - 1 if index > 0 else 23
             zt = self.zt_predictions[zt_index]
             oat = self.get_input_value(self.oat_name)
@@ -146,7 +148,7 @@ class firstorderzone(object):
         if oat is not None and zt is not None:
             _log.debug("OAT: %s -- ZT: %s", oat, zt)
             q = self.predict_quantity(oat, zt, _set, index)
-            q_correct = q * self.parent.prediction_error
+            q_correct = q * prediction_error
 
         _log.debug(
             "%s: vav.firstorderzone q: %s -  q_corrected %s- zt: %s- set: %s - sched: %s",

@@ -66,6 +66,7 @@ class firstorderzone(object):
         self.c4 = config["c4"]
         self.coefficients = {"c1", "c2", "c3", "c4"}
         self.rated_power = config["rated_power"]
+        self.prediction_data = []
 
         self.on = [0]
         self.off = [0]
@@ -111,6 +112,7 @@ class firstorderzone(object):
         else:
             self.off[0] += 1
             self.on[0] = 0
+        self.prediction_data.append(self.mclg*self.rated_power)
         _log.debug("Update model data: oat: {} - zt: {} - mclg: {} - mhtg: {}".format(self.oat, self.zt, self.mclg, self.mhtg))
 
     def update(self, _set, market_time):
@@ -131,7 +133,9 @@ class firstorderzone(object):
             oat = self.oat
             zt = self.zt
             occupied = self.sfs if self.sfs is not None else occupied
+            prediction_error = self.parent.prediction_error
         else:
+            prediction_error = 1.0
             zt_index = index - 1 if index > 0 else 23
             zt = self.zt_predictions[zt_index]
             oat = self.get_input_value(self.oat_name)
@@ -147,7 +151,7 @@ class firstorderzone(object):
         # might need to revisit this when doing both heating and cooling
         if occupied:
             q = clamp(q, min(self.parent.flexibility), max(self.parent.flexibility))
-            q = self.rated_power*q
+            q = self.rated_power*q*prediction_error
         else:
             q = 0.0
         return q

@@ -136,6 +136,7 @@ class BuildingAgent(MarketAgent, TransactiveNode):
         self.building_demand_topic = "{}/{}/{}/demand".format(self.db_topic, self.name, campus)
         self.campus_supply_topic = "{}/{}/{}/supply".format(self.db_topic, campus, self.name)
         self.system_loss_topic = "{}/{}/system_loss".format(self.db_topic, self.name)
+        self.day_ahead_price_topic = "{}/{}/DayAheadPrices".format(self.db_topic, self.name)
         self.dc_threshold_topic = "{}/{}/dc_threshold_topic".format(self.db_topic, self.name)
 
         self.mix_market_running = False
@@ -327,32 +328,19 @@ class BuildingAgent(MarketAgent, TransactiveNode):
                            "correction_market": False}
                 self.publish_message(self.cleared_price_topic, message)
                 for i, price in enumerate(self.prices):
-                    self.publish_message(f"{self.cleared_price_topic}/DayAheadPrice", {"day_ahead_price":price}, time_intervals[i])
-
-
+                    self.publish_message(self.day_ahead_price_topic, {"day_ahead_price":price}, time_intervals[i])
+                     
                 self.day_ahead_clear_price_sent[market.name] = True
-            _log.info(f"Market for name: {market.name} CLEARED marginal prices are: {self.prices}, flag: {self.day_ahead_clear_price_sent[market.name]}")
-
-            if not self.day_ahead_clear_price_sent[market.name]:
-                self.vip.pubsub.publish(peer='pubsub',
-                                    topic=self.cleared_price_topic,
-                                    message={"prices": self.prices,
-                                             "price_info": prices_tuple,
-                                             "market_intervals": time_intervals,
-                                             "Date": format_timestamp(now),
-                                             "correction_market": False})
-                self.day_ahead_clear_price_sent[market.name] = True
-                _log.info(f"Market for name: {market.name}, published cleared price {self.day_ahead_clear_price_sent[market.name]}")
+            _log.info(f"Market for name: {market.name}, published cleared price {self.day_ahead_clear_price_sent[market.name]}")
+                
         elif market.name.startswith('Real-Time'):
             price = market.marginalPrices
             # Get real time price from Real time market
             self.real_time_price = [price[0].value]
             avg_price, std_dev = market.model_prices(price[0].timeInterval.startTime)
             price_tuple = [(avg_price, std_dev)]
-            _log.info("Market for name: {} CLEARED marginal price are: {}, flag: {}".format(market.name,
-                                                                                             self.real_time_price,
-                                                                                             self.real_time_clear_price_sent))
-            if not self.real_time_clear_price_sent[market.name]:
+            _log.info(f"Market for name: {market.name} CLEARED marginal price are: {self.real_time_price}, flag: {self.real_time_clear_price_sent[market.name]}")
+            if not self.real_time_clear_price_sent.get(market.name, False):
                 _log.info("Market for name: {}, publishing cleared price".format(self.real_time_clear_price_sent))
                 message = {"prices": self.real_time_price,
                            "price_info": price_tuple,
@@ -360,18 +348,7 @@ class BuildingAgent(MarketAgent, TransactiveNode):
                            "correction_market": True}
                 self.publish_message(self.cleared_price_topic, message)
                 self.real_time_clear_price_sent[market.name] = True
-            _log.info(f"Market for name: {market.name} CLEARED marginal price are: {self.real_time_price}, flag: {self.real_time_clear_price_sent[market.name]}")
-            if not self.real_time_clear_price_sent.get(market.name, False):
-                self.vip.pubsub.publish(peer='pubsub',
-                                    topic=self.cleared_price_topic,
-                                    message={"prices": self.real_time_price,
-                                             "price_info": price_tuple,
-                                             "market_intervals": time_intervals,
-                                             "Date": format_timestamp(now),
-                                             "correction_market": True})
-
-                self.real_time_clear_price_sent[market.name] = True
-                _log.info(f"Market for name: {market.name}, published cleared price: {self.real_time_clear_price_sent[market.name]}")
+               _log.info(f"Market for name: {market.name}, published cleared price: {self.real_time_clear_price_sent[market.name]}")
 
     def new_demand_signal(self, peer, sender, bus, topic, headers, message):
         mtrs = self.campus.meterPoints

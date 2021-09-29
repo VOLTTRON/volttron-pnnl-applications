@@ -174,7 +174,7 @@ class EconCorrectlyOff(object):
         self.fan_spd_values.append(fan_sp)
 
     def economizer_conditions(self, current_time):
-        if len(self.economizing) >= len(self.economizing)*0.5:
+        if self.economizing and len(self.economizing) >= len(self.timestamp)*0.5:
             _log.info(constants.table_log_format(self.analysis_name, current_time,
                                                  (constants.ECON3 + constants.DX + ":" + str(self.economizing_dict))))
             self.results_publish.append(

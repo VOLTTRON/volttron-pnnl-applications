@@ -212,9 +212,8 @@ class RealTimeMarket(Market):
         cleared_quantity = "None"
         if market_time in self.demand_curve and self.demand_curve[market_time].points:
             cleared_quantity = self.demand_curve[market_time].x(price)
-            self.update_prediction(cleared_quantity)
+            self.parent.update_prediction(cleared_quantity)
 
-        self.parent.model.prediction_data = []
         _log.debug("%s RT price_callback - - price callback market: %s, price: %s, quantity: %s",
                    self.identity, market_name, price, quantity)
         topic_suffix = "MarketClear"

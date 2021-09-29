@@ -202,7 +202,7 @@ class EconCorrectlyOn(object):
         return True
 
     def economizer_conditions(self, current_time):
-        if len(self.not_cooling) >= len(self.not_cooling)*0.5:
+        if self.not_cooling and len(self.not_cooling) >= len(self.timestamp)*0.5:
             _log.info(constants.table_log_format(self.analysis_name, current_time,
                                                  (constants.ECON2 + constants.DX + ":" + str(self.not_cooling_dict))))
             self.results_publish.append(
@@ -212,7 +212,7 @@ class EconCorrectlyOn(object):
                                                self.not_cooling_dict))
             self.clear_data()
             return True
-        if len(self.not_cooling) >= len(self.not_cooling)*0.5:
+        if self.not_economizing and len(self.not_economizing) >= len(self.timestamp)*0.5:
             _log.info(constants.table_log_format(self.analysis_name, current_time,
                                                  (constants.ECON2 + constants.DX + ":" + str(self.not_cooling_dict))))
             self.results_publish.append(

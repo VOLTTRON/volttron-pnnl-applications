@@ -341,14 +341,13 @@ class BuildingAgent(MarketAgent, TransactiveNode):
             price_tuple = [(avg_price, std_dev)]
             _log.info(f"Market for name: {market.name} CLEARED marginal price are: {self.real_time_price}, flag: {self.real_time_clear_price_sent[market.name]}")
             if not self.real_time_clear_price_sent.get(market.name, False):
-                _log.info("Market for name: {}, publishing cleared price".format(self.real_time_clear_price_sent))
                 message = {"prices": self.real_time_price,
                            "price_info": price_tuple,
                            "market_intervals": time_intervals,
                            "correction_market": True}
                 self.publish_message(self.cleared_price_topic, message)
                 self.real_time_clear_price_sent[market.name] = True
-               _log.info(f"Market for name: {market.name}, published cleared price: {self.real_time_clear_price_sent[market.name]}")
+                _log.info(f"Market for name: {market.name}, published cleared price: {self.real_time_clear_price_sent[market.name]}")
 
     def new_demand_signal(self, peer, sender, bus, topic, headers, message):
         mtrs = self.campus.meterPoints

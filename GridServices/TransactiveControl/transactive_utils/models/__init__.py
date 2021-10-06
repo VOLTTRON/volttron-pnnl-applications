@@ -115,8 +115,15 @@ class Model(object):
             return
         _log.debug("Update prediction error %s -- %s -- %s", self.model.prediction_data, average_quantity, self.cleared_quantity)
         self.model.prediction_data = []
-        if self.cleared_quantity > 0:
+        if self.cleared_quantity > 0 and average_quantity > 0:
             self.prediction_error = average_quantity/self.cleared_quantity
         else:
             self.prediction_error = 1.0
+        message = {"Factor": self.prediction_error}
+        suffix = "PredictionCorrection"
+        try:
+            self.publish_record(suffix, message)
+        except Exception as e:
+            _log.debug("ERROR - publishing correction factor: {}".format(e))
+
 

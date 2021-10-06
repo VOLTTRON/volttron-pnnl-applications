@@ -150,7 +150,7 @@ class firstorderzone(object):
         _log.debug("{}: RTU predicted {} - zt: {} - set: {} - sched: {}".format(self.parent.agent_name, q, zt, _set, index))
         # might need to revisit this when doing both heating and cooling
         if occupied:
-            q = clamp(q, min(self.parent.flexibility), max(self.parent.flexibility))
+            q = clamp(q*prediction_error, min(self.parent.flexibility), max(self.parent.flexibility))
             q = self.rated_power*q*prediction_error
         else:
             q = 0.0

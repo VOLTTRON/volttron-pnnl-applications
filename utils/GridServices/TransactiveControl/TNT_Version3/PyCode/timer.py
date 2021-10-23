@@ -44,6 +44,7 @@ under Contract DE-AC05-76RL01830
 # TODO: Revisit the simulation features of class Timer that may have been lost by directly using datetime methods.
 
 from datetime import datetime
+#from volttron.platform.agent import utils
 
 
 class Timer(object):
@@ -58,6 +59,7 @@ class Timer(object):
         Calculate current time based on the amount of time has passed since this object is created
         :return:
         """
+        #cur_time = utils.get_aware_utc_now()
         cur_time = datetime.now()
         if cls.simulation:
             ratio = 3600 / cls.sim_one_hr_in_sec

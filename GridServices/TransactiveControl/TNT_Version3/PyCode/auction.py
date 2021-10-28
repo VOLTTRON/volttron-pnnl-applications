@@ -317,7 +317,8 @@ class Auction(Market):
             # 200702DJH: Why is this misspelling of "vertices" permitted here???????????????
             # upstream_agent.update_verices(self) #???????????????
             _log.debug("while_in_delivery_lead: update vertices {}".format(self.name))
-            upstream_agent.update_vertices(self)
+            #upstream_agent.update_vertices(self)
+            upstream_agent.schedule(self)
             # Sum all the agent's active local asset and neighbor vertices and determine the LMP at which local power is
             # balanced.
             _log.debug("while_in_delivery_lead: balance:{}".format(self.name))

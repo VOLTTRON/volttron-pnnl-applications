@@ -171,10 +171,24 @@ class BulkSupplier_dc(Neighbor):
             '''
             # Demand Charges only apply to HLH hours.
             if is_heavyloadhour(time_interval.startTime) and self.demandRate != 0:
-                scheduled_power = [x.power for x in self.scheduledPowers if x.timeInterval == time_interval]
-                if scheduled_power is not None and len(scheduled_power) != 0:
-                    active_threshold = max(active_threshold, scheduled_power[0])
                 vertices = self.include_demand_charges(vertices=vertices, threshold=active_threshold)
+
+                # Update the active threshold. This is easy if the current market interval has a corresponding
+                # scheduled power.
+                # 211014DJH: Another error is that this next line should find the *value* of the IntervalValue object.
+                scheduled_power = [x.value for x in self.scheduledPowers if x.timeInterval == time_interval]
+
+                # However, if the power is not yet scheduled (price is not known), the power must be inferred:
+                if len(scheduled_power) == 0:
+                    predicted_market_price = market.model_prices(time_interval.startTime)[0]
+                    scheduled_power = power_from_vertices(vertices,
+                                                          predicted_market_price)
+                else:
+                    scheduled_power = scheduled_power[0]
+
+                # Regardless how scheduled power was found, the temporary active threshold is updated within the series
+                # of time intervals in this market object.
+                active_threshold = max(active_threshold, scheduled_power)
 
             # Find and delete active vertices in the indexed time interval. These vertices shall be re-created.
             # 200925DJH: This already had an error in attempting equivalence between a time interval and interval value.

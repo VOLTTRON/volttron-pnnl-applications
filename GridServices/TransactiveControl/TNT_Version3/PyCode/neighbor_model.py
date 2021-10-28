@@ -437,7 +437,10 @@ class Neighbor(object):
 
             # Find the marginal price for the indexed time interval
             marginal_price = find_obj_by_ti(market.marginalPrices, time_intervals[i])  # an IntervalValue
-            marginal_price = marginal_price.value
+            if marginal_price is None:
+                marginal_price = market.model_prices(time_intervals[i].startTime)[0]
+            else:
+                marginal_price = marginal_price.value
 
             # Find the power that corresponds to the marginal price according to the set of active vertices in the
             # indexed time interval. Function Production() works for any power that is determined by its supply curve or
@@ -860,11 +863,23 @@ class Neighbor(object):
                 # and time interval object. How was this permitted by PyCharm?
                 # current_scheduled_power = [x.value for x in self.scheduledPowers
                 #                            if x.timeInterval.name == time_interval]
-                current_scheduled_power = [x.value for x in self.scheduledPowers
-                                           if x.timeInterval == time_interval]
-                if current_scheduled_power is not None and len(current_scheduled_power) != 0:
-                    active_threshold = max(active_threshold, current_scheduled_power[0])
                 active_vertices = self.include_demand_charges(vertices=active_vertices, threshold=active_threshold)
+
+                # Update the active threshold. This is easy if the current market interval has a corresponding
+                # scheduled power.
+                current_scheduled_power = [x.value for x in self.scheduledPowers if x.timeInterval == time_interval]
+
+                # However, if the power is not yet scheduled (price is not known), the power must be inferred:
+                if len(current_scheduled_power) == 0:
+                    predicted_market_price = market.model_prices(time_interval.startTime)[0]
+                    current_scheduled_power = power_from_vertices(active_vertices,
+                                                                  predicted_market_price)
+                else:
+                    current_scheduled_power = current_scheduled_power[0]
+
+                # Regardless how scheduled power was found, the temporary active threshold is updated within the series
+                # of time intervals in this market object.
+                active_threshold = max(active_threshold, current_scheduled_power)
 
             # Return the corrected vertices back to the neighbor's list of active vertices.
             for av in range(len(active_vertices)):

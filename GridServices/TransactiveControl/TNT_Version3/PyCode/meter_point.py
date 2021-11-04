@@ -71,7 +71,7 @@ class MeterPoint(object):
 
         # These following properties are dynamically assigned and should not be assigned during meter configuration:
         self.current_hour_measurements = []
-        self.current_measurement = None
+        self.current_measurement = 0
         self.lastUpdate = None
 
     # TODO: Consider how/whether this use of datetime.utcnow() affects simulations.

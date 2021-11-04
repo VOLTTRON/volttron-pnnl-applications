@@ -524,7 +524,11 @@ class Neighbor(object):
                 prior_peak = max(prior_market_powers)
                 self.demandThreshold = max([0, self.demandThreshold, prior_peak])
             else:
-                self.demandThreshold = float("inf")
+                # 211102DJH: This next line will cause problems if a "dummy" market has been partially configured at
+                #            startup. It is preferable to keep the demandThreshold constant instead.
+                # self.demandThreshold = float('inf')
+                pass
+            # log_statement("measurement: {} threshold: {}".format(d, self.demandThreshold), LogLevels.debug)
 
             # _log.debug("measurement: {} threshold: {}".format(d, self.demandThreshold))
         else:

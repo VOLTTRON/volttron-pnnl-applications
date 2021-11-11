@@ -105,10 +105,20 @@ def append_interval_value_table(method=METHOD, objects=None):
         SOURCE_TYPE = obj.associatedClass
         SOURCE_NAME = obj.associatedObject
         MARKET_SERIES = obj.market.marketSeriesName
-        MARKET_CLEARING_DATE = obj.market.marketClearingTime.strftime(DATE_FORMAT)
-        MARKET_CLEARING_TIME = obj.market.marketClearingTime.strftime(TIME_FORMAT)
-        INTERVAL_STARTING_DATE = obj.timeInterval.startTime.strftime(DATE_FORMAT)
-        INTERVAL_STARTING_TIME = obj.timeInterval.startTime.strftime(TIME_FORMAT)
+        # 211109DJH: The use of strftime() throws errors if these datetime objects were not defined. This approach
+        #            should be more tolerant.
+        if obj.market.marketClearingTime:
+            MARKET_CLEARING_DATE = obj.market.marketClearingTime.strftime(DATE_FORMAT)
+            MARKET_CLEARING_TIME = obj.market.marketClearingTime.strftime(TIME_FORMAT)
+        else:
+            MARKET_CLEARING_DATE = ''
+            MARKET_CLEARING_TIME = ''
+        if obj.timeInterval.startTime:
+            INTERVAL_STARTING_DATE = obj.timeInterval.startTime.strftime(DATE_FORMAT)
+            INTERVAL_STARTING_TIME = obj.timeInterval.startTime.strftime(TIME_FORMAT)
+        else:
+            INTERVAL_STARTING_DATE = ''
+            INTERVAL_STARTING_TIME = ''
         MEASUREMENT_TYPE = MeasurementType.get(obj.measurementType)
         value_type = type(obj.value)
         if value_type != Vertex:

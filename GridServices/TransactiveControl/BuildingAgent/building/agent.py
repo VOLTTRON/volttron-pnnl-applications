@@ -320,7 +320,7 @@ class BuildingAgent(MarketAgent, TransactiveNode):
             self.real_time_price = [price[0].value]
             avg_price, std_dev = market.model_prices(price[0].timeInterval.startTime)
             price_tuple = [(avg_price, std_dev)]
-            _log.info(f"Market for name: {market.name} CLEARED marginal price are: {self.real_time_price}, flag: {self.real_time_clear_price_sent[market.name]}")
+            _log.info(f"Market for name: {market.name} CLEARED marginal price are: {self.real_time_price}, PRICE TUPLE = {price_tuple} flag: {self.real_time_clear_price_sent[market.name]}")
             if not self.real_time_clear_price_sent.get(market.name, False):
                 self.vip.pubsub.publish(peer='pubsub',
                                     topic=self.cleared_price_topic,
@@ -336,6 +336,7 @@ class BuildingAgent(MarketAgent, TransactiveNode):
     def new_demand_signal(self, peer, sender, bus, topic, headers, message):
         mtrs = self.campus.meterPoints
         if len(mtrs) > 0:
+            _log.info("METER points are available")
             bldg_meter = mtrs[0]
             power_unit = message[1]
             cur_power = float(message[0]["WholeBuildingPower"])

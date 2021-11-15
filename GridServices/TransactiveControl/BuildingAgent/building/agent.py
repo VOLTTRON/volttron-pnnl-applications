@@ -219,6 +219,7 @@ class BuildingAgent(MarketAgent, TransactiveNode):
         self.vip.pubsub.subscribe(peer='pubsub',
                                   prefix=self.campus_supply_topic,
                                   callback=self.new_supply_signal)
+
         self.vip.pubsub.subscribe(peer='pubsub',
                                   prefix=self.power_topic,
                                   callback=self.new_demand_signal)

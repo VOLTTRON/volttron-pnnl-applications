@@ -346,6 +346,9 @@ class Neighbor(object):
         # mp - a marginal price that corresponds to p [$/kWh]
 
         # Sort the supplied vertices by power and marginal price.
+        _log.info(f"MARGINAL_PRICE_FROM_VERTICES: power = {power}"
+                  f"vertices[0].power = {vertices[0].power}"
+                  f"vertices[-1].power = {vertices[-1].power}")
         vertices = order_vertices(vertices)
 
         # number of supplied vertices len
@@ -382,9 +385,13 @@ class Neighbor(object):
                     # First, determine the segment's slope.
                     slope = (vertices[i + 1].marginalPrice - vertices[i].marginalPrice) \
                             / (vertices[i + 1].power - vertices[i].power)  # [$/kWh/kW]
-
                     # Then interpolate to find marginal price.
                     marginal_price = vertices[i].marginalPrice + (power - vertices[i].power) * slope  # [$/kWh]
+                    _log.info(f"MARGINAL_PRICE_FROM_VERTICES: power = {power}"
+                              f"vertices[i].power = {vertices[i].power}"
+                              f"vertices[i+1].power = {vertices[i+1].power}"
+                              f"slope = {slope}"
+                              f"marginal price = {marginal_price}")
                     return marginal_price
 
     # SEALED - DONOT MODIFY
@@ -695,6 +702,7 @@ class Neighbor(object):
         # (1) Generate active vertices for the non-transactive or transactive neighbor object.
 
         # Extract and sort active market time intervals.
+        _log.info("IN UPDATE VERTICES")
         time_intervals = set(market.timeIntervals)
         time_intervals = sorted(time_intervals, key=attrgetter('startTime'))
 
@@ -835,6 +843,8 @@ class Neighbor(object):
         # threshold that may increase while indexing through the time intervals.
         demand_threshold = self.demandThreshold
         active_threshold = copy(demand_threshold)
+        _log.debug(f"IN UPDATE VERTICES: demand threshold = {demand_threshold}"
+                   f"active threshold = {active_threshold}")
 
         # Index again through the active market time intervals.
         new_active_vertices = []
@@ -864,6 +874,7 @@ class Neighbor(object):
             # Check to see if the neighbor has a scheduled power in this time interval.
             # Note that this logic may be turned off by simply setting property demandRate = 0.
             if self.demandRate != 0:
+                _log.debug(f"IN UPDATE VERTICES: Demand rare is not zero")
                 # 201009DJH: I found this error in these commented lines. The conditional is trying to compare a string
                 # and time interval object. How was this permitted by PyCharm?
                 # current_scheduled_power = [x.value for x in self.scheduledPowers
@@ -1709,16 +1720,19 @@ class Neighbor(object):
 
         # Make a deep copy of the vertices that are to be corrected and returned. This method should not change the set
         # of input vertices.
+        _log.debug(f"IN INCLUDE_DEMAND_CHARGES")
         corrected_vertices = deepcopy(vertices)
 
         # Find the minimum and maximum powers represented in the received vertices.
         powers = [x.power for x in corrected_vertices]
         maximum_power = max(powers[:])
         minimum_power = min(powers[:])
+        _log.debug(f"IN INCLUDE_DEMAND_CHARGES: maximum_power = {maximum_power} and minimum_power = {minimum_power}")
 
         # If the demand threshold power lies above the maximum vertex power, this is all moot. Return the received
         # vertices unchanged.
         if threshold > maximum_power:
+            _log.debug(f"IN INCLUDE_DEMAND_CHARGES: threshold power is greater than maximum power")
             return order_vertices(corrected_vertices)
 
         # Demand charges only apply to supply from this remote neighbor.
@@ -1729,6 +1743,8 @@ class Neighbor(object):
         # vertices before any of their marginal prices have been changed.
         if minimum_power <= threshold <= maximum_power:
             threshold_price = self.marginal_price_from_vertices(threshold, corrected_vertices)
+            _log.debug(f"IN INCLUDE_DEMAND_CHARGES: minimum_power <= threshold <= maximum_power:"
+                       f"threshold_price = {threshold_price}")
 
         # If there was only one vertex, its marginal price will also be the threshold price.
         if minimum_power == maximum_power:
@@ -1744,6 +1760,8 @@ class Neighbor(object):
         for av in range(len(affected_vertices)):
             affected_vertex = affected_vertices[av]
             affected_vertex.marginalPrice = affected_vertex.marginalPrice + self.demandRate
+            _log.debug(f"IN INCLUDE_DEMAND_CHARGES: affected_vertex.marginalPrice = a"
+                       f"ffected_vertex.marginalPrice + self.demandRate = {affected_vertex}")
 
         # Find unaffected vertices that lie below the threshold.
         unaffected_vertices = [x for x in corrected_vertices if x.power < threshold]
@@ -1763,6 +1781,7 @@ class Neighbor(object):
 
         # Create vertices at the threshold. The two criteria make sure that no redundant vertices are created.
         if minimum_power < threshold <= maximum_power:
+            _log.debug(f"IN INCLUDE_DEMAND_CHARGES: minimum_power < threshold <= maximum_power")
             corrected_vertices.append(Vertex(marginal_price=threshold_price,
                                              prod_cost=0,
                                              power=threshold
@@ -1770,6 +1789,7 @@ class Neighbor(object):
                                       )
 
         if minimum_power <= threshold < maximum_power:
+            _log.debug(f"IN INCLUDE_DEMAND_CHARGES: minimum_power <= threshold < maximum_power")
             corrected_vertices.append(Vertex(marginal_price=other_threshold_price + self.demandRate,
                                              prod_cost=0,
                                              power=threshold

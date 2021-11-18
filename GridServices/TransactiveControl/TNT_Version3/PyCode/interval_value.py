@@ -51,7 +51,10 @@ class IntervalValue(object):
         self.version = 0
         self.scheduled = True  # islogical(scheduled)
         self.associatedClass = calling_object.__class__
-        self.associatedObject = type(calling_object).__name__
+        try:
+            self.associatedObject = calling_object.name
+        except:
+            self.associatedObject = type(calling_object).__name__
         self.id = None
         self.timeInterval = time_interval
         self.market = market

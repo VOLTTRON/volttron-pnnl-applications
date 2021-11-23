@@ -646,7 +646,8 @@ class BuildingAgent(MarketAgent, TransactiveNode):
 
     def make_campus_neighbor(self):
         # 191219DJH: There are no longer separate object and model neighbor classes.
-        campus = Neighbor(demand_rate=0.0)
+        #campus = Neighbor(demand_rate=0.0)
+        campus = Neighbor()
         campus.name = 'PNNL_Campus'
         campus.description = 'PNNL_Campus'
         campus.maximumPower = self.max_deliver_capacity

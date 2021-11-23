@@ -874,7 +874,7 @@ class Neighbor(object):
             # Check to see if the neighbor has a scheduled power in this time interval.
             # Note that this logic may be turned off by simply setting property demandRate = 0.
             if self.demandRate != 0:
-                _log.debug(f"IN UPDATE VERTICES: Demand rare is not zero")
+                _log.debug(f"IN UPDATE VERTICES: Demand rate is not zero")
                 # 201009DJH: I found this error in these commented lines. The conditional is trying to compare a string
                 # and time interval object. How was this permitted by PyCharm?
                 # current_scheduled_power = [x.value for x in self.scheduledPowers

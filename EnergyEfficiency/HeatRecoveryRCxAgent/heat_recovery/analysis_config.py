@@ -138,9 +138,6 @@ class AnalysisConfig:
     volttron-pnnl-application repository.
     """
 
-    """ The application signature (probably should be removed but not sure)"""
-    application: str
-
     device: DeviceProperty
     analysis_name: str
     arguments: Optional[ArgumentsProperty] = None

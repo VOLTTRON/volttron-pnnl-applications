@@ -1,6 +1,6 @@
-#from importlib.util import find_spec
+# from importlib.util import find_spec
 
-#if not find_spec("heat_recovery.diagnostics"):
+# if not find_spec("heat_recovery.diagnostics"):
 
 
 HR1 = "Temperature Sensor Dx"
@@ -25,6 +25,6 @@ def table_log_format(name, timestamp, data):
     return str(str(name) + "&" + str(timestamp) + "->[" + str(data) + "]")
 
 
-from . heat_recovery_correctly_off import *
-from . heat_recovery_correctly_on import *
-from . temperature_sensor import *
+from .heat_recovery_correctly_off import *
+from .heat_recovery_correctly_on import *
+from .temperature_sensor import *

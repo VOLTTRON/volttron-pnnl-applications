@@ -1,17 +1,23 @@
+import dataclasses
 import logging
 import sys
 from copy import deepcopy
-import dataclasses
 from dataclasses import dataclass
-from pprint import pprint, pformat
+from datetime import timedelta as td
 from typing import List, Union, Optional
 
-import gevent
-import pandas as pd
-from numpy import mean
-from dateutil import parser
 import dateutil.tz
-from datetime import timedelta as td
+from dateutil import parser
+from numpy import mean
+
+from volttron.platform.agent.utils import (
+    vip_main, load_config
+)
+from volttron.platform.messaging import topics as vtopic
+from volttron.platform.vip.agent import (
+    Agent,
+)
+from .analysis_config import AnalysisConfig, UnitProperty
 from .diagnostics import (
     table_log_format,
     HRT_LIMIT,
@@ -19,20 +25,6 @@ from .diagnostics import (
     HeatRecoveryCorrectlyOn,
     HeatRecoveryCorrectlyOff, DX_LIST, DX, OAT_LIMIT, EAT_LIMIT, FAN_OFF, OAT_EAT_CLOSE, OAT_SAT_SP_CLOSE, TEMP_SENSOR
 )
-
-from volttron.platform.vip.agent import (
-    Agent,
-    Core,
-)
-
-from volttron.platform.messaging import topics as vtopic
-
-from volttron.platform.agent.utils import (
-    setup_logging,
-    vip_main, load_config
-)
-
-from .analysis_config import AnalysisConfig, DeviceProperty, UnitProperty
 
 logging.basicConfig(level=logging.DEBUG)
 # setup_logging(logging.DEBUG, True)
@@ -153,7 +145,7 @@ class HeatRecoveryAgent(Agent):
         # Get the data from the passed file.
         config = load_config(config_path)
 
-        #print(self.aconfig)
+        # print(self.aconfig)
         # If there is configuration then we need to set it for the default use
         # case, otherwise the agent will use what is currently in the config
         # store.
@@ -161,7 +153,7 @@ class HeatRecoveryAgent(Agent):
             self.vip.config.set_default("config", config)
             self.config = HeatRecoveryConfig(**config)
             # self.config.update(**config)
-            #self.config.validate()
+            # self.config.validate()
             print(self.config.device.campus)
 
         # Subscription allows any changes to the config store to propagate
@@ -181,7 +173,7 @@ class HeatRecoveryAgent(Agent):
 
         base_subscription = f"device/{device.campus}/{device.building}"
         # building level all message
-        #topics.append(f"{base_subscription}/all")
+        # topics.append(f"{base_subscription}/all")
         topics.append(vtopic.DEVICES_VALUE(campus=device.campus, building=device.building,
                                            unit="", point="all"))
         # unit=u, path="", point="all")
@@ -189,8 +181,8 @@ class HeatRecoveryAgent(Agent):
         if isinstance(device.unit, str):
             topics.append(vtopic.DEVICES_VALUE(campus=device.campus, building=device.building, unit=device.unit,
                                                point="all"))
-            #topics.append(vtopic.DEVICES_VALUE(campus=device.campus, building=device.building, unit=device.unit))
-            #topics.append(f"{base_subscription}/{device.unit}/all")
+            # topics.append(vtopic.DEVICES_VALUE(campus=device.campus, building=device.building, unit=device.unit))
+            # topics.append(f"{base_subscription}/{device.unit}/all")
         elif isinstance(device.unit, UnitProperty):
             # Loops over the name fo the units
             for k in device.unit.units:
@@ -398,7 +390,7 @@ class HeatRecoveryAgent(Agent):
             dx_msg[sensitivity] = message
         for diagnostic in DX_LIST:  # log the message for each diagnostic
             print("info:" + table_log_format(self.analysis_name, cur_time,
-                                                       (diagnostic + DX + ":" + str(dx_msg))))
+                                             (diagnostic + DX + ":" + str(dx_msg))))
             # self.results_publish.append(...)
 
     def determine_hr_condition(self):
@@ -421,11 +413,11 @@ class HeatRecoveryAgent(Agent):
             self.sensor_limit_msg = HRT_LIMIT
             print("info: HRT sensor is outside of bounts: {}".format(current_time))
 
-    #def new_data_message(self, message):
+    # def new_data_message(self, message):
     def new_data_message(self, peer, sender, bus, topic, headers, message):
         self.diagnostic_done_flag = False
         current_time = parser.parse(headers["Date"])
-        #current_time = message[0]['timestamp']  # parser.parse(headers["Date"])
+        # current_time = message[0]['timestamp']  # parser.parse(headers["Date"])
         to_zone = dateutil.tz.gettz(self.timezone)
         current_time = current_time.astimezone(to_zone)
         print("info: Processing Results!")  # _log.info("Processing Results!")

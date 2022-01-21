@@ -48,6 +48,7 @@ class UnitProperty:
     strings as subdevices
     """
     unit: Union[str, SubDeviceProperty]
+    units: List[str]
 
     def __init__(self, **kwargs):
         """
@@ -65,11 +66,16 @@ class UnitProperty:
         :param kwargs:
         """
         self.unit = {}
+        self.units = []
 
         for k, v in kwargs.items():
             subd = SubDeviceProperty(v)
             setattr(self, k, subd)
             self.unit[k] = subd
+            self.units.append(k)
+
+    def __iter__(self):
+        return self.units.__iter__()
 
 
 @dataclass
@@ -94,12 +100,17 @@ class PointMapping:
 
 @dataclass
 class ArgumentsProperty:
-    point_mapping: PointMapping
+    point_mapping: Dict[str, str]
+
+    def __init__(self, **kwargs):
+        self.point_mapping = {}
+        for k, v in kwargs.items():
+            self.point_mapping[k] = v
 
 
 @dataclass
 class ConversionMapProperty:
-    conversion_map: List[MatchProperty]
+    conversion_map: Optional[List[MatchProperty]]
 
     def __init__(self, mappings: List[dict]):
         self.conversion_map = []
@@ -133,24 +144,26 @@ class AnalysisConfig:
 
     device: DeviceProperty
     analysis_name: str
-    arguments: ArgumentsProperty
-    conversion_map: ConversionMapProperty
+    arguments: Optional[ArgumentsProperty] = None
+    conversion_map: Optional[ConversionMapProperty] = None
     actuation_mode: str = "PASSIVE"
 
     def __post_init__(self):
         if isinstance(self.device, dict):
             self.device = DeviceProperty(**self.device)
-        # if not self.conversion_map:
-        #   self.conversion_map = ConversionMapProperty()
+        if self.actuation_mode is not None:
+            self.actuation_mode = "PASSIVE"
+
+        if isinstance(self.conversion_map, dict):
+            self.conversion_map = ConversionMapProperty(**self.conversion_map)
 
     def validate(self):
         required_properties = [
             ("application", str),
             ("device", DeviceProperty),
-            # ("campus", str),
-            # ("building", str),
             ("arguments", dict),
-            ("conversion_map", list)]
+            ("conversion_map", list)
+        ]
 
         errors = []
         # p = property, t = type
@@ -159,14 +172,14 @@ class AnalysisConfig:
             if not getattr(self, p):
                 errors.append(f"Property '{p}' requires a value")
             elif not isinstance(getattr(self, p), t):
-                errors.append(f"Property '{p}' must be of type '{t}' was '{type(getattr(self, p))}")
+                errors.append(f"property '{p}' must be of type '{t}' was '{type(getattr(self, p))}")
 
         if getattr(self, "actuation_mode") not in ('PASSIVE', 'ACTIVE'):
-            errors.append(f"Property activatino_mode must be 'ACTIVE' or 'PASSIVE'")
+            errors.append(f"property activatino_mode must be 'ACTIVE' or 'PASSIVE'")
 
         for v in ("campus", "building", "unit"):
             if not getattr(self.device, v):
-                errors.append(f"Property device.{v} not found")
+                errors.append(f"property device.{v} not found")
 
         if errors:
             raise ValueError("\n".join(errors))
@@ -179,9 +192,9 @@ class AnalysisConfig:
 #
 # class AnalysisConfig:
 #     def __init__(self):
-#         arguments_property = Property("arguments", "A collection of dynamic parameters for data")
-#         device_property = Property("device", "Properties for the device this unit is going to be using")
-#         unit_property = NestedProperty("unit",
+#         arguments_property = property("arguments", "A collection of dynamic parameters for data")
+#         device_property = property("device", "Properties for the device this unit is going to be using")
+#         unit_property = Nestedproperty("unit",
 #                                        "Contains unit definition (can include subdevices)")
 #         self.required_properties: List[Union[Property, NestedProperty]] = [
 #             Property("application",

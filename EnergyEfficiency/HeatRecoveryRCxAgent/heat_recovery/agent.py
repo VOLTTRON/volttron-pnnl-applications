@@ -1,5 +1,15 @@
+import logging
+import sys
+from copy import deepcopy
+import dataclasses
+from dataclasses import dataclass
+from pprint import pprint, pformat
+from typing import List, Union, Optional
+
+import gevent
 import pandas as pd
 from numpy import mean
+from dateutil import parser
 import dateutil.tz
 from datetime import timedelta as td
 from .diagnostics import (
@@ -15,22 +25,41 @@ from volttron.platform.vip.agent import (
     Core,
 )
 
+from volttron.platform.messaging import topics as vtopic
+
 from volttron.platform.agent.utils import (
     setup_logging,
-    vip_main
+    vip_main, load_config
 )
 
+from .analysis_config import AnalysisConfig, DeviceProperty, UnitProperty
 
-class HeatRecoveryAgent: #(Agent):
-    def __init__(self):
-        # list of class attributes.  Default values will be filled in from reading config file
-        # string attributes
-        self.config = None
-        self.campus = "PNNL"
-        self.building = "SEB"
-        # self.agent_id = ""
-        self.device_type = "ahu hr"
-        self.analysis_name = "Heat_Recovery_AIRCx"
+logging.basicConfig(level=logging.DEBUG)
+# setup_logging(logging.DEBUG, True)
+_log = logging.getLogger(__name__)
+
+ANALYSIS_NAME = "Heat_Recovery_AIRCx"
+
+
+@dataclass
+class HeatRecoveryConfig(AnalysisConfig):
+    # analysis_name: str = dataclasses.field(*, default=ANALYSIS_NAME)
+    analysis_name: Optional[str] = ANALYSIS_NAME
+
+    def validate(self):
+        super().validate()
+        # do validation here.
+        for k, v in self.arguments.items():
+            print(k, v)
+
+
+class HeatRecoveryAgent(Agent):
+    analysis_name = ANALYSIS_NAME
+    hr_off_steady_state = td(minutes=1)
+
+    def __init__(self, config_path, **kwargs):
+        super(HeatRecoveryAgent, self).__init__(enable_store=True, **kwargs)
+
         self.sensitivity = ["normal"]
         self.oatemp_name = "OutdoorAirTemperature"
         self.sf_status_name = "SupplyFanStatus"
@@ -45,12 +74,8 @@ class HeatRecoveryAgent: #(Agent):
         # self.publish_base = ""
         self.sensor_limit_msg = ""
 
-        # list attributes
-        self.device_list = ["AHU1"]
         self.publish_list = []
-        self.units = []
-        self.arguments = []
-        self.point_mapping = []
+
         self.damper_data = []
         self.oatemp_values = []
         self.sf_status_values = []
@@ -91,11 +116,11 @@ class HeatRecoveryAgent: #(Agent):
         self.hr_status_threshold = 0.5
         self.sf_status_threshold = 0.5  # threshold of determining if sf is on (status)
         self.sf_speed_threshold = 30  # threshold for determining if sf is on (speed)
-        self.hr_off_steady_state = td(minutes=1)
         self.temp_diff_threshold = 4.0
         # bool attributes
         self.constant_volume = False
 
+        self.hr_off_steady_state = td(minutes=1)
         # int data
         self.sf_status = 0
         self.ef_status = 0
@@ -120,7 +145,120 @@ class HeatRecoveryAgent: #(Agent):
         self.temp_sensor = None
         self.hr_correctly_on = None
         self.hr_correctly_off = None
+
+        # our configuration is setup to be a dictionary and is available
+        # from the config store or the file passed to the agent itself.
+        self.config: Union[dict, HeatRecoveryConfig] = {}
+
+        # Get the data from the passed file.
+        config = load_config(config_path)
+
+        #print(self.aconfig)
+        # If there is configuration then we need to set it for the default use
+        # case, otherwise the agent will use what is currently in the config
+        # store.
+        if config:
+            self.vip.config.set_default("config", config)
+            self.config = HeatRecoveryConfig(**config)
+            # self.config.update(**config)
+            #self.config.validate()
+            print(self.config.device.campus)
+
+        # Subscription allows any changes to the config store to propagate
+        # to the agent.
+        self.vip.config.subscribe(self.configure, actions=["NEW", "UPDATE"])
+
+        self._messages_received = 0
         self.create_diagnostics()
+
+    def get_subscription_topics(self) -> List[str]:
+        """
+        This function uses the device
+        :return:
+        """
+        topics = []
+        device = self.config.device
+
+        base_subscription = f"device/{device.campus}/{device.building}"
+        # building level all message
+        #topics.append(f"{base_subscription}/all")
+        topics.append(vtopic.DEVICES_VALUE(campus=device.campus, building=device.building,
+                                           unit="", point="all"))
+        # unit=u, path="", point="all")
+
+        if isinstance(device.unit, str):
+            topics.append(vtopic.DEVICES_VALUE(campus=device.campus, building=device.building, unit=device.unit,
+                                               point="all"))
+            #topics.append(vtopic.DEVICES_VALUE(campus=device.campus, building=device.building, unit=device.unit))
+            #topics.append(f"{base_subscription}/{device.unit}/all")
+        elif isinstance(device.unit, UnitProperty):
+            # Loops over the name fo the units
+            for k in device.unit.units:
+                # append the unit i.e rtu
+                topics.append(
+                    vtopic.DEVICES_VALUE(campus=device.campus, building=device.building, unit=k, point="all")
+                )
+
+                # v should be a list of sub devices for the unit i.e ahu
+                for subdev in device.unit.unit[k]:
+                    topics.append(
+                        vtopic.DEVICES_VALUE(campus=device.campus, building=device.building, unit=k,
+                                             path=subdev, point="all")
+                    )
+                    # topics.append(f"{base_subscription}/{k}/{subdev}/all")
+        else:
+            raise ValueError("Invalid configuration detected ")
+        return topics
+
+    def configure(self, config_name, action, contents):
+        # Create a copy of the current configuration object.
+        if isinstance(self.config, HeatRecoveryConfig):
+            # asdict is always available on dataclass objects
+            config = dataclasses.asdict(self.config)
+        else:
+            config = deepcopy(self.config)
+
+        config.update(**contents)
+
+        try:
+            # Validate the new values, should raise Key or Value error
+            # if invalid data is specified.
+            hr_config = HeatRecoveryConfig(**config)
+
+            hr_config.validate()
+
+            # Unsubscribe to all topics.
+            self.vip.pubsub.unsubscribe(peer="pubsub", prefix="", callback=self.new_data_message)
+
+            # We now have new state of the configuration
+            self.config = hr_config
+            self._messages_received = 0
+
+            # TODO: Skip this and just use the config object itself if possible?
+            # TODO: Perhaps a shallow copy of these rather than using getattr setattr
+            # TODO: Should these be member variables?
+            # Set items on the current object from the config object.
+            for field in dataclasses.fields(self.config):
+                setattr(self, field.name, getattr(self.config, field.name))
+
+            if isinstance(self.config.arguments, dict):
+                for k, v in self.config.arguments.items():
+                    setattr(self, k, v)
+            else:
+                for field in dataclasses.fields(self.config.arguments):
+                    setattr(self, field.name, getattr(self.config.arguments, field.name))
+
+            for topic in self.get_subscription_topics():
+                _log.debug(f"Subscribing to {topic}")
+                self.vip.pubsub.subscribe(peer="pubsub", prefix=topic, callback=self.new_data_message)
+
+        except (KeyError, ValueError) as ex:
+            _log.error(f"Invalid configuration options specified {ex} ")
+
+            # First time through if we get a validation error then we want to
+            # exit with a bad value.
+            if config_name == 'config' and action == 'NEW':
+                sys.exit(1)
 
     def create_diagnostics(self):
         self.temp_sensor = TemperatureSensor()
@@ -283,9 +421,11 @@ class HeatRecoveryAgent: #(Agent):
             self.sensor_limit_msg = HRT_LIMIT
             print("info: HRT sensor is outside of bounts: {}".format(current_time))
 
-    def new_data_message(self, message):
+    #def new_data_message(self, message):
+    def new_data_message(self, peer, sender, bus, topic, headers, message):
         self.diagnostic_done_flag = False
-        current_time = message[0]['timestamp']  # parser.parse(headers["Date"])
+        current_time = parser.parse(headers["Date"])
+        #current_time = message[0]['timestamp']  # parser.parse(headers["Date"])
         to_zone = dateutil.tz.gettz(self.timezone)
         current_time = current_time.astimezone(to_zone)
         print("info: Processing Results!")  # _log.info("Processing Results!")
@@ -371,5 +511,8 @@ class HeatRecoveryAgent: #(Agent):
         # self.check_for_config_update_after_diagnostics()
 
 
-
-
+if __name__ == '__main__':
+    vip_main(HeatRecoveryAgent, identity="heat_recovery",
+             publickey="REpJn2gAaKKX7qDzN5M-NW8ZGmdJyPb-ggRDUd_K52Q",
+             secretkey="Lj8nDCqwkAb-dul7IhmeBQsE0jKv2fM2YaPgcmf0CBo",
+             serverkey="33Jiil4A_kNutFhwKmZ3H4OwuQ0al-kZSe-fsdLsfGI")

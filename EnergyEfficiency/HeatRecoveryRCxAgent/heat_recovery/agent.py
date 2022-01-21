@@ -41,8 +41,6 @@ class HeatRecoveryConfig(AnalysisConfig):
     def validate(self):
         super().validate()
         # do validation here.
-        for k, v in self.arguments.items():
-            print(k, v)
 
 
 class HeatRecoveryAgent(Agent):
@@ -349,12 +347,12 @@ class HeatRecoveryAgent(Agent):
 
     def check_oatemp_eatemp_condition(self, current_time):
         # check if OAT is too close to EAT
-        if self.oatemp < self.eatemp + self.oa_ea_high_deadband and self.oatemp > self.eatemp - self.oa_ea_low_deadband:
+        if self.eatemp + self.oa_ea_high_deadband > self.oatemp > self.eatemp - self.oa_ea_low_deadband:
             self.oatemp_eatemp_close_condition.append(current_time)
 
     def check_oatemp_sat_sp_condition(self, current_time):
         # check if OAT is too close to SAT_SP
-        if self.oatemp < self.sat_sp + self.oa_sat_high_deadband and self.oatemp > self.sat_sp - self.oa_sat_low_deadband:
+        if self.sat_sp + self.oa_sat_high_deadband > self.oatemp > self.sat_sp - self.oa_sat_low_deadband:
             self.oatemp_sat_sp_close_condition.append(current_time)
 
     def check_elapsed_time(self, current_time, condition,
@@ -394,7 +392,7 @@ class HeatRecoveryAgent(Agent):
             # self.results_publish.append(...)
 
     def determine_hr_condition(self):
-        if self.oatemp > self.sat_sp + self.oa_sat_high_deadband and self.oatemp < self.eatemp - self.oa_ea_low_deadband:
+        if self.sat_sp + self.oa_sat_high_deadband < self.oatemp < self.eatemp - self.oa_ea_low_deadband:
             self.hr_cond = False
         else:
             self.hr_cond = True
@@ -490,7 +488,7 @@ class HeatRecoveryAgent(Agent):
         else:
             elapsed_time = td(minutes=0)
         # if not current_time.minute % self.run_interval or elapsed_time >= self.data_window: # for this to work, run_interval should be a factor of 60
-        if (elapsed_time >= self.data_window):  # if enough time has elapsed
+        if elapsed_time >= self.data_window:  # if enough time has elapsed
             self.temp_sensor_problem = self.temp_sensor.run_diagnostic(current_time)  # check for temp sensor problem
             if self.temp_sensor_problem is not None and not self.temp_sensor_problem:  # if no sensor problem is detected, run the other diagnostics
                 self.hr_correctly_on.run_diagnostic(current_time)
@@ -504,7 +502,7 @@ class HeatRecoveryAgent(Agent):
 
 
 if __name__ == '__main__':
-    vip_main(HeatRecoveryAgent, identity="heat_recovery",
-             publickey="REpJn2gAaKKX7qDzN5M-NW8ZGmdJyPb-ggRDUd_K52Q",
-             secretkey="Lj8nDCqwkAb-dul7IhmeBQsE0jKv2fM2YaPgcmf0CBo",
-             serverkey="33Jiil4A_kNutFhwKmZ3H4OwuQ0al-kZSe-fsdLsfGI")
+    try:
+        vip_main(HeatRecoveryAgent, version="0.1")
+    except KeyboardInterrupt:
+        pass

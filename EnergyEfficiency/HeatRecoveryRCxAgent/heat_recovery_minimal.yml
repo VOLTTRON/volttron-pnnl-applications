@@ -1,16 +1,5 @@
 ---
-application: recovery.application
 
-device:
-  campus: campus
-  building: building
-  # This can be a string or an rtu with
-  # a list of subdevices
-  #units: ahu1
-  unit:
-    rtu4:
-      - ahu1
-      - ahu2
 
 arguments:
   
@@ -33,18 +22,35 @@ arguments:
   sf_speed_threshold: 30  # threshold for determining if sf is on (speed)
   temp_diff_threshold: 4.0
 
-conversion_map:
-  - match: ".*Temperature"
-    datatype: "float"
-  - match: ".*Command"
-    datatype: "float"
-  - match: ".*Command"
-    datatype: "float"
-  - match: "*.Signal"
-    datatype: "float"
-  - match: "Cooling.*"
-    datatype: "int"
-  - match: "SupplyFanStatus"
-    datatype": "int"
-  - match: "SupplyFanSpeed"
-    datatype: "int"
+device:
+  campus: campus
+  building: building
+  # This can be a string or an rtu with
+  # a list of subdevices
+  units: ahu1
+  
+  # Alternate form, however default does not do a diagnostic
+  # from each of the units only subscribes.
+  #
+  # unit:
+  #   rtu4:
+  #     - ahu1
+  #     - ahu2
+
+point_map:
+  oatemp_name: OutdoorAirTemperature
+  sf_status_name: SupplyFanStatus
+  ef_status_name: ExhaustFanStatus
+  sf_speed_name: SupplyFanSpeedPercent
+  ef_speed_name: ExhaustFanSpeedPercent
+  eatemp_name: ReturnAirTemperature
+  hrtemp_name: HrWheelLeavingAirTemperature
+  sat_sp_name: DischargeAirTemperatureSetPoint
+  hr_status_name: HrWheelEnabled
+  timezone: US/Pacific
+
+sensitivity:
+  custom: True
+  sensitivity_values:
+    # point: value
+

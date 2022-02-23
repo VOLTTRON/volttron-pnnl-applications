@@ -1,19 +1,31 @@
 ---
-application: recovery.application
+analysis_name: HeatRecoveryRcx
+actuation_mode: PASSIVE
+
 
 device:
   campus: campus
   building: building
-  # This can be a string or an rtu with
-  # a list of subdevices
-  #units: ahu1
-  unit:
-    rtu4:
-      - ahu1
-      - ahu2
+  unit: rtu4
 
 arguments:
-  
+  point_mapping:
+    outdoor_air_temperature: OutdoorAirTemperature
+    supply_fan_status: SupplyFanStatus
+    supply_fan_speed_percent: SupplyFanSpeedPercent
+    exhaust_fan_status: ExhaustFanStatus
+    exhaust_fan_speed_percent: ExhaustFanSpeedPercent
+    return_air_temperature: ReturnAirTemperature
+    mixed_air_temperature: MixedAirTemp
+    outdoor_damper_signal: Damper
+    cool_call: CompressorStatus
+    supply_fan_speed: SupplyFanSpeed
+    heat_return_temperature: HrWheelLeavingAirTemperature
+    heat_return_status: HrWheelEnabled
+    discharge_temperature_set_point: DischargeAirTemperatureSetPoint
+
+  timezone: US/Pacific
+  no_required_data: 4
   oat_low_threshold: 20.0
   oat_high_threshold: 120.0
   eat_low_threshold: 50.0
@@ -33,18 +45,7 @@ arguments:
   sf_speed_threshold: 30  # threshold for determining if sf is on (speed)
   temp_diff_threshold: 4.0
 
-conversion_map:
-  - match: ".*Temperature"
-    datatype: "float"
-  - match: ".*Command"
-    datatype: "float"
-  - match: ".*Command"
-    datatype: "float"
-  - match: "*.Signal"
-    datatype: "float"
-  - match: "Cooling.*"
-    datatype: "int"
-  - match: "SupplyFanStatus"
-    datatype": "int"
-  - match: "SupplyFanSpeed"
-    datatype: "int"
+  run_interval: 4
+  number_required_data_points: 4
+  max_dx_time: 30
+  hr_cond: null

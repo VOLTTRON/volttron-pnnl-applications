@@ -1,21 +1,24 @@
 from datetime import timedelta as td
+import logging
+from typing import Tuple, List
 
 from numpy import mean
 
 # import constants
-from ..diagnostics import table_log_format, HR2, DX, EI
+from ..diagnostics import table_log_format, HR2, DX, EI, table_publish_format, DiagnosticBase, ResultPublisher
+
+_log = logging.getLogger(__name__)
 
 
-class HeatRecoveryCorrectlyOn:
-    def __init__(self):
+class HeatRecoveryCorrectlyOn(DiagnosticBase):
+    def __init__(self, analysis_name: str, results_publish: List[Tuple]):
+        super().__init__(analysis_name, results_publish)
         # initialize data arrays
         self.oatemp_values = []
         self.eatemp_values = []
         self.hrtemp_values = []
         self.sf_speed_values = []
         self.hr_status_values = []
-        self.timestamp = []
-        self.analysis_name = ""
 
         # Initialize not_recovering flag
         self.not_recovering = []
@@ -27,7 +30,6 @@ class HeatRecoveryCorrectlyOn:
         self.cfm = None
         self.eer = None
         self.expected_hre = None
-        self.results_publish = None
         self.max_dx_time = None
 
         self.not_recovering_dict = None
@@ -39,15 +41,14 @@ class HeatRecoveryCorrectlyOn:
             "The heat recovery system is operating but is not effectively recovering heat",
             "The heat recovery is functioning as expected"]
 
-    def set_class_values(self, results_publish, hr_status_threshold, hre_recovering_threshold, data_window,
-                         analysis_name, no_required_data, rated_cfm, eer, expected_hre):
-        self.results_publish = results_publish
+    def set_class_values(self, hr_status_threshold, hre_recovering_threshold, data_window,
+                         no_required_data, rated_cfm, eer, expected_hre):
+        # override base class's results_published with passed agent results publish.
         self.hr_status_threshold = hr_status_threshold
         self.hre_recovering_threshold = {"low": hre_recovering_threshold - 20,
                                          "normal": hre_recovering_threshold,
                                          "high": hre_recovering_threshold + 20}
         self.data_window = data_window
-        self.analysis_name = analysis_name
         self.no_required_data = no_required_data
         self.rated_cfm = rated_cfm
         self.eer = eer
@@ -66,14 +67,18 @@ class HeatRecoveryCorrectlyOn:
         #     return
         if len(self.timestamp) >= self.no_required_data:
             if elapsed_time > self.max_dx_time:
-                print("info: ", table_log_format(self.analysis_name, self.timestamp[-1],
-                                                 HR2 + DX + ":" + str(self.inconsistent_date)))
-                # self.results_publish.append(...)
+                _log.info(table_log_format(self.analysis_name, self.timestamp[-1],
+                                           HR2 + DX + ":" + str(self.inconsistent_date)))
+                # table_publish_format(self.analysis_name, self.timestamp[-1], __name__,
+                #                      HR2 + DX + ":" + str(self.inconsistent_date))
+                ResultPublisher.push_result(self, HR2 + DX + ":" + str(self.inconsistent_date))
+
                 self.clear_data()
                 return
             self.not_recovering_when_needed()
         else:
-            # self.results_publish.append(...)
+            # TODO what should be published here?
+            # self.push_result(...)
             self.clear_data()
 
     def heat_recovery_on_algorithm(self, oatemp, eatemp, hrtemp, sf_speed, hr_status, cur_time, hr_cond):
@@ -90,7 +95,7 @@ class HeatRecoveryCorrectlyOn:
 
     def recovering_check(self, hr_cond, cur_time):
         if not hr_cond:
-            print("info: {}: not recovering heat at {}".format(HR2, cur_time))
+            _log.info(f"{HR2} not recovering heat at {cur_time}")
             self.not_recovering.append(cur_time)
             return False
         return True
@@ -118,13 +123,16 @@ class HeatRecoveryCorrectlyOn:
                 msg = "{} - {}: {}".format(HR2, key, self.alg_result_messages[2])
                 result = 10.0
                 energy = 0.0
-            print("info: ", msg)
+            _log.info(msg)
             diagnostic_msg.update({key: result})
             energy_impact.update({key: energy})
-        print("info: ", table_log_format(self.analysis_name, self.timestamp[-1], HR2 + DX + ":" + str(diagnostic_msg)))
-        print("info: ", table_log_format(self.analysis_name, self.timestamp[-1], HR2 + EI + ":" + str(energy_impact)))
-        # self.results_publish.append(...)
-        # self.results_publish.append(...)
+
+        _log.info(table_log_format(self.analysis_name, self.timestamp[-1], HR2 + DX + ":" + str(diagnostic_msg)))
+        ResultPublisher.push_result(self, HR2 + DX + ":" + str(diagnostic_msg))
+
+        _log.info(table_log_format(self.analysis_name, self.timestamp[-1], HR2 + EI + ":" + str(energy_impact)))
+        ResultPublisher.push_result(self, HR2 + EI + ":" + str(energy_impact))
+
         self.clear_data()
 
     def energy_impact_calculation(self):
@@ -146,5 +154,5 @@ class HeatRecoveryCorrectlyOn:
         self.hrtemp_values = []
         self.sf_speed_values = []
         self.hr_status_values = []
-        self.timestamp = []
+        self.timestamp.clear()
         self.not_recovering = []

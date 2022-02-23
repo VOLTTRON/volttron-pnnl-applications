@@ -1,36 +1,38 @@
-from datetime import timedelta as td
+from datetime import timedelta as td, datetime
+import logging
+from typing import Optional, List, Tuple
 
 from numpy import mean
 
 # import constants
-from ..diagnostics import table_log_format, HR1, DX
+from ..diagnostics import table_log_format, HR1, DX, DiagnosticBase, ResultPublisher
+
+_log = logging.getLogger(__name__)
 
 
-class TemperatureSensor:
-    def __init__(self):
+class TemperatureSensor(DiagnosticBase):
+    def __init__(self, analysis_name: str,  results_publish: List[Tuple]):
+        super().__init__(analysis_name, results_publish)
         self.oatemp_values = []
         self.eatemp_values = []
         self.hrtemp_values = []
-        self.timestamp = []
 
         self.temp_sensor_problem = None
         self.max_dx_time = None
         self.analysis_name = ""
-        self.results_publich = []
 
         self.data_window = None
         self.no_required_data = None
         self.temp_diff_threshold = None
         self.inconsistent_date = None
         self.insufficient_data = None
+        self.results_publish = results_publish
 
         # self.temp_consistency_dx = TempConsistency()
 
-    def set_class_values(self, analysis_name, results_publish, data_window, no_required_data, temp_diff_threshold,
+    def set_class_values(self, data_window, no_required_data, temp_diff_threshold,
                          hr_off_steady_state):
 
-        self.analysis_name = analysis_name
-        self.results_publish = results_publish
         self.max_dx_time = td(minutes=60) if td(minutes=60) > data_window else data_window
         self.data_window = data_window
         self.no_required_data = no_required_data
@@ -46,27 +48,28 @@ class TemperatureSensor:
         self.inconsistent_date = {key: 3.2 for key in self.temp_diff_threshold}
         self.insufficient_data = {key: 2.2 for key in self.temp_diff_threshold}
 
-    def run_diagnostic(self, current_time):
+    def run_diagnostic(self, current_time: datetime) -> Optional[bool]:
         if self.timestamp:
             elapsed_time = self.timestamp[-1] - self.timestamp[0]
         else:
             elapsed_time = td(minutes=0)
-        print("info: Elapsed time {} -- required time: {}".format(elapsed_time, self.data_window))
+        _log.info(f"Elapsed time {elapsed_time} -- required time: {self.data_window}")
 
-        if (len(self.timestamp) >= self.no_required_data):
+        if len(self.timestamp) >= self.no_required_data:
             if elapsed_time >= self.max_dx_time:  # if too much time has elapsed without receiving enough data
-                print("info:" + table_log_format(self.analysis_name,
-                                                 self.timestamp[-1],
-                                                 HR1 + DX + ":" + str(self.inconsistent_date)))
+                _log.info(table_log_format(self.analysis_name,
+                                           self.timestamp[-1],
+                                           HR1 + DX + ":" + str(self.inconsistent_date)))
+                ResultPublisher.push_result(self, HR1 + DX + ":" + str(self.inconsistent_date), current_time)
                 self.clear_data()
                 return None
             temp_sensor_problem = self.temperature_sensor_dx()
         elif len(self.timestamp) < self.no_required_data:
-            # self.results_publish.append(...)
-            print("info: Not enough data to determine temperature range faults")
+            # self.push_result(...)
+            _log.info("Not enough data to determine temperature range faults")
             temp_sensor_problem = None
         else:
-            print("debug: Temperature sensor else!")
+            _log.error(f"{__name__} else for run_diagnostic")
             temp_sensor_problem = None
         self.clear_data()
         return temp_sensor_problem
@@ -92,13 +95,14 @@ class TemperatureSensor:
                 msg = "{}: No problems were detected - Sensitivity: {}".format(HR1, sensitivity)
                 result = 0.0
                 self.temp_sensor_problem = False
-            print("info: " + msg)
+            _log.info(msg)
             diagnostic_msg.update({sensitivity: result})
         if diagnostic_msg["normal"] > 0.0:
             self.temp_sensor_problem = True
-        print(
-            "info: " + table_log_format(self.analysis_name, self.timestamp[-1], (HR1 + DX + ":" + str(diagnostic_msg))))
-        # self.results_publish.append(...)
+
+        _log.info(table_log_format(self.analysis_name, self.timestamp[-1], (HR1 + DX + ":" + str(diagnostic_msg))))
+        ResultPublisher.push_result(self, HR1 + DX + ":" + str(diagnostic_msg))
+
         temp_sensor_problem = self.temp_sensor_problem
         self.clear_data()  # this clears temp_sensor_problem which we need to return
         return temp_sensor_problem
@@ -118,6 +122,6 @@ class TemperatureSensor:
         self.oatemp_values = []
         self.eatemp_values = []
         self.hrtemp_values = []
-        self.timestamp = []
+        self.timestamp.clear()
         if self.temp_sensor_problem:
             self.temp_sensor_problem = None

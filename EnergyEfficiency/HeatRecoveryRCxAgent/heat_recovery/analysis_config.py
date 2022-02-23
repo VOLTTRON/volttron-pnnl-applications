@@ -2,8 +2,10 @@
 # have NOT been created yet
 from __future__ import annotations
 
+import dataclasses
 from dataclasses import dataclass
-from typing import List, Dict, Union, Optional
+from functools import lru_cache
+from typing import List, Dict, Union, Optional, Tuple
 
 
 @dataclass
@@ -85,26 +87,66 @@ class DeviceProperty:
     """
     campus: str
     building: str
-    unit: UnitProperty
-
-    def __post_init__(self):
-        if isinstance(self.unit, dict):
-            self.unit = UnitProperty(**self.unit)
+    unit: str
 
 
 @dataclass
 class PointMapping:
-    point_mapping: Dict[str, str]
+    outdoor_air_temperature: str = "OutdoorAirTemperature"
+    supply_fan_status: str = "SupplyFanStatus"
+    supply_fan_speed_percent: str = "SupplyFanSpeedPercent"
+    exhaust_fan_status: str = "ExhaustFanStatus"
+    exhaust_fan_speed_percent: str = "ExhaustFanSpeedPercent"
+
+    return_air_temperature: str = "ReturnAirTemperature"
+    mixed_air_temperature: str = "MixedAirTemp"
+    outdoor_damper_signal: str = "Damper"
+    cool_call: str = "CompressorStatus"
+    supply_fan_speed: str = "SupplyFanSpeed"
+    heat_return_temperature: str = "HrWheelLeavingAirTemperature"
+    heat_return_status: str = "HrWheelEnabled"
+    discharge_temperature_set_point: str = "DischargeAirTemperatureSetPoint"
+
+    def __hash__(self):
+        value_str = ".".join([x.name for x in dataclasses.fields(self)])
+        return value_str.__hash__()
+
+    @lru_cache(maxsize=30)
+    def get_keys(self) -> Tuple:
+        return tuple([x.name for x in dataclasses.fields(self)])
+
+    @lru_cache(maxsize=30)
+    def get_value(self, name) -> str:
+        if not hasattr(self, name):
+            raise ValueError(f"Name: {name} not found on instance.")
+        return dataclasses.asdict(self)[name]
+
+    @lru_cache(maxsize=30)
+    def get_values(self) -> Tuple:
+        return tuple([self.get_value(x.name) for x in dataclasses.fields(self)])
+
+    @lru_cache(maxsize=30)
+    def get_key(self, value: str) -> str:
+        for k in self.get_keys():
+            if self.get_value(k) == value:
+                return k
+
+        raise ValueError(f"value: {value} not found on instance.")
 
 
 @dataclass
 class ArgumentsProperty:
-    point_mapping: Dict[str, str]
+    point_mapping: PointMapping
 
     def __init__(self, **kwargs):
-        self.point_mapping = {}
+        if 'point_mapping' in kwargs.keys():
+            self.point_mapping = PointMapping(**kwargs['point_mapping'])
+        else:
+            self.point_mapping = PointMapping()
+
         for k, v in kwargs.items():
-            self.point_mapping[k] = v
+            if k != 'point_mapping':
+                setattr(self, k, v)
 
 
 @dataclass
@@ -139,13 +181,11 @@ class AnalysisConfig:
     """
 
     """ The application signature (probably should be removed but not sure)"""
-    application: str
 
     device: DeviceProperty
     analysis_name: str
-    arguments: Optional[ArgumentsProperty] = None
-    conversion_map: Optional[ConversionMapProperty] = None
-    actuation_mode: str = "PASSIVE"
+    arguments: ArgumentsProperty
+    actuation_mode: str
 
     def __post_init__(self):
         if isinstance(self.device, dict):
@@ -153,15 +193,17 @@ class AnalysisConfig:
         if self.actuation_mode is not None:
             self.actuation_mode = "PASSIVE"
 
-        if isinstance(self.conversion_map, dict):
-            self.conversion_map = ConversionMapProperty(**self.conversion_map)
+    def __dict_to_sub_object__(self):
+        if isinstance(self.device, dict):
+            self.device = DeviceProperty(**self.device)
+        if isinstance(self.arguments, dict):
+            self.arguments = ArgumentsProperty(**self.arguments)
 
     def validate(self):
+        self.__dict_to_sub_object__()
         required_properties = [
-            ("application", str),
             ("device", DeviceProperty),
-            ("arguments", dict),
-            ("conversion_map", list)
+            ("arguments", ArgumentsProperty)
         ]
 
         errors = []

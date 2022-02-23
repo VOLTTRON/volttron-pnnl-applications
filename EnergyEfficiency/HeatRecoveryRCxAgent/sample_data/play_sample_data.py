@@ -10,7 +10,7 @@ datafile = Path(__file__).parent / "sample_data.csv"
 agent = build_agent(identity="my-agent",
                     publickey="REpJn2gAaKKX7qDzN5M-NW8ZGmdJyPb-ggRDUd_K52Q",
                     secretkey="Lj8nDCqwkAb-dul7IhmeBQsE0jKv2fM2YaPgcmf0CBo",
-                    serverkey="33Jiil4A_kNutFhwKmZ3H4OwuQ0al-kZSe-fsdLsfGI")
+                    serverkey="SzUeEpdkAu2qssziu-Etz2Is6hxt9oQy8rmFVoUxQ3s")
 
 headers = []
 data = {}
@@ -46,6 +46,8 @@ try:
                                      message=[data, {}])
             # publish here
             print(f"Publishing: {base_topic}/all, message=[data, {{}}] {data}")
+            print(f"Note is: {columns[-1]}")
+            input("Press enter to continue.")
             gevent.sleep(TIME_BETWEEN_LINES)
         if EXIT_AFTER_ONE:
             break

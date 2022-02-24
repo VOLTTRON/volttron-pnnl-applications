@@ -67,6 +67,7 @@ class EconCorrectlyOn(object):
         self.fan_spd_values = []
         self.oad_values = []
         self.timestamp = []
+        self.econ_timestamp = []
         self.analysis_name = ""
 
         # Initialize not_cooling and not_economizing flags
@@ -169,6 +170,7 @@ class EconCorrectlyOn(object):
         """
 
         economizing = self.economizing_check(cooling_call, econ_condition, cur_time)
+        self.econ_timestamp.append(cur_time)
         if not economizing:
             return
 
@@ -202,7 +204,7 @@ class EconCorrectlyOn(object):
         return True
 
     def economizer_conditions(self, current_time):
-        if len(self.not_cooling) >= len(self.not_cooling)*0.5:
+        if len(self.not_cooling) >= len(self.econ_timestamp)*0.5:
             _log.info(constants.table_log_format(self.analysis_name, current_time,
                                                  (constants.ECON2 + constants.DX + ":" + str(self.not_cooling_dict))))
             self.results_publish.append(
@@ -212,7 +214,7 @@ class EconCorrectlyOn(object):
                                                self.not_cooling_dict))
             self.clear_data()
             return True
-        if len(self.not_cooling) >= len(self.not_cooling)*0.5:
+        if len(self.not_cooling) >= len(self.econ_timestamp)*0.5:
             _log.info(constants.table_log_format(self.analysis_name, current_time,
                                                  (constants.ECON2 + constants.DX + ":" + str(self.not_cooling_dict))))
             self.results_publish.append(
@@ -285,6 +287,7 @@ class EconCorrectlyOn(object):
         self.mat_values = []
         self.fan_spd_values = []
         self.timestamp = []
+        self.econ_timestamp = []
         self.not_economizing = []
         self.not_cooling = []
 

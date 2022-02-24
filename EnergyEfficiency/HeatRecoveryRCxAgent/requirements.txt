@@ -1,7 +1,6 @@
 pandas
 numpy
 dateutils
-prodict
 
 # testing requirements
 # pytest

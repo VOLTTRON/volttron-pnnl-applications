@@ -21,6 +21,7 @@ class HeatRecoveryCorrectlyOff(DiagnosticBase):
         self.sf_speed_values = []
         self.hr_status_values = []
         self.timestamp = []
+        self.recovering_timestamp = []
         self.analysis_name = ""
 
         # Initialize not_recovering flag
@@ -64,8 +65,10 @@ class HeatRecoveryCorrectlyOff(DiagnosticBase):
             elapsed_time = self.timestamp[-1] - self.timestamp[0]
         else:
             elapsed_time = td(minutes=0)
-        # if self.heat_recovery_conditions(current_time): # what is the intent here?
-        #     return
+
+        if self.heat_recovery_conditions(current_time):
+            return
+
         if len(self.timestamp) >= self.no_required_data:
             if elapsed_time > self.max_dx_time:
                 _log.info(table_log_format(self.analysis_name, self.timestamp[-1],
@@ -81,13 +84,14 @@ class HeatRecoveryCorrectlyOff(DiagnosticBase):
 
     def heat_recovery_off_algorithm(self, oatemp, eatemp, hrtemp, sf_speed, hr_status, cur_time, hr_cond):
         recovering = self.recovering_check(hr_cond, cur_time)
+        self.recovering_timestamp.append(cur_time)
         if recovering:
             return
+        self.timestamp.append(cur_time)
         self.oatemp_values.append(oatemp)
         self.eatemp_values.append(eatemp)
         self.hrtemp_values.append(hrtemp)
         self.hr_status_values.append(hr_status)
-        self.timestamp.append(cur_time)
         sf_speed = sf_speed / 100.0 if sf_speed is not None else 1.0
         self.sf_speed_values.append(sf_speed)
 
@@ -98,8 +102,37 @@ class HeatRecoveryCorrectlyOff(DiagnosticBase):
             return True
         return False
 
-    # def heat_recovery_conditions(self, current_time):
-    #     return True
+    def heat_recovery_conditions(self, current_time):
+        # More than half the time we are recovering.
+        if len(self.recovering) >= len(self.recovering_timestamp) * 0.5:
+            txt = table_log_format(self.analysis_name, current_time, HR3 + DX + str(self.recovering_dict))
+            _log.info(txt)
+            ResultPublisher.push_result(self, txt, current_time)
+            self.clear_data()
+            return True
+        return False
+
+        # if len(self.not_cooling) >= len(self.not_cooling)*0.5:
+        #     _log.info(constants.table_log_format(self.analysis_name, current_time,
+        #                                          (constants.ECON2 + constants.DX + ":" + str(self.not_cooling_dict))))
+        #     self.results_publish.append(
+        #         constants.table_publish_format(self.analysis_name,
+        #                                        current_time,
+        #                                        (constants.ECON2 + constants.DX),
+        #                                        self.not_cooling_dict))
+        #     self.clear_data()
+        #     return True
+        # if len(self.not_cooling) >= len(self.not_cooling)*0.5:
+        #     _log.info(constants.table_log_format(self.analysis_name, current_time,
+        #                                          (constants.ECON2 + constants.DX + ":" + str(self.not_cooling_dict))))
+        #     self.results_publish.append(
+        #         constants.table_publish_format(self.analysis_name,
+        #                                        current_time,
+        #                                        (constants.ECON2 + constants.DX),
+        #                                        self.not_cooling_dict))
+        #     self.clear_data()
+        #     return True
+        # return False
 
     def recovering_when_not_needed(self):
         hre = [(oat - hrt) / (oat - eat) for oat, hrt, eat in
@@ -153,3 +186,4 @@ class HeatRecoveryCorrectlyOff(DiagnosticBase):
         self.hr_status_values = []
         self.timestamp = []
         self.recovering = []
+        self.recovering_timestamp = []

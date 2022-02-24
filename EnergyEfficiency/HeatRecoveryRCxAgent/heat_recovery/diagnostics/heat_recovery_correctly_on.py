@@ -22,6 +22,7 @@ class HeatRecoveryCorrectlyOn(DiagnosticBase):
 
         # Initialize not_recovering flag
         self.not_recovering = []
+        self.not_recovering_timestamp = []
 
         self.hre_recovering_threshold = None
         self.hr_status_threshold = None
@@ -83,13 +84,14 @@ class HeatRecoveryCorrectlyOn(DiagnosticBase):
 
     def heat_recovery_on_algorithm(self, oatemp, eatemp, hrtemp, sf_speed, hr_status, cur_time, hr_cond):
         recovering = self.recovering_check(hr_cond, cur_time)
+        self.not_recovering_timestamp.append(cur_time)
         if not recovering:
             return
+        self.timestamp.append(cur_time)
         self.oatemp_values.append(oatemp)
         self.eatemp_values.append(eatemp)
         self.hrtemp_values.append(hrtemp)
         self.hr_status_values.append(hr_status)
-        self.timestamp.append(cur_time)
         sf_speed = sf_speed / 100.0 if sf_speed is not None else 1.0
         self.sf_speed_values.append(sf_speed)
 
@@ -100,8 +102,15 @@ class HeatRecoveryCorrectlyOn(DiagnosticBase):
             return False
         return True
 
-    # def heat_recovery_conditions(self, current_time):
-    #     return True
+    def heat_recovery_conditions(self, current_time):
+        # More than half the time we are recovering.
+        if len(self.not_recovering) >= len(self.not_recovering_timestamp) * 0.5:
+            txt = table_log_format(self.analysis_name, current_time, HR2 + DX + str(self.not_recovering_dict))
+            _log.info(txt)
+            ResultPublisher.push_result(self, txt, current_time)
+            self.clear_data()
+            return True
+        return False
 
     def not_recovering_when_needed(self):
         hre = [(oat - hrt) / (oat - eat) for oat, hrt, eat in
@@ -156,3 +165,4 @@ class HeatRecoveryCorrectlyOn(DiagnosticBase):
         self.hr_status_values = []
         self.timestamp.clear()
         self.not_recovering = []
+        self.not_recovering_timestamp = []

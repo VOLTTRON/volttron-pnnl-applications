@@ -691,34 +691,33 @@ class HeatRecoveryAgent(Agent):
             if self.temp_sensor_problem is not None and not self.temp_sensor_problem:  # if no sensor problem is detected, run the other diagnostics
                 self.hr_correctly_on_dx.run_diagnostic(current_time)
                 self.hr_correctly_off_dx.run_diagnostic(current_time)
-                pass
             elif self.temp_sensor_problem:  # if temp sensor problem is present
                 self.pre_conditions(TEMP_SENSOR, current_time)
             self.clear_all()
         self.publish_analysis_results()
         # self.check_for_config_update_after_diagnostics()
     
-    def publish_analysis_results(self):
-        """Publish the diagnostic results"""
-        if(len(self.results_publish)) <= 0:
-            return
-        publish_base = "/".join([self.analysis_name])
-        for app, analysis_table in self.results_publish:
-            to_publish = {}
-            name_timestamp = app.split("&")
-            timestamp = name_timestamp[1]
-            point = analysis_table[0]
-            result = analysis_table[1]
-            headers = {headers_mod.CONTENT_TYPE: headers_mod.CONTENT_TYPE.JSON, headers_mod.DATE: timestamp, }
-            for device in self.publish_list:
-                publish_topic = "/".join([publish_base, device, point])
-                analysis_topic = topics.RECORD(subtopic=publish_topic)
-                to_publish[analysis_topic] = result
-
-            for result_topic, result in to_publish.items():
-                self.vip.pubsub.publish("pubsub", result_topic, headers, result)
-            to_publish.clear()
-        self.results_publish.clear()    
+    # def publish_analysis_results(self):
+    #     """Publish the diagnostic results"""
+    #     if(len(self.results_publish)) <= 0:
+    #         return
+    #     publish_base = "/".join([self.analysis_name])
+    #     for app, analysis_table in self.results_publish:
+    #         to_publish = {}
+    #         name_timestamp = app.split("&")
+    #         timestamp = name_timestamp[1]
+    #         point = analysis_table[0]
+    #         result = analysis_table[1]
+    #         headers = {headers_mod.CONTENT_TYPE: headers_mod.CONTENT_TYPE.JSON, headers_mod.DATE: timestamp, }
+    #         for device in self.publish_list:
+    #             publish_topic = "/".join([publish_base, device, point])
+    #             analysis_topic = topics.RECORD(subtopic=publish_topic)
+    #             to_publish[analysis_topic] = result
+    #
+    #         for result_topic, result in to_publish.items():
+    #             self.vip.pubsub.publish("pubsub", result_topic, headers, result)
+    #         to_publish.clear()
+    #     self.results_publish.clear()
 
     def publish_analysis_results(self):
         """Publish the diagnostic results"""

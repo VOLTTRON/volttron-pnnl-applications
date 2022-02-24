@@ -26,7 +26,6 @@ class TemperatureSensor(DiagnosticBase):
         self.temp_diff_threshold = None
         self.inconsistent_date = None
         self.insufficient_data = None
-        self.results_publish = results_publish
 
         # self.temp_consistency_dx = TempConsistency()
 

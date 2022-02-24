@@ -170,6 +170,7 @@ class EconCorrectlyOff(object):
         self.mat_values.append(mat)
         self.rat_values.append(rat)
         self.oad_values.append(oad)
+        self.timestamp.append(cur_time)
 
         fan_sp = fan_sp / 100.0 if fan_sp is not None else 1.0
         self.fan_spd_values.append(fan_sp)

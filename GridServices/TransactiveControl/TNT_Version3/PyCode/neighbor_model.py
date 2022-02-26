@@ -498,7 +498,8 @@ class Neighbor(object):
         mtr = [x for x in self.meterPoints if x.measurementType == MeasurementType.AverageDemandkW]
         mtr = mtr[0] if len(mtr) > 0 else None
 
-        if mtr is None:
+        #if mtr is None:
+        if True:
 
             # No appropriate MeterPoint was found. The demand threshold must be inferred.
             # 200731DJH: In Version 3, this is  improved to update the demand threshold using the peak power from the
@@ -526,10 +527,14 @@ class Neighbor(object):
             if prior_market is None:
                 return
             prior_market_powers = [x.value for x in self.scheduledPowers
-                                   if x.market == prior_market]
+                                   if x.market == prior_market and 'Real-Time' in x.market.name]
+            _log.debug(f"NEIGHBOR_MODEL: prior_market_powers {prior_market_powers}")
+
             if prior_market_powers is not None and len(prior_market_powers) != 0:
                 prior_peak = max(prior_market_powers)
                 self.demandThreshold = max([0, self.demandThreshold, prior_peak])
+                _log.debug("NEIGHBOR_MODEL: prior peak: {} demandThreshold: {}".format(prior_peak, self.demandThreshold))
+
             else:
                 # 211102DJH: This next line will cause problems if a "dummy" market has been partially configured at
                 #            startup. It is preferable to keep the demandThreshold constant instead.
@@ -1761,7 +1766,7 @@ class Neighbor(object):
             affected_vertex = affected_vertices[av]
             affected_vertex.marginalPrice = affected_vertex.marginalPrice + self.demandRate
             _log.debug(f"IN INCLUDE_DEMAND_CHARGES: affected_vertex.marginalPrice = a"
-                       f"ffected_vertex.marginalPrice + self.demandRate = {affected_vertex}")
+                       f"ffected_vertex.marginalPrice + self.demandRate = {affected_vertex.marginalPrice}")
 
         # Find unaffected vertices that lie below the threshold.
         unaffected_vertices = [x for x in corrected_vertices if x.power < threshold]

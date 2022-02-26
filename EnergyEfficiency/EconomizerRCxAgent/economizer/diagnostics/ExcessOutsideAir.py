@@ -67,6 +67,7 @@ class ExcessOutsideAir(object):
         self.mat_values = []
         self.oad_values = []
         self.timestamp = []
+        self.econ_timestamp = []
         self.fan_spd_values = []
         self.economizing = []
         self.analysis_name = ""
@@ -159,6 +160,7 @@ class ExcessOutsideAir(object):
         No return
         """
         economizing = self.economizing_check(econ_condition, cur_time)
+        self.econ_timestamp.append(cur_time)
         if economizing:
             return
 
@@ -172,7 +174,7 @@ class ExcessOutsideAir(object):
         self.fan_spd_values.append(fan_sp)
 
     def economizer_conditions(self, current_time):
-        if len(self.economizing) >= len(self.economizing) * 0.5:
+        if len(self.economizing) >= len(self.econ_timestamp) * 0.5:
             _log.info(constants.table_log_format(self.analysis_name, current_time,
                                                  (constants.ECON4 + constants.DX + ":" + str(self.economizing_dict))))
             self.results_publish.append(
@@ -282,4 +284,5 @@ class ExcessOutsideAir(object):
         self.mat_values = []
         self.fan_spd_values = []
         self.timestamp = []
+        self.econ_timestamp = []
         self.economizing = []

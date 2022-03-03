@@ -22,6 +22,7 @@ from volttron.platform.vip.agent import (
 from .analysis_config import AnalysisConfig, UnitProperty
 from .diagnostics import (
     table_log_format,
+    table_publish_format,
     HRT_LIMIT,
     TemperatureSensor,
     HeatRecoveryCorrectlyOn,
@@ -143,7 +144,7 @@ class HeatRecoveryAgent(Agent):
         # to the agent.
         self.vip.config.subscribe(self.configure, actions=["NEW", "UPDATE"])
 
-        self.sensitivity = ["normal"]
+        self.sensitivity = ["low", "normal", "high"]
 
         # A dictionary with keys the arguments.point_map keys and the value the last n values
         # for that point on the bus.
@@ -369,14 +370,12 @@ class HeatRecoveryAgent(Agent):
         # k in this case is both the key of the message and
         # the value of the arguments.point_mapping.key
         for k, v in data_message.items():
-
-            if not v:
-                continue
-
+            # if not v:
+                # continue
             try:
                 point_key = self.cfg.arguments.point_mapping.get_key(k)
                 self.value_map[point_key] = v
-            except ValueError:
+            except (KeyError, ValueError) as ex:
                 _log.warning(f"The value: {k} is not found in point_mapping values.")
 
         # self.oatemp_values = []
@@ -554,7 +553,7 @@ class HeatRecoveryAgent(Agent):
             dx_msg[sensitivity] = message
 
         for diagnostic in DX_LIST:  # log the message for each diagnostic
-            txt = table_log_format(self.analysis_name, cur_time, (diagnostic + DX + ":" + str(dx_msg)))
+            txt = table_publish_format(self.analysis_name, cur_time, (diagnostic + DX), str(dx_msg))
             ResultPublisher.push_result(self, txt, cur_time)
             # self.results_publish.append(txt)
 

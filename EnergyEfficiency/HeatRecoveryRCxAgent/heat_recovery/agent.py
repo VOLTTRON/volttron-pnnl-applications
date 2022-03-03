@@ -522,7 +522,7 @@ class HeatRecoveryAgent(Agent):
 
     def check_elapsed_time(self, current_time: datetime, condition: List[datetime], message):
         if condition:
-            elapsed_time = current_time - condition[-1]  # time since the last time this condition was true
+            elapsed_time = current_time - condition[0]  # time since the last time this condition was true
         else:
             elapsed_time = td(minutes=0)
 

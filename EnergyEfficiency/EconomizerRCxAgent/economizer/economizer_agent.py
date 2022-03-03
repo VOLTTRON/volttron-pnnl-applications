@@ -546,7 +546,7 @@ class EconomizerAgent(Agent):
         message: string
         """
         if condition:
-            elapsed_time = current_time - condition[-1]
+            elapsed_time = current_time - condition[0]
         else:
             elapsed_time = td(minutes=0)
         if ((current_time.minute % self.run_interval and len(condition) > self.no_required_data)

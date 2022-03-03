@@ -425,9 +425,9 @@ class HeatRecoveryAgent(Agent):
 
         def add_missing(field: str, orfield: Optional[str] = None):
             if orfield:
-                if not self.value_map.get(field) and not self.value_map.get(orfield):
+                if self.value_map.get(field) is None and self.value_map.get(orfield) is None:
                     missing_values.append(field)
-            elif not self.value_map.get(field):
+            elif self.value_map.get(field) is None:
                 missing_values.append(field)
 
             _log.debug(f"field: {field} orfield: {orfield}")

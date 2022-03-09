@@ -553,8 +553,8 @@ class HeatRecoveryAgent(Agent):
             dx_msg[sensitivity] = message
 
         for diagnostic in DX_LIST:  # log the message for each diagnostic
-            txt = table_publish_format(self.analysis_name, cur_time, (diagnostic + DX), str(dx_msg))
-            ResultPublisher.push_result(self, txt, cur_time)
+            # txt = table_publish_format(self.analysis_name, cur_time, (diagnostic + DX), str(dx_msg))
+            ResultPublisher.push_result(obj=self, table=(diagnostic + DX), data=dx_msg, timestamp=cur_time)
             # self.results_publish.append(txt)
 
     def determine_hr_condition(self) -> bool:

@@ -47,13 +47,11 @@ class DiagnosticBase:
 
 class ResultPublisher:
     @staticmethod
-    def push_result(obj: DiagnosticBase | Any, data: Any, timestamp: Optional[datetime] = None):
+    def push_result(obj: DiagnosticBase, table: str, data: Dict, timestamp: Optional[datetime] = None):
         if timestamp is None:
             timestamp = obj.timestamp[-1]
         data = json.dumps(data)
-        type(obj).mro()
-        table = type(obj).__name__
-        table_key = f"{table}&{str(timestamp)}"
+        table_key = f"{obj.analysis_name}&{str(timestamp)}"
         obj.results_publish.append((table_key, (table, data)))
 
 

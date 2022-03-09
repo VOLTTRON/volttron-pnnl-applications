@@ -73,7 +73,8 @@ class HeatRecoveryCorrectlyOff(DiagnosticBase):
             if elapsed_time > self.max_dx_time:
                 _log.info(table_log_format(self.analysis_name, self.timestamp[-1],
                                                  HR3 + DX + ":" + str(self.inconsistent_date)))
-                ResultPublisher.push_result(self, HR3 + DX + ":" + str(self.inconsistent_date))
+                ResultPublisher.push_result(obj=self, table=(HR3 + DX), data=self.inconsistent_date,
+                                            timestamp=self.timestamp[-1])
                 self.clear_data()
                 return
             self.recovering_when_not_needed()
@@ -107,7 +108,7 @@ class HeatRecoveryCorrectlyOff(DiagnosticBase):
         if len(self.recovering) >= len(self.recovering_timestamp) * 0.5:
             txt = table_log_format(self.analysis_name, current_time, HR3 + DX + str(self.recovering_dict))
             _log.info(txt)
-            ResultPublisher.push_result(self, txt, current_time)
+            ResultPublisher.push_result(obj=self, table=(HR3 + DX), data=self.recovering_dict, timestamp=current_time)
             self.clear_data()
             return True
         return False
@@ -160,10 +161,10 @@ class HeatRecoveryCorrectlyOff(DiagnosticBase):
             energy_impact.update({key: energy})
 
         _log.info(table_log_format(self.analysis_name, self.timestamp[-1], HR3 + DX + ":" + str(diagnostic_msg)))
-        ResultPublisher.push_result(self, DX + ":" + str(diagnostic_msg))
+        ResultPublisher.push_result(obj=self, table=(HR3 + DX), data=diagnostic_msg, timestamp=self.timestamp[-1])
 
         _log.info(table_log_format(self.analysis_name, self.timestamp[-1], HR3 + EI + ":" + str(energy_impact)))
-        ResultPublisher.push_result(self, HR3 + EI + ":" + str(energy_impact))
+        ResultPublisher.push_result(obj=self, table=(HR3 + DX), data=energy_impact, timestamp=self.timestamp[-1])
 
         self.clear_data()
 

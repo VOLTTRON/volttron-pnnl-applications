@@ -59,7 +59,7 @@ class TemperatureSensor(DiagnosticBase):
                 _log.info(table_log_format(self.analysis_name,
                                            self.timestamp[-1],
                                            HR1 + DX + ":" + str(self.inconsistent_date)))
-                ResultPublisher.push_result(self, HR1 + DX + ":" + str(self.inconsistent_date), current_time)
+                ResultPublisher.push_result(obj=self, table=(HR1 + DX), data=self.inconsistent_date, timestamp=current_time)
                 self.clear_data()
                 return None
             temp_sensor_problem = self.temperature_sensor_dx()
@@ -100,8 +100,7 @@ class TemperatureSensor(DiagnosticBase):
             self.temp_sensor_problem = True
 
         _log.info(table_log_format(self.analysis_name, self.timestamp[-1], (HR1 + DX + ":" + str(diagnostic_msg))))
-        ResultPublisher.push_result(self, HR1 + DX + ":" + str(diagnostic_msg))
-
+        ResultPublisher.push_result(obj=self, table=(HR1 + DX), data=diagnostic_msg, timestamp=self.timestamp[-1])
         temp_sensor_problem = self.temp_sensor_problem
         self.clear_data()  # this clears temp_sensor_problem which we need to return
         return temp_sensor_problem

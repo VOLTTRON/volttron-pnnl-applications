@@ -72,8 +72,8 @@ class HeatRecoveryCorrectlyOn(DiagnosticBase):
                                            HR2 + DX + ":" + str(self.inconsistent_date)))
                 # table_publish_format(self.analysis_name, self.timestamp[-1], __name__,
                 #                      HR2 + DX + ":" + str(self.inconsistent_date))
-                ResultPublisher.push_result(self, HR2 + DX + ":" + str(self.inconsistent_date))
-
+                ResultPublisher.push_result(obj=self, table=(HR2 + DX), data=self.inconsistent_date,
+                                            timestamp=self.timestamp[-1])
                 self.clear_data()
                 return
             self.not_recovering_when_needed()
@@ -107,7 +107,8 @@ class HeatRecoveryCorrectlyOn(DiagnosticBase):
         if len(self.not_recovering) >= len(self.not_recovering_timestamp) * 0.5:
             txt = table_log_format(self.analysis_name, current_time, HR2 + DX + str(self.not_recovering_dict))
             _log.info(txt)
-            ResultPublisher.push_result(self, txt, current_time)
+            ResultPublisher.push_result(obj=self, table=(HR2 + DX), data=self.not_recovering_dict,
+                                        timestamp=current_time)
             self.clear_data()
             return True
         return False
@@ -137,10 +138,10 @@ class HeatRecoveryCorrectlyOn(DiagnosticBase):
             energy_impact.update({key: energy})
 
         _log.info(table_log_format(self.analysis_name, self.timestamp[-1], HR2 + DX + ":" + str(diagnostic_msg)))
-        ResultPublisher.push_result(self, HR2 + DX + ":" + str(diagnostic_msg))
+        ResultPublisher.push_result(obj=self, table=(HR2 + DX), data=diagnostic_msg, timestamp=self.timestamp[-1])
 
         _log.info(table_log_format(self.analysis_name, self.timestamp[-1], HR2 + EI + ":" + str(energy_impact)))
-        ResultPublisher.push_result(self, HR2 + EI + ":" + str(energy_impact))
+        ResultPublisher.push_result(obj=self, table=(HR2 + DX), data=energy_impact, timestamp=self.timestamp[-1])
 
         self.clear_data()
 

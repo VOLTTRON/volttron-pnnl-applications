@@ -141,7 +141,7 @@ class HeatRecoveryCorrectlyOn(DiagnosticBase):
         ResultPublisher.push_result(obj=self, table=(HR2 + DX), data=diagnostic_msg, timestamp=self.timestamp[-1])
 
         _log.info(table_log_format(self.analysis_name, self.timestamp[-1], HR2 + EI + ":" + str(energy_impact)))
-        ResultPublisher.push_result(obj=self, table=(HR2 + DX), data=energy_impact, timestamp=self.timestamp[-1])
+        ResultPublisher.push_result(obj=self, table=(HR2 + EI), data=energy_impact, timestamp=self.timestamp[-1])
 
         self.clear_data()
 

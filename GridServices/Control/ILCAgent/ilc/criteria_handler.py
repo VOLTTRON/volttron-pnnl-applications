@@ -96,6 +96,8 @@ class CriteriaContainer(object):
     def __init__(self):
         self.clusters = []
         self.devices = {}
+        self.all_device_topics = []
+        self.topics_per_device = {}
 
     def add_criteria_cluster(self, cluster):
         self.clusters.append(cluster)
@@ -130,6 +132,15 @@ class CriteriaContainer(object):
     def get_device(self, device_name):
         return self.devices[device_name]
 
+    def get_ingest_topic_dict(self):
+        topic_list = []
+        for device in self.devices.values():
+            topic_list.extend(device.get_criteria_topic_list())
+            _log.debug("TOPIC1: {}".format(topic_list))
+            self.topics_per_device[device] = list(topic_list)
+            topic_list = []
+        return self.topics_per_device
+
     # this passes all data coming in to all device criteria
     # TODO:  rethink this approach.  Is there a better way to create the topic map to pass only data needed
     def ingest_data(self, time_stamp, data):
@@ -160,6 +171,12 @@ class DeviceCriteria(object):
 
     def evaluate(self, token):
         return self.criteria[token].evaluate()
+
+    def get_criteria_topic_list(self):
+        topic_list = []
+        for criteria in self.criteria.values():
+            topic_list.extend(criteria.get_criteria_topic_list())
+        return topic_list
 
 
 class Criteria(object):
@@ -193,6 +210,13 @@ class Criteria(object):
         for criterion in self.criteria.values():
             criterion.criteria_status(status)
 
+    def get_criteria_topic_list(self):
+        topic_list = []
+        for criterion in self.criteria.values():
+            topic_list.extend(criterion.get_topic_list())
+            _log.debug("TOPIC5: {}".format(criterion.get_topic_list()))
+        return topic_list
+
 
 class BaseCriterion(object):
     __metaclass__ = abc.ABCMeta
@@ -205,6 +229,7 @@ class BaseCriterion(object):
         self.device_topic = device_topic
         self.logging_topic = logging_topic
         self.device_topics = set()
+        self.topic_set = set()
         self.parent = parent
 
     def numeric_check(self, value):
@@ -261,6 +286,10 @@ class BaseCriterion(object):
         _log.debug("LOGGING {} - {} - {}".format(topic, value, time_stamp))
         self.parent.vip.pubsub.publish("pubsub", topic, headers, message).get()
 
+    def get_topic_list(self):
+        _log.debug("TOPICs4: {}".format(self.topic_set))
+        return self.topic_set
+
 
 @register_criterion('status')
 class StatusCriterion(BaseCriterion):
@@ -273,6 +302,8 @@ class StatusCriterion(BaseCriterion):
         self.point_name, device = fix_up_point_name(point_name, self.device_topic)
         self.device_topics.add(device)
         self.current_status = False
+        self.topic_set = set()
+        self.topic_set.add(self.point_name)
 
     def evaluate(self):
         if self.current_status:
@@ -348,10 +379,14 @@ class FormulaCriterion(BaseCriterion):
 
         for arg_type, arg_list in operation_args.items():
             topic_map, topic_set = create_device_topic_map(arg_list, self.device_topic)
+            _log.debug("TOPIC: {}".format(topic_map))
             self.device_topic_map.update(topic_map)
             self.device_topics |= topic_set
             self.update_points[arg_type] = set(topic_map.values())
             self.operation_arg_count += len(topic_map)
+        point_device = list(self.device_topic_map.keys())
+        for point in point_device:
+            self.topic_set.add(point)
 
     def evaluate(self):
         if len(self.current_operation_values) >= self.operation_arg_count:
@@ -398,6 +433,8 @@ class HistoryCriterion(BaseCriterion):
         self.previous_time_delta = td(minutes=previous_time)
         self.current_value = None
         self.history_time = None
+        self.topic_set = set()
+        self.topic_set.add(self.point_name)
 
     def linear_interpolation(self, date1, value1, date2, value2, target_date):
         end_delta_t = (date2 - date1).total_seconds()

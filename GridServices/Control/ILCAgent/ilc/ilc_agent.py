@@ -453,6 +453,14 @@ class ILCAgent(Agent):
                                   callback=demand_limit_handler)
         _log.debug("Target agent subscription: " + self.target_agent_subscription)
         self.vip.pubsub.publish("pubsub", self.ilc_start_topic, headers={}, message={})
+        self.setup_topics()
+
+    def setup_topics(self):
+        self.data_topics = self.criteria_container.get_ingest_topic_dict()
+        self.all_data_topics = []
+        for lst in self.data_topics.values():
+            self.all_data_topics.extend(lst)
+        _log.debug("TOPICS0: {} -- {}".format(self.data_topics, self.all_data_topics))
 
     @Core.receiver("onstop")
     def shutdown(self, sender, **kwargs):
@@ -623,8 +631,21 @@ class ILCAgent(Agent):
         data, meta = message
         now = parse_timestamp_string(header[headers_mod.TIMESTAMP])
         data_topics, meta_topics = self.breakout_all_publish(topic, message)
+        data_t = list(data_topics.keys())
+        _log.debug("TOPICS0: {} -- {}".format(data_t, self.all_data_topics))
+        device_topics = {}
+        device_t = self.intersection(self.all_data_topics, data_t)
+        for topic, values in data_topics.items():
+            if topic in device_t:
+                device_topics[topic] = values
+        _log.debug("TOPICS: {}".format(device_topics))
         self.criteria_container.ingest_data(now, data_topics)
         self.control_container.ingest_data(now, data_topics)
+
+    def intersection(self, topics, data):
+        topics = set(topics)
+        data = set(data)
+        return topics.intersection(data)
 
     def check_schedule(self, current_time):
         """

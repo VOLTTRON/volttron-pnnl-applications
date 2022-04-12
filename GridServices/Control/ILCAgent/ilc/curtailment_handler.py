@@ -81,6 +81,8 @@ class ControlContainer(object):
         self.clusters = []
         self.devices = {}
         self.device_topics = set()
+        self.topics_per_device = {}
+        self.control_topics = {}
 
     def add_control_cluster(self, cluster):
         self.clusters.append(cluster)
@@ -106,6 +108,12 @@ class ControlContainer(object):
     def ingest_data(self, time_stamp, data):
         for device in self.devices.values():
             device.ingest_data(time_stamp, data)
+
+    def get_ingest_topic_dict(self):
+        for device in self.devices.values():
+            for cls in device.controls.values():
+                self.control_topics[cls] = cls.get_topic_maps()
+        return self.control_topics
 
 
 class DeviceStatus(object):
@@ -187,6 +195,7 @@ class Controls(object):
                 self.device_status[state] = DeviceStatus(logging_topic, parent, default_device=device_topic, **device_status_parms)
                 self.device_topics |= self.device_status[state].device_topics
         self.currently_controlled = False
+        _log.debug("CONTROL_TOPIC: {}".format(self.device_topics))
 
     def ingest_data(self, time_stamp, data):
         for conditional_curtailment in self.conditional_curtailments:
@@ -218,11 +227,23 @@ class Controls(object):
     def reset_control_status(self):
         self.currently_controlled = False
 
+    def get_topic_maps(self):
+        topics = []
+        for cls in self.conditional_augments:
+            topics.extend(list(cls.device_topic_map.keys()))
+        for cls in self.conditional_curtailments:
+            topics.extend(list(cls.device_topic_map.keys()))
+        for state, cls in self.device_status.items():
+            topics.extend(list(cls.device_topic_map.keys()))
+        # _log.debug("TOPICS CO: {}".format(topics))
+        return topics
+
 
 class ControlManager(object):
     def __init__(self, device_config, logging_topic, parent, default_device=""):
         self.device_topics = set()
         self.controls = {}
+        self.topics_per_device = {}
 
         for device_id, control_config in device_config.items():
             controls = Controls(control_config, logging_topic, parent, default_device)
@@ -248,6 +269,13 @@ class ControlManager(object):
     def get_device_status(self, state):
         return [command for command, control in self.controls.items() if (state in control.device_status and control.device_status[state].command_status)]
 
+    def get_control_topics(self):
+        pass
+
+    def get_topics(self, time_stamp, data):
+        self.topics_per_device = {}
+        for control in self.controls.values():
+            self.topics_per_device[control] = control.get_topic_maps()
 
 class ControlSetting(object):
     def __init__(self, logging_topic, parent, point=None, value=None, load=None, offset=None, maximum=None, minimum=None,

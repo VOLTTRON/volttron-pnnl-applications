@@ -286,7 +286,7 @@ class BaseCriterion(object):
         self.parent.vip.pubsub.publish("pubsub", topic, headers, message).get()
 
     def get_topic_list(self):
-        _log.debug("TOPICs4: {}".format(self.topic_set))
+        # _log.debug("TOPICS4: {}".format(self.topic_set))
         return self.topic_set
 
 
@@ -378,7 +378,6 @@ class FormulaCriterion(BaseCriterion):
 
         for arg_type, arg_list in operation_args.items():
             topic_map, topic_set = create_device_topic_map(arg_list, self.device_topic)
-            _log.debug("TOPIC: {}".format(topic_map))
             self.device_topic_map.update(topic_map)
             self.device_topics |= topic_set
             self.update_points[arg_type] = set(topic_map.values())

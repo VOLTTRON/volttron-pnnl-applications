@@ -456,11 +456,15 @@ class ILCAgent(Agent):
         self.setup_topics()
 
     def setup_topics(self):
-        self.data_topics = self.criteria_container.get_ingest_topic_dict()
-        self.all_data_topics = []
-        for lst in self.data_topics.values():
-            self.all_data_topics.extend(lst)
-        _log.debug("TOPICS0: {} -- {}".format(self.data_topics, self.all_data_topics))
+        self.criteria_topics = self.criteria_container.get_ingest_topic_dict()
+        self.control_topics = self.control_container.get_ingest_topic_dict()
+        self.all_criteria_topics = []
+        self.all_control_topics = []
+        for lst in self.criteria_topics.values():
+            self.all_criteria_topics.extend(lst)
+        for lst in self.control_topics.values():
+            self.all_control_topics.extend(lst)
+        _log.debug("TOPICS0: {} -- {}".format(self.control_topics, self.all_control_topics))
 
     @Core.receiver("onstop")
     def shutdown(self, sender, **kwargs):
@@ -612,6 +616,41 @@ class ILCAgent(Agent):
                     device_criteria.criteria_status((subdevice, state), status)
                     _log.debug("Device: {} -- subdevice: {} -- curtail1 status: {}".format(device_name, subdevice, status))
 
+    def new_criteria_data(self, data_topics, now):
+        data_t = list(data_topics.keys())
+        #_log.debug("TOPICS CR0: {} -- {}".format(data_t, self.all_criteria_topics))
+        device_topics = {}
+        device_criteria_topics = self.intersection(self.all_criteria_topics, data_t)
+        for topic, values in data_topics.items():
+            if topic in device_criteria_topics:
+                device_topics[topic] = values
+        device_set = set(list(device_topics.keys()))
+        for device, topic_lst in self.criteria_topics.items():
+            topic_set = set(topic_lst)
+            needed_topics = self.intersection(topic_set, device_set)
+            #_log.debug("TOPICS CR1 : {}".format(needed_topics))
+            if needed_topics:
+                #_log.debug("TOPICS CR2: {}".format(device_topics))
+                device.ingest_data(now, device_topics)
+
+    def new_control_data(self, data_topics, now):
+        data_t = list(data_topics.keys())
+        #_log.debug("TOPICS CO0: {} -- {}".format(data_t, self.all_control_topics))
+        device_topics = {}
+        device_control_topics = self.intersection(self.all_control_topics, data_t)
+        for topic, values in data_topics.items():
+            if topic in device_control_topics:
+                device_topics[topic] = values
+        device_set = set(list(device_topics.keys()))
+        for device, topic_lst in self.control_topics.items():
+            #_log.debug("TOPICS CO1 : {}".format(topic_lst))
+            topic_set = set(topic_lst)
+            needed_topics = self.intersection(topic_set, device_set)
+            #_log.debug("TOPICS CO2 : {}".format(needed_topics))
+            if needed_topics:
+                #_log.debug("TOPICS CO3: {}".format(device_topics))
+                device.ingest_data(now, device_topics)
+
     def new_data(self, peer, sender, bus, topic, header, message):
         """
         Call back method for curtailable device data subscription.
@@ -632,23 +671,10 @@ class ILCAgent(Agent):
         data, meta = message
         now = parse_timestamp_string(header[headers_mod.TIMESTAMP])
         data_topics, meta_topics = self.breakout_all_publish(topic, message)
-        data_t = list(data_topics.keys())
-        _log.debug("TOPICS0: {} -- {}".format(data_t, self.all_data_topics))
-        device_topics = {}
-        device_t = self.intersection(self.all_data_topics, data_t)
-        for topic, values in data_topics.items():
-            if topic in device_t:
-                device_topics[topic] = values
-        device_set = set(list(device_topics.keys()))
-        for device, topic_lst in self.data_topics.items():
-            topic_set = set(topic_lst)
-            needed_topics = self.intersection(topic_set, device_set)
-            _log.debug("TOPICS1 : {}".format(needed_topics))
-            if needed_topics:
-                _log.debug("TOPICS2: {}".format(device_topics))
-                device.ingest_data(now, device_topics)
+        self.new_criteria_data(data_topics, now)
+        self.new_control_data(data_topics, now)
         # self.criteria_container.ingest_data(now, data_topics)
-        self.control_container.ingest_data(now, data_topics)
+        # self.control_container.ingest_data(now, data_topics)
 
     def intersection(self, topics, data):
         topics = set(topics)
@@ -911,8 +937,10 @@ class ILCAgent(Agent):
             _log.debug("State: {} - action info: {} - device {}, {} -- remaining {}".format(self.state, action_info, device_name, device_id, remaining_devices))
             if action_info is None:
                 continue
-            control_pt, control_value, control_load, revert_priority, revert_value = self.determine_curtail_parms(action_info, device)
-
+            control_pt, control_value, control_load, revert_priority, revert_value, error = self.determine_curtail_parms(action_info, device)
+            if error:
+                gevent.sleep(1)
+                continue
             try:
                 if self.kill_signal_received:
                     break
@@ -922,7 +950,7 @@ class ILCAgent(Agent):
                 topic = "/".join([prefix, control_pt, "Actuate"])
                 message = {"Value": control_value, "PreviousValue": revert_value}
                 self.publish_record(topic, message)
-            except RemoteError as ex:
+            except (RemoteError, gevent.sleep) as ex:
                 _log.warning("Failed to set {} to {}: {}".format(control_pt, control_value, str(ex)))
                 continue
 
@@ -1029,10 +1057,11 @@ class ILCAgent(Agent):
                     control_load = float(load_equation.subs(load_point_values))
                 except:
                     _log.debug("Could not convert expression for load estimation: ")
-
+        error = False
         try:
             revert_value = self.vip.rpc.call(device_actuator, "get_point", control_pt).get(timeout=30)
-        except RemoteError as ex:
+        except (RemoteError, gevent.Timeout) as ex:
+            error = True
             _log.warning("Failed get point for revert value storage {} (RemoteError): {}".format(control_pt, str(ex)))
             revert_value = None
 
@@ -1058,7 +1087,7 @@ class ILCAgent(Agent):
         elif control["maximum"] is not None and control["minimum"] is None:
             control_value = min(control["maximum"], control_value)
 
-        return control_pt, control_value, control_load, revert_priority, revert_value
+        return control_pt, control_value, control_load, revert_priority, revert_value, error
 
     def setup_release(self):
         if self.stagger_release and self.devices:

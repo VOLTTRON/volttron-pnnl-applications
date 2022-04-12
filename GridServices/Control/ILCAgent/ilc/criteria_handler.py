@@ -136,7 +136,6 @@ class CriteriaContainer(object):
         topic_list = []
         for device in self.devices.values():
             topic_list.extend(device.get_criteria_topic_list())
-            _log.debug("TOPIC1: {}".format(topic_list))
             self.topics_per_device[device] = list(topic_list)
             topic_list = []
         return self.topics_per_device

@@ -98,8 +98,8 @@ def create_device_topic_map(arg_list, default_topic=""):
 def fix_up_point_name(point, default_topic=""):
     if isinstance(point, list):
         device, point = point
-        point = clean_text(point)
+        #point = clean_text(point)
         return device + '/' + point, device
     elif isinstance(point, str):
-        point = clean_text(point)
+        #point = clean_text(point)
         return default_topic + '/' + point, default_topic

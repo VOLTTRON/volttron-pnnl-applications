@@ -623,6 +623,7 @@ class ILCAgent(Agent):
         :param message:
         :return:
         """
+
         if self.kill_signal_received:
             return
 
@@ -641,10 +642,10 @@ class ILCAgent(Agent):
         device_set = set(list(device_topics.keys()))
         for device, topic_lst in self.data_topics.items():
             topic_set = set(topic_lst)
-            common = topic_set.intersection(device_set)
-            _log.debug("TOPICS DEBUG: {}".format(common))
-            if common:
-                _log.debug("TOPICS: {}".format(device_topics))
+            needed_topics = self.intersection(topic_set, device_set)
+            _log.debug("TOPICS1 : {}".format(needed_topics))
+            if needed_topics:
+                _log.debug("TOPICS2: {}".format(device_topics))
                 device.ingest_data(now, device_topics)
         # self.criteria_container.ingest_data(now, data_topics)
         self.control_container.ingest_data(now, data_topics)

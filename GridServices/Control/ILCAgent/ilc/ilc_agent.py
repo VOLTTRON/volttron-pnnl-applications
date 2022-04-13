@@ -63,6 +63,7 @@ from ilc.curtailment_handler import ControlCluster, ControlContainer
 from ilc.criteria_handler import CriteriaContainer, CriteriaCluster, parse_sympy
 
 from transitions import Machine
+import time
 # from transitions.extensions import GraphMachine as Machine
 __author__ = "Robert Lutes, robert.lutes@pnnl.gov"
 __version__ = "2.0.1"
@@ -628,14 +629,11 @@ class ILCAgent(Agent):
         for device, topic_lst in self.criteria_topics.items():
             topic_set = set(topic_lst)
             needed_topics = self.intersection(topic_set, device_set)
-            #_log.debug("TOPICS CR1 : {}".format(needed_topics))
             if needed_topics:
-                #_log.debug("TOPICS CR2: {}".format(device_topics))
                 device.ingest_data(now, device_topics)
 
     def new_control_data(self, data_topics, now):
         data_t = list(data_topics.keys())
-        #_log.debug("TOPICS CO0: {} -- {}".format(data_t, self.all_control_topics))
         device_topics = {}
         device_control_topics = self.intersection(self.all_control_topics, data_t)
         for topic, values in data_topics.items():
@@ -643,12 +641,9 @@ class ILCAgent(Agent):
                 device_topics[topic] = values
         device_set = set(list(device_topics.keys()))
         for device, topic_lst in self.control_topics.items():
-            #_log.debug("TOPICS CO1 : {}".format(topic_lst))
             topic_set = set(topic_lst)
             needed_topics = self.intersection(topic_set, device_set)
-            #_log.debug("TOPICS CO2 : {}".format(needed_topics))
             if needed_topics:
-                #_log.debug("TOPICS CO3: {}".format(device_topics))
                 device.ingest_data(now, device_topics)
 
     def new_data(self, peer, sender, bus, topic, header, message):
@@ -662,19 +657,19 @@ class ILCAgent(Agent):
         :param message:
         :return:
         """
-
+        start = time.time()
         if self.kill_signal_received:
             return
-
         _log.info("Data Received for {}".format(topic))
-        self.sync_status()
+        # self.sync_status()
         data, meta = message
         now = parse_timestamp_string(header[headers_mod.TIMESTAMP])
         data_topics, meta_topics = self.breakout_all_publish(topic, message)
         self.new_criteria_data(data_topics, now)
         self.new_control_data(data_topics, now)
-        # self.criteria_container.ingest_data(now, data_topics)
-        # self.control_container.ingest_data(now, data_topics)
+        end = time.time()
+        duration = end - start
+        _log.debug("TIME: {} -- {}".format(topic, duration))
 
     def intersection(self, topics, data):
         topics = set(topics)
@@ -891,7 +886,7 @@ class ILCAgent(Agent):
             result = "Demand goal has not been set. Current load: ({load}) kW.".format(load=self.avg_power)
             if self.state != 'inactive':
                 self.no_target()
-        self.lock = False
+        # self.lock = False
         self.create_application_status(result)
 
     def modify_load(self):
@@ -970,6 +965,7 @@ class ILCAgent(Agent):
             )
             if est_curtailed >= need_curtailed:
                 break
+        self.lock = False
         self.hold()
 
     def actuator_request(self, score_order):

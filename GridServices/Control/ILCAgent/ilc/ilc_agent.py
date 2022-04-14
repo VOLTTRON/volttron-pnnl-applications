@@ -254,6 +254,7 @@ class ILCAgent(Agent):
         self.power_meter_topic = None
         self.kill_device_topic = None
         self.load_control_modes = ["curtail"]
+        self.schedule = {}
 
     def configure_main(self, config_name, action, contents):
         config = self.default_config.copy()
@@ -446,8 +447,10 @@ class ILCAgent(Agent):
 
         demand_limit_handler = self.demand_limit_handler if not self.sim_running else self.simulation_demand_limit_handler
 
-        if self.demand_schedule is not None:
+        if self.demand_schedule is not None and not self.sim_running:
             self.setup_demand_schedule()
+        elif self.demand_schedule is not None and self.sim_running:
+            self.setup_demand_schedule_sim()
 
         self.vip.pubsub.subscribe(peer="pubsub",
                                   prefix=self.target_agent_subscription,
@@ -495,6 +498,18 @@ class ILCAgent(Agent):
             return True
         else:
             return False
+
+    def setup_demand_schedule_sim(self):
+        if self.demand_schedule:
+            for day_str, schedule_info in self.demand_schedule.items():
+                _day = parser.parse(day_str).weekday()
+                if schedule_info not in ["always_on", "always_off"]:
+                    start = parser.parse(schedule_info["start"]).time()
+                    end = parser.parse(schedule_info["end"]).time()
+                    target = schedule_info.get("target", None)
+                    self.schedule[_day] = {"start": start, "end": end, "target": target}
+                else:
+                    self.schedule[_day] = schedule_info
 
     def setup_demand_schedule(self):
         self.tasks = {}
@@ -683,17 +698,19 @@ class ILCAgent(Agent):
         :param current_time:
         :return:
         """
-        if self.tasks:
-            task_list = []
+        if self.schedule:
             current_time = current_time.replace(tzinfo=self.tz)
-            for key, value in self.tasks.items():
-                if value["start"] <= current_time < value["end"]:
-                    self.demand_limit = value["target"]
-                elif current_time >= value["end"]:
-                    self.demand_limit = None
-                    task_list.append(key)
-            for key in task_list:
-                self.tasks.pop(key)
+            current_schedule = self.schedule[current_time.weekday()]
+            if "always_off" in current_schedule:
+                self.demand_limit = None
+                return
+            _start = current_schedule["start"]
+            _end = current_schedule["end"]
+            _target = current_schedule["target"]
+            if _start <= current_time.time() < _end:
+                self.demand_limit = _target
+            else:
+                self.demand_limit = None
 
     def handle_agent_kill(self, peer, sender, bus, topic, headers, message):
         """
@@ -817,9 +834,14 @@ class ILCAgent(Agent):
 
         finally:
             try:
-                headers = {
-                    headers_mod.DATE: format_timestamp(get_aware_utc_now())
-                }
+                if self.sim_running:
+                    headers = {
+                        headers_mod.DATE: format_timestamp(self.current_time)
+                    }
+                else:
+                    headers = {
+                        headers_mod.DATE: format_timestamp(get_aware_utc_now())
+                    }
                 load_topic = "/".join([self.update_base_topic, self.agent_id, "BuildingPower"])
                 demand_limit = "None" if self.demand_limit is None else self.demand_limit
                 power_message = [
@@ -945,7 +967,7 @@ class ILCAgent(Agent):
                 topic = "/".join([prefix, control_pt, "Actuate"])
                 message = {"Value": control_value, "PreviousValue": revert_value}
                 self.publish_record(topic, message)
-            except (RemoteError, gevent.sleep) as ex:
+            except (RemoteError, gevent.Timeout) as ex:
                 _log.warning("Failed to set {} to {}: {}".format(control_pt, control_value, str(ex)))
                 continue
 
@@ -1232,9 +1254,14 @@ class ILCAgent(Agent):
             application_state = "Inactive"
             if self.devices:
                 application_state = "Active"
-            headers = {
-                headers_mod.DATE: format_timestamp(get_aware_utc_now()),
-            }
+            if self.sim_running:
+                headers = {
+                    headers_mod.DATE: format_timestamp(self.current_time)
+                }
+            else:
+                headers = {
+                    headers_mod.DATE: format_timestamp(get_aware_utc_now()),
+                }
 
             application_message = [
                 {
@@ -1277,10 +1304,16 @@ class ILCAgent(Agent):
                         control_time = item[4]
                         device_state = "Active"
 
-                headers = {
-                    headers_mod.DATE: format_timestamp(get_aware_utc_now()),
-                    "ApplicationName": self.agent_id,
-                }
+                if self.sim_running:
+                    headers = {
+                        headers_mod.DATE: format_timestamp(self.current_time),
+                        "ApplicationName": self.agent_id,
+                    }
+                else:
+                    headers = {
+                        headers_mod.DATE: format_timestamp(get_aware_utc_now()),
+                        "ApplicationName": self.agent_id,
+                    }
 
                 device_msg = [
                     {
@@ -1349,7 +1382,10 @@ class ILCAgent(Agent):
         return
 
     def publish_record(self, topic_suffix, message):
-        headers = {headers_mod.DATE: format_timestamp(get_aware_utc_now())}
+        if self.sim_running:
+            headers = {headers_mod.DATE: format_timestamp(self.current_time)}
+        else:
+            headers = {headers_mod.DATE: format_timestamp(get_aware_utc_now())}
         message["TimeStamp"] = format_timestamp(self.current_time)
         topic = "/".join([self.record_topic, topic_suffix])
         self.vip.pubsub.publish("pubsub", topic, headers, message).get()

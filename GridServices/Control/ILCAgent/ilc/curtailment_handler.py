@@ -156,7 +156,7 @@ class DeviceStatus(object):
         message = self.current_device_values
         message["Status"] = self.command_status
         topic = "/".join([self.logging_topic, self.default_device, "DeviceStatus"])
-        publish_data(time_stamp, message, topic, self.parent.vip.pubsub.publish)
+        # publish_data(time_stamp, message, topic, self.parent.vip.pubsub.publish)
 
 
 class Controls(object):

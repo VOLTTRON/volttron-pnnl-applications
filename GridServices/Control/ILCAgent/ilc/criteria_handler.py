@@ -314,7 +314,7 @@ class StatusCriterion(BaseCriterion):
     def ingest_data(self, time_stamp, data):
         if self.point_name in data:
             value = data[self.point_name]
-            self.publish_data(self.point_name, value, time_stamp)
+            # self.publish_data(self.point_name, value, time_stamp)
             self.current_status = bool(data[self.point_name])
 
 
@@ -399,7 +399,7 @@ class FormulaCriterion(BaseCriterion):
             if topic in data:
                 if not self.status or point not in self.update_points.get("nc", set()):
                     value = data[topic]
-                    self.publish_data(topic, value, time_stamp)
+                    # self.publish_data(topic, value, time_stamp)
                     self.current_operation_values[point] = value
 
     def criteria_status(self, status):

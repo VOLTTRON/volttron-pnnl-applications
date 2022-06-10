@@ -1,0 +1,51 @@
+---
+analysis_name: HeatRecoveryRcx
+actuation_mode: PASSIVE
+
+
+device:
+  campus: campus
+  building: building
+  unit: rtu4
+
+arguments:
+  point_mapping:
+    outdoor_air_temperature: OutdoorAirTemperature
+    supply_fan_status: SupplyFanStatus
+    supply_fan_speed_percent: SupplyFanSpeedPercent
+    exhaust_fan_status: ExhaustFanStatus
+    exhaust_fan_speed_percent: ExhaustFanSpeedPercent
+    return_air_temperature: ReturnAirTemperature
+    mixed_air_temperature: MixedAirTemp
+    outdoor_damper_signal: Damper
+    cool_call: CompressorStatus
+    supply_fan_speed: SupplyFanSpeed
+    heat_return_temperature: HrWheelLeavingAirTemperature
+    heat_return_status: HrWheelEnabled
+    discharge_temperature_set_point: DischargeAirTemperatureSetPoint
+
+  timezone: US/Pacific
+  no_required_data: 4
+  oat_low_threshold: 20.0
+  oat_high_threshold: 120.0
+  eat_low_threshold: 50.0
+  eat_high_threshold: 90.0
+  hrt_low_threshold: -20.0
+  hrt_high_threshold: 120.0
+  oa_ea_low_deadband: 2.0
+  oa_ea_high_deadband: 5.0
+  oa_sat_low_deadband: 8.0
+  oa_sat_high_deadband: 2.0
+  hre_recovering_threshold: 50.0
+  rated_cfm: 1000.0
+  expected_hre: 0.5
+  eer: 20.0
+  hr_status_threshold: 0.5
+  sf_status_threshold: 0.5  # threshold of determining if sf is on (status)
+  sf_speed_threshold: 30  # threshold for determining if sf is on (speed)
+  temp_diff_threshold: 4.0
+
+  run_interval: 4
+  number_required_data_points: 4
+  max_dx_time: 30
+  hr_cond: null

@@ -66,7 +66,7 @@ from transitions import Machine
 import time
 # from transitions.extensions import GraphMachine as Machine
 __author__ = "Robert Lutes, robert.lutes@pnnl.gov"
-__version__ = "2.0.1"
+__version__ = "2.0.2"
 
 setup_logging()
 _log = logging.getLogger(__name__)
@@ -495,6 +495,7 @@ class ILCAgent(Agent):
 
     def confirm_start_release(self):
         if self.action_end is not None and self.current_time >= self.action_end:
+            self.lock = True
             return True
         else:
             return False
@@ -634,7 +635,6 @@ class ILCAgent(Agent):
 
     def new_criteria_data(self, data_topics, now):
         data_t = list(data_topics.keys())
-        #_log.debug("TOPICS CR0: {} -- {}".format(data_t, self.all_criteria_topics))
         device_topics = {}
         device_criteria_topics = self.intersection(self.all_criteria_topics, data_t)
         for topic, values in data_topics.items():
@@ -828,7 +828,7 @@ class ILCAgent(Agent):
             if self.lock:
                 return
 
-            if len(self.bldg_power) < 0:
+            if len(self.bldg_power) < 5:
                 return
             self.check_load()
 
@@ -902,7 +902,6 @@ class ILCAgent(Agent):
                 if self.state != 'inactive':
                     result = "Current load of {} kW meets demand goal of {} kW.".format(self.avg_power,
                                                                                         self.demand_limit)
-                    self.lock = True
                     self.release()
         else:
             result = "Demand goal has not been set. Current load: ({load}) kW.".format(load=self.avg_power)

@@ -1081,6 +1081,7 @@ class ILCAgent(Agent):
             error = True
             _log.warning("Failed get point for revert value storage {} (RemoteError): {}".format(control_pt, str(ex)))
             revert_value = None
+            return control_pt, None, control_load, revert_priority, revert_value, error
 
         if control_method.lower() == "offset":
             control_value = revert_value + control["offset"]

@@ -376,7 +376,8 @@ class HeatRecoveryAgent(Agent):
                 point_key = self.cfg.arguments.point_mapping.get_key(k)
                 self.value_map[point_key] = v
             except (KeyError, ValueError) as ex:
-                _log.warning(f"The value: {k} is not found in point_mapping values.")
+                continue
+                #_log.warning(f"The value: {k} is not found in point_mapping values.")
 
         # self.oatemp_values = []
         # self.sf_status_values = []

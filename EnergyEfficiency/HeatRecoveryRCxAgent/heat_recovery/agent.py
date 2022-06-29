@@ -542,6 +542,8 @@ class HeatRecoveryAgent(Agent):
         self.sensor_limit = []
         self.sensor_limit_msg = ""
         self.timestamp_array = []
+        self.oatemp_sat_sp_close_condition = []
+        self.oatemp_eatemp_close_condition = []
 
     def clear_diagnostics(self):
         self.temp_sensor_dx.clear_data()

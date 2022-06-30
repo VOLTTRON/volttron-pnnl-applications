@@ -3,6 +3,7 @@ import logging
 import os
 import sys
 from copy import deepcopy
+from collections import defaultdict
 from dataclasses import dataclass
 from datetime import timedelta as td, datetime
 from pathlib import Path
@@ -149,7 +150,7 @@ class HeatRecoveryAgent(Agent):
         # A dictionary with keys the arguments.point_map keys and the value the last n values
         # for that point on the bus.
         #
-        self.value_map = {}
+        self.value_map = defaultdict(list)
 
         # self.oatemp_name = "OutdoorAirTemperature"
         # self.sf_status_name = "SupplyFanStatus"
@@ -364,17 +365,14 @@ class HeatRecoveryAgent(Agent):
         data_message = message[0]
 
         # Re-initialize the value mappings
-        for k in self.cfg.arguments.point_mapping.get_keys():
-            self.value_map[k] = []
+        self.value_map = defaultdict(list, keys=self.cfg.arguments.point_mapping.get_keys())
 
         # k in this case is both the key of the message and
         # the value of the arguments.point_mapping.key
         for k, v in data_message.items():
-            # if not v:
-                # continue
             try:
                 point_key = self.cfg.arguments.point_mapping.get_key(k)
-                self.value_map[point_key] = v
+                self.value_map[point_key].append(v)
             except (KeyError, ValueError) as ex:
                 continue
                 #_log.warning(f"The value: {k} is not found in point_mapping values.")

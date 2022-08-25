@@ -930,8 +930,8 @@ class ILCAgent(Agent):
         est_curtailed = 0.0
         remaining_devices = score_order[:]
 
-        if self.control_mode.lower() != "dollar":
-            for device in self.devices:
+        for device in self.devices:
+            if device[8] != "dollar":
                 current_tuple = (device[0], device[1], device[7])
                 if current_tuple in remaining_devices:
                     remaining_devices.remove(current_tuple)
@@ -952,7 +952,7 @@ class ILCAgent(Agent):
             _log.debug("State: {} - action info: {} - device {}, {} -- remaining {}".format(self.state, action_info, device_name, device_id, remaining_devices))
             if action_info is None:
                 continue
-            control_pt, control_value, control_load, revert_priority, revert_value, error = self.determine_curtail_parms(action_info, device)
+            control_pt, control_value, control_load, revert_priority, revert_value, control_mode, error = self.determine_curtail_parms(action_info, device)
             if error:
                 gevent.sleep(1)
                 continue
@@ -971,22 +971,33 @@ class ILCAgent(Agent):
 
             est_curtailed += control_load
             self.control_container.get_device((device_name, actuator)).increment_control(device_id)
-            self.devices.append(
-                [
-                    device_name,
-                    device_id,
-                    control_pt,
-                    revert_value,
-                    control_load,
-                    revert_priority,
-                    format_timestamp(self.current_time),
-                    actuator
-                 ]
-            )
+            if self.update_devices(device_name, device_id):
+                self.devices.append(
+                    [
+                        device_name,
+                        device_id,
+                        control_pt,
+                        revert_value,
+                        control_load,
+                        revert_priority,
+                        format_timestamp(self.current_time),
+                        actuator,
+                        control_mode
+                     ]
+                )
             if est_curtailed >= need_curtailed:
                 break
         self.lock = False
         self.hold()
+
+    def update_devices(self, device_name, device_id):
+        """
+        Update devices list with only newly controlled devices.
+        """
+        for device in self.devices:
+            if device_name in device and device_id in device:
+                return False
+        return True
 
     def actuator_request(self, score_order):
         """
@@ -1054,6 +1065,7 @@ class ILCAgent(Agent):
         control_load = control["load"]
         revert_priority = control["revert_priority"]
         control_method = control["control_method"]
+        control_mode = control["control_mode"]
 
         control_pt = self.base_rpc_path(path=contol_pt)
 
@@ -1104,7 +1116,7 @@ class ILCAgent(Agent):
         elif control["maximum"] is not None and control["minimum"] is None:
             control_value = min(control["maximum"], control_value)
 
-        return control_pt, control_value, control_load, revert_priority, revert_value, error
+        return control_pt, control_value, control_load, revert_priority, revert_value, control_mode, error
 
     def setup_release(self):
         if self.stagger_release and self.devices:

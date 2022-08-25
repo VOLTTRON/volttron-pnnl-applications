@@ -278,7 +278,7 @@ class ControlManager(object):
 
 class ControlSetting(object):
     def __init__(self, logging_topic, parent, point=None, value=None, load=None, offset=None, maximum=None, minimum=None,
-                 revert_priority=None, equation=None, control_method=None,
+                 revert_priority=None, equation=None, control_method=None, control_mode="comfort",
                  condition="", conditional_args=[], default_device=""):
         if control_method is None:
             raise ValueError("Missing 'control_method' configuration parameter!")
@@ -292,6 +292,7 @@ class ControlSetting(object):
         self.value = value
 
         self.offset = offset
+        self.control_mode = control_mode
         self.revert_priority = revert_priority
         self.maximum = maximum
         self.minimum = minimum
@@ -365,7 +366,8 @@ class ControlSetting(object):
                 'equation_args': self.equation_args,
                 'control_method': self.control_method,
                 'maximum': self.maximum,
-                'minimum': self.minimum
+                'minimum': self.minimum,
+                'control_mode': self.control_mode
             }
         elif self.control_method.lower() == 'offset':
             return {
@@ -375,7 +377,8 @@ class ControlSetting(object):
                 'revert_priority': self.revert_priority,
                 'control_method': self.control_method,
                 'maximum': self.maximum,
-                'minimum': self.minimum
+                'minimum': self.minimum,
+                'control_mode': self.control_mode
             }
         elif self.control_method.lower() == 'value':
             return {
@@ -385,7 +388,8 @@ class ControlSetting(object):
                 'revert_priority': self.revert_priority,
                 'control_method': self.control_method,
                 'maximum': self.maximum,
-                'minimum': self.minimum
+                'minimum': self.minimum,
+                'control_mode': self.control_mode
             }
 
     def check_condition(self):

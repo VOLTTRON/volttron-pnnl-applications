@@ -183,7 +183,6 @@ class Criteria(object):
         device_topic = criteria.pop("device_topic", "")
         self.device_topics = set()
         self.device_topics.add(device_topic)
-        _log.debug("DEVICE_TOPICS: {}".format(self.device_topics))
         self.criteria = {}
         for name, criterion in criteria.items():
             self.add(name, criterion, device_topic, logging_topic, parent)
@@ -286,7 +285,6 @@ class BaseCriterion(object):
         self.parent.vip.pubsub.publish("pubsub", topic, headers, message).get()
 
     def get_topic_list(self):
-        # _log.debug("TOPICS4: {}".format(self.topic_set))
         return self.topic_set
 
 

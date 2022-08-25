@@ -235,7 +235,6 @@ class Controls(object):
             topics.extend(list(cls.device_topic_map.keys()))
         for state, cls in self.device_status.items():
             topics.extend(list(cls.device_topic_map.keys()))
-        # _log.debug("TOPICS CO: {}".format(topics))
         return topics
 
 

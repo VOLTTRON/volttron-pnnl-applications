@@ -468,7 +468,6 @@ class ILCAgent(Agent):
             self.all_criteria_topics.extend(lst)
         for lst in self.control_topics.values():
             self.all_control_topics.extend(lst)
-        _log.debug("TOPICS0: {} -- {}".format(self.control_topics, self.all_control_topics))
 
     @Core.receiver("onstop")
     def shutdown(self, sender, **kwargs):

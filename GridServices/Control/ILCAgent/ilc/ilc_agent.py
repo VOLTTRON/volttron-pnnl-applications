@@ -1171,7 +1171,7 @@ class ILCAgent(Agent):
         _log.debug("Controlled devices for release reverse sort: {}".format(currently_controlled))
 
         for item in range(self.device_group_size.pop(0)):
-            device, device_id, control_pt, revert_val, control_load, revert_priority, modified_time, actuator = controlled_iterate[item]
+            device, device_id, control_pt, revert_val, control_load, revert_priority, modified_time, actuator, control_mode = controlled_iterate[item]
             revert_value = self.get_revert_value(device, revert_priority, revert_val)
 
             _log.debug("Returned revert value: {}".format(revert_value))

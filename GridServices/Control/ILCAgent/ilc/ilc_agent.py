@@ -1397,7 +1397,7 @@ class ILCAgent(Agent):
         key_list = []
         for key, value in self.tasks.items():
             if (start_time < value["end"] and end_time > value["start"]) or (
-                    value["start"] <= start_time <= value["end"]):
+                    value["start"] <= start_time < value["end"]):
                 key_list.append(key)
         for key in key_list:
             self.tasks.pop(key)

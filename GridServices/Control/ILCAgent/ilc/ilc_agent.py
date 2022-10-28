@@ -691,11 +691,13 @@ class ILCAgent(Agent):
 
     def check_schedule(self, current_time):
         """
-        Simulation cannot use clock time, this function handles the CBP target scheduling
-        Energy simulations.
+        Simulation cannot use clock time, this function handles the CBP target scheduling for
+        Energy simulations and updating target based on pubsub message for transactive type
+        simulation.
         :param current_time:
         :return:
         """
+        # Handles load scheduling in configuration file
         if self.schedule:
             current_time = current_time.replace(tzinfo=self.tz)
             current_schedule = self.schedule[current_time.weekday()]
@@ -709,6 +711,19 @@ class ILCAgent(Agent):
                 self.demand_limit = _target
             else:
                 self.demand_limit = None
+        # Handles updating the target that is sent via pub-sub by transactive type application
+        # and stored in tasks in simulation_demand_limit_handler
+        if self.tasks:
+            task_list = []
+            current_time = current_time.replace(tzinfo=self.tz)
+            for key, value in self.tasks.items():
+                if value["start"] <= current_time < value["end"]:
+                    self.demand_limit = value["target"]
+                elif current_time >= value["end"]:
+                    self.demand_limit = None
+                    task_list.append(key)
+            for key in task_list:
+                self.tasks.pop(key)
 
     def handle_agent_kill(self, peer, sender, bus, topic, headers, message):
         """
@@ -1208,11 +1223,12 @@ class ILCAgent(Agent):
         :param revert_value:
         :return:
         """
+        # TODO:  Resolve issue with revert_priority as key to do BACNet release.  This is not ideal solution.
         current_device_list = []
         if revert_priority is None:
             return None
 
-        for controlled_device in evices:
+        for controlled_device in self.devices:
             if controlled_device[0] == device:
                 current_device_list.append(controlled_device)
 

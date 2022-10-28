@@ -59,14 +59,14 @@ from volttron.platform.vip.agent import Agent, Core
 from volttron.platform.jsonrpc import RemoteError
 from ilc.ilc_matrices import (extract_criteria, calc_column_sums,
                               normalize_matrix, validate_input)
-from ilc.curtailment_handler import ControlCluster, ControlContainer
+from ilc.control_handler import ControlCluster, ControlContainer
 from ilc.criteria_handler import CriteriaContainer, CriteriaCluster, parse_sympy
 
 from transitions import Machine
 import time
 # from transitions.extensions import GraphMachine as Machine
 __author__ = "Robert Lutes, robert.lutes@pnnl.gov"
-__version__ = "2.0.2"
+__version__ = "2.1.2"
 
 setup_logging()
 _log = logging.getLogger(__name__)
@@ -282,7 +282,6 @@ class ILCAgent(Agent):
         self.agent_id = config.get("agent_id", APP_NAME)
         dashboard_topic = config.get("dashboard_topic")
         ilc_start_topic = self.agent_id
-        self.control_mode = config.get("control_mode", "dollar")
         self.load_control_modes = config.get("load_control_modes", ["curtail"])
 
         campus = config.get("campus", "")
@@ -886,7 +885,7 @@ class ILCAgent(Agent):
         :param current_time:
         :return:
         """
-        _log.debug("Checking building load: {} -- mode: {}".format(self.demand_limit, self.control_mode))
+        _log.debug("Checking building load: {}".format(self.demand_limit))
 
         if self.demand_limit is not None:
             if "curtail" in self.load_control_modes and self.avg_power > self.demand_limit + self.demand_threshold:
@@ -906,6 +905,7 @@ class ILCAgent(Agent):
             result = "Demand goal has not been set. Current load: ({load}) kW.".format(load=self.avg_power)
             if self.state != 'inactive':
                 self.no_target()
+        _log.debug("Result: {}".format(result))
         # self.lock = False
         self.create_application_status(result)
 
@@ -1212,7 +1212,7 @@ class ILCAgent(Agent):
         if revert_priority is None:
             return None
 
-        for controlled_device in self.devices:
+        for controlled_device in evices:
             if controlled_device[0] == device:
                 current_device_list.append(controlled_device)
 

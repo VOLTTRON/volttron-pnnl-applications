@@ -1,0 +1,68 @@
+{
+    "campus": "PNNL",
+    "building_db": "small_office.historian.sqlite",
+    "campus_db": "campus.historian.sqlite",
+    "city_db": "city.historian.sqlite",
+    "building_topic_list":  ["SMALL_OFFICE_VANILLA", "SMALL_OFFICE_ILC", "SMALL_OFFICE_DR"],
+    "device_list": ["HP1", "HP2", "HP3", "HP5", "HP6", "HP7", "HP8", "HP9", "HP10"],
+    "power_point": "WholeBuildingPower",
+    "devices":{
+        "heatpumps": {
+            "device_list": [
+                "HP1",
+                "HP2",
+                "HP3",
+                "HP4",
+                "HP5",
+                "HP6",
+                "HP7",
+                "HP8",
+                "HP9",
+                "HP10"
+            ],
+            "device_data": {
+                "ZoneCoolingTemperatureSetPoint": {
+                    "secondary_axis": false,
+                    "units": "Temperature (\u00B0F)",
+                    "combine": true
+                },
+                "ZoneTemperature": {
+                    "secondary_axis": false,
+                    "units": "Temperature (\u00B0F)",
+                    "combine": false
+                },
+                "FirstStageCooling": {
+                    "secondary_axis": true,
+                    "units": "Status",
+                    "combine": false
+                }
+            }
+        },
+        "lights": {
+            "device_list": [
+                "LIGHTING/GS1",
+                "LIGHTING/GE2",
+                "LIGHTING/GN3",
+                "LIGHTING/GW4",
+                "LIGHTING/GC5",
+                "LIGHTING/TS11",
+                "LIGHTING/TE12",
+                "LIGHTING/TN13",
+                "LIGHTING/TW14",
+                "LIGHTING/TC15"
+            ],
+           "device_data": {
+               "DimmingLevelOutput": {
+                   "secondary_axis": false,
+                   "units":  "Command",
+                   "combine":  true
+               },
+               "Power": {
+                   "secondary_axis":  true,
+                   "units":  "watts",
+                   "combine":  false
+               }
+           }
+        }
+    }
+}

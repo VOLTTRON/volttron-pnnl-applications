@@ -1,10 +1,7 @@
 {
     "campus": "PNNL",
     "building_db": "small_office.historian.sqlite",
-    "campus_db": "campus.historian.sqlite",
-    "city_db": "city.historian.sqlite",
     "building_topic_list":  ["SMALL_OFFICE_VANILLA", "SMALL_OFFICE_ILC", "SMALL_OFFICE_DR"],
-    "device_list": ["HP1", "HP2", "HP3", "HP5", "HP6", "HP7", "HP8", "HP9", "HP10"],
     "power_point": "WholeBuildingPower",
     "devices":{
         "heatpumps": {

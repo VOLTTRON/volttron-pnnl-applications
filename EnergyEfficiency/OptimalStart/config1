@@ -1,0 +1,46 @@
+{
+    "campus": "PNNL",
+    "building": "BUILDING",
+    "system": "HP6",
+    "system_status_point": "OccupancyMode",
+    "local_tz": "US/Pacific",
+    "zone_point_names": {
+        "zonetemperature": "ZoneTemperature",
+        "coolingsetpoint": "CoolingTemperatureSetPoint",
+        "heatingsetpoint": "HeatingTemperatureSetpoint",
+        "supplyfanstatus": "SupplyFanStatus",
+        "outdoorairtemperature": "OutdoorAirTemperature",
+        "heating": "FirstStageHeating",
+        "cooling": "FirstStageCooling"
+    },
+    "earliest_start_time": 120,
+    "latest_start_time": 10,
+    "schedule": {
+        "Monday": {
+            "start": "6:30",
+            "end": "18:00"
+        },
+        "Tuesday": {
+            "start": "6:30",
+            "end": "18:00"
+        },
+        "Wednesday": {
+            "start": "6:30",
+            "end": "18:00"
+        },
+        "Thursday": {
+            "start": "6:30",
+            "end": "18:00"
+        },
+        "Friday": {
+            "start": "6:30",
+            "end": "18:00"
+        },
+        "Saturday": "always_off",
+        "Sunday": "always_off"
+    },
+    "zone_control": {
+        "occupied": {"OccupancyMode": 1},
+        "unoccupied": {"OccupancyMode": 0}
+    }
+}

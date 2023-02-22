@@ -1,6 +1,7 @@
 {
     "campus": "PNNL",
     "building_db": "small_office.historian.sqlite",
+    "baseline_building": "SMALL_OFFICE_VANILLA",
     "building_topic_list":  ["SMALL_OFFICE_VANILLA", "SMALL_OFFICE_ILC", "SMALL_OFFICE_DR"],
     "power_point": "WholeBuildingPower",
     "devices":{

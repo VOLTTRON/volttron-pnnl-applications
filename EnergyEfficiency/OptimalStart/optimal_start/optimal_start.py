@@ -88,7 +88,7 @@ class OptimalStart(Agent):
         self.precontrol_flag = False
         self.system_status_point = config.get("system_status_point", None)
         self.zone_point_names = config.get("zone_point_names")
-        self.actuator = config.get("actuator", "platform.actuator1")
+        self.actuator = config.get("actuator", "platform.actuator")
         self.earliest_start_time = config.get("earliest_start_time", 120)
         self.latest_start_time = config.get("latest_start_time", 10)
         self.t_error = config.get("allowable_setpoint_deviation", 0.5)
@@ -109,7 +109,7 @@ class OptimalStart(Agent):
         self.models = {"j": None, "s": None, "c": None}
         try:
             for tag in self.models:
-                _file = self.model_path + "/{}.pickle".format(tag)
+                _file = self.model_path + "/{}_{}.pickle".format(self.device, tag)
                 with open(_file, 'rb') as f:
                     _cls = dill.load(f)
                 self.models[tag] = _cls
@@ -179,9 +179,13 @@ class OptimalStart(Agent):
         :return:
         """
         for tag, model in self.models.items():
-            model.train(self.df)
             try:
-                _file = self.model_path + "/{}.pickle".format(tag)
+                model.train(self.df)
+            except:
+                _log.debug("ERROR training model: {}".format(tag))
+                continue
+            try:
+                _file = self.model_path + "/{}_{}.pickle".format(self.device, tag)
                 with open(_file, 'wb') as f:
                     dill.dump(model, file=f)
             except Exception as ex:

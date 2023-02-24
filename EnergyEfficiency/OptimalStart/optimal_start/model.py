@@ -81,9 +81,7 @@ class Model:
     def __init__(self, config, schedule):
         self.latest_start_time = config.get('latest_start_time', 0)
         self.earliest_start_time = config.get('earliest_start_time', 120)
-
         self.t_error = config.get("allowable_setpoint_deviation", 1.0)
-
         self.cooling_trained = False
         self.heating_trained = False
         self.schedule = schedule
@@ -183,17 +181,17 @@ class Carrier(Model):
             if zonetemp + self.t_error < hsp:
                 if not self.h1:
                     return self.earliest_start_time
-                zsp = zonetemp - hsp
+                zsp = hsp - zonetemp
                 coefficient1 = ema(self.h1)
+                start_time = zsp / ((0.0 - oat) / (0 - 32.0) * coefficient1)
             elif zonetemp - self.t_error > csp:
                 if not self.c1:
                     return self.earliest_start_time
                 zsp = zonetemp - csp
                 coefficient1 = ema(self.c1)
+                start_time = zsp / ((100 - oat) / (100 - 65) * coefficient1)
             else:
                 return self.latest_start_time
-
-            start_time = zsp / ((100 - oat)/(100 - 65) * coefficient1)
         else:
             start_time = self.earliest_start_time
         return start_time
@@ -260,6 +258,7 @@ class Siemens(Model):
                 osp = hsp - oat
                 coefficient1 = ema(self.h1)
                 coefficient2 = ema(self.h2)
+                start_time = (coefficient1 * zsp + coefficient2 * zsp * osp / 25.0) * 60.0 + self.adjust_time
             elif zonetemp - self.t_error > csp:
                 if not self.c1 or not self.c2:
                     return self.earliest_start_time
@@ -267,9 +266,9 @@ class Siemens(Model):
                 osp = oat - csp
                 coefficient1 = ema(self.c1)
                 coefficient2 = ema(self.c2)
+                start_time = (coefficient1 * zsp + coefficient2 * zsp * osp / 10.0) * 60.0 + self.adjust_time
             else:
                 return self.latest_start_time
-            start_time = (coefficient1*zsp + coefficient2*zsp*osp/10.0)*60.0 + self.adjust_time
         else:
             start_time = self.earliest_start_time
         return start_time
@@ -320,7 +319,7 @@ class Johnson(Model):
     def train_heating(self, data):
         # cooling trained flag checked
         temp_diff_end = data['heatingsetpoint'][-1] - data['zonetemperature'][-1]
-        data['temp_diff'] = data['zoneheatingsetpoint'] - data['zonetemperature']
+        data['temp_diff'] = data['heatingsetpoint'] - data['zonetemperature']
         if not self.heating_trained:
             data = data[data['heating'] != 0]
             # check if there is cooling data for the training data

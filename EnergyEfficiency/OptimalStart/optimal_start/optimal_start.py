@@ -76,6 +76,7 @@ class OptimalStart(Agent):
         self.campus = config.get("campus", "")
         self.building = config.get("building", "")
         self.device = config.get("system", "")
+        self.results_topic = "record/{}/{}/{}/OptimalStart".format(self.campus, self.building, self.device)
         self.system_rpc_path = ""
         timezone = config.get("local_tz", "UTC")
         self.controller = config.get("controller", "s")
@@ -190,6 +191,16 @@ class OptimalStart(Agent):
                     dill.dump(model, file=f)
             except Exception as ex:
                 _log.debug("Could not store object %s -- %s", tag, ex)
+            try:
+                msg = model.__dict__
+                _log.debug("MODEL: {}".format(msg))
+                if 'schedule' in msg:
+                    sched = msg.pop('schedule')
+                headers = {"Date": format_timestamp(get_aware_utc_now())}
+                self.vip.pubsub.publish("pubsub", self.results_topic, headers, msg)
+            except:
+                _log.debug("ERROR publishing result!")
+                continue
 
     def assign_local_tz(self, _dt):
         """

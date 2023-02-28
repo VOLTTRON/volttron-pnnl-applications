@@ -40,6 +40,8 @@ operated by BATTELLE for the UNITED STATES DEPARTMENT OF ENERGY
 under Contract DE-AC05-76RL01830
 """
 import pandas as pd
+import warnings
+warnings.filterwarnings("ignore", category=DeprecationWarning)
 import logging
 from datetime import timedelta as td, datetime as dt
 import math
@@ -91,16 +93,18 @@ class Model:
             return
         _day = dt.now().weekday()
         schedule = self.schedule[_day]
-        if 'start' in schedule:
-            start = "00:00"
+        if 'start' in schedule and 'earliest' in schedule:
+            start = schedule['earliest']
             end = schedule['start']
         else:
             _log.debug("No start in schedule!!")
             return
+        data['ts'] = pd.to_datetime(data['ts'])
         data['time'] = data['ts']
         data = data.set_index(data['time'])
         data = data.between_time(start, end)
         data = data[data['supplyfanstatus'] != 0]
+        data.to_csv('sort.csv')
         if not data.empty:
             if data['cooling'].sum() > 0:
                 data['temp_diff'] = data['zonetemperature'] - data['coolingsetpoint']
@@ -138,6 +142,7 @@ class Model:
                 htr = htr.append(data.loc[min_slope], ignore_index=True)
             except (IndexError, ValueError) as ex:
                 _log.debug("Model error getting heat transfer rate: %s", ex)
+        htr.to_csv('htr.csv')
         return htr
 
 
@@ -242,7 +247,8 @@ class Siemens(Model):
         preheating = htr['timediff'].sum()
 
         self.h1 = trim(self.h1, h1, 10)
-        h2 = (preheating / 60 - ema(self.c1) * zhsp) / (osp * zhsp / 10)
+        _log.debug("preheating: {} - h1: {} - zhsp: {} -- osp: {}".format(preheating, self.h1, zhsp, osp))
+        h2 = (preheating / 60 - ema(self.h1) * zhsp) / (osp * zhsp / 10)
         self.h2 = trim(self.h2, h2, 10)
 
     def calculate_prestart(self, data):

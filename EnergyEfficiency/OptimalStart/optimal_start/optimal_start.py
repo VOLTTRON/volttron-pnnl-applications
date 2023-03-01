@@ -179,9 +179,17 @@ class OptimalStart(Agent):
          - Save model as pickle on disk for saving state.
         :return:
         """
+        prestart = None
+        if self.result:
+            _now = dt.now()
+            _day = _now.weekday()
+            controller = self.day_map[_day]
+            if controller in self.result:
+                prestart = self.result[controller]
+
         for tag, model in self.models.items():
             try:
-                model.train(self.df)
+                model.train(self.df, prestart)
             except:
                 _log.debug("ERROR training model: {}".format(tag))
                 continue

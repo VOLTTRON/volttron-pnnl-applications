@@ -43,6 +43,7 @@ import pandas as pd
 import warnings
 warnings.filterwarnings("ignore", category=DeprecationWarning)
 import logging
+import datetime
 from datetime import timedelta as td, datetime as dt
 import math
 from volttron.platform.agent.utils import setup_logging
@@ -88,20 +89,27 @@ class Model:
         self.heating_trained = False
         self.schedule = schedule
 
-    def train(self, data):
+    def train(self, data, prestart):
         if data.empty:
             return
         _day = dt.now().weekday()
         schedule = self.schedule[_day]
         if 'start' in schedule and 'earliest' in schedule:
-            start = schedule['earliest']
             end = schedule['start']
+            if prestart is not None:
+                _hours, _minutes = divmod(prestart, 60)
+                _hours = end.hour - _hours
+                _minutes = end.minute - _minutes
+                start = datetime.time(hour=_hours, minute=_minutes)
+            else:
+                start = schedule['earliest']
         else:
             _log.debug("No start in schedule!!")
             return
         data['ts'] = pd.to_datetime(data['ts'])
         data['time'] = data['ts']
         data = data.set_index(data['time'])
+        data.index = pd.to_datetime(data.index)
         data = data.between_time(start, end)
         data = data[data['supplyfanstatus'] != 0]
         data.to_csv('sort.csv')
@@ -142,6 +150,8 @@ class Model:
                 htr = htr.append(data.loc[min_slope], ignore_index=True)
             except (IndexError, ValueError) as ex:
                 _log.debug("Model error getting heat transfer rate: %s", ex)
+        if len(htr) == 1 and int_tot > self.t_error:
+            htr = htr.append(data.iloc[-1], ignore_index=True)
         htr.to_csv('htr.csv')
         return htr
 
@@ -218,6 +228,7 @@ class Siemens(Model):
             return
         zcsp = htr['zonetemperature'][0] - htr['coolingsetpoint'][0]
         osp = htr['outdoortemperature'][0] - htr['coolingsetpoint'][0]
+        # zcspf = htr['zonetemperature'][-1] - htr['coolingsetpoint'][-1]
         htr['timediff'] = htr['ts'].diff().dt.total_seconds() / 60
         time_avg = htr['timediff'].mean()
         if math.isnan(time_avg):
@@ -237,7 +248,7 @@ class Siemens(Model):
             _log.debug("Siemens debug cooling htr returned empty!")
             return
         zhsp = htr['heatingsetpoint'][0] - htr['zonetemperature'][0]
-        osp = htr['heatingsetpoint'][0] - htr['outdoortemperature'][0]
+        osp = htr['outdoortemperature'][0] - htr['heatingsetpoint'][0]
         htr['timediff'] = htr['ts'].diff().dt.total_seconds() / 60
         time_avg = htr['timediff'].mean()
         if math.isnan(time_avg):
@@ -248,7 +259,7 @@ class Siemens(Model):
 
         self.h1 = trim(self.h1, h1, 10)
         _log.debug("preheating: {} - h1: {} - zhsp: {} -- osp: {}".format(preheating, self.h1, zhsp, osp))
-        h2 = (preheating / 60 - ema(self.h1) * zhsp) / (osp * zhsp / 10)
+        h2 = (preheating / 60 - ema(self.h1) * zhsp) / (osp * zhsp / 25)
         self.h2 = trim(self.h2, h2, 10)
 
     def calculate_prestart(self, data):

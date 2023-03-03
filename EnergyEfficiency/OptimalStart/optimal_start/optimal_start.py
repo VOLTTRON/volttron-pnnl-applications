@@ -43,14 +43,13 @@ under Contract DE-AC05-76RL01830
 import os
 import sys
 import logging
-import csv
-from dateutil import parser, tz
 from datetime import timedelta as td, datetime as dt
 
 import pandas as pd
 import dill
 from dateutil.parser import parse
 from .model import Johnson, Siemens, Carrier
+from .data_utils import Data
 from volttron.platform.agent import utils
 from volttron.platform.scheduling import cron
 from volttron.platform.messaging import topics, headers as headers_mod
@@ -76,14 +75,12 @@ class OptimalStart(Agent):
         self.campus = config.get("campus", "")
         self.building = config.get("building", "")
         self.device = config.get("system", "")
-        self.results_topic = "record/{}/{}/{}/OptimalStart".format(self.campus, self.building, self.device)
+        self.results_model = "record/{}/{}/{}/OptimalStartModel".format(self.campus, self.building, self.device)
+        self.results_topic = "record/{}/{}/{}/OptimalStar".format(self.campus, self.building, self.device)
+        self.result = {}
         self.system_rpc_path = ""
         timezone = config.get("local_tz", "UTC")
         self.controller = config.get("controller", "s")
-        try:
-            self.local_tz = tz.gettz(timezone)
-        except:
-            self.local_tz = tz.gettz("UTC")
         # No precontrol code yet, this might be needed in future
         self.precontrols = config.get("precontrols", {})
         self.precontrol_flag = False
@@ -93,8 +90,8 @@ class OptimalStart(Agent):
         self.earliest_start_time = config.get("earliest_start_time", 120)
         self.latest_start_time = config.get("latest_start_time", 10)
         self.t_error = config.get("allowable_setpoint_deviation", 0.5)
+        self.data_handler = Data(self.zone_point_names, timezone, self.device)
         self.system_occ_switch = 0
-        self.df = None
         self.run_sched = None
         self.current_time = None
         self.zone_control = config.get("zone_control", {})
@@ -179,19 +176,12 @@ class OptimalStart(Agent):
          - Save model as pickle on disk for saving state.
         :return:
         """
-        prestart = None
-        if self.result:
-            _now = dt.now()
-            _day = _now.weekday()
-            controller = self.day_map[_day]
-            if controller in self.result:
-                prestart = self.result[controller]
-
         for tag, model in self.models.items():
             try:
-                model.train(self.df, prestart)
-            except:
-                _log.debug("ERROR training model: {}".format(tag))
+                data = self.data_handler.df
+                model.train(data)
+            except Exception as ex:
+                _log.debug("ERROR training model {}: -- {}".format(tag, ex))
                 continue
             try:
                 _file = self.model_path + "/{}_{}.pickle".format(self.device, tag)
@@ -205,69 +195,17 @@ class OptimalStart(Agent):
                 if 'schedule' in msg:
                     sched = msg.pop('schedule')
                 headers = {"Date": format_timestamp(get_aware_utc_now())}
-                self.vip.pubsub.publish("pubsub", self.results_topic, headers, msg)
+                self.vip.pubsub.publish("pubsub", self.results_model, headers, msg)
             except:
                 _log.debug("ERROR publishing result!")
                 continue
-
-    def assign_local_tz(self, _dt):
-        """
-        Convert UTC time from driver to local time.
-        """
-        if _dt.tzinfo is None or _dt.tzinfo.utcoffset(_dt) is None:
-            _log.debug("TZ: %s", _dt)
-            return _dt
-        else:
-            _dt = _dt.astimezone(self.local_tz)
-            _log.debug("TZ: %s", _dt)
-            return _dt
 
     def update_data(self, peer, sender, bus, topic, header, message):
         """
         Store current data measurements in daily data df.
         """
         _log.debug("Update data : %s", topic)
-        data, meta = message
-        _now = parser.parse(header[headers_mod.TIMESTAMP])
-        stored_data = {}
-        current_time = self.assign_local_tz(_now)
-        self.current_time = current_time
-        for point, value in data.items():
-            if point in self.zone_point_names.values():
-                _key = list(filter(lambda x: self.zone_point_names[x] == point, self.zone_point_names))[0]
-                stored_data[_key] = [value]
-        if stored_data:
-            stored_data['ts'] = [current_time]
-            df = pd.DataFrame.from_dict(stored_data)
-            df['timeindex'] = df['ts']
-            df = df.set_index(df['timeindex'])
-            if self.df is not None:
-                self.df = pd.concat([self.df, df], axis=0, ignore_index=False)
-            else:
-                self.df = df
-            self.df.to_csv("data.csv")
-            _log.debug("Dataframe: {}".format(self.df))
-
-    def process_data(self):
-        """
-        Save data to disk, save 15 days of data.
-        """
-        try:
-            df = pd.read_pickle('data.pkl')
-        except:
-            _log.debug("Error parsing df pickle!")
-            df = None
-        try:
-            if df is not None:
-                df = pd.concat([df, self.df])
-            else:
-                df = self.df
-            data_window = dt.now() - td(days=15)
-            df = df[df['ts'] >= data_window]
-            df.to_pickle('data.pkl')
-        except:
-            _log.debug("Error saving df pickle!")
-        self.df = None
+        self.data_handler.update_data(message, header)
 
     def set_up_run(self):
         """
@@ -275,47 +213,54 @@ class OptimalStart(Agent):
         and schedules the run_method.
         """
         _log.debug("Setting up run!")
-        _now = dt.now()
-        _day = _now.weekday()
-        if self.schedule:
-            sched = self.schedule[_day]
-            earliest = sched.get('earliest')
-            if earliest is not None:
-                e_hour = earliest.hour
-                e_minute = earliest.minute
-                run_time = _now.replace(hour=e_hour, minute=e_minute)
-                _log.debug("Schedule run method: %s", format_timestamp(run_time))
-                self.run_sched = self.core.schedule(run_time, self.run_method)
-        self.process_data()
+        current_time = dt.now()
+        current_day = current_time.weekday()
+        if self.schedule and current_day in self.schedule:
+            current_schedule = self.schedule[current_day]
+            if current_schedule == 'always_off':
+                self.do_zone_control("unoccupied")
+            elif current_schedule == 'always_on':
+                self.do_zone_control("occupied")
+            else:
+                earliest = current_schedule.get('earliest')
+                if earliest is not None:
+                    e_hour = earliest.hour
+                    e_minute = earliest.minute
+                    run_time = current_time.replace(hour=e_hour, minute=e_minute)
+                    _log.debug("Schedule run method: %s", format_timestamp(run_time))
+                    self.run_sched = self.core.schedule(run_time, self.run_method)
+        self.data_handler.process_data()
 
     def run_method(self):
         """
         Run at the earliest start time for the day.  Uses models to calculate needed
         prestart time to meet room temperature requirements.
         """
-        _now = dt.now()
-        _day = _now.weekday()
-        result = {}
-        if self.schedule:
-            sched = self.schedule[_day]
+        current_time = dt.now()
+        current_day = current_time.weekday()
+        self.result = {}
+        if self.schedule and current_day in self.schedule:
+            sched = self.schedule[current_day]
             start = sched.get('start')
             end = sched.get('end')
             s_hour = start.hour
             s_minute = start.minute
             e_hour = end.hour
             e_minute = end.minute
-            occupancy_time = _now.replace(hour=s_hour, minute=s_minute)
-            unoccupied_time = _now.replace(hour=e_hour, minute=e_minute)
+            occupancy_time = current_time.replace(hour=s_hour, minute=s_minute)
+            unoccupied_time = current_time.replace(hour=e_hour, minute=e_minute)
             if start is not None:
                 for tag, model in self.models.items():
                     prestart_time = model.calculate_prestart(self.df)
-                    result[tag] = prestart_time
-                result['occupancy'] = format_timestamp(occupancy_time)
-            controller = self.day_map[_day]
-            active_minutes = result[controller]
+                    self.result[tag] = prestart_time
+                self.result['occupancy'] = format_timestamp(occupancy_time)
+            controller = self.day_map[current_day]
+            active_minutes = self.result[controller]
             active_minutes = max(self.latest_start_time, min(active_minutes, self.earliest_start_time))
             prestart_time = occupancy_time - td(minutes=active_minutes)
-            _log.debug("Optimal start result: %s", result)
+            _log.debug("Optimal start result: %s", self.result)
+            headers = {"Date": format_timestamp(get_aware_utc_now())}
+            self.vip.pubsub.publish("pubsub", self.results_topic, headers, self.result).get(timeout=10)
             self.start_obj = self.core.schedule(prestart_time, self.do_zone_control, "occupied")
             self.end_obj = self.core.schedule(unoccupied_time, self.do_zone_control, "unoccupied")
 

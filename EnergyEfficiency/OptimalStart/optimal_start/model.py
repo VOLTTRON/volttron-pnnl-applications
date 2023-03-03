@@ -80,11 +80,23 @@ def ema(lst):
     return ema
 
 
+def calculate_prestart_time(end, prestart):
+    _hours, _minutes = divmod(prestart, 60)
+    _minutes = end.minute - _minutes
+    if _minutes < 0:
+        _minutes = 60 + _minutes
+        _hours += 1
+    _hours = end.hour - _hours
+    start = datetime.time(hour=_hours, minute=_minutes)
+    return start
+
+
 class Model:
     def __init__(self, config, schedule):
         self.latest_start_time = config.get('latest_start_time', 0)
         self.earliest_start_time = config.get('earliest_start_time', 120)
         self.t_error = config.get("allowable_setpoint_deviation", 1.0)
+        self.prestart_time = self.earliest_start_time
         self.cooling_trained = False
         self.heating_trained = False
         self.schedule = schedule
@@ -96,13 +108,7 @@ class Model:
         schedule = self.schedule[_day]
         if 'start' in schedule and 'earliest' in schedule:
             end = schedule['start']
-            if prestart is not None:
-                _hours, _minutes = divmod(prestart, 60)
-                _hours = end.hour - _hours
-                _minutes = end.minute - _minutes
-                start = datetime.time(hour=_hours, minute=_minutes)
-            else:
-                start = schedule['earliest']
+            start = calculate_prestart_time(end, prestart)
         else:
             _log.debug("No start in schedule!!")
             return
@@ -209,6 +215,7 @@ class Carrier(Model):
                 return self.latest_start_time
         else:
             start_time = self.earliest_start_time
+        self.prestart_time = start_time
         return start_time
 
 
@@ -288,6 +295,7 @@ class Siemens(Model):
                 return self.latest_start_time
         else:
             start_time = self.earliest_start_time
+        self.prestart_time = start_time
         return start_time
 
 
@@ -397,5 +405,6 @@ class Johnson(Model):
             start_time = coefficient1 * zsp * zsp + coefficient2
         else:
             start_time = self.earliest_start_time
+        self.prestart_time = start_time
         return start_time
 

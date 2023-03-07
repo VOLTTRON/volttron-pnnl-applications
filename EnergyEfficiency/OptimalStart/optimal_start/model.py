@@ -102,6 +102,8 @@ class Model:
         self.schedule = schedule
 
     def train(self, data, prestart):
+        if prestart is None:
+            prestart = self.earliest_start_time
         if data.empty:
             return
         _day = dt.now().weekday()

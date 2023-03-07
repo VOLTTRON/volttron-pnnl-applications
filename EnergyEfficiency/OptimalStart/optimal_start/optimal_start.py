@@ -176,10 +176,13 @@ class OptimalStart(Agent):
          - Save model as pickle on disk for saving state.
         :return:
         """
+        prestart = None
         for tag, model in self.models.items():
             try:
+                if self.result and tag in self.result:
+                    prestart = self.result[tag]
                 data = self.data_handler.df
-                model.train(data)
+                model.train(data, prestart)
             except Exception as ex:
                 _log.debug("ERROR training model {}: -- {}".format(tag, ex))
                 continue
@@ -251,7 +254,8 @@ class OptimalStart(Agent):
             unoccupied_time = current_time.replace(hour=e_hour, minute=e_minute)
             if start is not None:
                 for tag, model in self.models.items():
-                    prestart_time = model.calculate_prestart(self.df)
+                    data = self.data_handler.df
+                    prestart_time = model.calculate_prestart(data)
                     self.result[tag] = prestart_time
                 self.result['occupancy'] = format_timestamp(occupancy_time)
             controller = self.day_map[current_day]

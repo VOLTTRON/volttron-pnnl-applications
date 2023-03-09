@@ -111,6 +111,7 @@ class Model:
         if 'start' in schedule and 'earliest' in schedule:
             end = schedule['start']
             start = calculate_prestart_time(end, prestart)
+            _log.debug("TRAIN DEBUG: {} -- {}".format(start, end))
         else:
             _log.debug("No start in schedule!!")
             return

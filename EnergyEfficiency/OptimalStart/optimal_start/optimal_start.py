@@ -97,6 +97,7 @@ class OptimalStart(Agent):
         self.zone_control = config.get("zone_control", {})
         self.start_obj = None
         self.end_obj = None
+        self.prestart_training = None
         self.schedule = {}
         self.init_schedule(config.get("schedule", {}))
         self.day_map = {0: "s", 1: "s", 2: "c", 3: "c", 4: "j"}
@@ -179,8 +180,8 @@ class OptimalStart(Agent):
         prestart = None
         for tag, model in self.models.items():
             try:
-                if self.result and tag in self.result:
-                    prestart = self.result[tag]
+                if self.prestart_training is not None:
+                    prestart = int(self.prestart_training) + 10
                 data = self.data_handler.df
                 model.train(data, prestart)
             except Exception as ex:
@@ -260,6 +261,7 @@ class OptimalStart(Agent):
                 self.result['occupancy'] = format_timestamp(occupancy_time)
             controller = self.day_map[current_day]
             active_minutes = self.result[controller]
+            self.prestart_training = active_minutes
             active_minutes = max(self.latest_start_time, min(active_minutes, self.earliest_start_time))
             prestart_time = occupancy_time - td(minutes=active_minutes)
             _log.debug("Optimal start result: %s", self.result)

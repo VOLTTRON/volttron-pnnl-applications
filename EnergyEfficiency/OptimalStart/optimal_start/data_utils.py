@@ -53,7 +53,7 @@ class Data:
         Save data to disk, save 15 days of data.
         """
         _date = format_timestamp(dt.now())
-        data_file = self.data_path + + "/data_{}_{}.csv".format(self.tag, _date)
+        data_file = self.data_path + "/data_{}_{}.csv".format(self.tag, _date)
         try:
             self.df.to_csv(data_file)
             self.df = None

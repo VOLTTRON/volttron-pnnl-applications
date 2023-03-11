@@ -78,6 +78,12 @@ def trim(lst, new_value, cutoff):
         lst.pop(0)
     return lst
 
+def get_time_temp_diff(htr):
+    htr['timediff'] = htr['ts'].diff().dt.total_seconds() / 60
+    time_diff = htr['timediff'].sum(axis=0)
+    temp_diff = htr['temp_diff'].iloc[0] - htr['temp_diff'].iloc[-1]
+    return time_diff, temp_diff
+
 
 def ema(lst):
     smoothing_constant = 2.0 / (len(lst) + 1.0) * 2.0 if lst else 1.0

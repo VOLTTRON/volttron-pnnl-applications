@@ -32,7 +32,7 @@ class Data:
         if os.path.isfile(data_file):
             try:
                 self.df = pd.read_csv(data_file)
-
+                self.df.set_index('timeindex')
             except Exception as ex:
                 _log.debug("No previous dataframe object: %s", ex)
 

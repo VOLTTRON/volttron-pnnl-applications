@@ -78,6 +78,7 @@ def trim(lst, new_value, cutoff):
         lst.pop(0)
     return lst
 
+
 def get_time_temp_diff(htr):
     htr['timediff'] = htr['ts'].diff().dt.total_seconds() / 60
     time_diff = htr['timediff'].sum(axis=0)

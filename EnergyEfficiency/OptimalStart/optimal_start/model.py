@@ -208,7 +208,6 @@ class Carrier(Model):
         self.c1 = trim(self.c1, c1, 15)
 
     def train_heating(self, data):
-        self.h1 = self.h1[0:5]
         htr = self.heat_transfer_rate(data)
         if htr.empty:
             _log.debug("Carrier debug heating htr returned empty!")
@@ -277,8 +276,6 @@ class Siemens(Model):
         self.c2 = trim(self.c2, c2, 15)
 
     def train_heating(self, data):
-        self.h1 = []
-        self.h2 = []
         htr = self.heat_transfer_rate(data)
         if htr.empty:
             _log.debug("Siemens debug cooling htr returned empty!")
@@ -372,8 +369,6 @@ class Johnson(Model):
 
     def train_heating(self, data):
         # cooling trained flag checked
-        self.h2_list = []
-        self.h1_list = []
         temp_diff_end = data['heatingsetpoint'][-1] - data['zonetemperature'][-1]
         temp_diff_begin = data['heatingsetpoint'][0] - data['zonetemperature'][0]
         data['temp_diff'] = data['heatingsetpoint'] - data['zonetemperature']

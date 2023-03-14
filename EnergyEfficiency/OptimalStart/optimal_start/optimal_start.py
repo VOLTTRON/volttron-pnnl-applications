@@ -76,7 +76,7 @@ class OptimalStart(Agent):
         self.building = config.get("building", "")
         self.device = config.get("system", "")
         self.results_model = "record/{}/{}/{}/OptimalStartModel".format(self.campus, self.building, self.device)
-        self.results_topic = "record/{}/{}/{}/OptimalStar".format(self.campus, self.building, self.device)
+        self.results_topic = "record/{}/{}/{}/OptimalStart".format(self.campus, self.building, self.device)
         self.result = {}
         self.system_rpc_path = ""
         timezone = config.get("local_tz", "UTC")
@@ -191,6 +191,7 @@ class OptimalStart(Agent):
                 _file = self.model_path + "/{}_{}.pickle".format(self.device, tag)
                 with open(_file, 'wb') as f:
                     dill.dump(model, file=f)
+
             except Exception as ex:
                 _log.debug("Could not store object %s -- %s", tag, ex)
             try:
@@ -199,7 +200,8 @@ class OptimalStart(Agent):
                 if 'schedule' in msg:
                     sched = msg.pop('schedule')
                 headers = {"Date": format_timestamp(get_aware_utc_now())}
-                self.vip.pubsub.publish("pubsub", self.results_model, headers, msg)
+                topic = self.results_model + "/{}".format(tag)
+                self.vip.pubsub.publish("pubsub", topic, headers, msg)
             except:
                 _log.debug("ERROR publishing result!")
                 continue
@@ -237,7 +239,7 @@ class OptimalStart(Agent):
 
     def run_method(self):
         """
-        Run at the earliest start time for the day.  Uses models to calculate needed
+        Run at the earliest start time for the day.  Use models to calculate needed
         prestart time to meet room temperature requirements.
         """
         current_time = dt.now()

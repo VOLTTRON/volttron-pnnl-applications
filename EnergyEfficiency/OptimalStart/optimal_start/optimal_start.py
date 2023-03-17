@@ -195,10 +195,14 @@ class OptimalStart(Agent):
             except Exception as ex:
                 _log.debug("Could not store object %s -- %s", tag, ex)
             try:
-                msg = model.__dict__
-                _log.debug("MODEL: {}".format(msg))
-                if 'schedule' in msg:
-                    sched = msg.pop('schedule')
+                msg = {}
+                model_parms = model.__dict__
+                _log.debug("MODEL parameters: {}".format(msg))
+
+                for key, value in model_parms.items():
+                    if key != 'schedule':
+                        msg[key] = model_parms[key]
+
                 headers = {"Date": format_timestamp(get_aware_utc_now())}
                 topic = self.results_model + "/{}".format(tag)
                 self.vip.pubsub.publish("pubsub", topic, headers, msg)

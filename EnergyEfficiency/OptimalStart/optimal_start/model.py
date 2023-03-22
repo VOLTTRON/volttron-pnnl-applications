@@ -47,7 +47,7 @@ import logging
 import datetime
 from datetime import timedelta as td, datetime as dt
 import math
-from volttron.platform.agent.utils import setup_logging
+from volttron.platform.agent.utils import setup_logging, format_timestamp
 
 
 setup_logging()
@@ -119,8 +119,10 @@ class Model:
         self.cooling_trained = False
         self.heating_trained = False
         self.schedule = schedule
+        self.record = {}
 
     def train(self, data, prestart):
+        self.record = {}
         if prestart is None:
             prestart = self.earliest_start_time
         if data.empty:
@@ -206,6 +208,7 @@ class Carrier(Model):
             return
         c1 = temp_diff/time_diff
         self.c1 = trim(self.c1, c1, 15)
+        self.record = {"date": format_timestamp(dt.now()), "c1": c1, "c1_array": self.c1}
 
     def train_heating(self, data):
         htr = self.heat_transfer_rate(data)
@@ -218,6 +221,7 @@ class Carrier(Model):
             return
         h1 = temp_diff / time_diff
         self.h1 = trim(self.h1, h1, 15)
+        self.record = {"date": format_timestamp(dt.now()), "h1": h1, "h1_array": self.h1}
 
     def calculate_prestart(self, data):
         if not data.empty:
@@ -272,8 +276,9 @@ class Siemens(Model):
         c1 = time_avg / 60
 
         self.c1 = trim(self.c1, c1, 15)
-        c2 = (precooling / 60 - ema(self.c1) * zcsp) / (osp * zcsp / 10)
+        c2 = (precooling / 60 - c1 * zcsp) / (osp * zcsp / 10)
         self.c2 = trim(self.c2, c2, 15)
+        self.record = {"date": format_timestamp(dt.now()), "c1": c1, "c1_array": self.c1, "c2": c2, "c2_array": self.c2}
 
     def train_heating(self, data):
         htr = self.heat_transfer_rate(data)
@@ -290,10 +295,11 @@ class Siemens(Model):
         h1 = time_avg/60.0
         preheating = htr['timediff'].sum()
 
-        self.h1 = trim(self.h1, h1, 10)
+        self.h1 = trim(self.h1, h1, 15)
         _log.debug("preheating: {} - h1: {} - zhsp: {} -- osp: {}".format(preheating, self.h1, zhsp, osp))
-        h2 = (preheating / 60 - ema(self.h1) * zhsp) / (osp * zhsp / 25)
-        self.h2 = trim(self.h2, h2, 10)
+        h2 = (preheating / 60 - h1 * zhsp) / (osp * zhsp / 25)
+        self.h2 = trim(self.h2, h2, 15)
+        self.record = {"date": format_timestamp(dt.now()), "h1": h1, "h1_array": self.h1, "h2": h2, "h2_array": self.h2}
 
     def calculate_prestart(self, data):
         if not data.empty:
@@ -359,6 +365,8 @@ class Johnson(Model):
                 self.c1_list = trim(self.c1_list, c1, 15)
                 self.c1 = ema(self.c1_list)
                 self.c2 = ema(self.c2_list)
+                self.record = {"date": format_timestamp(dt.now()), "c1": c1, "c1_array": self.c1_list, "c2": c2,
+                               "c2_array": self.c2_list}
                 if len(self.c1_list) >= 15:
                     self.cooling_trained = True
         else:
@@ -366,6 +374,8 @@ class Johnson(Model):
                 self.c1 += self.cooling_heating_adjust*2.0
             else:
                 self.c1 -= self.cooling_heating_adjust
+            self.record = {"date": format_timestamp(dt.now()), "c1": self.c1, "c1_array": self.c1_list, "c2": self.c2,
+                           "c2_array": self.c2_list}
 
     def train_heating(self, data):
         # cooling trained flag checked
@@ -389,6 +399,9 @@ class Johnson(Model):
                 self.h1_list = trim(self.h1_list, h1, 15)
                 self.h1 = ema(self.h1_list)
                 self.h2 = ema(self.h2_list)
+                self.record = {"date": format_timestamp(dt.now()), "h1": h1, "h1_array": self.h1_list,
+                               "h2": h2,
+                               "h2_array": self.h2_list}
                 if len(self.h1_list) >= 15:
                     self.heating_trained = True
         else:
@@ -396,6 +409,9 @@ class Johnson(Model):
                 self.h1 += self.cooling_heating_adjust * 2.0
             else:
                 self.h1 -= self.cooling_heating_adjust
+            self.record = {"date": format_timestamp(dt.now()), "h1": self.h1, "h1_array": self.h1_list,
+                           "h2": self.h2,
+                           "h2_array": self.h2_list}
 
     def calculate_prestart(self, data):
         if not data.empty:

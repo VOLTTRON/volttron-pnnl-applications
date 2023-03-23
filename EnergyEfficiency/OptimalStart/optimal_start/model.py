@@ -286,7 +286,7 @@ class Siemens(Model):
             _log.debug("Siemens debug cooling htr returned empty!")
             return
         zhsp = htr['heatingsetpoint'][0] - htr['zonetemperature'][0]
-        osp = - htr['heatingsetpoint'][0] - htr['outdoortemperature'][0]
+        osp = htr['heatingsetpoint'][0] - htr['outdoortemperature'][0]
         htr['timediff'] = htr['ts'].diff().dt.total_seconds() / 60
         time_avg = htr['timediff'].mean()
         if math.isnan(time_avg):

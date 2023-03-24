@@ -40,6 +40,7 @@ operated by BATTELLE for the UNITED STATES DEPARTMENT OF ENERGY
 under Contract DE-AC05-76RL01830
 """
 import pandas as pd
+import numpy as np
 import sys
 import warnings
 warnings.filterwarnings("ignore", category=DeprecationWarning)
@@ -55,7 +56,10 @@ _log = logging.getLogger(__name__)
 
 
 def parse_df(df, condition):
-    data_sort = df[df['zonetemperature'] == df[condition]]
+    if condition == "coolingsetpoint":
+        data_sort = df[df['zonetemperature'] <= df[condition]]
+    else:
+        data_sort = df[df['zonetemperature'] >= df[condition]]
     if not data_sort.empty:
         idx = data_sort.index[0]
         df = df.loc[:idx]
@@ -438,3 +442,98 @@ class Johnson(Model):
         self.prestart_time = start_time
         return start_time
 
+
+class Sbs(Model):
+    def __init__(self, config, schedule):
+        super(Sbs, self).__init__(config, schedule)
+        self.e_last = 0
+        self.sXY = 0
+        self.sX2 = 0
+        self.ctime = 0
+        self.e_std = 0.1
+        self.sp_error_occ = 0
+        default_start = (self.earliest_start_time + self.latest_start_time)
+        self.alpha = np.exp(-1/default_start)
+        self.day_count = 0
+        self.train_heating = self.train_cooling
+
+    def reset_estimation(self):
+        # initialize estimation parameters
+        self.sXY = 0
+        self.sX2 = 0
+        # initialize EWMA of error
+        self.e_std = 0.5
+        # resset timer
+        self.ctime = 0
+
+    def deadband(self, row):
+        # apply deadband
+        e_b = row['e_b']
+        db = row['db']
+        if np.abs(e_b) <= db/2:
+            e_a = 0
+        elif e_b > db / 2:
+            e_a = e_b - db / 2
+        else:
+            e_a = e_b + db / 2
+        return e_a
+
+    def train_cooling(self, data):
+        self.reset_estimation()
+        sp_last = None
+        data['sp'] = (data['coolingsetpoint'] + data['heatingsetpoint'])/2
+        data['db'] = data['coolingsetpoint'] - data['heatingsetpoint']
+        data['e_b'] = data['sp'] - data['zonetemperature']
+        data['e_a'] = data.apply(self.deadband, axis=1)
+        data['timediff'] = data['ts'].diff().dt.total_seconds() / 60
+        time_avg = data['timediff'].mean()
+        for index, row in data.iterrows():
+            _log.debug("row - %s", row)
+            self.ctime = self.ctime + time_avg
+            # need this to start only after error has jumped due to mode change
+            if sp_last is not None and (np.abs(row['e_a'] - self.e_last) < (row['coolingsetpoint'] - row['heatingsetpoint']) and np.abs(row['sp'] - sp_last) < 1e-4):
+                x = self.e_last  # + (self.sp - self.sp_last)
+                y = row['e_a']
+                self.sX2 = self.sX2 + x ** 2
+                self.sXY = self.sXY + x * y
+                # EWMA for errors (15 min window)
+                self.e_std = self.e_std + (row['e_a'] ** 2 - self.e_std) / (900 / time_avg)
+            _log.debug("SBS: x: %s -- e_a: %s  --sXy: %s -- sX2: %s -- alpha: %s, estd: %s", self.e_last, row['e_a'], self.sXY, self.sX2, self.alpha, self.e_std)
+            # update previous values
+            sp_last = row['sp']
+            self.e_last = row['e_a']
+        self.day_count += 1
+        if self.sX2 * self.sXY > 0:
+            new_alpha = self.sXY / self.sX2
+            _log.debug("CALCULATE SAMPLE: {} -- {}".format(new_alpha, self.alpha))
+            # put upper and lower bounds on alpha based on min/max start times
+            new_alpha = max(0.001, min(0.999, new_alpha))
+            # EWMA of alpha estimate
+            # self.day_count = min(self.day_count + 1, self.ndays)
+            self.alpha = self.alpha + (new_alpha - self.alpha) / self.day_count
+
+    def calculate_prestart(self, data):
+        # set target setpoint and deadband
+        rt = (data['coolingsetpoint'][-1] + data['heatingsetpoint'][-1])/2.0
+        db = data['coolingsetpoint'][-1] - data['heatingsetpoint'][-1]
+        # current room temperature
+        yp = data['zonetemperature'][-1]
+        # start error (adjusted by deadband)
+        e0 = (rt - yp)
+        db_dict = {'e_b': e0, 'db': db}
+        e0 = np.abs(self.deadband(db_dict))
+        # calculate time required to get error within tolerance (in units of dt)
+        if e0 > 0:
+            # zone_logger.info("Calculating start time with temperature error")
+            prestart_time = np.log(self.t_error / e0) / np.log(self.alpha)
+        else:
+            prestart_time = self.latest_start_time
+        # zone_logger.info("Calculating final start time")
+        prestart_time = max(prestart_time, self.latest_start_time)
+        prestart_time = min(prestart_time, self.earliest_start_time)
+        # zone_logger.info("Calculated final start time")
+        # calculate error at start time (time to occupancy in units of dt)
+        self.sp_error_occ = e0 * np.power(self.alpha, self.earliest_start_time)
+        _log.debug("OPTIMIZE_I: -- %s -- %s".format(e0, self.sp_error_occ))
+
+        return prestart_time

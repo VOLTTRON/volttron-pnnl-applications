@@ -48,7 +48,7 @@ from datetime import timedelta as td, datetime as dt
 import pandas as pd
 import dill
 from dateutil.parser import parse
-from .model import Johnson, Siemens, Carrier
+from .model import Johnson, Siemens, Carrier, Sbs
 from .data_utils import Data
 from volttron.platform.agent import utils
 from volttron.platform.scheduling import cron
@@ -117,8 +117,16 @@ class OptimalStart(Agent):
             j = Johnson(config, self.schedule)
             s = Siemens(config, self.schedule)
             c = Carrier(config, self.schedule)
-
-            self.models = {"j": j, "s": s, "c": c}
+            sbs = Sbs(config, self.schedule)
+            self.models = {"j": j, "s": s, "c": c, 'sbs': sbs}
+        if 'j' not in self.models:
+            self.models['j'] = Johnson(config, self.schedule)
+        if 's' not in self.models:
+            self.models['s'] = Siemens(config, self.schedule)
+        if 'c' not in self.models:
+            self.models['c'] = Carrier(config, self.schedule)
+        if 'sbs' not in self.models:
+            self.models['sbs'] = Sbs(config, self.schedule)
 
         self.core.schedule(cron('1 0 * * *'), self.set_up_run)
         self.core.schedule(cron('0 9 * * *'), self.train_models)

@@ -136,7 +136,7 @@ class Model:
         if 'start' in schedule and 'earliest' in schedule:
             end = schedule['start']
             start = calculate_prestart_time(end, prestart)
-            end = offset_time(end, 30)
+            end = offset_time(end, 45)
             _log.debug("TRAIN DEBUG: {} -- {}".format(start, end))
         else:
             _log.debug("No start in schedule!!")
@@ -289,6 +289,7 @@ class Siemens(Model):
         if htr.empty:
             _log.debug("Siemens debug cooling htr returned empty!")
             return
+        #change htr to data?
         zhsp = htr['heatingsetpoint'][0] - htr['zonetemperature'][0]
         osp = htr['heatingsetpoint'][0] - htr['outdoortemperature'][0]
         htr['timediff'] = htr['ts'].diff().dt.total_seconds() / 60
@@ -450,7 +451,6 @@ class Sbs(Model):
         self.sXY = 0
         self.sX2 = 0
         self.ctime = 0
-        self.e_std = 0.1
         self.sp_error_occ = 0
         default_start = (self.earliest_start_time + self.latest_start_time)
         self.alpha = np.exp(-1/default_start)
@@ -461,8 +461,6 @@ class Sbs(Model):
         # initialize estimation parameters
         self.sXY = 0
         self.sX2 = 0
-        # initialize EWMA of error
-        self.e_std = 0.5
         # resset timer
         self.ctime = 0
 
@@ -480,7 +478,6 @@ class Sbs(Model):
 
     def train_cooling(self, data):
         self.reset_estimation()
-        sp_last = None
         data['sp'] = (data['coolingsetpoint'] + data['heatingsetpoint'])/2
         data['db'] = data['coolingsetpoint'] - data['heatingsetpoint']
         data['e_b'] = data['sp'] - data['zonetemperature']
@@ -491,26 +488,24 @@ class Sbs(Model):
             _log.debug("row - %s", row)
             self.ctime = self.ctime + time_avg
             # need this to start only after error has jumped due to mode change
-            if sp_last is not None and (np.abs(row['e_a'] - self.e_last) < (row['coolingsetpoint'] - row['heatingsetpoint']) and np.abs(row['sp'] - sp_last) < 1e-4):
-                x = self.e_last  # + (self.sp - self.sp_last)
-                y = row['e_a']
-                self.sX2 = self.sX2 + x ** 2
-                self.sXY = self.sXY + x * y
-                # EWMA for errors (15 min window)
-                self.e_std = self.e_std + (row['e_a'] ** 2 - self.e_std) / (900 / time_avg)
-            _log.debug("SBS: x: %s -- e_a: %s  --sXy: %s -- sX2: %s -- alpha: %s, estd: %s", self.e_last, row['e_a'], self.sXY, self.sX2, self.alpha, self.e_std)
+            x = self.e_last  # + (self.sp - self.sp_last)
+            y = row['e_a']
+            self.sX2 = self.sX2 + x ** 2
+            self.sXY = self.sXY + x * y
+            _log.debug("SBS: x: %s -- e_a: %s  --sXy: %s -- sX2: %s -- alpha: %s", self.e_last, row['e_a'], self.sXY, self.sX2, self.alpha)
             # update previous values
-            sp_last = row['sp']
             self.e_last = row['e_a']
         self.day_count += 1
+        self.day_count = min(self.day_count, 10)
+        new_alpha = None
         if self.sX2 * self.sXY > 0:
             new_alpha = self.sXY / self.sX2
             _log.debug("CALCULATE SAMPLE: {} -- {}".format(new_alpha, self.alpha))
             # put upper and lower bounds on alpha based on min/max start times
             new_alpha = max(0.001, min(0.999, new_alpha))
             # EWMA of alpha estimate
-            # self.day_count = min(self.day_count + 1, self.ndays)
             self.alpha = self.alpha + (new_alpha - self.alpha) / self.day_count
+        self.record = {"date": format_timestamp(dt.now()), "new_alpha": new_alpha, "alpha": self.alpha}
 
     def calculate_prestart(self, data):
         # set target setpoint and deadband
@@ -534,6 +529,5 @@ class Sbs(Model):
         # zone_logger.info("Calculated final start time")
         # calculate error at start time (time to occupancy in units of dt)
         self.sp_error_occ = e0 * np.power(self.alpha, self.earliest_start_time)
-        _log.debug("OPTIMIZE_I: -- %s -- %s".format(e0, self.sp_error_occ))
-
+        _log.debug("OPTIMIZE_I: -- %s -- %s", e0, self.sp_error_occ)
         return prestart_time

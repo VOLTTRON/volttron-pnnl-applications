@@ -105,7 +105,7 @@ class OptimalStart(Agent):
             _log.debug("No schedule configured, exiting!")
             self.core.stop()
         self.model_path = os.path.expanduser("~/models")
-        self.models = {"j": None, "s": None, "c": None}
+        self.models = {"j": None, "s": None, "c": None, 'sbs': None}
         try:
             for tag in self.models:
                 _file = self.model_path + "/{}_{}.pickle".format(self.device, tag)
@@ -118,7 +118,7 @@ class OptimalStart(Agent):
             s = Siemens(config, self.schedule)
             c = Carrier(config, self.schedule)
             sbs = Sbs(config, self.schedule)
-            self.models = {"j": j, "s": s, "c": c, 'sbs': sbs}
+            self.models = {"j": j, "s": s, "c": c, "sbs": sbs}
         if 'j' not in self.models:
             self.models['j'] = Johnson(config, self.schedule)
         if 's' not in self.models:

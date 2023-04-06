@@ -119,6 +119,7 @@ class Model:
         self.latest_start_time = config.get('latest_start_time', 0)
         self.earliest_start_time = config.get('earliest_start_time', 120)
         self.t_error = config.get("allowable_setpoint_deviation", 1.0)
+        self.training_interval = config.get('training_interval', 10)
         self.prestart_time = self.earliest_start_time
         self.cooling_trained = False
         self.heating_trained = False
@@ -136,8 +137,8 @@ class Model:
         if 'start' in schedule and 'earliest' in schedule:
             end = schedule['start']
             start = calculate_prestart_time(end, prestart)
-            end = offset_time(end, 45)
-            _log.debug("TRAIN DEBUG: {} -- {}".format(start, end))
+            end = offset_time(end, 60)
+            _log.debug("Train Start: {} -- End: {}".format(start, end))
         else:
             _log.debug("No start in schedule!!")
             return
@@ -211,7 +212,7 @@ class Carrier(Model):
             _log.debug("Carrier debug cooling temp_diff == 0!")
             return
         c1 = temp_diff/time_diff
-        self.c1 = trim(self.c1, c1, 15)
+        self.c1 = trim(self.c1, c1, 10)
         self.record = {"date": format_timestamp(dt.now()), "c1": c1, "c1_array": self.c1}
 
     def train_heating(self, data):
@@ -224,7 +225,7 @@ class Carrier(Model):
             _log.debug("Carrier debug heating temp_diff == 0!")
             return
         h1 = temp_diff / time_diff
-        self.h1 = trim(self.h1, h1, 15)
+        self.h1 = trim(self.h1, h1, 10)
         self.record = {"date": format_timestamp(dt.now()), "h1": h1, "h1_array": self.h1}
 
     def calculate_prestart(self, data):
@@ -279,9 +280,9 @@ class Siemens(Model):
         # Calculate average value of time to change degree
         c1 = time_avg / 60
 
-        self.c1 = trim(self.c1, c1, 15)
+        self.c1 = trim(self.c1, c1, 10)
         c2 = (precooling / 60 - c1 * zcsp) / (osp * zcsp / 10)
-        self.c2 = trim(self.c2, c2, 15)
+        self.c2 = trim(self.c2, c2, 10)
         self.record = {"date": format_timestamp(dt.now()), "c1": c1, "c1_array": self.c1, "c2": c2, "c2_array": self.c2}
 
     def train_heating(self, data):
@@ -300,10 +301,10 @@ class Siemens(Model):
         h1 = time_avg/60.0
         preheating = htr['timediff'].sum()
 
-        self.h1 = trim(self.h1, h1, 15)
+        self.h1 = trim(self.h1, h1, 10)
         _log.debug("preheating: {} - h1: {} - zhsp: {} -- osp: {}".format(preheating, self.h1, zhsp, osp))
         h2 = (preheating / 60 - h1 * zhsp) / (osp * zhsp / 25)
-        self.h2 = trim(self.h2, h2, 15)
+        self.h2 = trim(self.h2, h2, 10)
         self.record = {"date": format_timestamp(dt.now()), "h1": h1, "h1_array": self.h1, "h2": h2, "h2_array": self.h2}
 
     def calculate_prestart(self, data):
@@ -364,15 +365,15 @@ class Johnson(Model):
                     _log.debug("Johnson debug cooling htr returned empty!")
                     return
                 c2 = htr['timediff'].mean()
-                self.c2_list = trim(self.c2_list, c2, 15)
+                self.c2_list = trim(self.c2_list, c2, 10)
                 c1 = (precooling - c2)/(temp_diff_begin*temp_diff_begin)
                 _log.debug("precooling: {} - h1: {} - h2: {} -- zhsp: {}".format(precooling, c1, c2, temp_diff_begin))
-                self.c1_list = trim(self.c1_list, c1, 15)
+                self.c1_list = trim(self.c1_list, c1, 10)
                 self.c1 = ema(self.c1_list)
                 self.c2 = ema(self.c2_list)
                 self.record = {"date": format_timestamp(dt.now()), "c1": c1, "c1_array": self.c1_list, "c2": c2,
                                "c2_array": self.c2_list}
-                if len(self.c1_list) >= 15:
+                if len(self.c1_list) >= 10:
                     self.cooling_trained = True
         else:
             if temp_diff_end > self.t_error:
@@ -398,16 +399,16 @@ class Johnson(Model):
                     _log.debug("Johnson debug heating htr returned empty!")
                     return
                 h2 = htr['timediff'].mean()
-                self.h2_list = trim(self.h2_list, h2, 15)
+                self.h2_list = trim(self.h2_list, h2, 10)
                 h1 = (preheating - h2)/(temp_diff_begin*temp_diff_begin)
                 _log.debug("preheating: {} - h1: {} - h2: {} -- zhsp: {}".format(preheating, h1, h2, temp_diff_begin))
-                self.h1_list = trim(self.h1_list, h1, 15)
+                self.h1_list = trim(self.h1_list, h1, 10)
                 self.h1 = ema(self.h1_list)
                 self.h2 = ema(self.h2_list)
                 self.record = {"date": format_timestamp(dt.now()), "h1": h1, "h1_array": self.h1_list,
                                "h2": h2,
                                "h2_array": self.h2_list}
-                if len(self.h1_list) >= 15:
+                if len(self.h1_list) >= 10:
                     self.heating_trained = True
         else:
             if temp_diff_end > self.t_error:

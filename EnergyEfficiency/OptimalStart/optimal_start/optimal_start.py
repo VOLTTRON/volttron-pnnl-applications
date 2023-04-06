@@ -44,20 +44,18 @@ import os
 import sys
 import logging
 from datetime import timedelta as td, datetime as dt
-
 import pandas as pd
 import dill
 from dateutil.parser import parse
-from .model import Johnson, Siemens, Carrier, Sbs
-from .data_utils import Data
 from volttron.platform.agent import utils
 from volttron.platform.scheduling import cron
-from volttron.platform.messaging import topics, headers as headers_mod
-from volttron.platform.agent.utils import (setup_logging, format_timestamp, get_aware_utc_now, parse_timestamp_string)
+from volttron.platform.messaging import topics
+from volttron.platform.agent.utils import (setup_logging, format_timestamp, get_aware_utc_now)
 from volttron.platform.vip.agent import Agent, Core
 from volttron.platform.jsonrpc import RemoteError
 import gevent
-
+from .model import Johnson, Siemens, Carrier, Sbs
+from .data_utils import Data
 
 pd.set_option('display.max_rows', None)
 __author__ = "Robert Lutes, robert.lutes@pnnl.gov"
@@ -84,14 +82,14 @@ class OptimalStart(Agent):
         # No precontrol code yet, this might be needed in future
         self.precontrols = config.get("precontrols", {})
         self.precontrol_flag = False
-        self.system_status_point = config.get("system_status_point", None)
+
         self.zone_point_names = config.get("zone_point_names")
         self.actuator = config.get("actuator", "platform.actuator")
         self.earliest_start_time = config.get("earliest_start_time", 120)
         self.latest_start_time = config.get("latest_start_time", 10)
         self.t_error = config.get("allowable_setpoint_deviation", 0.5)
         self.data_handler = Data(self.zone_point_names, timezone, self.device)
-        self.system_occ_switch = 0
+
         self.run_sched = None
         self.current_time = None
         self.zone_control = config.get("zone_control", {})
@@ -149,6 +147,35 @@ class OptimalStart(Agent):
                 else:
                     self.schedule[_day] = schedule_info
         _log.debug("Schedule!: %s", self.schedule)
+
+    def get_current_schedule(self):
+        """
+        read schedule and return for current day
+        :param None:
+        :return:
+        """
+        current_time = dt.now()
+        current_day = current_time.weekday()
+        current_schedule = None
+        if self.schedule and current_day in self.schedule:
+            current_schedule = self.schedule[current_day]
+        return current_schedule
+
+    def get_controller(self):
+        """
+        Get prestart time from active controller
+        :param None:
+        :return: int; active prestart time in minutes
+        """
+        try:
+            current_time = dt.now()
+            current_day = current_time.weekday()
+
+            controller = self.day_map[current_day]
+            active_minutes = self.result[controller]
+        except:
+            active_minutes = self.earliest_start_time
+        return active_minutes
 
     @Core.receiver("onstart")
     def starting_base(self, sender, **kwargs):
@@ -226,20 +253,18 @@ class OptimalStart(Agent):
         and schedules the run_method.
         """
         _log.debug("Setting up run!")
-        current_time = dt.now()
-        current_day = current_time.weekday()
-        if self.schedule and current_day in self.schedule:
-            current_schedule = self.schedule[current_day]
+        current_schedule = self.get_current_schedule()
+        if current_schedule:
             if current_schedule == 'always_off':
                 self.do_zone_control("unoccupied")
             elif current_schedule == 'always_on':
                 self.do_zone_control("occupied")
             else:
                 earliest = current_schedule.get('earliest')
-                if earliest is not None:
+                if earliest:
                     e_hour = earliest.hour
                     e_minute = earliest.minute
-                    run_time = current_time.replace(hour=e_hour, minute=e_minute)
+                    run_time = dt.now().replace(hour=e_hour, minute=e_minute)
                     _log.debug("Schedule run method: %s", format_timestamp(run_time))
                     self.run_sched = self.core.schedule(run_time, self.run_method)
         self.data_handler.process_data()
@@ -249,29 +274,26 @@ class OptimalStart(Agent):
         Run at the earliest start time for the day.  Use models to calculate needed
         prestart time to meet room temperature requirements.
         """
-        current_time = dt.now()
-        current_day = current_time.weekday()
+
         self.result = {}
-        if self.schedule and current_day in self.schedule:
-            sched = self.schedule[current_day]
-            start = sched.get('start')
-            end = sched.get('end')
+        current_schedule = self.get_current_schedule()
+        if current_schedule:
+            start = current_schedule.get('start')
+            end = current_schedule.get('end')
             s_hour = start.hour
             s_minute = start.minute
             e_hour = end.hour
             e_minute = end.minute
-            occupancy_time = current_time.replace(hour=s_hour, minute=s_minute)
-            unoccupied_time = current_time.replace(hour=e_hour, minute=e_minute)
+            occupancy_time = dt.now().replace(hour=s_hour, minute=s_minute)
+            unoccupied_time = dt.now().replace(hour=e_hour, minute=e_minute)
             if start is not None:
                 for tag, model in self.models.items():
                     data = self.data_handler.df
                     prestart_time = model.calculate_prestart(data)
                     self.result[tag] = prestart_time
                 self.result['occupancy'] = format_timestamp(occupancy_time)
-            controller = self.day_map[current_day]
-            active_minutes = self.result[controller]
+            active_minutes = max(self.latest_start_time, min(self.get_controller(), self.earliest_start_time))
             self.prestart_training = active_minutes
-            active_minutes = max(self.latest_start_time, min(active_minutes, self.earliest_start_time))
             prestart_time = occupancy_time - td(minutes=active_minutes)
             _log.debug("Optimal start result: %s", self.result)
             headers = {"Date": format_timestamp(get_aware_utc_now())}
@@ -312,20 +334,6 @@ class OptimalStart(Agent):
                 _log.warning("Failed to set {} to {}: {}".format(topic, value, str(ex)))
             continue
 
-    def do_system_control(self):
-        """
-        Makes RPC call to actuator agent to change system mode  when there is an occupancy
-            mode change
-        :return:
-        """
-        result = None
-        try:
-            _log.debug("Do system control: {} -- {} -- {}".format(self.rt_time, self.system_rpc_path, self.system_occ_switch))
-            result = self.vip.rpc.call(self.actuator, "set_point", "optimal_start", self.system_rpc_path, self.system_occ_switch).get(timeout=30)
-        except RemoteError as ex:
-            _log.warning("Failed to set {} to {}: {}".format(self.system_rpc_path, self.system_occ_switch, str(ex)))
-        return
-
     def start_precontrol(self):
         """
         Makes RPC call to actuator agent to enable any pre-control actions needed for SBS
@@ -334,13 +342,13 @@ class OptimalStart(Agent):
         result = None
         for topic, value in self.precontrols.items():
             try:
-                _log.debug("Do pre-control: {} -- {} -- {}".format(self.rt_time, topic, value))
+                _log.debug("Do pre-control: {} -- {} -- {}".format(self.current_time, topic, value))
                 result = self.vip.rpc.call(self.actuator, "set_point", "optimal_start", topic, value).get(timeout=30)
             except RemoteError as ex:
                 _log.warning("Failed to set {} to {}: {}".format(topic, value, str(ex)))
                 continue
         self.precontrol_flag = True
-        return
+        return result
 
     def end_precontrol(self):
         """
@@ -351,12 +359,12 @@ class OptimalStart(Agent):
         result = None
         for topic, value in self.precontrols.items():
             try:
-                _log.debug("Do pre-control: {} -- {} -- {}".format(self.rt_time, topic, "None"))
+                _log.debug("Do pre-control: {} -- {} -- {}".format(self.current_time, topic, "None"))
                 result = self.vip.rpc.call(self.actuator, "set_point", "optimal_start", topic, None).get(timeout=30)
             except RemoteError as ex:
                 _log.warning("Failed to set {} to {}: {}".format(topic, value, str(ex)))
                 continue
-        return
+        return result
 
 
 def main(argv=sys.argv):

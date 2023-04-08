@@ -80,6 +80,7 @@ def trim(lst, new_value, cutoff):
     lst.append(new_value)
     if lst and len(lst) > cutoff:
         lst.pop(0)
+    lst = [item for item in lst if item != 0]
     return lst
 
 
@@ -121,8 +122,6 @@ class Model:
         self.t_error = config.get("allowable_setpoint_deviation", 1.0)
         self.training_interval = config.get('training_interval', 10)
         self.prestart_time = self.earliest_start_time
-        self.cooling_trained = False
-        self.heating_trained = False
         self.schedule = schedule
         self.record = {}
 
@@ -175,9 +174,7 @@ class Model:
             int_tot1 = 1
         else:
             int_tot1 = int(math.ceil(data['temp_diff'][0]))
-
         int_tot2 = int(max(abs(data['temp_diff'] - data['temp_diff'][0])))
-
         if int_tot1 > int_tot2:
             int_tot = int_tot2 + 1
         else:
@@ -291,8 +288,8 @@ class Siemens(Model):
             _log.debug("Siemens debug cooling htr returned empty!")
             return
         #change htr to data?
-        zhsp = htr['heatingsetpoint'][0] - htr['zonetemperature'][0]
-        osp = htr['heatingsetpoint'][0] - htr['outdoortemperature'][0]
+        zhsp = htr['zonetemperature'][0] - htr['heatingsetpoint'][0]
+        osp = htr['outdoortemperature'][0] - htr['heatingsetpoint'][0]
         htr['timediff'] = htr['ts'].diff().dt.total_seconds() / 60
         time_avg = htr['timediff'].mean()
         if math.isnan(time_avg):
@@ -303,7 +300,7 @@ class Siemens(Model):
 
         self.h1 = trim(self.h1, h1, 10)
         _log.debug("preheating: {} - h1: {} - zhsp: {} -- osp: {}".format(preheating, self.h1, zhsp, osp))
-        h2 = (preheating / 60 - h1 * zhsp) / (osp * zhsp / 25)
+        h2 = (preheating / 60 - h1 * zhsp) / (osp * zhsp / 10)
         self.h2 = trim(self.h2, h2, 10)
         self.record = {"date": format_timestamp(dt.now()), "h1": h1, "h1_array": self.h1, "h2": h2, "h2_array": self.h2}
 
@@ -316,11 +313,11 @@ class Siemens(Model):
             if zonetemp + self.t_error < hsp:
                 if not self.h1 or not self.h2:
                     return self.earliest_start_time
-                zsp = hsp - zonetemp
-                osp = hsp - oat
+                zsp = zonetemp - hsp
+                osp = oat - hsp
                 coefficient1 = ema(self.h1)
                 coefficient2 = ema(self.h2)
-                start_time = (coefficient1 * zsp + coefficient2 * zsp * osp / 25.0) * 60.0 + self.adjust_time
+                start_time = (coefficient1 * zsp + coefficient2 * zsp * osp / 10.0) * 60.0 + self.adjust_time
             elif zonetemp - self.t_error > csp:
                 if not self.c1 or not self.c2:
                     return self.earliest_start_time
@@ -354,70 +351,55 @@ class Johnson(Model):
         # cooling trained flag checked
         temp_diff_end = data['zonetemperature'][-1] - data['coolingsetpoint'][-1]
         temp_diff_begin = data['zonetemperature'][0] - data['coolingsetpoint'][0]
-        if not self.cooling_trained:
-            data = data[data['cooling'] != 0]
-            # check if there is cooling data for the training data
-            if not data.empty:
-                htr = self.heat_transfer_rate(data)
-                htr['timediff'] = htr['ts'].diff().dt.total_seconds() / 60
-                precooling = htr['timediff'].sum()
-                if htr.empty:
-                    _log.debug("Johnson debug cooling htr returned empty!")
-                    return
-                c2 = htr['timediff'].mean()
-                self.c2_list = trim(self.c2_list, c2, 10)
-                c1 = (precooling - c2)/(temp_diff_begin*temp_diff_begin)
-                _log.debug("precooling: {} - h1: {} - h2: {} -- zhsp: {}".format(precooling, c1, c2, temp_diff_begin))
-                self.c1_list = trim(self.c1_list, c1, 10)
-                self.c1 = ema(self.c1_list)
-                self.c2 = ema(self.c2_list)
-                self.record = {"date": format_timestamp(dt.now()), "c1": c1, "c1_array": self.c1_list, "c2": c2,
-                               "c2_array": self.c2_list}
-                if len(self.c1_list) >= 10:
-                    self.cooling_trained = True
-        else:
-            if temp_diff_end > self.t_error:
-                self.c1 += self.cooling_heating_adjust*2.0
-            else:
-                self.c1 -= self.cooling_heating_adjust
-            self.record = {"date": format_timestamp(dt.now()), "c1": self.c1, "c1_array": self.c1_list, "c2": self.c2,
-                           "c2_array": self.c2_list}
+        data = data[data['cooling'] != 0]
+        # check if there is cooling data for the training data
+        if not data.empty:
+            htr = self.heat_transfer_rate(data)
+            htr['timediff'] = htr['ts'].diff().dt.total_seconds() / 60
+            precooling = htr['timediff'].sum()
+            if htr.empty:
+                _log.debug("Johnson debug cooling htr returned empty!")
+                return
+            c2 = htr['timediff'].mean()
+            self.c2_list = trim(self.c2_list, c2, 10)
+            c1 = (precooling - c2)/(temp_diff_begin*temp_diff_begin)
+            _log.debug("precooling: {} - h1: {} - h2: {} -- zhsp: {}".format(precooling, c1, c2, temp_diff_begin))
+            self.c1_list = trim(self.c1_list, c1, 10)
+            self.c1 = ema(self.c1_list)
+            self.c2 = ema(self.c2_list)
+            self.record = {
+                "date": format_timestamp(dt.now()), "c1": c1,
+                "c1_array": self.c1_list, "c2": c2,
+                "c2_array": self.c2_list
+            }
 
     def train_heating(self, data):
         # cooling trained flag checked
         temp_diff_end = data['heatingsetpoint'][-1] - data['zonetemperature'][-1]
         temp_diff_begin = data['heatingsetpoint'][0] - data['zonetemperature'][0]
         data['temp_diff'] = data['heatingsetpoint'] - data['zonetemperature']
-        if not self.heating_trained:
-            data = data[data['heating'] != 0]
-            # check if there is cooling data for the training data
-            if not data.empty:
-                htr = self.heat_transfer_rate(data)
-                htr['timediff'] = htr['ts'].diff().dt.total_seconds() / 60
-                preheating = htr['timediff'].sum()
-                if htr.empty:
-                    _log.debug("Johnson debug heating htr returned empty!")
-                    return
-                h2 = htr['timediff'].mean()
-                self.h2_list = trim(self.h2_list, h2, 10)
-                h1 = (preheating - h2)/(temp_diff_begin*temp_diff_begin)
-                _log.debug("preheating: {} - h1: {} - h2: {} -- zhsp: {}".format(preheating, h1, h2, temp_diff_begin))
-                self.h1_list = trim(self.h1_list, h1, 10)
-                self.h1 = ema(self.h1_list)
-                self.h2 = ema(self.h2_list)
-                self.record = {"date": format_timestamp(dt.now()), "h1": h1, "h1_array": self.h1_list,
-                               "h2": h2,
-                               "h2_array": self.h2_list}
-                if len(self.h1_list) >= 10:
-                    self.heating_trained = True
-        else:
-            if temp_diff_end > self.t_error:
-                self.h1 += self.cooling_heating_adjust * 2.0
-            else:
-                self.h1 -= self.cooling_heating_adjust
-            self.record = {"date": format_timestamp(dt.now()), "h1": self.h1, "h1_array": self.h1_list,
-                           "h2": self.h2,
-                           "h2_array": self.h2_list}
+        data = data[data['heating'] != 0]
+        # check if there is cooling data for the training data
+        if not data.empty:
+            htr = self.heat_transfer_rate(data)
+            htr['timediff'] = htr['ts'].diff().dt.total_seconds() / 60
+            preheating = htr['timediff'].sum()
+            if htr.empty:
+                _log.debug("Johnson debug heating htr returned empty!")
+                return
+            h2 = htr['timediff'].mean()
+            self.h2_list = trim(self.h2_list, h2, 10)
+            h1 = (preheating - h2)/(temp_diff_begin*temp_diff_begin)
+            _log.debug("preheating: {} - h1: {} - h2: {} -- zhsp: {}".format(preheating, h1, h2, temp_diff_begin))
+            self.h1_list = trim(self.h1_list, h1, 10)
+            self.h1 = ema(self.h1_list)
+            self.h2 = ema(self.h2_list)
+            self.record = {
+                "date": format_timestamp(dt.now()), "h1": h1,
+                "h1_array": self.h1_list, "h2": h2,
+                "h2_array": self.h2_list
+            }
+
 
     def calculate_prestart(self, data):
         if not data.empty:

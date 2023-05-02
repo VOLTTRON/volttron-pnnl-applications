@@ -85,7 +85,7 @@ def trim(lst, new_value, cutoff):
     if lst and len(lst) > cutoff:
         lst.pop(0)
     lst = [item for item in lst if item != 0]
-    lst = [item for item in lst if not np.nan(item)]
+    lst = [item for item in lst if not np.isnan(item)]
     return lst
 
 
@@ -205,8 +205,8 @@ class Carrier(Model):
         self.adjust_time = config.get('adjust_time', 0)
 
     def _start(self):
-        self.c1 = [item for item in self.c1 if not np.nan(item)]
-        self.h1 = [item for item in self.h1 if not np.nan(item)]
+        self.c1 = [item for item in self.c1 if not np.isnan(item)]
+        self.h1 = [item for item in self.h1 if not np.isnan(item)]
 
     def train_cooling(self, data):
         htr = self.heat_transfer_rate(data)
@@ -270,10 +270,10 @@ class Siemens(Model):
         self.adjust_time = config.get('adjust_time', 0)
 
     def _start(self):
-        self.c1 = [item for item in self.c1 if not np.nan(item)]
-        self.c2 = [item for item in self.c2 if not np.nan(item)]
-        self.h1 = [item for item in self.h1 if not np.nan(item)]
-        self.h2 = [item for item in self.h2 if not np.nan(item)]
+        self.c1 = [item for item in self.c1 if not np.isnan(item)]
+        self.c2 = [item for item in self.c2 if not np.isnan(item)]
+        self.h1 = [item for item in self.h1 if not np.isnan(item)]
+        self.h2 = [item for item in self.h2 if not np.isnan(item)]
 
     def train_cooling(self, data):
         htr = self.heat_transfer_rate(data)
@@ -285,7 +285,7 @@ class Siemens(Model):
         # zcspf = htr['zonetemperature'][-1] - htr['coolingsetpoint'][-1]
         htr['timediff'] = htr['ts'].diff().dt.total_seconds() / 60
         time_avg = htr['timediff'].mean()
-        if math.isnan(time_avg):
+        if np.isnan(time_avg):
             _log.debug("Siemens cooling debug time_avg is nan")
             return
         precooling = htr['timediff'].sum()
@@ -307,7 +307,7 @@ class Siemens(Model):
         osp = htr['outdoortemperature'][0] - htr['heatingsetpoint'][0]
         htr['timediff'] = htr['ts'].diff().dt.total_seconds() / 60
         time_avg = htr['timediff'].mean()
-        if math.isnan(time_avg):
+        if np.isnan(time_avg):
             _log.debug("Siemens heating debug time_avg is nan")
             return
         h1 = time_avg/60.0
@@ -363,10 +363,10 @@ class Johnson(Model):
         self.cooling_heating_adjust = config.get('cooling_heating_adjust', 0.025)
 
     def _start(self):
-        self.c1_list = [item for item in self.c1_list if not np.nan(item)]
-        self.c2_list = [item for item in self.c2_list if not np.nan(item)]
-        self.h1_list = [item for item in self.h1_list if not np.nan(item)]
-        self.h2_list = [item for item in self.h2_list if not np.nan(item)]
+        self.c1_list = [item for item in self.c1_list if not np.isnan(item)]
+        self.c2_list = [item for item in self.c2_list if not np.isnan(item)]
+        self.h1_list = [item for item in self.h1_list if not np.isnan(item)]
+        self.h2_list = [item for item in self.h2_list if not np.isnan(item)]
 
     def train_cooling(self, data):
         # cooling trained flag checked

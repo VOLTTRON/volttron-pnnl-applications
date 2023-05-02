@@ -56,12 +56,16 @@ _log = logging.getLogger(__name__)
 
 
 def parse_df(df, condition):
-    if condition == "coolingsetpoint":
+    if condition == "cooling":
         data_sort = df[df['zonetemperature'] <= df[condition]]
     else:
         data_sort = df[df['zonetemperature'] >= df[condition]]
+    data_sort_mode = df[df[condition].diff() < 0]
     if not data_sort.empty:
         idx = data_sort.index[0]
+        df = df.loc[:idx]
+    if not data_sort_mode.empty:
+        idx = data_sort_mode.index[0]
         df = df.loc[:idx]
     return df
 
@@ -81,6 +85,7 @@ def trim(lst, new_value, cutoff):
     if lst and len(lst) > cutoff:
         lst.pop(0)
     lst = [item for item in lst if item != 0]
+    lst = [item for item in lst if not np.nan(item)]
     return lst
 
 
@@ -199,6 +204,10 @@ class Carrier(Model):
         self.h1 = config.get('h1', [])
         self.adjust_time = config.get('adjust_time', 0)
 
+    def _start(self):
+        self.c1 = [item for item in self.c1 if not np.nan(item)]
+        self.h1 = [item for item in self.h1 if not np.nan(item)]
+
     def train_cooling(self, data):
         htr = self.heat_transfer_rate(data)
         if htr.empty:
@@ -259,6 +268,12 @@ class Siemens(Model):
         self.h1 = config.get('h1', [])
         self.h2 = config.get('h2', [])
         self.adjust_time = config.get('adjust_time', 0)
+
+    def _start(self):
+        self.c1 = [item for item in self.c1 if not np.nan(item)]
+        self.c2 = [item for item in self.c2 if not np.nan(item)]
+        self.h1 = [item for item in self.h1 if not np.nan(item)]
+        self.h2 = [item for item in self.h2 if not np.nan(item)]
 
     def train_cooling(self, data):
         htr = self.heat_transfer_rate(data)
@@ -346,6 +361,12 @@ class Johnson(Model):
         self.h1_list = []
         self.h2_list = []
         self.cooling_heating_adjust = config.get('cooling_heating_adjust', 0.025)
+
+    def _start(self):
+        self.c1_list = [item for item in self.c1_list if not np.nan(item)]
+        self.c2_list = [item for item in self.c2_list if not np.nan(item)]
+        self.h1_list = [item for item in self.h1_list if not np.nan(item)]
+        self.h2_list = [item for item in self.h2_list if not np.nan(item)]
 
     def train_cooling(self, data):
         # cooling trained flag checked
@@ -439,6 +460,9 @@ class Sbs(Model):
         self.alpha = np.exp(-1/default_start)
         self.day_count = 0
         self.train_heating = self.train_cooling
+
+    def _start(self):
+        pass
 
     def reset_estimation(self):
         # initialize estimation parameters

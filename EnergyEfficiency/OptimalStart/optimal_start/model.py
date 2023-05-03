@@ -204,9 +204,14 @@ class Carrier(Model):
         self.h1 = config.get('h1', [])
         self.adjust_time = config.get('adjust_time', 0)
 
-    def _start(self):
+    def _start(self, config, schedule):
         self.c1 = [item for item in self.c1 if not np.isnan(item)]
         self.h1 = [item for item in self.h1 if not np.isnan(item)]
+        self.latest_start_time = config.get('latest_start_time', 0)
+        self.earliest_start_time = config.get('earliest_start_time', 120)
+        self.t_error = config.get("allowable_setpoint_deviation", 1.0)
+        self.training_interval = config.get('training_interval', 10)
+        self.schedule = schedule
 
     def train_cooling(self, data):
         htr = self.heat_transfer_rate(data)
@@ -269,11 +274,16 @@ class Siemens(Model):
         self.h2 = config.get('h2', [])
         self.adjust_time = config.get('adjust_time', 0)
 
-    def _start(self):
+    def _start(self, config, schedule):
         self.c1 = [item for item in self.c1 if not np.isnan(item)]
         self.c2 = [item for item in self.c2 if not np.isnan(item)]
         self.h1 = [item for item in self.h1 if not np.isnan(item)]
         self.h2 = [item for item in self.h2 if not np.isnan(item)]
+        self.latest_start_time = config.get('latest_start_time', 0)
+        self.earliest_start_time = config.get('earliest_start_time', 120)
+        self.t_error = config.get("allowable_setpoint_deviation", 1.0)
+        self.training_interval = config.get('training_interval', 10)
+        self.schedule = schedule
 
     def train_cooling(self, data):
         htr = self.heat_transfer_rate(data)
@@ -362,11 +372,22 @@ class Johnson(Model):
         self.h2_list = []
         self.cooling_heating_adjust = config.get('cooling_heating_adjust', 0.025)
 
-    def _start(self):
+    def _start(self, config, schedule):
         self.c1_list = [item for item in self.c1_list if not np.isnan(item)]
         self.c2_list = [item for item in self.c2_list if not np.isnan(item)]
         self.h1_list = [item for item in self.h1_list if not np.isnan(item)]
         self.h2_list = [item for item in self.h2_list if not np.isnan(item)]
+        self.c1 = ema(self.c1_list) if self.c1_list else 0
+        self.c2 = ema(self.c2_list) if self.c2_list else 0
+        self.h1 = ema(self.h1_list) if self.h1_list else 0
+        self.h2 = ema(self.h2_list) if self.h2_list else 0
+        _log.debug("J: {} -- {} -- {} -- {} --{} -- {} --{} -- {}".format(self.c1_list, self.c1, self.c2_list, self.c2, self.h1_list, self.h1, self.h2_list, self.h2))
+        self.latest_start_time = config.get('latest_start_time', 0)
+        self.earliest_start_time = config.get('earliest_start_time', 120)
+        self.t_error = config.get("allowable_setpoint_deviation", 1.0)
+        self.training_interval = config.get('training_interval', 10)
+        self.schedule = schedule
+
 
     def train_cooling(self, data):
         # cooling trained flag checked
@@ -382,10 +403,10 @@ class Johnson(Model):
                 _log.debug("Johnson debug cooling htr returned empty!")
                 return
             c2 = htr['timediff'].mean()
-            self.c2_list = trim(self.c2_list, c2, 10)
+            self.c2_list = trim(self.c2_list, c2, self.training_interval)
             c1 = (precooling - c2)/(temp_diff_begin*temp_diff_begin)
             _log.debug("precooling: {} - h1: {} - h2: {} -- zhsp: {}".format(precooling, c1, c2, temp_diff_begin))
-            self.c1_list = trim(self.c1_list, c1, 10)
+            self.c1_list = trim(self.c1_list, c1, self.training_interval)
             self.c1 = ema(self.c1_list)
             self.c2 = ema(self.c2_list)
             self.record = {
@@ -409,10 +430,10 @@ class Johnson(Model):
                 _log.debug("Johnson debug heating htr returned empty!")
                 return
             h2 = htr['timediff'].mean()
-            self.h2_list = trim(self.h2_list, h2, 10)
+            self.h2_list = trim(self.h2_list, h2, self.training_interval)
             h1 = (preheating - h2)/(temp_diff_begin*temp_diff_begin)
             _log.debug("preheating: {} - h1: {} - h2: {} -- zhsp: {}".format(preheating, h1, h2, temp_diff_begin))
-            self.h1_list = trim(self.h1_list, h1, 10)
+            self.h1_list = trim(self.h1_list, h1, self.training_interval)
             self.h1 = ema(self.h1_list)
             self.h2 = ema(self.h2_list)
             self.record = {
@@ -461,8 +482,8 @@ class Sbs(Model):
         self.day_count = 0
         self.train_heating = self.train_cooling
 
-    def _start(self):
-        pass
+    def _start(self, config, schedule):
+        self.schedule = schedule
 
     def reset_estimation(self):
         # initialize estimation parameters

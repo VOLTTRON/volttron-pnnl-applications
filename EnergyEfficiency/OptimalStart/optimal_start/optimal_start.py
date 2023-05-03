@@ -128,7 +128,7 @@ class OptimalStart(Agent):
             self.models['sbs'] = Sbs(config, self.schedule)
 
         for tag, cls in self.models.items():
-            cls._start()
+            cls._start(config, self.schedule)
 
         self.core.schedule(cron('1 0 * * *'), self.set_up_run)
         self.core.schedule(cron('0 9 * * *'), self.train_models)

@@ -57,9 +57,9 @@ _log = logging.getLogger(__name__)
 
 def parse_df(df, condition):
     if condition == "cooling":
-        data_sort = df[df['zonetemperature'] <= df[condition]]
+        data_sort = df[df['zonetemperature'] <= df["coolingsetpoint"]]
     else:
-        data_sort = df[df['zonetemperature'] >= df[condition]]
+        data_sort = df[df['zonetemperature'] >= df["heatingsetpoint"]]
     data_sort_mode = df[df[condition].diff() < 0]
     if not data_sort.empty:
         idx = data_sort.index[0]

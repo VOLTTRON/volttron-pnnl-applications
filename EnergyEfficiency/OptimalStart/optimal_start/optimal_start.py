@@ -70,39 +70,61 @@ class OptimalStart(Agent):
         super(OptimalStart, self).__init__(**kwargs)
         config = utils.load_config(config_path)
         # topic for device level data
-        self.campus = config.get("campus", "")
-        self.building = config.get("building", "")
+        campus = config.get("campus", "")
+        building = config.get("building", "")
         self.device = config.get("system", "")
-        self.results_model = "record/{}/{}/{}/OptimalStartModel".format(self.campus, self.building, self.device)
-        self.results_topic = "record/{}/{}/{}/OptimalStart".format(self.campus, self.building, self.device)
+        self.system_rpc_path = topics.RPC_DEVICE_PATH(campus=campus,
+                                                      building=building,
+                                                      unit=self.device,
+                                                      path="",
+                                                      point=None)
+        self.base_device_topic = topics.DEVICES_VALUE(campus=campus,
+                                                      building=building,
+                                                      unit="",
+                                                      path=self.device,
+                                                      point="all")
+        # Result objects for record topic
+        self.results_model = topics.RECORD(subtopic="/".join([campus, building, self.device, "OptimalStartModel"]))
+        self.results_topic = topics.RECORD(subtopic="/".join([campus, building, self.device, "OptimalStart"]))
         self.result = {}
-        self.system_rpc_path = ""
+        # Configuration for data handler
         timezone = config.get("local_tz", "UTC")
-        self.controller = config.get("controller", "s")
+        self.zone_point_names = config.get("zone_point_names")
+        self.data_handler = Data(self.zone_point_names, timezone, self.device)
         # No precontrol code yet, this might be needed in future
         self.precontrols = config.get("precontrols", {})
         self.precontrol_flag = False
-
-        self.zone_point_names = config.get("zone_point_names")
+        # Controller parameters
         self.actuator = config.get("actuator", "platform.actuator")
-        self.earliest_start_time = config.get("earliest_start_time", 120)
-        self.latest_start_time = config.get("latest_start_time", 10)
-        self.t_error = config.get("allowable_setpoint_deviation", 0.5)
-        self.data_handler = Data(self.zone_point_names, timezone, self.device)
-
+        self.zone_control = config.get("zone_control", {})
+        self.day_map = config.get("day_map", {0: "s", 1: "s", 2: "c", 3: "c", 4: "j"})
+        self.earliest_start_time = config.get("earliest_start_time", 180)
+        self.latest_start_time = config.get("latest_start_time", 0)
+        # Time and schedule object initialization
         self.run_sched = None
         self.current_time = None
-        self.zone_control = config.get("zone_control", {})
         self.start_obj = None
         self.end_obj = None
         self.prestart_training = None
         self.schedule = {}
         self.init_schedule(config.get("schedule", {}))
-        self.day_map = config.get("day_map", {0: "s", 1: "s", 2: "c", 3: "c", 4: "j"})
         if not self.schedule:
             _log.debug("No schedule configured, exiting!")
             self.core.stop()
         self.model_path = os.path.expanduser("~/models")
+        self.models = {"j": None, "s": None, "c": None, 'sbs': None}
+        self.load_models(config)
+        self.core.schedule(cron('1 0 * * *'), self.set_up_run)
+        self.core.schedule(cron('0 9 * * *'), self.train_models)
+
+    def load_models(self, config):
+        """
+        Create or load model pickle.
+        :param config: dict of configurations
+        :return: None
+        """
+        if not os.path.exists(self.model_path):
+            os.makedirs(self.model_path)
         self.models = {"j": None, "s": None, "c": None, 'sbs': None}
         try:
             for tag in self.models:
@@ -126,12 +148,8 @@ class OptimalStart(Agent):
             self.models['c'] = Carrier(config, self.schedule)
         if 'sbs' not in self.models:
             self.models['sbs'] = Sbs(config, self.schedule)
-
         for tag, cls in self.models.items():
             cls._start(config, self.schedule)
-
-        self.core.schedule(cron('1 0 * * *'), self.set_up_run)
-        self.core.schedule(cron('0 9 * * *'), self.train_models)
 
     def init_schedule(self, schedule):
         """
@@ -191,22 +209,11 @@ class OptimalStart(Agent):
         :return:
         """
         _log.debug("Starting!")
-        base_device_topic = topics.DEVICES_VALUE(campus=self.campus,
-                                                 building=self.building,
-                                                 unit="",
-                                                 path=self.device,
-                                                 point="all")
-        _log.debug("Starting %s", base_device_topic)
-        self.system_rpc_path = topics.RPC_DEVICE_PATH(campus=self.campus,
-                                                      building=self.building,
-                                                      unit=self.device,
-                                                      path="",
-                                                      point=None)
 
         self.vip.pubsub.subscribe(peer="pubsub",
-                                  prefix=base_device_topic,
+                                  prefix=self.base_device_topic,
                                   callback=self.update_data)
-        _log.debug("Subscribing to %s", base_device_topic)
+        _log.debug("Subscribing to %s", self.base_device_topic)
 
     def train_models(self):
         """

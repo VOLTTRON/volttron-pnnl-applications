@@ -155,17 +155,19 @@ class Model:
         data.to_csv('sort.csv')
         if not data.empty:
             if data['cooling'].sum() > 0:
-                data = parse_df(data, 'coolingsetpoint')
+                data = parse_df(data, 'cooling')
                 data.to_csv('sort1.csv')
                 data['temp_diff'] = data['zonetemperature'] - data['coolingsetpoint']
                 self.train_cooling(data)
             elif data['heating'].sum() > 0:
-                data = parse_df(data, 'heatingsetpoint')
+                data = parse_df(data, 'heating')
                 data.to_csv('sort1.csv')
                 data['temp_diff'] = data['heatingsetpoint'] - data['zonetemperature']
                 self.train_heating(data)
             else:
                 print("I don't know what to do!")
+
+
 
     def train_cooling(self, data):
         pass

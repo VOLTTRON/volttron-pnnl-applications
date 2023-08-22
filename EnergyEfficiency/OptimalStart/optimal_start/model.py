@@ -55,6 +55,11 @@ setup_logging()
 _log = logging.getLogger(__name__)
 
 
+def clean_array(array):
+    array = [item for item in array if np.isfinite(item)]
+    return array
+
+
 def parse_df(df, condition):
     if condition == "cooling":
         data_sort = df[df['zonetemperature'] <= df["coolingsetpoint"]]
@@ -207,8 +212,8 @@ class Carrier(Model):
         self.adjust_time = config.get('adjust_time', 0)
 
     def _start(self, config, schedule):
-        self.c1 = [item for item in self.c1 if not np.isnan(item)]
-        self.h1 = [item for item in self.h1 if not np.isnan(item)]
+        self.c1 = clean_array(self.c1)
+        self.h1 = clean_array(self.h1)
         self.latest_start_time = config.get('latest_start_time', 0)
         self.earliest_start_time = config.get('earliest_start_time', 120)
         self.t_error = config.get("allowable_setpoint_deviation", 1.0)
@@ -216,19 +221,26 @@ class Carrier(Model):
         self.schedule = schedule
 
     def train_cooling(self, data):
+        data = data[data['cooling'] != 0]
+        self.c1 = clean_array(self.c1)
         htr = self.heat_transfer_rate(data)
         if htr.empty:
             _log.debug("Carrier debug cooling htr returned empty!")
             return
         time_diff, temp_diff = get_time_temp_diff(htr)
         if not time_diff:
-            _log.debug("Carrier debug cooling temp_diff == 0!")
+            _log.debug("Carrier debug cooling time_diff == 0!")
             return
         c1 = temp_diff/time_diff
+        if not np.isfinite(c1):
+            _log.debug("C - cooling model returned non-numeric coefficients!")
+            return
         self.c1 = trim(self.c1, c1, 10)
         self.record = {"date": format_timestamp(dt.now()), "c1": c1, "c1_array": self.c1}
 
     def train_heating(self, data):
+        data = data[data['heating'] != 0]
+        self.h1 = clean_array(self.h1)
         htr = self.heat_transfer_rate(data)
         if htr.empty:
             _log.debug("Carrier debug heating htr returned empty!")
@@ -238,6 +250,9 @@ class Carrier(Model):
             _log.debug("Carrier debug heating temp_diff == 0!")
             return
         h1 = temp_diff / time_diff
+        if not np.isfinite(h1):
+            _log.debug("C - heating model returned non-numeric coefficients!")
+            return
         self.h1 = trim(self.h1, h1, 10)
         self.record = {"date": format_timestamp(dt.now()), "h1": h1, "h1_array": self.h1}
 
@@ -277,10 +292,10 @@ class Siemens(Model):
         self.adjust_time = config.get('adjust_time', 0)
 
     def _start(self, config, schedule):
-        self.c1 = [item for item in self.c1 if not np.isnan(item)]
-        self.c2 = [item for item in self.c2 if not np.isnan(item)]
-        self.h1 = [item for item in self.h1 if not np.isnan(item)]
-        self.h2 = [item for item in self.h2 if not np.isnan(item)]
+        self.c1 = clean_array(self.c1)
+        self.c2 = clean_array(self.c2)
+        self.h1 = clean_array(self.h1)
+        self.h2 = clean_array(self.h2)
         self.latest_start_time = config.get('latest_start_time', 0)
         self.earliest_start_time = config.get('earliest_start_time', 120)
         self.t_error = config.get("allowable_setpoint_deviation", 1.0)
@@ -288,6 +303,9 @@ class Siemens(Model):
         self.schedule = schedule
 
     def train_cooling(self, data):
+        data = data[data['cooling'] != 0]
+        self.c1 = clean_array(self.c1)
+        self.c2 = clean_array(self.c2)
         htr = self.heat_transfer_rate(data)
         if htr.empty:
             _log.debug("Siemens debug cooling htr returned empty!")
@@ -303,13 +321,19 @@ class Siemens(Model):
         precooling = htr['timediff'].sum()
         # Calculate average value of time to change degree
         c1 = time_avg / 60
-
-        self.c1 = trim(self.c1, c1, 10)
         c2 = (precooling / 60 - c1 * zcsp) / (osp * zcsp / 10)
+        _log.debug("S - precooling: {} - c1: {} - zcsp: {} -- osp: {}".format(precooling, self.c1, zcsp, osp))
+        if not np.isfinite(c1) or not np.isfinite(c2):
+            _log.debug("S: cooling model returned non-numeric coefficients!")
+            return
+        self.c1 = trim(self.c1, c1, 10)
         self.c2 = trim(self.c2, c2, 10)
         self.record = {"date": format_timestamp(dt.now()), "c1": c1, "c1_array": self.c1, "c2": c2, "c2_array": self.c2}
 
     def train_heating(self, data):
+        data = data[data['heating'] != 0]
+        self.h1 = clean_array(self.h1)
+        self.h2 = clean_array(self.h2)
         htr = self.heat_transfer_rate(data)
         if htr.empty:
             _log.debug("Siemens debug cooling htr returned empty!")
@@ -324,10 +348,12 @@ class Siemens(Model):
             return
         h1 = time_avg/60.0
         preheating = htr['timediff'].sum()
-
-        self.h1 = trim(self.h1, h1, 10)
-        _log.debug("preheating: {} - h1: {} - zhsp: {} -- osp: {}".format(preheating, self.h1, zhsp, osp))
+        _log.debug("S - preheating: {} - h1: {} - zhsp: {} -- osp: {}".format(preheating, self.h1, zhsp, osp))
         h2 = (preheating / 60 - h1 * zhsp) / (osp * zhsp / 10)
+        if not np.isfinite(h1) or not np.isfinite(h1):
+            _log.debug("S - heating model returned non-numeric coefficients!")
+            return
+        self.h1 = trim(self.h1, h1, 10)
         self.h2 = trim(self.h2, h2, 10)
         self.record = {"date": format_timestamp(dt.now()), "h1": h1, "h1_array": self.h1, "h2": h2, "h2_array": self.h2}
 
@@ -375,10 +401,10 @@ class Johnson(Model):
         self.cooling_heating_adjust = config.get('cooling_heating_adjust', 0.025)
 
     def _start(self, config, schedule):
-        self.c1_list = [item for item in self.c1_list if not np.isnan(item)]
-        self.c2_list = [item for item in self.c2_list if not np.isnan(item)]
-        self.h1_list = [item for item in self.h1_list if not np.isnan(item)]
-        self.h2_list = [item for item in self.h2_list if not np.isnan(item)]
+        self.c1_list = clean_array(self.c1_list)
+        self.c2_list = clean_array(self.c2_list)
+        self.h1_list = clean_array(self.h1_list)
+        self.h2_list = clean_array(self.h2_list)
         self.c1 = ema(self.c1_list) if self.c1_list else 0
         self.c2 = ema(self.c2_list) if self.c2_list else 0
         self.h1 = ema(self.h1_list) if self.h1_list else 0
@@ -390,12 +416,12 @@ class Johnson(Model):
         self.training_interval = config.get('training_interval', 10)
         self.schedule = schedule
 
-
     def train_cooling(self, data):
         # cooling trained flag checked
-        temp_diff_end = data['zonetemperature'][-1] - data['coolingsetpoint'][-1]
-        temp_diff_begin = data['zonetemperature'][0] - data['coolingsetpoint'][0]
+        self.c1_list = clean_array(self.c1_list)
+        self.c2_list = clean_array(self.c2_list)
         data = data[data['cooling'] != 0]
+        temp_diff_begin = data['zonetemperature'][0] - data['coolingsetpoint'][0]
         # check if there is cooling data for the training data
         if not data.empty:
             htr = self.heat_transfer_rate(data)
@@ -405,11 +431,17 @@ class Johnson(Model):
                 _log.debug("Johnson debug cooling htr returned empty!")
                 return
             c2 = htr['timediff'].mean()
-            self.c2_list = trim(self.c2_list, c2, self.training_interval)
             c1 = (precooling - c2)/(temp_diff_begin*temp_diff_begin)
-            _log.debug("precooling: {} - h1: {} - h2: {} -- zhsp: {}".format(precooling, c1, c2, temp_diff_begin))
-            self.c1_list = trim(self.c1_list, c1, self.training_interval)
-            self.c1 = ema(self.c1_list)
+            _log.debug("J - precooling: {} - c1: {} - c2: {} -- zcsp: {}".format(precooling, c1, c2, temp_diff_begin))
+            if not np.isfinite(c1) or not np.isfinite(c2):
+                _log.debug("J - cooling model returned non-numeric coefficients!")
+                return
+            if c1 != 0:
+                self.c1_list = trim(self.c1_list, c1, self.training_interval)
+                self.c1 = ema(self.c1_list)
+            else:
+                self.c1 = 0
+            self.c2_list = trim(self.c2_list, c2, self.training_interval)
             self.c2 = ema(self.c2_list)
             self.record = {
                 "date": format_timestamp(dt.now()), "c1": c1,
@@ -419,10 +451,11 @@ class Johnson(Model):
 
     def train_heating(self, data):
         # cooling trained flag checked
-        temp_diff_end = data['heatingsetpoint'][-1] - data['zonetemperature'][-1]
+        self.h1_list = clean_array(self.h1_list)
+        self.h2_list = clean_array(self.h2_list)
+        data = data[data['heating'] != 0]
         temp_diff_begin = data['heatingsetpoint'][0] - data['zonetemperature'][0]
         data['temp_diff'] = data['heatingsetpoint'] - data['zonetemperature']
-        data = data[data['heating'] != 0]
         # check if there is cooling data for the training data
         if not data.empty:
             htr = self.heat_transfer_rate(data)
@@ -432,18 +465,23 @@ class Johnson(Model):
                 _log.debug("Johnson debug heating htr returned empty!")
                 return
             h2 = htr['timediff'].mean()
-            self.h2_list = trim(self.h2_list, h2, self.training_interval)
             h1 = (preheating - h2)/(temp_diff_begin*temp_diff_begin)
-            _log.debug("preheating: {} - h1: {} - h2: {} -- zhsp: {}".format(preheating, h1, h2, temp_diff_begin))
-            self.h1_list = trim(self.h1_list, h1, self.training_interval)
-            self.h1 = ema(self.h1_list)
+            _log.debug("J - preheating: {} - h1: {} - h2: {} -- zhsp: {}".format(preheating, h1, h2, temp_diff_begin))
+            if not np.isfinite(h1) or not np.isfinite(h2):
+                _log.debug("J - heating model returned non-numeric coefficients!")
+                return
+            if h1 != 0:
+                self.h1_list = trim(self.h1_list, h1, self.training_interval)
+                self.h1 = ema(self.h1_list)
+            else:
+                self.h1 = 0
+            self.h2_list = trim(self.h2_list, h2, self.training_interval)
             self.h2 = ema(self.h2_list)
             self.record = {
                 "date": format_timestamp(dt.now()), "h1": h1,
                 "h1_array": self.h1_list, "h2": h2,
                 "h2_array": self.h2_list
             }
-
 
     def calculate_prestart(self, data):
         if not data.empty:

@@ -1,0 +1,34 @@
+{
+    "campus": "PNNL",
+	"building": "SIGMA1",
+	"power_unit": "METERS",
+    "power_name": "WholeBuildingPower",
+    "out_temp_unit": "",
+    "out_temp_name": "OutdoorAirTemperature",
+    "tz": "US/Pacific",
+    "zip": 99352,
+
+    "object_id": 1, #To add independent variables later. Always=1 for now
+    "variable_id": 3, #To add independent variables later. Always=3 for now
+    "n_degrees": 2, #Degrees of freedom. Always=2 for now
+    "deviation": 24, #Time step used to decide next potential point to put in the bin
+    "time_diff_tol": 2, #Time difference tolerance b/w model (predicted) and actual points
+    "oat_diff_tol": 2.5, #OAT difference tolerance b/w model (predicted) and actual points
+    "cost_limit": 10, #Energy cost threshold. Not used for now.
+    "price": 0, #Energy price. Always=0 for now
+    "threshold": 35.7965, #Whole building energy consumption/day threshold
+
+    "operation_mode": 1, #1: real-time, 2: simulation (cur_time is required)
+
+    #Optional
+    #"prediction_start": "2016-12-15 00:00:00", #Start of prediction period
+    #"prediction_stop": "2016-12-18 23:00:00", #End of prediction period
+    #"model_start": "2014-06-29 00:00:00", #Start of period used to create the prediction model
+    #"model_stop": "2015-06-30 23:00:00", #End of period used to create the prediction model
+    #"cur_time": "2001-12-31 16:00:00",
+
+    #local db directory
+    "db_folder": "/home/hngo/PycharmProjects/volttron-applications/pnnl/WbeAgent/data/",
+    "debug_folder": "/home/hngo/PycharmProjects/volttron-applications/pnnl/WbeAgent/data/"
+
+}

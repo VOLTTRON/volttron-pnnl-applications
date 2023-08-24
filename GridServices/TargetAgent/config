@@ -1,0 +1,53 @@
+{
+	"campus": "PNNL",
+	"building": "350_BUILDING",
+    "tz": "US/Pacific",
+
+    "wbe_file": "/home/ngoh511/PycharmProjects/volttron-applications/pnnl/TargetAgent/wbe.csv",
+    "prediction_method": "pge", #"wbe"
+
+    # dr_mode:
+    #   - dev mode for development only
+    #   - manual for simulation
+    #   - auto for real test
+    #   - open_adr to get event start and end time from openADR
+    # cur_time is only used in manual_mode (simulation)
+    "dr_mode": "open_adr",
+    "start_time": "2018-02-01 06:00:00",
+    "end_time": "2018-02-10 17:00:00",
+    "cur_time": "2018-02-10 07:28:49", #manual only, auto uses real time
+
+    #continute publishing target value after dr event
+    "cont_after_dr": "yes",
+    "occ_time": "2018-02-10 18:00:00", #this will supercede the "end_time" above. unused when in open_adr mode.
+
+    #DR days that will be excluded from baseline calculation
+    "dr_days": [],
+
+    "cbp": [
+        [0,0,0,0], #Midnight
+        [0,0,0,0],
+        [0,0,0,0], #2:00AM
+        [0,0,0,0],
+        [0,0,0,0], #4:00AM
+        [0,0,0,0],
+        [0,0,0,0], #6:00AM
+        [0,0,0,0],
+        [0,0,0,0], #8:00AM
+        [0,0,0,0],
+        [0,0,0,0], #10:00AM
+        [0,0,0,0],
+        [0,0,0,0], #Noon
+        [15,15,15,15],
+        [10,10,10,10], #2:00PM
+        [5,5,5,5],
+        [0,0,0,0], #4:00PM
+        [0,0,0,0],
+        [0,0,0,0], #6:00PM
+        [0,0,0,0],
+        [0,0,0,0], #8:00PM
+        [0,0,0,0],
+        [0,0,0,0], #10:00PM
+        [0,0,0,0]  #11:00PM
+    ]
+}

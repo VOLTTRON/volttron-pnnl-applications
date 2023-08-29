@@ -57,11 +57,17 @@ _log = logging.getLogger(__name__)
 
 def clean_array(array):
     """
-    Returns list of coefficients with nan, -inf, inf, and negative numbers removed.
+    Returns list of coefficients with nan, -inf, inf, negative
+    numbers, and outliers removed.
         :param array: (list) coefficients from models
         :return: array (list)
     """
     array = [item for item in array if np.isfinite(item) and item > 0]
+    if array:
+        u = np.mean(array)
+        s = np.std(array)
+        if np.isfinite(u) and np.isfinite(s):
+            array = [e for e in array if (u - 1.5 * s < e < u + 1.5 * s)]
     return array
 
 

@@ -56,7 +56,12 @@ _log = logging.getLogger(__name__)
 
 
 def clean_array(array):
-    array = [item for item in array if np.isfinite(item)]
+    """
+    Returns list of coefficients with nan, -inf, inf, and negative numbers removed.
+        :param array: (list) coefficients from models
+        :return: array (list)
+    """
+    array = [item for item in array if np.isfinite(item) and item > 0]
     return array
 
 
@@ -65,13 +70,15 @@ def parse_df(df, condition):
         data_sort = df[df['zonetemperature'] <= df["coolingsetpoint"]]
     else:
         data_sort = df[df['zonetemperature'] >= df["heatingsetpoint"]]
-    data_sort_mode = df[df[condition].diff() < 0]
+    df['conditioning'] = df[condition].rolling(window=10).mean()
+    data_sort_mode = df[df['conditioning'] == 0]
     if not data_sort.empty:
         idx = data_sort.index[0]
         df = df.loc[:idx]
     if not data_sort_mode.empty:
         idx = data_sort_mode.index[0]
         df = df.loc[:idx]
+    df = df[df[condition] > 0]
     return df
 
 
@@ -95,7 +102,7 @@ def trim(lst, new_value, cutoff):
 
 
 def get_time_temp_diff(htr):
-    htr['timediff'] = htr['ts'].diff().dt.total_seconds() / 60
+    htr['timediff'] = htr.index.to_series().diff().dt.total_seconds() / 60
     time_diff = htr['timediff'].sum(axis=0)
     temp_diff = htr['temp_diff'].iloc[0] - htr['temp_diff'].iloc[-1]
     return time_diff, temp_diff
@@ -109,8 +116,8 @@ def ema(lst):
     ema = 0
     for n in range(len(lst)):
         ema += _sort[n] * smoothing_constant * (1.0 - smoothing_constant) ** n
-
-    ema += _sort[-1] * (1.0 - smoothing_constant) ** (len(lst))
+    if _sort:
+        ema += _sort[-1] * (1.0 - smoothing_constant) ** (len(lst))
     return ema
 
 
@@ -151,9 +158,6 @@ class Model:
         else:
             _log.debug("No start in schedule!!")
             return
-        data['ts'] = pd.to_datetime(data['ts'])
-        data['time'] = data['ts']
-        data = data.set_index(data['time'])
         data.index = pd.to_datetime(data.index)
         data = data.between_time(start, end)
         data = data[data['supplyfanstatus'] != 0]
@@ -172,8 +176,6 @@ class Model:
             else:
                 print("I don't know what to do!")
 
-
-
     def train_cooling(self, data):
         pass
 
@@ -182,22 +184,15 @@ class Model:
 
     def heat_transfer_rate(self, data):
         df_list = []
-        if data.empty:
-            int_tot1 = 1
-        else:
-            int_tot1 = int(math.ceil(data['temp_diff'][0]))
-        int_tot2 = int(max(abs(data['temp_diff'] - data['temp_diff'][0])))
-        if int_tot1 > int_tot2:
-            int_tot = int_tot2 + 1
-        else:
-            int_tot = int_tot1
-        for j in range(0, int_tot):
+        _range = np.linspace(0, 15, 61)
+        for j in _range:
             try:
                 min_slope = data[(data['temp_diff'][0] - data['temp_diff']) >= j].index[0]
                 df_list.append(data.loc[min_slope])
             except (IndexError, ValueError) as ex:
                 _log.debug("Model error getting heat transfer rate: %s", ex)
-        if len(df_list) == 1 and int_tot > self.t_error:
+                continue
+        if len(df_list) == 1 and data['temp_diff'][0] > self.t_error:
             df_list.append(data.iloc[-1])
         htr = pd.concat(df_list, axis=1).T
         htr.to_csv('htr.csv')
@@ -221,7 +216,6 @@ class Carrier(Model):
         self.schedule = schedule
 
     def train_cooling(self, data):
-        data = data[data['cooling'] != 0]
         self.c1 = clean_array(self.c1)
         htr = self.heat_transfer_rate(data)
         if htr.empty:
@@ -239,7 +233,6 @@ class Carrier(Model):
         self.record = {"date": format_timestamp(dt.now()), "c1": c1, "c1_array": self.c1}
 
     def train_heating(self, data):
-        data = data[data['heating'] != 0]
         self.h1 = clean_array(self.h1)
         htr = self.heat_transfer_rate(data)
         if htr.empty:
@@ -303,7 +296,6 @@ class Siemens(Model):
         self.schedule = schedule
 
     def train_cooling(self, data):
-        data = data[data['cooling'] != 0]
         self.c1 = clean_array(self.c1)
         self.c2 = clean_array(self.c2)
         htr = self.heat_transfer_rate(data)
@@ -312,13 +304,15 @@ class Siemens(Model):
             return
         zcsp = htr['zonetemperature'][0] - htr['coolingsetpoint'][0]
         osp = htr['outdoortemperature'][0] - htr['coolingsetpoint'][0]
-        # zcspf = htr['zonetemperature'][-1] - htr['coolingsetpoint'][-1]
-        htr['timediff'] = htr['ts'].diff().dt.total_seconds() / 60
-        time_avg = htr['timediff'].mean()
+        time_diff, temp_diff = get_time_temp_diff(htr)
+        if not time_diff:
+            _log.debug("Siemens debug cooling time_diff == 0!")
+            return
+        time_avg = time_diff / temp_diff
         if np.isnan(time_avg):
             _log.debug("Siemens cooling debug time_avg is nan")
             return
-        precooling = htr['timediff'].sum()
+        precooling = time_diff
         # Calculate average value of time to change degree
         c1 = time_avg / 60
         c2 = (precooling / 60 - c1 * zcsp) / (osp * zcsp / 10)
@@ -331,23 +325,25 @@ class Siemens(Model):
         self.record = {"date": format_timestamp(dt.now()), "c1": c1, "c1_array": self.c1, "c2": c2, "c2_array": self.c2}
 
     def train_heating(self, data):
-        data = data[data['heating'] != 0]
         self.h1 = clean_array(self.h1)
         self.h2 = clean_array(self.h2)
         htr = self.heat_transfer_rate(data)
         if htr.empty:
             _log.debug("Siemens debug cooling htr returned empty!")
             return
-        #change htr to data?
+        # change htr to data?
         zhsp = htr['zonetemperature'][0] - htr['heatingsetpoint'][0]
         osp = htr['outdoortemperature'][0] - htr['heatingsetpoint'][0]
-        htr['timediff'] = htr['ts'].diff().dt.total_seconds() / 60
-        time_avg = htr['timediff'].mean()
+        time_diff, temp_diff = get_time_temp_diff(htr)
+        if not time_diff:
+            _log.debug("Siemens debug heating time_diff == 0!")
+            return
+        time_avg = time_diff / temp_diff
         if np.isnan(time_avg):
             _log.debug("Siemens heating debug time_avg is nan")
             return
         h1 = time_avg/60.0
-        preheating = htr['timediff'].sum()
+        preheating = time_diff
         _log.debug("S - preheating: {} - h1: {} - zhsp: {} -- osp: {}".format(preheating, self.h1, zhsp, osp))
         h2 = (preheating / 60 - h1 * zhsp) / (osp * zhsp / 10)
         if not np.isfinite(h1) or not np.isfinite(h1):
@@ -420,17 +416,20 @@ class Johnson(Model):
         # cooling trained flag checked
         self.c1_list = clean_array(self.c1_list)
         self.c2_list = clean_array(self.c2_list)
-        data = data[data['cooling'] != 0]
         temp_diff_begin = data['zonetemperature'][0] - data['coolingsetpoint'][0]
+        data = data[data['cooling'] != 0]
         # check if there is cooling data for the training data
         if not data.empty:
             htr = self.heat_transfer_rate(data)
-            htr['timediff'] = htr['ts'].diff().dt.total_seconds() / 60
-            precooling = htr['timediff'].sum()
             if htr.empty:
                 _log.debug("Johnson debug cooling htr returned empty!")
                 return
-            c2 = htr['timediff'].mean()
+            time_diff, temp_diff = get_time_temp_diff(htr)
+            if not time_diff:
+                _log.debug("JCI debug cooling time_diff == 0!")
+                return
+            c2 = time_diff / temp_diff
+            precooling = time_diff
             c1 = (precooling - c2)/(temp_diff_begin*temp_diff_begin)
             _log.debug("J - precooling: {} - c1: {} - c2: {} -- zcsp: {}".format(precooling, c1, c2, temp_diff_begin))
             if not np.isfinite(c1) or not np.isfinite(c2):
@@ -453,18 +452,19 @@ class Johnson(Model):
         # cooling trained flag checked
         self.h1_list = clean_array(self.h1_list)
         self.h2_list = clean_array(self.h2_list)
-        data = data[data['heating'] != 0]
         temp_diff_begin = data['heatingsetpoint'][0] - data['zonetemperature'][0]
-        data['temp_diff'] = data['heatingsetpoint'] - data['zonetemperature']
         # check if there is cooling data for the training data
         if not data.empty:
             htr = self.heat_transfer_rate(data)
-            htr['timediff'] = htr['ts'].diff().dt.total_seconds() / 60
-            preheating = htr['timediff'].sum()
             if htr.empty:
                 _log.debug("Johnson debug heating htr returned empty!")
                 return
-            h2 = htr['timediff'].mean()
+            time_diff, temp_diff = get_time_temp_diff(htr)
+            if not time_diff:
+                _log.debug("JCI debug heating time_diff == 0!")
+                return
+            h2 = time_diff / temp_diff
+            preheating = time_diff
             h1 = (preheating - h2)/(temp_diff_begin*temp_diff_begin)
             _log.debug("J - preheating: {} - h1: {} - h2: {} -- zhsp: {}".format(preheating, h1, h2, temp_diff_begin))
             if not np.isfinite(h1) or not np.isfinite(h2):
@@ -550,10 +550,9 @@ class Sbs(Model):
         data['db'] = data['coolingsetpoint'] - data['heatingsetpoint']
         data['e_b'] = data['sp'] - data['zonetemperature']
         data['e_a'] = data.apply(self.deadband, axis=1)
-        data['timediff'] = data['ts'].diff().dt.total_seconds() / 60
+        data['timediff'] = data.index.to_series().diff().dt.total_seconds() / 60
         time_avg = data['timediff'].mean()
         for index, row in data.iterrows():
-            _log.debug("row - %s", row)
             self.ctime = self.ctime + time_avg
             # need this to start only after error has jumped due to mode change
             x = self.e_last  # + (self.sp - self.sp_last)

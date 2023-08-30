@@ -328,9 +328,12 @@ class Siemens(Model):
         # Calculate average value of time to change degree
         c1 = time_avg / 60
         c2 = (precooling / 60 - c1 * zcsp) / (osp * zcsp / 10)
-        _log.debug("S - precooling: {} - c1: {} - zcsp: {} -- osp: {}".format(precooling, self.c1, zcsp, osp))
+        _log.debug("S - cooling: {} - c1: {} - zcsp: {} -- osp: {}".format(precooling, self.c1, zcsp, osp))
         if not np.isfinite(c1) or not np.isfinite(c2):
             _log.debug("S: cooling model returned non-numeric coefficients!")
+            return
+        if c1 <= 0 or c2 <= 0:
+            _log.debug("S - cooling model returned negative coefficients!")
             return
         self.c1 = trim(self.c1, c1, 10)
         self.c2 = trim(self.c2, c2, 10)

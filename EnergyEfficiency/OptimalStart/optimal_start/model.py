@@ -235,6 +235,9 @@ class Carrier(Model):
         if not np.isfinite(c1):
             _log.debug("C - cooling model returned non-numeric coefficients!")
             return
+        if c1 <= 0:
+            _log.debug("C - cooling model returned negative coefficients!")
+            return
         self.c1 = trim(self.c1, c1, 10)
         self.record = {"date": format_timestamp(dt.now()), "c1": c1, "c1_array": self.c1}
 
@@ -246,11 +249,14 @@ class Carrier(Model):
             return
         time_diff, temp_diff = get_time_temp_diff(htr)
         if not time_diff:
-            _log.debug("Carrier debug heating temp_diff == 0!")
+            _log.debug("Carrier debug heating time_diff == 0!")
             return
         h1 = temp_diff / time_diff
         if not np.isfinite(h1):
             _log.debug("C - heating model returned non-numeric coefficients!")
+            return
+        if h1 <= 0:
+            _log.debug("C - heating model returned negative coefficients!")
             return
         self.h1 = trim(self.h1, h1, 10)
         self.record = {"date": format_timestamp(dt.now()), "h1": h1, "h1_array": self.h1}
@@ -355,6 +361,9 @@ class Siemens(Model):
         if not np.isfinite(h1) or not np.isfinite(h1):
             _log.debug("S - heating model returned non-numeric coefficients!")
             return
+        if h1 <= 0 or h2 <= 0:
+            _log.debug("S - heating model returned negative coefficients!")
+            return
         self.h1 = trim(self.h1, h1, 10)
         self.h2 = trim(self.h2, h2, 10)
         self.record = {"date": format_timestamp(dt.now()), "h1": h1, "h1_array": self.h1, "h2": h2, "h2_array": self.h2}
@@ -437,15 +446,15 @@ class Johnson(Model):
             c2 = time_diff / temp_diff
             precooling = time_diff
             c1 = (precooling - c2)/(temp_diff_begin*temp_diff_begin)
-            _log.debug("J - precooling: {} - c1: {} - c2: {} -- zcsp: {}".format(precooling, c1, c2, temp_diff_begin))
+            _log.debug("J - cooling: {} - c1: {} - c2: {} -- zcsp: {}".format(precooling, c1, c2, temp_diff_begin))
             if not np.isfinite(c1) or not np.isfinite(c2):
                 _log.debug("J - cooling model returned non-numeric coefficients!")
                 return
-            if c1 != 0:
-                self.c1_list = trim(self.c1_list, c1, self.training_interval)
-                self.c1 = ema(self.c1_list)
-            else:
-                self.c1 = 0
+            if c1 <= 0 or c2 <= 0:
+                _log.debug("J - cooling model returned negative coefficients!")
+                return
+            self.c1_list = trim(self.c1_list, c1, self.training_interval)
+            self.c1 = ema(self.c1_list)
             self.c2_list = trim(self.c2_list, c2, self.training_interval)
             self.c2 = ema(self.c2_list)
             self.record = {
@@ -472,15 +481,15 @@ class Johnson(Model):
             h2 = time_diff / temp_diff
             preheating = time_diff
             h1 = (preheating - h2)/(temp_diff_begin*temp_diff_begin)
-            _log.debug("J - preheating: {} - h1: {} - h2: {} -- zhsp: {}".format(preheating, h1, h2, temp_diff_begin))
+            _log.debug("J - heating: {} - h1: {} - h2: {} -- zhsp: {}".format(preheating, h1, h2, temp_diff_begin))
             if not np.isfinite(h1) or not np.isfinite(h2):
                 _log.debug("J - heating model returned non-numeric coefficients!")
                 return
-            if h1 != 0:
-                self.h1_list = trim(self.h1_list, h1, self.training_interval)
-                self.h1 = ema(self.h1_list)
-            else:
-                self.h1 = 0
+            if h1 <= 0 or h2 <= 0:
+                _log.debug("J - heating model returned negative coefficients!")
+                return
+            self.h1_list = trim(self.h1_list, h1, self.training_interval)
+            self.h1 = ema(self.h1_list)
             self.h2_list = trim(self.h2_list, h2, self.training_interval)
             self.h2 = ema(self.h2_list)
             self.record = {

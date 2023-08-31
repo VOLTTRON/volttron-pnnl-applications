@@ -167,6 +167,7 @@ class Model:
         data.index = pd.to_datetime(data.index)
         data = data.between_time(start, end)
         data = data[data['supplyfanstatus'] != 0]
+        data.drop(index=data.index[0], axis=0, inplace=True)
         data.to_csv('sort.csv')
         if not data.empty:
             if data['cooling'].sum() > 0:
@@ -380,16 +381,16 @@ class Siemens(Model):
             if zonetemp + self.t_error < hsp:
                 if not self.h1 or not self.h2:
                     return self.earliest_start_time
-                zsp = zonetemp - hsp
-                osp = oat - hsp
+                zsp = max(0, hsp - zonetemp)
+                osp = max(0, hsp - oat)
                 coefficient1 = ema(self.h1)
                 coefficient2 = ema(self.h2)
                 start_time = (coefficient1 * zsp + coefficient2 * zsp * osp / 10.0) * 60.0 + self.adjust_time
             elif zonetemp - self.t_error > csp:
                 if not self.c1 or not self.c2:
                     return self.earliest_start_time
-                zsp = zonetemp - csp
-                osp = oat - csp
+                zsp = max(0, zonetemp - csp)
+                osp = max(0, oat - csp)
                 coefficient1 = ema(self.c1)
                 coefficient2 = ema(self.c2)
                 start_time = (coefficient1 * zsp + coefficient2 * zsp * osp / 10.0) * 60.0 + self.adjust_time

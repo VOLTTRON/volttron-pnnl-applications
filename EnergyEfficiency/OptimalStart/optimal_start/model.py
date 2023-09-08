@@ -42,100 +42,16 @@ under Contract DE-AC05-76RL01830
 import pandas as pd
 import numpy as np
 import sys
-import warnings
-warnings.filterwarnings("ignore", category=DeprecationWarning)
-import logging
 import datetime
 from datetime import timedelta as td, datetime as dt
-import math
+import warnings
+import logging
+from .utils import clean_array, parse_df, offset_time, trim, get_time_temp_diff, ema, calculate_prestart_time
 from volttron.platform.agent.utils import setup_logging, format_timestamp
 
-
+warnings.filterwarnings("ignore", category=DeprecationWarning)
 setup_logging()
 _log = logging.getLogger(__name__)
-
-
-def clean_array(array):
-    """
-    Returns list of coefficients with nan, -inf, inf, negative
-    numbers, and outliers removed.
-        :param array: (list) coefficients from models
-        :return: array (list)
-    """
-    array = [item for item in array if np.isfinite(item) and item > 0]
-    if array:
-        u = np.mean(array)
-        s = np.std(array)
-        if np.isfinite(u) and np.isfinite(s):
-            array = [e for e in array if (u - 1.5 * s < e < u + 1.5 * s)]
-    return array
-
-
-def parse_df(df, condition):
-    if condition == "cooling":
-        data_sort = df[df['zonetemperature'] <= df["coolingsetpoint"]]
-    else:
-        data_sort = df[df['zonetemperature'] >= df["heatingsetpoint"]]
-    df['conditioning'] = df[condition].rolling(window=10).mean()
-    data_sort_mode = df[df['conditioning'] == 0]
-    if not data_sort.empty:
-        idx = data_sort.index[0]
-        df = df.loc[:idx]
-    if not data_sort_mode.empty:
-        idx = data_sort_mode.index[0]
-        df = df.loc[:idx]
-    df = df[df[condition] > 0]
-    return df
-
-
-def offset_time(_time, offset):
-    _hour = _time.hour
-    _minute = _time.minute + offset
-    if _minute >= 60:
-        _hour += 1
-        _minute = _minute - 60
-    ret_time = datetime.time(hour=_hour, minute=_minute)
-    return ret_time
-
-
-def trim(lst, new_value, cutoff):
-    lst.append(new_value)
-    if lst and len(lst) > cutoff:
-        lst.pop(0)
-    lst = [item for item in lst if item != 0]
-    lst = [item for item in lst if not np.isnan(item)]
-    return lst
-
-
-def get_time_temp_diff(htr):
-    htr['timediff'] = htr.index.to_series().diff().dt.total_seconds() / 60
-    time_diff = htr['timediff'].sum(axis=0)
-    temp_diff = htr['temp_diff'].iloc[0] - htr['temp_diff'].iloc[-1]
-    return time_diff, temp_diff
-
-
-def ema(lst):
-    smoothing_constant = 2.0 / (len(lst) + 1.0) * 2.0 if lst else 1.0
-    smoothing_constant = smoothing_constant if smoothing_constant <= 1.0 else 1.0
-    _sort = list(lst)
-    _sort.sort(reverse=True)
-    ema = 0
-    for n in range(len(lst)):
-        ema += _sort[n] * smoothing_constant * (1.0 - smoothing_constant) ** n
-    if _sort:
-        ema += _sort[-1] * (1.0 - smoothing_constant) ** (len(lst))
-    return ema
-
-
-def calculate_prestart_time(end, prestart):
-    _hours, _minutes = divmod(prestart, 60)
-    _minutes = end.minute - _minutes
-    if _minutes < 0:
-        _minutes = 60 + _minutes
-        _hours += 1
-    _hours = end.hour - _hours
-    start = datetime.time(hour=_hours, minute=_minutes)
-    return start
 
 
 class Model:

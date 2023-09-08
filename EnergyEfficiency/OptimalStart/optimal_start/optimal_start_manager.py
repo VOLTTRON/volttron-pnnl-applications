@@ -39,16 +39,16 @@ PACIFIC NORTHWEST NATIONAL LABORATORY
 operated by BATTELLE for the UNITED STATES DEPARTMENT OF ENERGY
 under Contract DE-AC05-76RL01830
 """
-from __future__ import annotations
+# from __future__ import annotations
 from typing import Dict, Tuple, Union, List
 from datetime import datetime as dt, timedelta as td
 import logging
 import dill
-from .optimal_start_models import Johnson, Siemens, Carrier, Sbs
+from .model import Johnson, Siemens, Carrier, Sbs
 from volttron.platform.agent.utils import (setup_logging, format_timestamp, get_aware_utc_now)
 from volttron.platform.scheduling import cron
 from volttron.platform.vip.agent import Agent
-from dataclasses import dataclass
+#from dataclasses import dataclass
 
 setup_logging()
 _log = logging.getLogger(__name__)
@@ -82,7 +82,7 @@ class OptimalStartManager:
         @rtype:
         """
         self.models = self.load_models(self.config)
-        self.weekend_holiday_models = self.load_models(self.config, weekend='we')
+        self.weekend_holiday_models = self.load_models(self.config, weekend='_we')
         self.core.schedule(cron('1 0 * * *'), self.set_up_run)
         self.core.schedule(cron('0 9 * * *'), self.train_models)
 
@@ -123,7 +123,7 @@ class OptimalStartManager:
                         e_hour = earliest.hour
                         e_minute = earliest.minute
                         run_time = dt.now().replace(hour=e_hour, minute=e_minute)
-                        # _log.debug("Schedule run method: %s", format_timestamp(run_time))
+                        _log.debug("Schedule run method: %s", format_timestamp(run_time))
                         self.run_schedule = self.core.schedule(run_time, self.run_method)
         except Exception as ex:
             _log.debug("Error setting up optimal start run: %s", ex)
@@ -219,7 +219,7 @@ class OptimalStartManager:
         models = {"j": None, "s": None, "c": None, 'sbs': None}
         for tag in models:
             try:
-                _file = self.base.manager_path + "/{}_{}_{}.pickle".format(self.base.device, tag, weekend)
+                _file = self.base.model_path + "/{}_{}{}.pickle".format(self.base.device, tag, weekend)
                 with open(_file, 'rb') as f:
                     _cls = dill.load(f)
                 models[tag] = _cls
@@ -252,7 +252,7 @@ class OptimalStartManager:
         data = self.base.data_handler.df
         if self.previous_weekend_holiday:
             models = self.weekend_holiday_models
-            weekend = 'we'
+            weekend = '_we'
             self.weekend_holiday_trained = True
         else:
             models = self.models
@@ -264,7 +264,7 @@ class OptimalStartManager:
                 _log.debug(f'{self.identity} - ERROR training model {tag}: -- {ex}')
                 continue
             try:
-                _file = self.base.manager_path + f'/{self.base.device}_{tag}_{weekend}.pickle'
+                _file = self.base.model_path + f'/{self.base.device}_{tag}{weekend}.pickle'
                 with open(_file, 'wb') as f:
                     dill.dump(model, file=f)
             except Exception as ex:

@@ -70,6 +70,8 @@ class OptimalStart(Agent):
     def __init__(self, config_path, **kwargs):
         super(OptimalStart, self).__init__(**kwargs)
         config = utils.load_config(config_path)
+        self.identity = self.core.identity
+        self.config = config
         # topic for device level data
         campus = config.get("campus", "")
         building = config.get("building", "")
@@ -106,7 +108,6 @@ class OptimalStart(Agent):
             _log.debug("No schedule configured, exiting!")
             self.core.stop()
         self.model_path = os.path.expanduser("~/models")
-        self.identity = self.core.identity
         # Initialize sub-classes
         self.holiday_manager = HolidayManager()
         self.optimal_start = OptimalStartManager(self)

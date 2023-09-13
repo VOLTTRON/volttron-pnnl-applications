@@ -74,6 +74,8 @@ class OptimalStartManager:
         self.identity = parent.core.identity
         self.weekend_holiday_trained = False
         self.base_record_topic = parent.base_record_topic
+        self.earliest_start_time = self.base.earliest_start_time
+        self.latest_start_time = self.base.latest_start_time
 
     def setup_optimal_start(self):
         """
@@ -140,7 +142,7 @@ class OptimalStartManager:
             current_time = dt.now()
             current_day = current_time.weekday()
 
-            controller = self.day_map[current_day]
+            controller = self.base.day_map[current_day]
             active_minutes = self.result[controller]
         except:
             active_minutes = self.earliest_start_time

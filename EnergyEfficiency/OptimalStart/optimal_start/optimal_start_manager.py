@@ -192,7 +192,7 @@ class OptimalStartManager:
             self.result[tag] = optimal_start_time
 
         self.result['occupancy'] = format_timestamp(occupancy_time)
-        active_minutes = max(self.base.latest_start_time, min(self.base.get_controller(), self.base.earliest_start_time))
+        active_minutes = max(self.latest_start_time, min(self.get_controller(), self.earliest_start_time))
         self.training_time = active_minutes
         optimal_start_time = occupancy_time - td(minutes=active_minutes)
         reschedule_time = dt.now() + td(minutes=15)

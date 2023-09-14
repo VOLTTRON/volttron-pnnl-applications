@@ -127,11 +127,13 @@ class Carrier(Model):
         super(Carrier, self).__init__(config, schedule)
         self.c1 = config.get('c1', [])
         self.h1 = config.get('h1', [])
+        self.oat = []
         self.adjust_time = config.get('adjust_time', 0)
 
     def _start(self, config, schedule):
         self.c1 = clean_array(self.c1)
         self.h1 = clean_array(self.h1)
+        self.oat = clean_array(self.oat)
         self.latest_start_time = config.get('latest_start_time', 0)
         self.earliest_start_time = config.get('earliest_start_time', 120)
         self.t_error = config.get("allowable_setpoint_deviation", 1.0)
@@ -145,6 +147,8 @@ class Carrier(Model):
             _log.debug("Carrier debug cooling htr returned empty!")
             return
         time_diff, temp_diff = get_time_temp_diff(htr)
+        oat = htr['outdoortemperature'].mean()
+        _log.debug("C: training {} -- {}".format(temp_diff, time_diff))
         if not time_diff:
             _log.debug("Carrier debug cooling time_diff == 0!")
             return
@@ -156,6 +160,7 @@ class Carrier(Model):
             _log.debug("C - cooling model returned negative coefficients!")
             return
         self.c1 = trim(self.c1, c1, 10)
+        self.oat = trim(self.oat, oat, 10)
         self.record = {"date": format_timestamp(dt.now()), "c1": c1, "c1_array": self.c1}
 
     def train_heating(self, data):
@@ -165,6 +170,7 @@ class Carrier(Model):
             _log.debug("Carrier debug heating htr returned empty!")
             return
         time_diff, temp_diff = get_time_temp_diff(htr)
+        oat = htr['outdoortemperature'].mean()
         if not time_diff:
             _log.debug("Carrier debug heating time_diff == 0!")
             return
@@ -176,6 +182,7 @@ class Carrier(Model):
             _log.debug("C - heating model returned negative coefficients!")
             return
         self.h1 = trim(self.h1, h1, 10)
+        self.oat = trim(self.oat, oat, 10)
         self.record = {"date": format_timestamp(dt.now()), "h1": h1, "h1_array": self.h1}
 
     def calculate_prestart(self, data):
@@ -189,13 +196,19 @@ class Carrier(Model):
                     return self.earliest_start_time
                 zsp = hsp - zonetemp
                 coefficient1 = ema(self.h1)
-                start_time = zsp / ((0.0 - oat) / (0 - 32.0) * coefficient1)
+                oat_training = ema(self.oat) if self.oat else oat
+                _log.debug(f"C heating calculate: {self.c1} -- {coefficient1} -- "
+                           f"{self.oat} -- {oat_training} -- {hsp} -- {zonetemp}")
+                start_time = zsp / ((0 - oat) / (0 - oat_training) * coefficient1)
             elif zonetemp - self.t_error > csp:
                 if not self.c1:
                     return self.earliest_start_time
                 zsp = zonetemp - csp
                 coefficient1 = ema(self.c1)
-                start_time = zsp / ((100 - oat) / (100 - 65) * coefficient1)
+                oat_training = ema(self.oat) if self.oat else oat
+                _log.debug(f"C cooling calculate: {self.c1} -- {coefficient1} -- "
+                           f"{self.oat} -- {oat_training} -- {csp} -- {zonetemp}")
+                start_time = zsp / ((100 - oat) / (100 - oat_training) * coefficient1)
             else:
                 return self.latest_start_time
         else:
@@ -214,6 +227,13 @@ class Siemens(Model):
         self.adjust_time = config.get('adjust_time', 0)
 
     def _start(self, config, schedule):
+        """
+        Called on model initialization to set class variables and validate stored coefficients.
+        @param config: configuration parameters
+        @type config: dict
+        @return: None
+        @rtype:
+        """
         self.c1 = clean_array(self.c1)
         self.c2 = clean_array(self.c2)
         self.h1 = clean_array(self.h1)
@@ -225,6 +245,13 @@ class Siemens(Model):
         self.schedule = schedule
 
     def train_cooling(self, data):
+        """
+        Train coefficients (c1, c2) for optimal start cooling.
+        @param data: RTU data to train optimal start
+        @type data: DataFrame
+        @return: None
+        @rtype:
+        """
         self.c1 = clean_array(self.c1)
         self.c2 = clean_array(self.c2)
         htr = self.heat_transfer_rate(data)
@@ -249,14 +276,24 @@ class Siemens(Model):
         if not np.isfinite(c1) or not np.isfinite(c2):
             _log.debug("S: cooling model returned non-numeric coefficients!")
             return
-        if c1 <= 0 or c2 <= 0:
-            _log.debug("S - cooling model returned negative coefficients!")
+        if c1 <= 0:
+            _log.debug("S - cooling c1 model returned negative coefficients!")
             return
+        if c2 <= 0:
+            _log.debug("S - cooling c2 model returned negative coefficients!")
+            c2 = 0
         self.c1 = trim(self.c1, c1, 10)
         self.c2 = trim(self.c2, c2, 10)
         self.record = {"date": format_timestamp(dt.now()), "c1": c1, "c1_array": self.c1, "c2": c2, "c2_array": self.c2}
 
     def train_heating(self, data):
+        """
+        Train coefficients (h1, h2) for optimal start heating.
+        @param data: RTU data to train optimal start
+        @type data: DataFrame
+        @return: None
+        @rtype:
+        """
         self.h1 = clean_array(self.h1)
         self.h2 = clean_array(self.h2)
         htr = self.heat_transfer_rate(data)
@@ -278,17 +315,31 @@ class Siemens(Model):
         preheating = time_diff
         _log.debug("S - preheating: {} - h1: {} - zhsp: {} -- osp: {}".format(preheating, self.h1, zhsp, osp))
         h2 = (preheating / 60 - h1 * zhsp) / (osp * zhsp / 10)
-        if not np.isfinite(h1) or not np.isfinite(h1):
+        if not np.isfinite(h1) or not np.isfinite(h2):
             _log.debug("S - heating model returned non-numeric coefficients!")
             return
-        if h1 <= 0 or h2 <= 0:
-            _log.debug("S - heating model returned negative coefficients!")
+        if h1 <= 0:
+            _log.debug("S - heating h1 model returned negative coefficients!")
             return
+        if h2 <= 0:
+            _log.debug("J - heating h2 model returned negative coefficients!")
+            h2 = 0
         self.h1 = trim(self.h1, h1, 10)
         self.h2 = trim(self.h2, h2, 10)
         self.record = {"date": format_timestamp(dt.now()), "h1": h1, "h1_array": self.h1, "h2": h2, "h2_array": self.h2}
 
-    def calculate_prestart(self, data):
+    def calculate_prestart(self, data, offset, mode):
+        """
+        Calculate optimal start time using trained coefficients for heating and cooling.
+        @param data: DataFrame with data to calculate optimal start time
+        @type data: DataFrame
+        @param offset: preconditioning offset
+        @type offset: float
+        @param mode: heating or cooling
+        @type mode: str
+        @return: time to precondition to reach target offset by DR Event
+        @rtype: float
+        """
         if not data.empty:
             csp = data['coolingsetpoint'][-1]
             hsp = data['heatingsetpoint'][-1]
@@ -352,7 +403,6 @@ class Johnson(Model):
         self.c1_list = clean_array(self.c1_list)
         self.c2_list = clean_array(self.c2_list)
         temp_diff_begin = data['zonetemperature'][0] - data['coolingsetpoint'][0]
-        data = data[data['cooling'] != 0]
         # check if there is cooling data for the training data
         if not data.empty:
             htr = self.heat_transfer_rate(data)
@@ -365,7 +415,10 @@ class Johnson(Model):
                 return
             c2 = time_diff / temp_diff
             precooling = time_diff
-            c1 = (precooling - c2)/(temp_diff_begin*temp_diff_begin)
+            if precooling - c2 < 1:
+                c1 = (precooling - c2)/(temp_diff_begin*temp_diff_begin)
+            else:
+                c1 = time_diff / temp_diff*10
             _log.debug("J - cooling: {} - c1: {} - c2: {} -- zcsp: {}".format(precooling, c1, c2, temp_diff_begin))
             if not np.isfinite(c1) or not np.isfinite(c2):
                 _log.debug("J - cooling model returned non-numeric coefficients!")
@@ -400,7 +453,10 @@ class Johnson(Model):
                 return
             h2 = time_diff / temp_diff
             preheating = time_diff
-            h1 = (preheating - h2)/(temp_diff_begin*temp_diff_begin)
+            if preheating - h2 < 1:
+                h1 = (preheating - h2)/(temp_diff_begin*temp_diff_begin)
+            else:
+                h1 = time_diff / temp_diff*10
             _log.debug("J - heating: {} - h1: {} - h2: {} -- zhsp: {}".format(preheating, h1, h2, temp_diff_begin))
             if not np.isfinite(h1) or not np.isfinite(h2):
                 _log.debug("J - heating model returned non-numeric coefficients!")

@@ -1,4 +1,4 @@
-"""
+u"""
 Copyright (c) 2023, Battelle Memorial Institute
 All rights reserved.
 Redistribution and use in source and binary forms, with or without
@@ -90,7 +90,7 @@ def trim(lst, new_value, cutoff):
     lst.append(new_value)
     if lst and len(lst) > cutoff:
         lst.pop(0)
-    lst = [item for item in lst if item != 0]
+    # lst = [item for item in lst if item != 0]
     lst = [item for item in lst if not np.isnan(item)]
     return lst
 

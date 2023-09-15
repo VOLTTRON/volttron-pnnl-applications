@@ -238,6 +238,7 @@ class Siemens(Model):
         self.c2 = clean_array(self.c2)
         self.h1 = clean_array(self.h1)
         self.h2 = clean_array(self.h2)
+        _log.debug("J: {} -- {} -- {} -- {}".format(self.c1, self.c2, self.h1, self.h2))
         self.latest_start_time = config.get('latest_start_time', 0)
         self.earliest_start_time = config.get('earliest_start_time', 120)
         self.t_error = config.get("allowable_setpoint_deviation", 1.0)
@@ -415,10 +416,10 @@ class Johnson(Model):
                 return
             c2 = time_diff / temp_diff
             precooling = time_diff
-            if precooling - c2 < 1:
+            if precooling - c2 >= 1:
                 c1 = (precooling - c2)/(temp_diff_begin*temp_diff_begin)
             else:
-                c1 = time_diff / temp_diff*10
+                c1 = time_diff / (temp_diff*10)
             _log.debug("J - cooling: {} - c1: {} - c2: {} -- zcsp: {}".format(precooling, c1, c2, temp_diff_begin))
             if not np.isfinite(c1) or not np.isfinite(c2):
                 _log.debug("J - cooling model returned non-numeric coefficients!")
@@ -453,10 +454,10 @@ class Johnson(Model):
                 return
             h2 = time_diff / temp_diff
             preheating = time_diff
-            if preheating - h2 < 1:
+            if preheating - h2 >= 1:
                 h1 = (preheating - h2)/(temp_diff_begin*temp_diff_begin)
             else:
-                h1 = time_diff / temp_diff*10
+                h1 = time_diff / (temp_diff*10)
             _log.debug("J - heating: {} - h1: {} - h2: {} -- zhsp: {}".format(preheating, h1, h2, temp_diff_begin))
             if not np.isfinite(h1) or not np.isfinite(h2):
                 _log.debug("J - heating model returned non-numeric coefficients!")

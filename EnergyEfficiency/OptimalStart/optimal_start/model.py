@@ -159,8 +159,8 @@ class Carrier(Model):
         if c1 <= 0:
             _log.debug("C - cooling model returned negative coefficients!")
             return
-        self.c1 = trim(self.c1, c1, 10)
-        self.oat = trim(self.oat, oat, 10)
+        self.c1 = trim(self.c1, c1, self.training_interval)
+        self.oat = trim(self.oat, oat, self.training_interval)
         self.record = {"date": format_timestamp(dt.now()), "c1": c1, "c1_array": self.c1}
 
     def train_heating(self, data):
@@ -181,8 +181,8 @@ class Carrier(Model):
         if h1 <= 0:
             _log.debug("C - heating model returned negative coefficients!")
             return
-        self.h1 = trim(self.h1, h1, 10)
-        self.oat = trim(self.oat, oat, 10)
+        self.h1 = trim(self.h1, h1, self.training_interval)
+        self.oat = trim(self.oat, oat, self.training_interval)
         self.record = {"date": format_timestamp(dt.now()), "h1": h1, "h1_array": self.h1}
 
     def calculate_prestart(self, data):
@@ -231,6 +231,8 @@ class Siemens(Model):
         Called on model initialization to set class variables and validate stored coefficients.
         @param config: configuration parameters
         @type config: dict
+        @param schedule: weekly occupancy schedule
+        @type schedule: dict
         @return: None
         @rtype:
         """
@@ -238,7 +240,7 @@ class Siemens(Model):
         self.c2 = clean_array(self.c2)
         self.h1 = clean_array(self.h1)
         self.h2 = clean_array(self.h2)
-        _log.debug("J: {} -- {} -- {} -- {}".format(self.c1, self.c2, self.h1, self.h2))
+        _log.debug("S: {} -- {} -- {} -- {}".format(self.c1, self.c2, self.h1, self.h2))
         self.latest_start_time = config.get('latest_start_time', 0)
         self.earliest_start_time = config.get('earliest_start_time', 120)
         self.t_error = config.get("allowable_setpoint_deviation", 1.0)
@@ -283,8 +285,8 @@ class Siemens(Model):
         if c2 <= 0:
             _log.debug("S - cooling c2 model returned negative coefficients!")
             c2 = 0
-        self.c1 = trim(self.c1, c1, 10)
-        self.c2 = trim(self.c2, c2, 10)
+        self.c1 = trim(self.c1, c1, self.training_interval)
+        self.c2 = trim(self.c2, c2, self.training_interval)
         self.record = {"date": format_timestamp(dt.now()), "c1": c1, "c1_array": self.c1, "c2": c2, "c2_array": self.c2}
 
     def train_heating(self, data):
@@ -325,19 +327,15 @@ class Siemens(Model):
         if h2 <= 0:
             _log.debug("J - heating h2 model returned negative coefficients!")
             h2 = 0
-        self.h1 = trim(self.h1, h1, 10)
-        self.h2 = trim(self.h2, h2, 10)
+        self.h1 = trim(self.h1, h1, self.training_interval)
+        self.h2 = trim(self.h2, h2, self.training_interval)
         self.record = {"date": format_timestamp(dt.now()), "h1": h1, "h1_array": self.h1, "h2": h2, "h2_array": self.h2}
 
-    def calculate_prestart(self, data, offset, mode):
+    def calculate_prestart(self, data):
         """
         Calculate optimal start time using trained coefficients for heating and cooling.
         @param data: DataFrame with data to calculate optimal start time
         @type data: DataFrame
-        @param offset: preconditioning offset
-        @type offset: float
-        @param mode: heating or cooling
-        @type mode: str
         @return: time to precondition to reach target offset by DR Event
         @rtype: float
         """

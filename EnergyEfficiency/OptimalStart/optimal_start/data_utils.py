@@ -80,6 +80,10 @@ class Data:
     def assign_local_tz(self, _dt):
         """
         Convert UTC time from driver to local time.
+        @param _dt: datetime object
+        @type _dt: datetime.datetime
+        @return: localized datetime object
+        @rtype: datetime.datetime
         """
         if _dt.tzinfo is None or _dt.tzinfo.utcoffset(_dt) is None:
             _log.debug("TZ: %s", _dt)
@@ -92,6 +96,8 @@ class Data:
     def process_data(self):
         """
         Save data to disk, save 15 days of data.
+        @return:
+        @rtype:
         """
         _date = format_timestamp(dt.now())
         data_file = self.data_path + "/data_{}_{}.csv".format(self.tag, _date)
@@ -105,6 +111,12 @@ class Data:
     def update_data(self, payload, header):
         """
         Store current data measurements in daily data df.
+        @param payload: data payload from device driver
+        @type payload: dict
+        @param header: header payload from device driver, contains timestamp
+        @type header: dict
+        @return: None
+        @rtype:
         """
         data, meta = payload
         _now = parser.parse(header[headers_mod.TIMESTAMP])

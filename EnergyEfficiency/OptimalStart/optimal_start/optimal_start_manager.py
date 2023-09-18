@@ -111,7 +111,7 @@ class OptimalStartManager:
         _log.debug("Setting up run!")
         current_schedule = self.base.get_current_schedule()
         is_holiday = self.base.holiday_manager.is_holiday(dt.now())
-        is_weekend = dt.now().weekday() >= 5
+        is_weekend = (dt.now() - td(minutes=720)).weekday() >= 5
         self.previous_weekend_holiday = True if is_holiday or is_weekend else False
         try:
             if current_schedule:
@@ -220,6 +220,8 @@ class OptimalStartManager:
         @rtype: Class Model
         """
         models = {"j": None, "s": None, "c": None, 'sbs': None}
+        if weekend:
+            config.update({"training_interval": 6})
         for tag in models:
             try:
                 _file = self.base.model_path + "/{}_{}{}.pickle".format(self.base.device, tag, weekend)

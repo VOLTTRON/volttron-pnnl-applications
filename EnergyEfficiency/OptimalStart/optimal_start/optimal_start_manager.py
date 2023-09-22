@@ -56,6 +56,7 @@ _log = logging.getLogger(__name__)
 OPTIMAL_START = "OptimalStart"
 OPTIMAL_START_MODEL = "OptimalStartModel"
 OPTIMAL_START_TIME = "OptimalStartTimes"
+MODELS = {'j': Johnson, 's': Siemens, 'c': Carrier, 'sbs': Sbs}
 
 
 class OptimalStartManager:
@@ -241,7 +242,12 @@ class OptimalStartManager:
         if models['sbs'] is None:
             models['sbs'] = Sbs(config, self.schedule)
         for tag, cls in models.items():
-            cls._start(config, self.schedule)
+            try:
+                cls._start(config, self.schedule)
+            except (AttributeError, Exception) as ex:
+                _log.debug(f'Error instantiating model: {tag} -- {ex}')
+                models[tag] = MODELS[tag](config, self.schedule)
+                continue
         return models
 
     def train_models(self):
@@ -282,5 +288,5 @@ class OptimalStartManager:
                     topic = '/'.join([self.base_record_topic, OPTIMAL_START_MODEL, tag])
                     self.base.vip.pubsub.publish("pubsub", topic, headers, record)
             except Exception as ex:
-                _log.debug(f'{self.identity} - ERROR publishing optimal start model information!')
+                _log.debug(f'{self.identity} - ERROR publishing optimal start model information: {ex}')
                 continue

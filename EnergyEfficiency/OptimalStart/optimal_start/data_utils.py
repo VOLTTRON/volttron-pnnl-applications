@@ -56,7 +56,7 @@ _log = logging.getLogger(__name__)
 class Data:
     def __init__(self, points, timezone, tag, data_dir=""):
         self.points = points
-        self.current_time = dt.now()
+        self.current_dt = dt.now()
         self.df = None
         try:
             self.local_tz = tz.gettz(timezone)
@@ -73,9 +73,15 @@ class Data:
         if os.path.isfile(data_file):
             try:
                 self.df = pd.read_csv(data_file, index_col='ts')
-                self.df.index = pd.to_datetime(self.df.index).apply(self.assign_local_tz)
+                self.df.index = pd.to_datetime(self.df.index)
             except Exception as ex:
-                _log.debug("No previous dataframe object: %s", ex)
+                _log.debug(f'No previous dataframe object: {ex}')
+        try:
+            if self.df is not None:
+                if self.df.index[0].date() != self.current_dt.date():
+                    self.df = None
+        except (AttributeError, IndexError, TypeError) as ex:
+            _log.debug(f'Error parsing DataFrame: {ex}')
 
     def assign_local_tz(self, _dt):
         """
@@ -86,11 +92,11 @@ class Data:
         @rtype: datetime.datetime
         """
         if _dt.tzinfo is None or _dt.tzinfo.utcoffset(_dt) is None:
-            _log.debug("TZ: %s", _dt)
+            _log.debug(f'TZ: {_dt}')
             return _dt
         else:
             _dt = _dt.astimezone(self.local_tz)
-            _log.debug("TZ: %s", _dt)
+            _log.debug(f'TZ: {_dt}')
             return _dt
 
     def process_data(self):
@@ -121,8 +127,8 @@ class Data:
         data, meta = payload
         _now = parser.parse(header[headers_mod.TIMESTAMP])
         stored_data = {}
-        current_time = self.assign_local_tz(_now)
-        self.current_time = current_time
+        current_dt = self.assign_local_tz(_now)
+        self.current_dt = current_dt
         for point, value in data.items():
             if point in self.points.values():
                 _key = list(filter(lambda x: self.points[x] == point, self.points))[0]
@@ -142,7 +148,7 @@ class Data:
                     stored_data['cooling'] = [1]
 
         if stored_data:
-            stored_data['ts'] = [current_time]
+            stored_data['ts'] = [current_dt]
             df = pd.DataFrame.from_dict(stored_data)
             df['ts'] = pd.to_datetime(df['ts'])
             df.set_index(df['ts'], inplace=True)

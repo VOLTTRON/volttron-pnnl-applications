@@ -112,8 +112,6 @@ class OptimalStartManager:
         _log.debug("Setting up run!")
         current_schedule = self.base.get_current_schedule()
         is_holiday = self.base.holiday_manager.is_holiday(dt.now())
-        is_weekend = (dt.now() - td(minutes=720)).weekday() >= 5
-        self.previous_weekend_holiday = True if is_holiday or is_weekend else False
         try:
             if current_schedule:
                 if current_schedule == 'always_off' or is_holiday:
@@ -178,6 +176,10 @@ class OptimalStartManager:
 
         # If previous day was weekend or holiday and holiday models exist
         # calculate optimal start time using weekend/holiday models.
+        yesterday = dt.now() - td(days=1)
+        yesterday_holiday = self.base.holiday_manager.is_holiday(yesterday)
+        yesterday_weekend = yesterday.weekday() >= 5
+        self.previous_weekend_holiday = True if yesterday_holiday or yesterday_weekend else False
         if self.previous_weekend_holiday and self.weekend_holiday_trained:
             models = self.weekend_holiday_models
         else:
@@ -259,7 +261,7 @@ class OptimalStartManager:
         @return:
         @rtype:
         """
-        training_time = int(self.training_time) + 10 if self.training_time else None
+        training_time = int(self.training_time) + 5 if self.training_time else None
         data = self.base.data_handler.df
         if self.previous_weekend_holiday:
             models = self.weekend_holiday_models

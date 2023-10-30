@@ -77,8 +77,9 @@ def parse_df(df, condition):
 
 
 def offset_time(_time, offset):
-    _hour = _time.hour
-    _minute = _time.minute + offset
+    _offset_hr, offset_min = divmod(offset, 60)
+    _hour = _time.hour + _offset_hr
+    _minute = _time.minute + offset_min
     if _minute >= 60:
         _hour += 1
         _minute = _minute - 60

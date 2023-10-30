@@ -54,7 +54,7 @@ _log = logging.getLogger(__name__)
 
 
 class Data:
-    def __init__(self, points, timezone, tag, data_dir=""):
+    def __init__(self, points, timezone, tag, data_dir="", setpoint_offset=None):
         self.points = points
         self.current_dt = dt.now()
         self.df = None
@@ -68,6 +68,7 @@ class Data:
             data_dir = os.path.expanduser("~/optimal_start")
             data_file = data_dir + "/data_{}.csv".format(tag)
         self.data_path = data_dir
+        self.setpoint_offset = setpoint_offset
         self.tag = tag
         _log.debug("Data file: {}".format(data_file))
         if os.path.isfile(data_file):
@@ -129,10 +130,15 @@ class Data:
         stored_data = {}
         current_dt = self.assign_local_tz(_now)
         self.current_dt = current_dt
-        for point, value in data.items():
-            if point in self.points.values():
-                _key = list(filter(lambda x: self.points[x] == point, self.points))[0]
-                stored_data[_key] = [value]
+        for _key, point_name in self.points.items():
+            if point_name in data:
+                value = data[point_name]
+            else:
+                continue
+            stored_data[_key] = [value]
+        if self.setpoint_offset is not None:
+            stored_data['coolingsetpoint'][0] = stored_data['coolingsetpoint'][0] + self.setpoint_offset
+            stored_data['heatingsetpoint'][0] = stored_data['heatingsetpoint'][0] - self.setpoint_offset
         if 'reversingvalve' in stored_data and 'compressorcommand' in stored_data:
             vlv = stored_data['reversingvalve'][0]
             comp = stored_data['compressorcommand'][0]

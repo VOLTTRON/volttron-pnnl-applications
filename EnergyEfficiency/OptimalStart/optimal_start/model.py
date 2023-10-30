@@ -325,7 +325,7 @@ class Siemens(Model):
             _log.debug("S - heating h1 model returned negative coefficients!")
             return
         if h2 <= 0:
-            _log.debug("J - heating h2 model returned negative coefficients!")
+            _log.debug("S - heating h2 model returned negative coefficients!")
             h2 = 0
         self.h1 = trim(self.h1, h1, self.training_interval)
         self.h2 = trim(self.h2, h2, self.training_interval)
@@ -514,6 +514,8 @@ class Sbs(Model):
 
     def _start(self, config, schedule):
         self.schedule = schedule
+        self.latest_start_time = config.get('latest_start_time', 0)
+        self.earliest_start_time = config.get('earliest_start_time', 120)
 
     def reset_estimation(self):
         # initialize estimation parameters

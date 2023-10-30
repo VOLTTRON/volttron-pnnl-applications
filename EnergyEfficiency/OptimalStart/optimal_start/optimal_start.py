@@ -92,7 +92,8 @@ class OptimalStart(Agent):
         # Configuration for data handler
         timezone = config.get("local_tz", "UTC")
         self.zone_point_names = config.get("zone_point_names")
-        self.data_handler = Data(self.zone_point_names, timezone, self.device)
+        setpoint_offset = config.get('setpoint_offset')
+        self.data_handler = Data(self.zone_point_names, timezone, self.device, setpoint_offset=setpoint_offset)
         # No precontrol code yet, this might be needed in future
         self.precontrols = config.get("precontrols", {})
         self.precontrol_flag = False

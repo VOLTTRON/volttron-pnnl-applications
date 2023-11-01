@@ -274,7 +274,7 @@ class Siemens(Model):
         precooling = time_diff
         # Calculate average value of time to change degree
         c1 = time_avg / 60
-        c2 = (precooling / 60 - c1 * zcsp) / (osp * zcsp / 10)
+        c2 = ((precooling / 60 - c1 * zcsp)*10.0) / (osp * zcsp)
         _log.debug("S - cooling: {} - c1: {} - zcsp: {} -- osp: {}".format(precooling, self.c1, zcsp, osp))
         if not np.isfinite(c1) or not np.isfinite(c2):
             _log.debug("S: cooling model returned non-numeric coefficients!")
@@ -317,7 +317,7 @@ class Siemens(Model):
         h1 = time_avg/60.0
         preheating = time_diff
         _log.debug("S - preheating: {} - h1: {} - zhsp: {} -- osp: {}".format(preheating, self.h1, zhsp, osp))
-        h2 = (preheating / 60 - h1 * zhsp) / (osp * zhsp / 10)
+        h2 = ((preheating / 60 - h1 * zhsp)*10.0) / (osp * zhsp)
         if not np.isfinite(h1) or not np.isfinite(h2):
             _log.debug("S - heating model returned non-numeric coefficients!")
             return
@@ -511,6 +511,8 @@ class Sbs(Model):
         self.alpha = np.exp(-1/default_start)
         self.day_count = 0
         self.train_heating = self.train_cooling
+        self.training_interval = config.get('training_interval', 5)
+        self.alpha_list = []
 
     def _start(self, config, schedule):
         self.schedule = schedule
@@ -563,7 +565,8 @@ class Sbs(Model):
             # put upper and lower bounds on alpha based on min/max start times
             new_alpha = max(0.001, min(0.999, new_alpha))
             # EWMA of alpha estimate
-            self.alpha = self.alpha + (new_alpha - self.alpha) / self.day_count
+            self.alpha_list = trim(self.alpha_list, new_alpha, self.training_interval)
+            self.alpha = ema(self.alpha_list)
         self.record = {"date": format_timestamp(dt.now()), "new_alpha": new_alpha, "alpha": self.alpha}
 
     def calculate_prestart(self, data):

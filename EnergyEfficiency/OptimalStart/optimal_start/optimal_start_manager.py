@@ -230,8 +230,11 @@ class OptimalStartManager:
         for name, cls in MODELS.items():
             tag = "_".join([name, 'we']) if weekend else name
             _cls = cls(config, self.schedule)
-            cls_attrs = self.vip.config.get(tag)
-            _cls.load_model(cls_attrs)
+            try:
+                cls_attrs = self.vip.config.get(tag)
+                _cls.load_model(cls_attrs)
+            except KeyError as ex:
+                _log.debug(f'{self.identity}: config not in store: {tag} - {ex}')
             models[tag] = _cls
         return models
 
@@ -250,7 +253,6 @@ class OptimalStartManager:
         if self.previous_weekend_holiday:
             models = self.weekend_holiday_models
             self.weekend_holiday_trained = True
-            weekend = 'we'
 
         for tag, model in models.items():
             try:
@@ -260,8 +262,9 @@ class OptimalStartManager:
                 continue
             try:
                 cls_attrs = get_cls_attrs(model)
+                cls_attrs.pop('schedule')
                 self.vip.config.set(tag, cls_attrs, send_update=False)
-                _file = self.base.model_path + f'/{self.base.device}_{tag}_{weekend}.json'
+                _file = self.base.model_path + f'/{self.base.device}_{tag}.json'
                 with open(_file, 'w') as fp:
                     json.dump(cls_attrs, fp)
             except Exception as ex:

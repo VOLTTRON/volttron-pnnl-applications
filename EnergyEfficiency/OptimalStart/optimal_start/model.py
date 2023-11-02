@@ -138,18 +138,9 @@ class Carrier(Model):
         self.oat = []
         self.adjust_time = config.get('adjust_time', 0)
 
-    def _start(self, config, schedule):
-        self.c1 = clean_array(self.c1)
-        self.h1 = clean_array(self.h1)
-        self.oat = clean_array(self.oat)
-        self.latest_start_time = config.get('latest_start_time', 0)
-        self.earliest_start_time = config.get('earliest_start_time', 120)
-        self.t_error = config.get("allowable_setpoint_deviation", 1.0)
-        self.training_interval = config.get('training_interval', 10)
-        self.schedule = schedule
-
     def train_cooling(self, data):
         self.c1 = clean_array(self.c1)
+        self.oat = clean_array(self.oat)
         htr = self.heat_transfer_rate(data)
         if htr.empty:
             _log.debug("Carrier debug cooling htr returned empty!")
@@ -173,6 +164,7 @@ class Carrier(Model):
 
     def train_heating(self, data):
         self.h1 = clean_array(self.h1)
+        self.oat = clean_array(self.oat)
         htr = self.heat_transfer_rate(data)
         if htr.empty:
             _log.debug("Carrier debug heating htr returned empty!")
@@ -233,27 +225,6 @@ class Siemens(Model):
         self.h1 = config.get('h1', [])
         self.h2 = config.get('h2', [])
         self.adjust_time = config.get('adjust_time', 0)
-
-    def _start(self, config, schedule):
-        """
-        Called on model initialization to set class variables and validate stored coefficients.
-        @param config: configuration parameters
-        @type config: dict
-        @param schedule: weekly occupancy schedule
-        @type schedule: dict
-        @return: None
-        @rtype:
-        """
-        self.c1 = clean_array(self.c1)
-        self.c2 = clean_array(self.c2)
-        self.h1 = clean_array(self.h1)
-        self.h2 = clean_array(self.h2)
-        _log.debug("S: {} -- {} -- {} -- {}".format(self.c1, self.c2, self.h1, self.h2))
-        self.latest_start_time = config.get('latest_start_time', 0)
-        self.earliest_start_time = config.get('earliest_start_time', 120)
-        self.t_error = config.get("allowable_setpoint_deviation", 1.0)
-        self.training_interval = config.get('training_interval', 10)
-        self.schedule = schedule
 
     def train_cooling(self, data):
         """
@@ -389,22 +360,6 @@ class Johnson(Model):
         self.h2_list = []
         self.cooling_heating_adjust = config.get('cooling_heating_adjust', 0.025)
 
-    def _start(self, config, schedule):
-        self.c1_list = clean_array(self.c1_list)
-        self.c2_list = clean_array(self.c2_list)
-        self.h1_list = clean_array(self.h1_list)
-        self.h2_list = clean_array(self.h2_list)
-        self.c1 = ema(self.c1_list) if self.c1_list else 0
-        self.c2 = ema(self.c2_list) if self.c2_list else 0
-        self.h1 = ema(self.h1_list) if self.h1_list else 0
-        self.h2 = ema(self.h2_list) if self.h2_list else 0
-        _log.debug("J: {} -- {} -- {} -- {} --{} -- {} --{} -- {}".format(self.c1_list, self.c1, self.c2_list, self.c2, self.h1_list, self.h1, self.h2_list, self.h2))
-        self.latest_start_time = config.get('latest_start_time', 0)
-        self.earliest_start_time = config.get('earliest_start_time', 120)
-        self.t_error = config.get("allowable_setpoint_deviation", 1.0)
-        self.training_interval = config.get('training_interval', 10)
-        self.schedule = schedule
-
     def train_cooling(self, data):
         # cooling trained flag checked
         self.c1_list = clean_array(self.c1_list)
@@ -521,11 +476,6 @@ class Sbs(Model):
         self.train_heating = self.train_cooling
         self.training_interval = config.get('training_interval', 5)
         self.alpha_list = []
-
-    def _start(self, config, schedule):
-        self.schedule = schedule
-        self.latest_start_time = config.get('latest_start_time', 0)
-        self.earliest_start_time = config.get('earliest_start_time', 120)
 
     def reset_estimation(self):
         # initialize estimation parameters

@@ -64,6 +64,14 @@ class Model:
         self.schedule = schedule
         self.record = {}
 
+    def load_model(self, model_dict):
+        for name, value in model_dict.items():
+            try:
+                setattr(self, name, value)
+            except Exception as ex:
+                _log.debug(f"Problem initializing configuration parameter {name} - {value} -- {ex}")
+                continue
+
     def train(self, data, prestart):
         self.record = {}
         if prestart is None:

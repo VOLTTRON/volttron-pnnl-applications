@@ -45,10 +45,11 @@ from datetime import datetime as dt, timedelta as td
 import logging
 import dill
 from .model import Johnson, Siemens, Carrier, Sbs
+from .utils import get_cls_attrs
 from volttron.platform.agent.utils import (setup_logging, format_timestamp, get_aware_utc_now)
 from volttron.platform.scheduling import cron
 from volttron.platform.vip.agent import Agent
-#from dataclasses import dataclass
+import json
 
 setup_logging()
 _log = logging.getLogger(__name__)
@@ -72,6 +73,7 @@ class OptimalStartManager:
         self.config = parent.config
 
         self.core = parent.core
+        self.vip = parent.vip
         self.identity = parent.core.identity
         self.weekend_holiday_trained = False
         self.base_record_topic = parent.base_record_topic
@@ -85,7 +87,7 @@ class OptimalStartManager:
         @rtype:
         """
         self.models = self.load_models(self.config)
-        self.weekend_holiday_models = self.load_models(self.config, weekend='_we')
+        self.weekend_holiday_models = self.load_models(self.config, weekend=True)
         self.core.schedule(cron('1 0 * * *'), self.set_up_run)
         self.core.schedule(cron('0 9 * * *'), self.train_models)
 
@@ -205,14 +207,14 @@ class OptimalStartManager:
             self.run_schedule = self.core.schedule(reschedule_time, self.run_method)
             return
 
-        _log.debug("%s - Optimal start result: %s", self.base.core.identity, self.result)
+        _log.debug("%s - Optimal start result: %s", self.identity, self.result)
         headers = {"Date": format_timestamp(get_aware_utc_now())}
         topic = '/'.join([self.base_record_topic, OPTIMAL_START_TIME])
-        self.base.vip.pubsub.publish("pubsub", topic, headers, self.result).get(timeout=10)
+        self.vip.pubsub.publish("pubsub", topic, headers, self.result).get(timeout=10)
         self.start_obj = self.core.schedule(optimal_start_time, self.base.occupancy_control, "occupied")
         self.end_obj = self.core.schedule(unoccupied_time, self.base.occupancy_control, "unoccupied")
 
-    def load_models(self, config, weekend=""):
+    def load_models(self, config, weekend=False):
         """
         Create or load model pickle (trained model instance).
         @param config:
@@ -222,34 +224,15 @@ class OptimalStartManager:
         @return:
         @rtype: Class Model
         """
-        models = {"j": None, "s": None, "c": None, 'sbs': None}
+        models = {}
         if weekend:
-            config.update({"training_interval": 6})
-        for tag in models:
-            try:
-                _file = self.base.model_path + "/{}_{}{}.pickle".format(self.base.device, tag, weekend)
-                with open(_file, 'rb') as f:
-                    _cls = dill.load(f)
-                models[tag] = _cls
-            except Exception as ex:
-                _log.debug(f'{self.identity} - Exception loading pickle for {tag}!: {ex}')
-                continue
-
-        if models['j'] is None:
-            models['j'] = Johnson(config, self.schedule)
-        if models['s'] is None:
-            models['s'] = Siemens(config, self.schedule)
-        if models['c'] is None:
-            models['c'] = Carrier(config, self.schedule)
-        if models['sbs'] is None:
-            models['sbs'] = Sbs(config, self.schedule)
-        for tag, cls in models.items():
-            try:
-                cls._start(config, self.schedule)
-            except (AttributeError, Exception) as ex:
-                _log.debug(f'Error instantiating model: {tag} -- {ex}')
-                models[tag] = MODELS[tag](config, self.schedule)
-                continue
+            config.update({"training_interval": 5})
+        for name, cls in MODELS.items():
+            tag = "_".join([name, 'we']) if weekend else name
+            _cls = cls(config, self.schedule)
+            cls_attrs = self.vip.config.get(tag)
+            _cls.load_model(cls_attrs)
+            models[tag] = _cls
         return models
 
     def train_models(self):
@@ -263,13 +246,12 @@ class OptimalStartManager:
         """
         training_time = int(self.training_time) + 5 if self.training_time else None
         data = self.base.data_handler.df
+        models = self.models
         if self.previous_weekend_holiday:
             models = self.weekend_holiday_models
-            weekend = '_we'
             self.weekend_holiday_trained = True
-        else:
-            models = self.models
-            weekend = ''
+            weekend = 'we'
+
         for tag, model in models.items():
             try:
                 model.train(data, training_time)
@@ -277,9 +259,11 @@ class OptimalStartManager:
                 _log.debug(f'{self.identity} - ERROR training model {tag}: -- {ex}')
                 continue
             try:
-                _file = self.base.model_path + f'/{self.base.device}_{tag}{weekend}.pickle'
-                with open(_file, 'wb') as f:
-                    dill.dump(model, file=f)
+                cls_attrs = get_cls_attrs(model)
+                self.vip.config.set(tag, cls_attrs, send_update=False)
+                _file = self.base.model_path + f'/{self.base.device}_{tag}_{weekend}.json'
+                with open(_file, 'w') as fp:
+                    json.dump(cls_attrs, fp)
             except Exception as ex:
                 _log.debug(f'{self.identity} - Could not store object {tag} -- {ex}')
             try:
@@ -288,7 +272,7 @@ class OptimalStartManager:
                 if record:
                     headers = {"Date": format_timestamp(get_aware_utc_now())}
                     topic = '/'.join([self.base_record_topic, OPTIMAL_START_MODEL, tag])
-                    self.base.vip.pubsub.publish("pubsub", topic, headers, record)
+                    self.vip.pubsub.publish("pubsub", topic, headers, record)
             except Exception as ex:
                 _log.debug(f'{self.identity} - ERROR publishing optimal start model information: {ex}')
                 continue

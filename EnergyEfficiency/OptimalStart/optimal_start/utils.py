@@ -125,3 +125,13 @@ def calculate_prestart_time(end, prestart):
     _hours = end.hour - _hours
     start = dt.time(hour=_hours, minute=_minutes)
     return start
+
+
+def get_cls_attrs(cls):
+    d = {
+        key: value for key, value in cls.__dict__.items()
+        if not key.startswith('__')
+           and not callable(value)
+           and not callable(getattr(value, "__get__", None))  # <- important
+    }
+    return d

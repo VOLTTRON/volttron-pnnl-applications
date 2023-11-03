@@ -54,13 +54,14 @@ import json
 setup_logging()
 _log = logging.getLogger(__name__)
 
-OPTIMAL_START = "OptimalStart"
-OPTIMAL_START_MODEL = "OptimalStartModel"
-OPTIMAL_START_TIME = "OptimalStartTimes"
+OPTIMAL_START = 'OptimalStart'
+OPTIMAL_START_MODEL = 'OptimalStartModel'
+OPTIMAL_START_TIME = 'OptimalStartTimes'
 MODELS = {'j': Johnson, 's': Siemens, 'c': Carrier, 'sbs': Sbs}
 
 
 class OptimalStartManager:
+
     def __init__(self, parent: Agent):
         self.base: Agent = parent
         self.models = {}
@@ -111,25 +112,25 @@ class OptimalStartManager:
         @return:
         @rtype:
         """
-        _log.debug("Setting up run!")
+        _log.debug('Setting up run!')
         current_schedule = self.base.get_current_schedule()
         is_holiday = self.base.holiday_manager.is_holiday(dt.now())
         try:
             if current_schedule:
                 if current_schedule == 'always_off' or is_holiday:
-                    self.base.occupancy_control("unoccupied")
+                    self.base.occupancy_control('unoccupied')
                 elif current_schedule == 'always_on':
-                    self.base.occupancy_control("occupied")
+                    self.base.occupancy_control('occupied')
                 else:
                     earliest = current_schedule.get('earliest')
                     if earliest:
                         e_hour = earliest.hour
                         e_minute = earliest.minute
                         run_time = dt.now().replace(hour=e_hour, minute=e_minute)
-                        _log.debug("Schedule run method: %s", format_timestamp(run_time))
+                        _log.debug('Schedule run method: %s', format_timestamp(run_time))
                         self.run_schedule = self.core.schedule(run_time, self.run_method)
         except Exception as ex:
-            _log.debug("Error setting up optimal start run: %s", ex)
+            _log.debug('Error setting up optimal start run: %s', ex)
         finally:
             self.base.data_handler.process_data()
 
@@ -197,20 +198,21 @@ class OptimalStartManager:
             self.result[tag] = optimal_start_time
 
         self.result['occupancy'] = format_timestamp(occupancy_time)
-        active_minutes = max(self.latest_start_time, min(self.get_controller(), self.earliest_start_time))
+        active_minutes = max(self.latest_start_time,
+                             min(self.get_controller(), self.earliest_start_time))
 
         self.training_time = active_minutes
         optimal_start_time = occupancy_time - td(minutes=active_minutes)
         reschedule_time = dt.now() + td(minutes=15)
         if reschedule_time < optimal_start_time:
-            _log.debug("Reschedule run method!")
+            _log.debug('Reschedule run method!')
             self.run_schedule = self.core.schedule(reschedule_time, self.run_method)
             return
 
-        _log.debug("%s - Optimal start result: %s", self.identity, self.result)
+        _log.debug('%s - Optimal start result: %s', self.identity, self.result)
         headers = {"Date": format_timestamp(get_aware_utc_now())}
         topic = '/'.join([self.base_record_topic, OPTIMAL_START_TIME])
-        self.vip.pubsub.publish("pubsub", topic, headers, self.result).get(timeout=10)
+        self.vip.pubsub.publish('pubsub', topic, headers, self.result).get(timeout=10)
         self.start_obj = self.core.schedule(optimal_start_time, self.base.occupancy_control, "occupied")
         self.end_obj = self.core.schedule(unoccupied_time, self.base.occupancy_control, "unoccupied")
 
@@ -226,7 +228,7 @@ class OptimalStartManager:
         """
         models = {}
         if weekend:
-            config.update({"training_interval": 5})
+            config.update({'training_interval': 5})
         for name, cls in MODELS.items():
             tag = "_".join([name, 'we']) if weekend else name
             _cls = cls(config, self.schedule)
@@ -273,9 +275,9 @@ class OptimalStartManager:
                 record = model.record
                 _log.debug(f'{self.identity}: MODEL parameters: {record}')
                 if record:
-                    headers = {"Date": format_timestamp(get_aware_utc_now())}
+                    headers = {'Date': format_timestamp(get_aware_utc_now())}
                     topic = '/'.join([self.base_record_topic, OPTIMAL_START_MODEL, tag])
-                    self.vip.pubsub.publish("pubsub", topic, headers, record)
+                    self.vip.pubsub.publish('pubsub', topic, headers, record)
             except Exception as ex:
                 _log.debug(f'{self.identity} - ERROR publishing optimal start model information: {ex}')
                 continue

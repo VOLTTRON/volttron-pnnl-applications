@@ -1,4 +1,4 @@
-u"""
+"""
 Copyright (c) 2023, Battelle Memorial Institute
 All rights reserved.
 Redistribution and use in source and binary forms, with or without
@@ -60,10 +60,10 @@ def clean_array(array):
 
 
 def parse_df(df, condition):
-    if condition == "cooling":
-        data_sort = df[df['zonetemperature'] <= df["coolingsetpoint"]]
+    if condition == 'cooling':
+        data_sort = df[df['zonetemperature'] <= df['coolingsetpoint']]
     else:
-        data_sort = df[df['zonetemperature'] >= df["heatingsetpoint"]]
+        data_sort = df[df['zonetemperature'] >= df['heatingsetpoint']]
     df['conditioning'] = df[condition].rolling(window=10).mean()
     data_sort_mode = df[df['conditioning'] == 0]
     if not data_sort.empty:
@@ -110,9 +110,9 @@ def ema(lst):
     _sort.sort(reverse=True)
     ema = 0
     for n in range(len(lst)):
-        ema += _sort[n] * smoothing_constant * (1.0 - smoothing_constant) ** n
+        ema += _sort[n] * smoothing_constant * (1.0 - smoothing_constant)**n
     if _sort:
-        ema += _sort[-1] * (1.0 - smoothing_constant) ** (len(lst))
+        ema += _sort[-1] * (1.0 - smoothing_constant)**(len(lst))
     return ema
 
 
@@ -132,6 +132,6 @@ def get_cls_attrs(cls):
         key: value for key, value in cls.__dict__.items()
         if not key.startswith('__')
            and not callable(value)
-           and not callable(getattr(value, "__get__", None))  # <- important
+           and not callable(getattr(value, '__get__', None))  # <- important
     }
     return d

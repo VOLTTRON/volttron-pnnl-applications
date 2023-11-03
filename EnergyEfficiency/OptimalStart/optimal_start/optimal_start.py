@@ -59,8 +59,8 @@ from .optimal_start_manager import OptimalStartManager
 from .holiday_manager import HolidayManager
 
 pd.set_option('display.max_rows', None)
-__author__ = "Robert Lutes, robert.lutes@pnnl.gov"
-__version__ = "0.0.1"
+__author__ = 'Robert Lutes, robert.lutes@pnnl.gov'
+__version__ = '0.0.1'
 
 setup_logging()
 _log = logging.getLogger(__name__)
@@ -73,47 +73,47 @@ class OptimalStart(Agent):
         self.identity = self.core.identity
         self.config = config
         # topic for device level data
-        campus = config.get("campus", "")
-        building = config.get("building", "")
-        self.device = config.get("system", "")
+        campus = config.get('campus', '')
+        building = config.get('building', '')
+        self.device = config.get('system', '')
         self.system_rpc_path = topics.RPC_DEVICE_PATH(campus=campus,
                                                       building=building,
                                                       unit=self.device,
-                                                      path="",
+                                                      path='',
                                                       point=None)
         self.base_device_topic = topics.DEVICES_VALUE(campus=campus,
                                                       building=building,
-                                                      unit="",
+                                                      unit='',
                                                       path=self.device,
-                                                      point="all")
+                                                      point='all')
         # Result objects for record topic
         self.base_record_topic = self.base_device_topic.replace('devices', 'record')
         self.base_record_topic = self.base_record_topic.rstrip('/all')
         # Configuration for data handler
-        timezone = config.get("local_tz", "UTC")
-        self.zone_point_names = config.get("zone_point_names")
+        timezone = config.get('local_tz', 'UTC')
+        self.zone_point_names = config.get('zone_point_names')
         setpoint_offset = config.get('setpoint_offset')
         self.data_handler = Data(self.zone_point_names, timezone, self.device, setpoint_offset=setpoint_offset)
         # No precontrol code yet, this might be needed in future
-        self.precontrols = config.get("precontrols", {})
+        self.precontrols = config.get('precontrols', {})
         self.precontrol_flag = False
         # Controller parameters
-        self.actuator = config.get("actuator", "platform.actuator")
-        self.zone_control = config.get("zone_control", {})
-        self.day_map = config.get("day_map", {0: "s", 1: "s", 2: "c", 3: "c", 4: "j"})
-        self.earliest_start_time = config.get("earliest_start_time", 180)
-        self.latest_start_time = config.get("latest_start_time", 0)
+        self.actuator = config.get('actuator', 'platform.actuator')
+        self.zone_control = config.get('zone_control', {})
+        self.day_map = config.get('day_map', {0: 's', 1: 's', 2: 'c', 3: 'c', 4: 'j'})
+        self.earliest_start_time = config.get('earliest_start_time', 180)
+        self.latest_start_time = config.get('latest_start_time', 0)
         self.schedule = {}
-        self.init_schedule(config.get("schedule", {}))
+        self.init_schedule(config.get('schedule', {}))
         if not self.schedule:
-            _log.debug("No schedule configured, exiting!")
+            _log.debug('No schedule configured, exiting!')
             self.core.stop()
-        self.model_path = os.path.expanduser("~/models")
+        self.model_path = os.path.expanduser('~/models')
         # Initialize sub-classes
         self.holiday_manager = HolidayManager()
         self.optimal_start = OptimalStartManager(self)
 
-    @Core.receiver("onstart")
+    @Core.receiver('onstart')
     def starting_base(self, sender, **kwargs):
         """
          Startup method:
@@ -125,12 +125,12 @@ class OptimalStart(Agent):
         @return:
         @rtype:
         """
-        _log.debug("Starting!")
+        _log.debug('Starting!')
 
-        self.vip.pubsub.subscribe(peer="pubsub",
+        self.vip.pubsub.subscribe(peer='pubsub',
                                   prefix=self.base_device_topic,
                                   callback=self.update_data)
-        _log.debug("Subscribing to %s", self.base_device_topic)
+        _log.debug('Subscribing to %s', self.base_device_topic)
         self.optimal_start.setup_optimal_start()
 
     def init_schedule(self, schedule):
@@ -141,18 +141,18 @@ class OptimalStart(Agent):
         @return:
         @rtype:
         """
-        _log.debug("Schedule!")
+        _log.debug('Schedule!')
         if schedule:
             for day_str, schedule_info in schedule.items():
                 _day = parse(day_str).weekday()
-                if schedule_info not in ["always_on", "always_off"]:
-                    start = parse(schedule_info["start"])
+                if schedule_info not in ['always_on', 'always_off']:
+                    start = parse(schedule_info['start'])
                     earliest = start - td(minutes=self.earliest_start_time)
-                    end = parse(schedule_info["end"]).time()
-                    self.schedule[_day] = {"earliest": earliest.time(), "start": start.time(), "end": end}
+                    end = parse(schedule_info['end']).time()
+                    self.schedule[_day] = {'earliest': earliest.time(), 'start': start.time(), 'end': end}
                 else:
                     self.schedule[_day] = schedule_info
-        _log.debug("Schedule!: %s", self.schedule)
+        _log.debug('Schedule!: %s', self.schedule)
 
     def get_current_schedule(self):
         """
@@ -186,7 +186,7 @@ class OptimalStart(Agent):
         @return:
         @rtype:
         """
-        _log.debug("Update data : %s", topic)
+        _log.debug('Update data : %s', topic)
         self.data_handler.update_data(message, header)
 
     def get_system_occupancy(self):
@@ -197,10 +197,10 @@ class OptimalStart(Agent):
         """
         result = None
         try:
-            result = self.vip.rpc.call(self.actuator, "get_point", self.system_rpc_path).get(timeout=30)
-            _log.debug("Do system get: {} -- {}".format(self.system_rpc_path, result))
+            result = self.vip.rpc.call(self.actuator, 'get_point', self.system_rpc_path).get(timeout=30)
+            _log.debug('Do system get: {} -- {}'.format(self.system_rpc_path, result))
         except (RemoteError, gevent.Timeout) as ex:
-            _log.warning("Failed to get {}: {}".format(self.system_rpc_path, str(ex)))
+            _log.warning('Failed to get {}: {}'.format(self.system_rpc_path, str(ex)))
         return result
 
     def occupancy_control(self, state):
@@ -215,13 +215,10 @@ class OptimalStart(Agent):
         control = self.zone_control[state]
         for point, value in control.items():
             topic = self.system_rpc_path(point=point)
-            _log.debug(f'{self.identity} - Do occupancy control: {topic} -- {value}')
-            if value == "None":
-                value = None
             try:
-                result = self.vip.rpc.call(self.actuator, "set_point", "optimal_start", topic, value).get(timeout=30)
+                result = self.vip.rpc.call(self.actuator, 'set_point', 'optimal_start', topic, value).get(timeout=30)
             except RemoteError as ex:
-                _log.warning("Failed to set {} to {}: {}".format(topic, value, str(ex)))
+                _log.warning('Failed to set {} to {}: {}'.format(topic, value, str(ex)))
             continue
 
     def start_precontrol(self):
@@ -234,10 +231,10 @@ class OptimalStart(Agent):
         result = None
         for topic, value in self.precontrols.items():
             try:
-                _log.debug("Do pre-control: {} -- {}".format(topic, value))
-                result = self.vip.rpc.call(self.actuator, "set_point", "optimal_start", topic, value).get(timeout=30)
+                _log.debug('Do pre-control: {} -- {}'.format(topic, value))
+                result = self.vip.rpc.call(self.actuator, 'set_point', 'optimal_start', topic, value).get(timeout=30)
             except RemoteError as ex:
-                _log.warning("Failed to set {} to {}: {}".format(topic, value, str(ex)))
+                _log.warning('Failed to set {} to {}: {}'.format(topic, value, str(ex)))
                 continue
         self.precontrol_flag = True
         return result
@@ -252,10 +249,10 @@ class OptimalStart(Agent):
         result = None
         for topic, value in self.precontrols.items():
             try:
-                _log.debug("Do pre-control: {} -- {}".format(topic, "None"))
-                result = self.vip.rpc.call(self.actuator, "set_point", "optimal_start", topic, None).get(timeout=30)
+                _log.debug('Do pre-control: {} -- {}'.format(topic, 'None'))
+                result = self.vip.rpc.call(self.actuator, 'set_point', 'optimal_start', topic, None).get(timeout=30)
             except RemoteError as ex:
-                _log.warning("Failed to set {} to {}: {}".format(topic, value, str(ex)))
+                _log.warning('Failed to set {} to {}: {}'.format(topic, value, str(ex)))
                 continue
         return result
 
@@ -269,7 +266,7 @@ def main(argv=sys.argv):
         _log.error(repr(exception))
 
 
-if __name__ == "__main__":
+if __name__ =='__main__':
     # Entry point for script
     try:
         sys.exit(main())

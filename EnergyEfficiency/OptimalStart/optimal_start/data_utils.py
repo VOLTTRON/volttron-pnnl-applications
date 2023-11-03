@@ -43,7 +43,8 @@ import os
 import logging
 import pandas as pd
 import warnings
-warnings.filterwarnings("ignore", category=DeprecationWarning)
+
+warnings.filterwarnings('ignore', category=DeprecationWarning)
 from datetime import datetime as dt, timedelta as td
 from dateutil import parser, tz
 from volttron.platform.agent.utils import setup_logging, format_timestamp
@@ -54,23 +55,23 @@ _log = logging.getLogger(__name__)
 
 
 class Data:
-    def __init__(self, points, timezone, tag, data_dir="", setpoint_offset=None):
+    def __init__(self, points, timezone, tag, data_dir='', setpoint_offset=None):
         self.points = points
         self.current_dt = dt.now()
         self.df = None
         try:
             self.local_tz = tz.gettz(timezone)
         except:
-            self.local_tz = tz.gettz("UTC")
+            self.local_tz = tz.gettz('UTC')
         if data_dir:
-            data_file = data_dir + "/data_{}.csv".format(tag)
+            data_file = data_dir + '/data_{}.csv'.format(tag)
         else:
-            data_dir = os.path.expanduser("~/optimal_start")
-            data_file = data_dir + "/data_{}.csv".format(tag)
+            data_dir = os.path.expanduser('~/optimal_start')
+            data_file = data_dir + '/data_{}.csv'.format(tag)
         self.data_path = data_dir
         self.setpoint_offset = setpoint_offset
         self.tag = tag
-        _log.debug("Data file: {}".format(data_file))
+        _log.debug('Data file: {}'.format(data_file))
         if os.path.isfile(data_file):
             try:
                 self.df = pd.read_csv(data_file, index_col='ts')
@@ -107,12 +108,12 @@ class Data:
         @rtype:
         """
         _date = format_timestamp(dt.now())
-        data_file = self.data_path + "/data_{}_{}.csv".format(self.tag, _date)
+        data_file = self.data_path + '/data_{}_{}.csv'.format(self.tag, _date)
         try:
             self.df.to_csv(data_file)
             self.df = None
         except Exception as ex:
-            _log.debug("Error saving df csv!: %s", ex)
+            _log.debug('Error saving df csv!: %s', ex)
             self.df = None
 
     def update_data(self, payload, header):

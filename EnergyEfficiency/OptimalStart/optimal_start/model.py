@@ -292,8 +292,8 @@ class Siemens(Model):
             _log.debug('Siemens debug cooling htr returned empty!')
             return
         # change htr to data?
-        zhsp = htr['zonetemperature'][0] - htr['heatingsetpoint'][0]
-        osp = htr['outdoortemperature'][0] - htr['heatingsetpoint'][0]
+        zhsp = htr['heatingsetpoint'][0] - htr['zonetemperature'][0]
+        osp = htr['heatingsetpoint'][0] - htr['outdoortemperature'][0]
         time_diff, temp_diff = get_time_temp_diff(htr)
         if not time_diff:
             _log.debug('Siemens debug heating time_diff == 0!')
@@ -554,7 +554,8 @@ class Sbs(Model):
         self.record = {
             'date': format_timestamp(dt.now()),
             'new_alpha': new_alpha,
-            'alpha': self.alpha
+            'alpha': self.alpha,
+            'alpha_array': self.alpha_list
         }
 
     def calculate_prestart(self, data):

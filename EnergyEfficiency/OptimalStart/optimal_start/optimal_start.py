@@ -152,12 +152,12 @@ class OptimalStart(Agent):
                     self.schedule[_day] = {'earliest': earliest.time(), 'start': start.time(), 'end': end}
                 else:
                     self.schedule[_day] = schedule_info
-        _log.debug('Schedule!: %s', self.schedule)
+        _log.debug(f'Schedule!: {self.schedule}')
 
     def get_current_schedule(self):
         """
         Get stored value for current days schedule and return.
-        @return: current dates occupancy schedule (entries are datetimes).
+        @return: current dates occupancy schedule (entries are datetime objects).
         @rtype: dict
         """
         current_time = dt.now()
@@ -186,7 +186,7 @@ class OptimalStart(Agent):
         @return:
         @rtype:
         """
-        _log.debug('Update data : %s', topic)
+        _log.debug(f'Update data : {topic}')
         self.data_handler.update_data(message, header)
 
     def get_system_occupancy(self):
@@ -198,9 +198,9 @@ class OptimalStart(Agent):
         result = None
         try:
             result = self.vip.rpc.call(self.actuator, 'get_point', self.system_rpc_path).get(timeout=30)
-            _log.debug('Do system get: {} -- {}'.format(self.system_rpc_path, result))
+            _log.debug(f'Do system get: {self.system_rpc_path} -- {result}')
         except (RemoteError, gevent.Timeout) as ex:
-            _log.warning('Failed to get {}: {}'.format(self.system_rpc_path, str(ex)))
+            _log.warning(f'Failed to get {self.system_rpc_path}: {ex}')
         return result
 
     def occupancy_control(self, state):
@@ -218,7 +218,7 @@ class OptimalStart(Agent):
             try:
                 result = self.vip.rpc.call(self.actuator, 'set_point', 'optimal_start', topic, value).get(timeout=30)
             except RemoteError as ex:
-                _log.warning('Failed to set {} to {}: {}'.format(topic, value, str(ex)))
+                _log.warning(f'Failed to set {topic} to {value}: {ex}')
             continue
 
     def start_precontrol(self):
@@ -231,10 +231,10 @@ class OptimalStart(Agent):
         result = None
         for topic, value in self.precontrols.items():
             try:
-                _log.debug('Do pre-control: {} -- {}'.format(topic, value))
+                _log.debug(f'Do pre-control: {topic} -- {value}')
                 result = self.vip.rpc.call(self.actuator, 'set_point', 'optimal_start', topic, value).get(timeout=30)
             except RemoteError as ex:
-                _log.warning('Failed to set {} to {}: {}'.format(topic, value, str(ex)))
+                _log.warning(f'Failed to set {topic} to {value}: {ex}')
                 continue
         self.precontrol_flag = True
         return result

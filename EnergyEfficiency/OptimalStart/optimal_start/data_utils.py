@@ -64,10 +64,10 @@ class Data:
         except:
             self.local_tz = tz.gettz('UTC')
         if data_dir:
-            data_file = data_dir + '/data_{}.csv'.format(tag)
+            data_file = data_dir + f'/data_{tag}.csv'
         else:
             data_dir = os.path.expanduser('~/optimal_start')
-            data_file = data_dir + '/data_{}.csv'.format(tag)
+            data_file = data_dir + f'/data_{tag}.csv'
         self.data_path = data_dir
         self.setpoint_offset = setpoint_offset
         self.tag = tag
@@ -108,12 +108,12 @@ class Data:
         @rtype:
         """
         _date = format_timestamp(dt.now())
-        data_file = self.data_path + '/data_{}_{}.csv'.format(self.tag, _date)
+        data_file = self.data_path + f'/data_{self.tag}_{_date}.csv'
         try:
             self.df.to_csv(data_file)
             self.df = None
         except Exception as ex:
-            _log.debug('Error saving df csv!: %s', ex)
+            _log.debug(f'Error saving df csv!: {ex}')
             self.df = None
 
     def update_data(self, payload, header):
@@ -164,5 +164,5 @@ class Data:
                 self.df = self.df.drop(columns=['ts'])
             else:
                 self.df = df
-            data_path = self.data_path + "/data_{}.csv".format(self.tag)
+            data_path = self.data_path + f'/data_{self.tag}.csv'
             self.df.to_csv(data_path)

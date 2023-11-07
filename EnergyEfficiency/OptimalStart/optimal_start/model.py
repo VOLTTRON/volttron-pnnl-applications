@@ -536,8 +536,7 @@ class Sbs(Model):
             y = row['e_a']
             self.sX2 = self.sX2 + x**2
             self.sXY = self.sXY + x * y
-            _log.debug('SBS: x: %s -- e_a: %s  --sXy: %s -- sX2: %s -- alpha: %s', self.e_last,
-                       row['e_a'], self.sXY, self.sX2, self.alpha)
+            _log.debug(f'sbs train -  x: {x} -- y: {y}  --sXy: {self.sXY} -- sX2: {self.sX2}')
             # update previous values
             self.e_last = row['e_a']
         self.day_count += 1
@@ -545,12 +544,12 @@ class Sbs(Model):
         new_alpha = None
         if self.sX2 * self.sXY > 0:
             new_alpha = self.sXY / self.sX2
-            _log.debug('CALCULATE SAMPLE: {} -- {}'.format(new_alpha, self.alpha))
             # put upper and lower bounds on alpha based on min/max start times
             new_alpha = max(0.001, min(0.999, new_alpha))
             # EWMA of alpha estimate
             self.alpha_list = trim(self.alpha_list, new_alpha, self.training_interval)
             self.alpha = ema(self.alpha_list)
+        _log.debug(f'sbs train2 - new_alpha: {new_alpha} -- alpha: {self.alpha}')
         self.record = {
             'date': format_timestamp(dt.now()),
             'new_alpha': new_alpha,
@@ -580,5 +579,5 @@ class Sbs(Model):
         # zone_logger.info("Calculated final start time")
         # calculate error at start time (time to occupancy in units of dt)
         self.sp_error_occ = e0 * np.power(self.alpha, self.earliest_start_time)
-        _log.debug('OPTIMIZE_I: -- %s -- %s', e0, self.sp_error_occ)
+        _log.debug(f'sbs calculate: e0: {e0} -- alpha: {self.alpha}')
         return prestart_time

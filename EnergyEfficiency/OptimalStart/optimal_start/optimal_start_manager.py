@@ -58,6 +58,7 @@ OPTIMAL_START = 'OptimalStart'
 OPTIMAL_START_MODEL = 'OptimalStartModel'
 OPTIMAL_START_TIME = 'OptimalStartTimes'
 MODELS = {'j': Johnson, 's': Siemens, 'c': Carrier, 'sbs': Sbs}
+CONFIG_STORE = 'optimal_start.model'
 
 
 class OptimalStartManager:

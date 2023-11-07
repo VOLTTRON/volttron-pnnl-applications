@@ -50,7 +50,7 @@ def clean_array(array):
         :param array: (list) coefficients from models
         :return: array (list)
     """
-    array = [item for item in array if np.isfinite(item) and item > 0]
+    array = [item for item in array if np.isfinite(item) and item >= 0]
     if len(array) > 3:
         u = np.mean(array)
         s = np.std(array)

@@ -269,7 +269,7 @@ class OptimalStartManager:
                 self.vip.config.set(tag, cls_attrs, send_update=False)
                 _file = self.base.model_path + f'/{self.base.device}_{tag}.json'
                 with open(_file, 'w') as fp:
-                    json.dump(cls_attrs, fp)
+                    json.dump(cls_attrs, fp, indent=4)
             except Exception as ex:
                 _log.debug(f'{self.identity} - Could not store object {tag} -- {ex}')
             try:

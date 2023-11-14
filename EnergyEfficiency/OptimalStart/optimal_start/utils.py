@@ -39,11 +39,13 @@ PACIFIC NORTHWEST NATIONAL LABORATORY
 operated by BATTELLE for the UNITED STATES DEPARTMENT OF ENERGY
 under Contract DE-AC05-76RL01830
 """
-from datetime import datetime as dt
+import datetime as dt
+import logging
 import numpy as np
 from volttron.platform.agent.utils import (setup_logging,
-                                           format_timestamp,
-                                           get_aware_utc_now)
+                                           format_timestamp,)
+setup_logging()
+_log = logging.getLogger(__name__)
 
 
 def clean_array(array):
@@ -95,7 +97,7 @@ def offset_time(_time, offset):
 def trim(lst, new_value, cutoff):
     if not np.isfinite(new_value):
         return
-    lst.append([format_timestamp(dt.now()), new_value])
+    lst.append([format_timestamp(dt.datetime.now()), new_value])
     if lst and len(lst) > cutoff:
         lst.pop(0)
     return lst
@@ -123,10 +125,9 @@ def get_time_target(data, target):
 def ema(lst):
     smoothing_constant = 2.0 / (len(lst) + 1.0) * 2.0 if lst else 1.0
     smoothing_constant = smoothing_constant if smoothing_constant <= 1.0 else 1.0
-    _sort = list(lst)
-    _sort.sort(reverse=True)
+    _sort = lst[::-1]
     ema = 0
-    lst = [item[1] if isinstance(item, list) else item for item in lst]
+    _sort = [item[1] if isinstance(item, list) else item for item in _sort]
     for n in range(len(lst)):
         ema += _sort[n] * smoothing_constant * (1.0 - smoothing_constant)**n
     if _sort:

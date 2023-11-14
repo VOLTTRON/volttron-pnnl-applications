@@ -60,12 +60,19 @@ _log = logging.getLogger(__name__)
 class Model:
 
     def __init__(self, config, schedule):
-        self.latest_start_time = config.get('latest_start_time', 0)
-        self.earliest_start_time = config.get('earliest_start_time', 120)
-        self.t_error = config.get('allowable_setpoint_deviation', 1.0)
-        self.training_interval = config.get('training_interval', 10)
+        self.latest_start_time = 10
+        self.earliest_start_time = 120
+        self.t_error = 1.0
+        self.training_interval = 10
         self.schedule = schedule
+        self.config = config
         self.record = {}
+
+    def load_config(self):
+        self.latest_start_time = self.config.get('latest_start_time', 0)
+        self.earliest_start_time = self.config.get('earliest_start_time', 120)
+        self.t_error = self.config.get('allowable_setpoint_deviation', 1.0)
+        self.training_interval = self.config.get('training_interval', 10)
 
     def load_model(self, model_dict):
         for name, value in model_dict.items():
@@ -74,6 +81,7 @@ class Model:
             except Exception as ex:
                 _log.debug(f"Problem initializing configuration parameter {name} - {value} -- {ex}")
                 continue
+        self.load_config()
 
     def train(self, data, prestart):
         """

@@ -266,6 +266,7 @@ class OptimalStartManager:
             try:
                 cls_attrs = get_cls_attrs(model)
                 cls_attrs.pop('schedule')
+                cls_attrs.pop('config')
                 self.vip.config.set(tag, cls_attrs, send_update=False)
                 _file = self.base.model_path + f'/{self.base.device}_{tag}.json'
                 with open(_file, 'w') as fp:

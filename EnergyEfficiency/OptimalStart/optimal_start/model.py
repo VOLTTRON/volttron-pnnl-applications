@@ -65,7 +65,13 @@ class Model:
         self.t_error = 1.0
         self.training_interval = 10
         self.schedule = schedule
-        self.config = config
+        self.config = {
+            "earliest_start_time": config.get('earliest_start_time', 120),
+            "latest_start_time": config.get('latest_start_time', 10),
+            "allowable_setpoint_deviation": config.get('allowable_setpoint_deviation', 10),
+            "training_interval": config.get('training_interval', 10)
+
+        }
         self.record = {}
 
     def load_config(self):

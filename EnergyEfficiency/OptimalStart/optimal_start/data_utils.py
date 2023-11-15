@@ -74,8 +74,7 @@ class Data:
         _log.debug('Data file: {}'.format(data_file))
         if os.path.isfile(data_file):
             try:
-                self.df = pd.read_csv(data_file, index_col='ts')
-                self.df.index = pd.to_datetime(self.df.index)
+                self.df = pd.read_csv(data_file, index_col='ts', parse_dates=True)
             except Exception as ex:
                 _log.debug(f'No previous dataframe object: {ex}')
         try:
@@ -157,7 +156,6 @@ class Data:
         if stored_data:
             stored_data['ts'] = [current_dt]
             df = pd.DataFrame.from_dict(stored_data)
-            df['ts'] = pd.to_datetime(df['ts'])
             df.set_index(df['ts'], inplace=True)
             if self.df is not None:
                 self.df = pd.concat([self.df, df], axis=0, ignore_index=False)

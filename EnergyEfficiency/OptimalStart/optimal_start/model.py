@@ -65,6 +65,7 @@ class Model:
         self.t_error = 1.0
         self.training_interval = 10
         self.schedule = schedule
+        self.tz = config.get('local_tz', 'US/Pacific')
         self.config = {
             "earliest_start_time": config.get('earliest_start_time', 120),
             "latest_start_time": config.get('latest_start_time', 10),
@@ -114,6 +115,8 @@ class Model:
         else:
             _log.debug('No start in schedule!!')
             return
+        data.index = pd.to_datetime(data.index, utc=True)
+        data.index = data.index.tz_convert(self.tz)
         data = data.between_time(training_start, training_end)
         data = data[data['supplyfanstatus'] != 0]
         data.drop(index=data.index[0], axis=0, inplace=True)

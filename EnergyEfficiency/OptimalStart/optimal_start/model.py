@@ -69,7 +69,7 @@ class Model:
         self.config = {
             "earliest_start_time": config.get('earliest_start_time', 120),
             "latest_start_time": config.get('latest_start_time', 10),
-            "allowable_setpoint_deviation": config.get('allowable_setpoint_deviation', 10),
+            "allowable_setpoint_deviation": config.get('allowable_setpoint_deviation', 1.0),
             "training_interval": config.get('training_interval', 10)
 
         }

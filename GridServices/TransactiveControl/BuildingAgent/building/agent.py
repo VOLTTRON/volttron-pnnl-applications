@@ -220,6 +220,7 @@ class BuildingAgent(MarketAgent, TransactiveNode):
         self.vip.pubsub.subscribe(peer='pubsub',
                                   prefix=self.campus_supply_topic,
                                   callback=self.new_supply_signal)
+
         self.vip.pubsub.subscribe(peer='pubsub',
                                   prefix=self.power_topic,
                                   callback=self.new_demand_signal)
@@ -339,7 +340,7 @@ class BuildingAgent(MarketAgent, TransactiveNode):
             self.real_time_price = [price[0].value]
             avg_price, std_dev = market.model_prices(price[0].timeInterval.startTime)
             price_tuple = [(avg_price, std_dev)]
-            _log.info(f"Market for name: {market.name} CLEARED marginal price are: {self.real_time_price}, flag: {self.real_time_clear_price_sent[market.name]}")
+            _log.info(f"Market for name: {market.name} CLEARED marginal price are: {self.real_time_price}, PRICE TUPLE = {price_tuple} flag: {self.real_time_clear_price_sent[market.name]}")
             if not self.real_time_clear_price_sent.get(market.name, False):
                 message = {"prices": self.real_time_price,
                            "price_info": price_tuple,
@@ -352,6 +353,7 @@ class BuildingAgent(MarketAgent, TransactiveNode):
     def new_demand_signal(self, peer, sender, bus, topic, headers, message):
         mtrs = self.campus.meterPoints
         if len(mtrs) > 0:
+            _log.info("METER points are available")
             bldg_meter = mtrs[0]
             power_unit = message[1]
             cur_power = float(message[0]["WholeBuildingPower"])
@@ -650,7 +652,8 @@ class BuildingAgent(MarketAgent, TransactiveNode):
 
     def make_campus_neighbor(self):
         # 191219DJH: There are no longer separate object and model neighbor classes.
-        campus = Neighbor(demand_rate=0.0)
+        #campus = Neighbor(demand_rate=0.0)
+        campus = Neighbor()
         campus.name = 'PNNL_Campus'
         campus.description = 'PNNL_Campus'
         campus.maximumPower = self.max_deliver_capacity

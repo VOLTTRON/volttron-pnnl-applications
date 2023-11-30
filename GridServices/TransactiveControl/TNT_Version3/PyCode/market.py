@@ -656,6 +656,7 @@ class Market(object):
         final_prices = self.marginalPrices
         for x in range(len(final_prices)):
             self.model_prices(final_prices[x].timeInterval.startTime, final_prices[x].value)
+            _log.info(f"FINAL PRICE = {final_prices[x].value}, FINAL PRICE START TIME = {final_prices[x].timeInterval.startTime}")
 
         self.deliverylead_schedule_power = False
         return None
@@ -808,6 +809,7 @@ class Market(object):
         :return sd_price: [$/kWh] standard price deviation for given date and time
         """
         # Initialize the average and standard deviation prices.
+        _log.info(f"new price = {new_price}")
         avg_price = None
         sd_price = None
 

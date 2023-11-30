@@ -94,12 +94,13 @@ class firstorderzone(object):
             self.predict_name = self.zdat_name
 
     def update_data(self):
-        zaf = self.get_input_value(self.zaf_name)
-        if zaf is None:
-            _log.debug("Cannot update prediction error ratio!  No data!")
-            return
-        self.prediction_data.append(zaf)
-        _log.debug("Prediction data  zaf %s -- %s", zaf, self.prediction_data)
+        pass
+        #zaf = self.get_input_value(self.zaf_name)
+        #if zaf is None:
+        #    _log.debug("Cannot update prediction error ratio!  No data!")
+        #    return
+        #self.prediction_data.append(zaf)
+        #_log.debug("Prediction data  zaf %s -- %s", zaf, self.prediction_data)
 
     def update_coefficients(self, coefficients):
         if set(coefficients.keys()) != self.coefficients:

@@ -1,4 +1,4 @@
-u"""
+"""
 Copyright (c) 2023, Battelle Memorial Institute
 All rights reserved.
 Redistribution and use in source and binary forms, with or without
@@ -40,7 +40,12 @@ operated by BATTELLE for the UNITED STATES DEPARTMENT OF ENERGY
 under Contract DE-AC05-76RL01830
 """
 import datetime as dt
+import logging
 import numpy as np
+from volttron.platform.agent.utils import (setup_logging,
+                                           format_timestamp,)
+setup_logging()
+_log = logging.getLogger(__name__)
 
 
 def clean_array(array):
@@ -50,7 +55,7 @@ def clean_array(array):
         :param array: (list) coefficients from models
         :return: array (list)
     """
-    array = [item for item in array if np.isfinite(item) and item > 0]
+    array = [item for item in array if np.isfinite(item) and item >= 0]
     if len(array) > 3:
         u = np.mean(array)
         s = np.std(array)
@@ -60,10 +65,12 @@ def clean_array(array):
 
 
 def parse_df(df, condition):
-    if condition == "cooling":
-        data_sort = df[df['zonetemperature'] <= df["coolingsetpoint"]]
+    if condition == 'cooling':
+        data_sort = df[df['zonetemperature'] <= df['coolingsetpoint']]
+        df['temp_diff'] = df['zonetemperature'] - df['coolingsetpoint']
     else:
-        data_sort = df[df['zonetemperature'] >= df["heatingsetpoint"]]
+        data_sort = df[df['zonetemperature'] >= df['heatingsetpoint']]
+        df['temp_diff'] = df['heatingsetpoint'] - df['zonetemperature']
     df['conditioning'] = df[condition].rolling(window=10).mean()
     data_sort_mode = df[df['conditioning'] == 0]
     if not data_sort.empty:
@@ -88,11 +95,11 @@ def offset_time(_time, offset):
 
 
 def trim(lst, new_value, cutoff):
-    lst.append(new_value)
+    if not np.isfinite(new_value):
+        return
+    lst.append([format_timestamp(dt.datetime.now()), new_value])
     if lst and len(lst) > cutoff:
         lst.pop(0)
-    # lst = [item for item in lst if item != 0]
-    lst = [item for item in lst if not np.isnan(item)]
     return lst
 
 
@@ -103,16 +110,28 @@ def get_time_temp_diff(htr):
     return time_diff, temp_diff
 
 
+def get_time_target(data, target):
+    try:
+        idx = data[(data['temp_diff'][0] - data['temp_diff']) >= target].index[0]
+        target_df = data.loc[:idx]
+    except IndexError as ex:
+        return
+    _dt = (target_df.index[-1] - target_df.index[0]).total_seconds()/60
+    temp = target_df['temp_diff'][0] - target_df['temp_diff'][-1]
+
+    return _dt/temp
+
+
 def ema(lst):
     smoothing_constant = 2.0 / (len(lst) + 1.0) * 2.0 if lst else 1.0
     smoothing_constant = smoothing_constant if smoothing_constant <= 1.0 else 1.0
-    _sort = list(lst)
-    _sort.sort(reverse=True)
+    _sort = lst[::-1]
     ema = 0
+    _sort = [item[1] if isinstance(item, list) else item for item in _sort]
     for n in range(len(lst)):
-        ema += _sort[n] * smoothing_constant * (1.0 - smoothing_constant) ** n
+        ema += _sort[n] * smoothing_constant * (1.0 - smoothing_constant)**n
     if _sort:
-        ema += _sort[-1] * (1.0 - smoothing_constant) ** (len(lst))
+        ema += _sort[-1] * (1.0 - smoothing_constant)**(len(lst))
     return ema
 
 
@@ -125,3 +144,24 @@ def calculate_prestart_time(end, prestart):
     _hours = end.hour - _hours
     start = dt.time(hour=_hours, minute=_minutes)
     return start
+
+
+def get_cls_attrs(cls):
+    d = {
+        key: value for key, value in cls.__dict__.items()
+        if not key.startswith('__')
+           and not callable(value)
+           and not callable(getattr(value, '__get__', None))  # <- important
+    }
+    return d
+
+
+def get_operating_mode(data):
+    mode = None
+    cooling_count = data['cooling'].sum()
+    heating_count = data['heating'].sum()
+    if cooling_count > heating_count and cooling_count > 0:
+        mode = 'cooling'
+    elif heating_count > cooling_count and heating_count > 0:
+        mode = 'heating'
+    return mode

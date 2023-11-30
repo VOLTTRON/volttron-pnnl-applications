@@ -1,5 +1,5 @@
 """
-Copyright (c) 2021, Battelle Memorial Institute
+Copyright (c) 2023, Battelle Memorial Institute
 All rights reserved.
 Redistribution and use in source and binary forms, with or without
 modification, are permitted provided that the following conditions are met:
@@ -53,7 +53,7 @@ setup(
     include_package_data=True,
     name=package + 'agent',
     version=__version__,
-    install_requires=['volttron>=3.0', 'dill', 'numpy'],
+    install_requires=['volttron>=3.0', 'numpy'],
     packages=packages,
     entry_points={
         'setuptools.installation': [

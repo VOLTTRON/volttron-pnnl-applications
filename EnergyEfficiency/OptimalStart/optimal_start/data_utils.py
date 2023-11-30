@@ -43,7 +43,8 @@ import os
 import logging
 import pandas as pd
 import warnings
-warnings.filterwarnings("ignore", category=DeprecationWarning)
+
+warnings.filterwarnings('ignore', category=DeprecationWarning)
 from datetime import datetime as dt, timedelta as td
 from dateutil import parser, tz
 from volttron.platform.agent.utils import setup_logging, format_timestamp
@@ -54,27 +55,26 @@ _log = logging.getLogger(__name__)
 
 
 class Data:
-    def __init__(self, points, timezone, tag, data_dir="", setpoint_offset=None):
+    def __init__(self, points, timezone, tag, data_dir='', setpoint_offset=None):
         self.points = points
         self.current_dt = dt.now()
         self.df = None
         try:
             self.local_tz = tz.gettz(timezone)
         except:
-            self.local_tz = tz.gettz("UTC")
+            self.local_tz = tz.gettz('UTC')
         if data_dir:
-            data_file = data_dir + "/data_{}.csv".format(tag)
+            data_file = data_dir + f'/data_{tag}.csv'
         else:
-            data_dir = os.path.expanduser("~/optimal_start")
-            data_file = data_dir + "/data_{}.csv".format(tag)
+            data_dir = os.path.expanduser('~/optimal_start')
+            data_file = data_dir + f'/data_{tag}.csv'
         self.data_path = data_dir
         self.setpoint_offset = setpoint_offset
         self.tag = tag
-        _log.debug("Data file: {}".format(data_file))
+        _log.debug('Data file: {}'.format(data_file))
         if os.path.isfile(data_file):
             try:
-                self.df = pd.read_csv(data_file, index_col='ts')
-                self.df.index = pd.to_datetime(self.df.index)
+                self.df = pd.read_csv(data_file, index_col='ts', parse_dates=True)
             except Exception as ex:
                 _log.debug(f'No previous dataframe object: {ex}')
         try:
@@ -107,12 +107,12 @@ class Data:
         @rtype:
         """
         _date = format_timestamp(dt.now())
-        data_file = self.data_path + "/data_{}_{}.csv".format(self.tag, _date)
+        data_file = self.data_path + f'/data_{self.tag}_{_date}.csv'
         try:
             self.df.to_csv(data_file)
             self.df = None
         except Exception as ex:
-            _log.debug("Error saving df csv!: %s", ex)
+            _log.debug(f'Error saving df csv!: {ex}')
             self.df = None
 
     def update_data(self, payload, header):
@@ -156,12 +156,11 @@ class Data:
         if stored_data:
             stored_data['ts'] = [current_dt]
             df = pd.DataFrame.from_dict(stored_data)
-            df['ts'] = pd.to_datetime(df['ts'])
             df.set_index(df['ts'], inplace=True)
             if self.df is not None:
                 self.df = pd.concat([self.df, df], axis=0, ignore_index=False)
                 self.df = self.df.drop(columns=['ts'])
             else:
                 self.df = df
-            data_path = self.data_path + "/data_{}.csv".format(self.tag)
+            data_path = self.data_path + f'/data_{self.tag}.csv'
             self.df.to_csv(data_path)

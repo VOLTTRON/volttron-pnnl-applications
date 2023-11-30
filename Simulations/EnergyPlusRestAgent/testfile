@@ -1,0 +1,223 @@
+       
+        "Catalyst_CB_34Mech_CO2Set": {
+            "name": "Catalyst_CB_34Mech_CO2Set",
+            "type": "schedule",
+            "topic": "EcoDistrict/Catalyst/CB/34Mech",
+            "field": "CO2Set"
+        },
+        "Morris_FC_2Bath_CO2Set": {
+            "name": "Morris_FC_2Bath_CO2Set",
+            "type": "schedule",
+            "topic": "EcoDistrict/Morris/FC/2Bath",
+            "field": "CO2Set"
+        },
+        "Morris_FC_1Restaurant_CO2Set": {
+            "name": "Morris_FC_1Restaurant_CO2Set",
+            "type": "schedule",
+            "topic": "EcoDistrict/Morris/FC/1Restaurant",
+            "field": "CO2Set"
+        },
+        "Catalyst_CB_GStorage_CO2Set": {
+            "name": "Catalyst_CB_GStorage_CO2Set",
+            "type": "schedule",
+            "topic": "EcoDistrict/Catalyst/CB/GStorage",
+            "field": "CO2Set"
+        },
+        "Catalyst_CB_GWSuite_CO2Set": {
+            "name": "Catalyst_CB_GWSuite_CO2Set",
+            "type": "schedule",
+            "topic": "EcoDistrict/Catalyst/CB/GWSuite",
+            "field": "CO2Set"
+        },
+        "Catalyst_CB_GCorridor_CO2Set": {
+            "name": "Catalyst_CB_GCorridor_CO2Set",
+            "type": "schedule",
+            "topic": "EcoDistrict/Catalyst/CB/GCorridor",
+            "field": "CO2Set"
+        },
+        "Catalyst_CB_GMech_CO2Set": {
+            "name": "Catalyst_CB_GMech_CO2Set",
+            "type": "schedule",
+            "topic": "EcoDistrict/Catalyst/CB/GMech",
+            "field": "CO2Set"
+        },
+        "Catalyst_CB_GFitness_CO2Set": {
+            "name": "Catalyst_CB_GFitness_CO2Set",
+            "type": "schedule",
+            "topic": "EcoDistrict/Catalyst/CB/GFitness",
+            "field": "CO2Set"
+        },
+        "Catalyst_CB_GBath_CO2Set": {
+            "name": "Catalyst_CB_GBath_CO2Set",
+            "type": "schedule",
+            "topic": "EcoDistrict/Catalyst/CB/GBath",
+            "field": "CO2Set"
+        },
+        "Catalyst_CB_GStorageE_CO2Set": {
+            "name": "Catalyst_CB_GStorageE_CO2Set",
+            "type": "schedule",
+            "topic": "EcoDistrict/Catalyst/CB/GStorageE",
+            "field": "CO2Set"
+        },
+        "Catalyst_CB_GElectrical_CO2Set": {
+            "name": "Catalyst_CB_GElectrical_CO2Set",
+            "type": "schedule",
+            "topic": "EcoDistrict/Catalyst/CB/GElectrical",
+            "field": "CO2Set"
+        },
+        "Catalyst_CB_GTSER_CO2Set": {
+            "name": "Catalyst_CB_GTSER_CO2Set",
+            "type": "schedule",
+            "topic": "EcoDistrict/Catalyst/CB/GTSER",
+            "field": "CO2Set"
+        },
+        "Catalyst_CB_1Lobby_CO2Set": {
+            "name": "Catalyst_CB_1Lobby_CO2Set",
+            "type": "schedule",
+            "topic": "EcoDistrict/Catalyst/CB/1Lobby",
+            "field": "CO2Set"
+        },
+        "Catalyst_CB_1WSuite_CO2Set": {
+            "name": "Catalyst_CB_1WSuite_CO2Set",
+            "type": "schedule",
+            "topic": "EcoDistrict/Catalyst/CB/1WSuite",
+            "field": "CO2Set"
+        },
+        "Catalyst_CB_1Bath_CO2Set": {
+            "name": "Catalyst_CB_1Bath_CO2Set",
+            "type": "schedule",
+            "topic": "EcoDistrict/Catalyst/CB/1Bath",
+            "field": "CO2Set"
+        },
+        "Catalyst_CB_1NESuit_CO2Set": {
+            "name": "Catalyst_CB_1NESuit_CO2Set",
+            "type": "schedule",
+            "topic": "EcoDistrict/Catalyst/CB/1NESuit",
+            "field": "CO2Set"
+        },
+        "Catalyst_CB_1Corridor_CO2Set": {
+            "name": "Catalyst_CB_1Corridor_CO2Set",
+            "type": "schedule",
+            "topic": "EcoDistrict/Catalyst/CB/1Corridor",
+            "field": "CO2Set"
+        },
+        "Catalyst_CB_1SESuite_CO2Set": {
+            "name": "Catalyst_CB_1SESuite_CO2Set",
+            "type": "schedule",
+            "topic": "EcoDistrict/Catalyst/CB/1SESuite",
+            "field": "CO2Set"
+        },
+        "Catalyst_CB_1Bath2_CO2Set": {
+            "name": "Catalyst_CB_1Bath2_CO2Set",
+            "type": "schedule",
+            "topic": "EcoDistrict/Catalyst/CB/1Bath2",
+            "field": "CO2Set"
+        },
+        "Catalyst_CB_1Mech_CO2Set": {
+            "name": "Catalyst_CB_1Mech_CO2Set",
+            "type": "schedule",
+            "topic": "EcoDistrict/Catalyst/CB/1Mech",
+            "field": "CO2Set"
+        },
+        "Catalyst_CB_2WSuite_CO2Set": {
+            "name": "Catalyst_CB_2WSuite_CO2Set",
+            "type": "schedule",
+            "topic": "EcoDistrict/Catalyst/CB/2WSuite",
+            "field": "CO2Set"
+        },
+        "Catalyst_CB_2Bath_CO2Set": {
+            "name": "Catalyst_CB_2Bath_CO2Set",
+            "type": "schedule",
+            "topic": "EcoDistrict/Catalyst/CB/2Bath",
+            "field": "CO2Set"
+        },
+        "Catalyst_CB_2Lobby_CO2Set": {
+            "name": "Catalyst_CB_2Lobby_CO2Set",
+            "type": "schedule",
+            "topic": "EcoDistrict/Catalyst/CB/2Lobby",
+            "field": "CO2Set"
+        },
+        "Catalyst_CB_2ESuite_CO2Set": {
+            "name": "Catalyst_CB_2ESuite_CO2Set",
+            "type": "schedule",
+            "topic": "EcoDistrict/Catalyst/CB/2ESuite",
+            "field": "CO2Set"
+        },
+        "Catalyst_CB_2Corridor_CO2Set": {
+            "name": "Catalyst_CB_2Corridor_CO2Set",
+            "type": "schedule",
+            "topic": "EcoDistrict/Catalyst/CB/2Corridor",
+            "field": "CO2Set"
+        },
+        "Catalyst_CB_2Mech_CO2Set": {
+            "name": "Catalyst_CB_2Mech_CO2Set",
+            "type": "schedule",
+            "topic": "EcoDistrict/Catalyst/CB/2Mech",
+            "field": "CO2Set"
+        },
+        "Catalyst_CB_34WSuite_CO2Set": {
+            "name": "Catalyst_CB_34WSuite_CO2Set",
+            "type": "schedule",
+            "topic": "EcoDistrict/Catalyst/CB/34WSuite",
+            "field": "CO2Set"
+        },
+        "Catalyst_CB_34Bath_CO2Set": {
+            "name": "Catalyst_CB_34Bath_CO2Set",
+            "type": "schedule",
+            "topic": "EcoDistrict/Catalyst/CB/34Bath",
+            "field": "CO2Set"
+        },
+        "Catalyst_CB_34Corridor_CO2Set": {
+            "name": "Catalyst_CB_34Corridor_CO2Set",
+            "type": "schedule",
+            "topic": "EcoDistrict/Catalyst/CB/34Corridor",
+            "field": "CO2Set"
+        },
+        "Catalyst_CB_5WSuite_CO2Set": {
+            "name": "Catalyst_CB_5WSuite_CO2Set",
+            "type": "schedule",
+            "topic": "EcoDistrict/Catalyst/CB/5WSuite",
+            "field": "CO2Set"
+        },
+        "Catalyst_CB_5ESuite_CO2Set": {
+            "name": "Catalyst_CB_5ESuite_CO2Set",
+            "type": "schedule",
+            "topic": "EcoDistrict/Catalyst/CB/5ESuite",
+            "field": "CO2Set"
+        },
+        "Catalyst_CB_5Bath_CO2Set": {
+            "name": "Catalyst_CB_5Bath_CO2Set",
+            "type": "schedule",
+            "topic": "EcoDistrict/Catalyst/CB/5Bath",
+            "field": "CO2Set"
+        },
+        "Catalyst_CB_5Corridor_CO2Set": {
+            "name": "Catalyst_CB_5Corridor_CO2Set",
+            "type": "schedule",
+            "topic": "EcoDistrict/Catalyst/CB/5Corridor",
+            "field": "CO2Set"
+        },
+        "Catalyst_CB_5Mech_CO2Set": {
+            "name": "Catalyst_CB_5Mech_CO2Set",
+            "type": "schedule",
+            "topic": "EcoDistrict/Catalyst/CB/5Mech",
+            "field": "CO2Set"
+        },
+        "Morris_FC_1Lobby_CO2Set": {
+            "name": "Morris_FC_1Lobby_CO2Set",
+            "type": "schedule",
+            "topic": "EcoDistrict/Morris/FC/1Lobby",
+            "field": "CO2Set"
+        },
+        "Morris_FC_1EcodistrictPlant_CO2Set": {
+            "name": "Morris_FC_1EcodistrictPlant_CO2Set",
+            "type": "schedule",
+            "topic": "EcoDistrict/Morris/FC/1EcodistrictPlant",
+            "field": "CO2Set"
+        },
+        "Morris_FC_2Tenant_CO2Set": {
+            "name": "Morris_FC_2Tenant_CO2Set",
+            "type": "schedule",
+            "topic": "EcoDistrict/Morris/FC/2Tenant",
+            "field": "CO2Set"
+        },

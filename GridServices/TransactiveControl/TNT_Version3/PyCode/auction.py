@@ -469,7 +469,7 @@ class Auction(Market):
             for asset in my_transactive_node.localAssets:
                 transactive_operation['demand']['actual']['assets'][asset.name] = asset.getDict()['vertices']
 
-        topic = "{}/{}".format(my_transactive_node.transactive_operation_topic, self.name)
+        topic = "{}/{}".format(my_transactive_node.transactive_operation_topic, self.marketSeriesName)
         my_transactive_node.vip.pubsub.publish(peer='pubsub', topic=topic,
                                                headers=headers, message=transactive_operation)
 #        _log.debug("AUCTION: Publishing on market topic: {} and info: {}".format(topic, transactive_operation))

@@ -444,8 +444,6 @@ class ILCAgent(Agent):
                                       prefix=self.kill_device_topic,
                                       callback=self.handle_agent_kill)
 
-        demand_limit_handler = self.demand_limit_handler if not self.sim_running else self.simulation_demand_limit_handler
-
         if self.demand_schedule is not None and not self.sim_running:
             self.setup_demand_schedule()
         elif self.demand_schedule is not None and self.sim_running:
@@ -453,7 +451,7 @@ class ILCAgent(Agent):
 
         self.vip.pubsub.subscribe(peer="pubsub",
                                   prefix=self.target_agent_subscription,
-                                  callback=demand_limit_handler)
+                                  callback=self.demand_limit_handler)
         _log.debug("Target agent subscription: " + self.target_agent_subscription)
         self.vip.pubsub.publish("pubsub", self.ilc_start_topic, headers={}, message={})
         self.setup_topics()
@@ -541,56 +539,6 @@ class ILCAgent(Agent):
             self.tasks.pop(task_id)
             if self.demand_schedule is not None:
                 self.setup_demand_schedule()
-
-    def demand_limit_handler(self, peer, sender, bus, topic, headers, message):
-        self.sim_time = 0
-        if isinstance(message, list):
-            target_info = message[0]["value"]
-            tz_info = message[1]["value"]["tz"]
-        else:
-            target_info = message
-            tz_info = "US/Pacific"
-
-        self.tz = to_zone = dateutil.tz.gettz(tz_info)
-        start_time = parser.parse(target_info["start"]).astimezone(to_zone)
-        end_time = parser.parse(target_info.get("end", start_time.replace(hour=23, minute=59, second=45))).astimezone(to_zone)
-        target = target_info["target"]
-        demand_goal = float(target) if target is not None else target
-        task_id = target_info["id"]
-        _log.debug("TARGET - id: {} - start: {} - goal: {}".format(task_id, start_time, demand_goal))
-        task_list = []
-        for key, value in self.tasks.items():
-            if start_time == value["end"]:
-                start_time += td(seconds=15)
-            if (start_time < value["end"] and end_time > value["start"]) or value["start"] <= start_time <= value["end"]:
-                task_list.append(key)
-        for task in task_list:
-           sched_tasks = self.tasks.pop(task)["schedule"]
-           for current_task in sched_tasks:
-               current_task.cancel()
-
-        current_task_exists = self.tasks.get(target_info["id"])
-        if current_task_exists is not None:
-            _log.debug("TARGET: duplicate task - {}".format(target_info["id"]))
-            for item in self.tasks.pop(target_info["id"])["schedule"]:
-                item.cancel()
-        _log.debug("TARGET: create schedule - ID: {}".format(target_info["id"]))
-        self.tasks[target_info["id"]] = {
-            "schedule": [
-                self.core.schedule(start_time,
-                                   self.demand_limit_update,
-                                   demand_goal,
-                                   task_id),
-                self.core.schedule(end_time,
-                                   self.demand_limit_update,
-                                   None,
-                                   task_id)
-            ],
-            "start": start_time,
-            "end": end_time,
-            "target": demand_goal
-        }
-        return
 
     def breakout_all_publish(self, topic, message):
         values_map = {}
@@ -1366,7 +1314,7 @@ class ILCAgent(Agent):
         except:
             _log.debug("Unable to publish device status message.")
 
-    def simulation_demand_limit_handler(self, peer, sender, bus, topic, headers, message):
+    def demand_limit_handler(self, peer, sender, bus, topic, headers, message):
         """
         Simulation handler for TargetAgent.
         :param peer:
@@ -1385,15 +1333,61 @@ class ILCAgent(Agent):
             target_info = message
             tz_info = "US/Pacific"
 
-        self.tz = to_zone = dateutil.tz.gettz(tz_info)
-        start_time = parser.parse(target_info["start"]).astimezone(to_zone)
-        end_time = parser.parse(target_info.get("end", start_time.replace(hour=23, minute=59, second=59))).astimezone(
-            to_zone)
+        to_zone = dateutil.tz.gettz(tz_info)
+        try:
+            start_time = parser.parse(target_info["start"])
+            end_time = target_info.get("end")
+            end_time = parser.parse(end_time) if end_time is not None else start_time.replace(hour=23, minute=59,
+                                                                                              second=59)
+            target = target_info["target"]
+            demand_goal = float(target) if target is not None else target
+            task_id = target_info["id"]
+        except (KeyError, ValueError, TypeError) as ex:
+            _log.warning("Malformed demand target message, cannot set new target: %s", str(ex))
+            return
+        if start_time.tzinfo is None or start_time.tzinfo.utcoffset(start_time) is None:
+            start_time = start_time.replace(tzinfo=to_zone)
+            end_time = end_time.replace(tzinfo=to_zone)
+        if self.sim_running:
+            self.update_sim_tasklist(start_time, end_time, demand_goal, task_id)
+        else:
+            self.update_tasklist(start_time, end_time, demand_goal, task_id)
 
-        demand_goal = target_info["target"]
-        task_id = target_info["id"]
+    def update_tasklist(self, start_time, end_time, demand_goal, task_id):
+        task_list = []
+        for key, value in self.tasks.items():
+            if start_time == value["end"]:
+                start_time += td(seconds=5)
+            if (start_time < value["end"] and end_time > value["start"]) or value["start"] <= start_time <= value["end"]:
+                task_list.append(key)
+        for task in task_list:
+            sched_tasks = self.tasks.pop(task)["schedule"]
+            for current_task in sched_tasks:
+                current_task.cancel()
 
-        _log.debug("TARGET: Simulation running.")
+        current_task_exists = self.tasks.get(task_id)
+        if current_task_exists is not None:
+            _log.debug("TARGET: duplicate task - {}".format(task_id))
+            for item in self.tasks.pop(task_id)["schedule"]:
+                item.cancel()
+        _log.debug("TARGET: create schedule - ID: {}".format(task_id))
+        self.tasks[task_id] = {
+            "schedule": [
+                self.core.schedule(start_time,
+                                   self.demand_limit_update,
+                                   demand_goal,
+                                   task_id),
+                self.core.schedule(end_time,
+                                   self.demand_limit_update,
+                                   None,
+                                   task_id)
+            ],
+            "start": start_time,
+            "end": end_time,
+            "target": demand_goal
+        }
+
+    def update_sim_tasklist(self, start_time, end_time, demand_goal, task_id):
         key_list = []
         for key, value in self.tasks.items():
             if (start_time < value["end"] and end_time > value["start"]) or (
@@ -1405,7 +1399,7 @@ class ILCAgent(Agent):
         _log.debug("TARGET: received demand goal schedule - start: {} - end: {} - target: {}.".format(start_time,
                                                                                                       end_time,
                                                                                                       demand_goal))
-        self.tasks[target_info["id"]] = {"start": start_time, "end": end_time, "target": demand_goal}
+        self.tasks[task_id] = {"start": start_time, "end": end_time, "target": demand_goal}
         return
 
     def publish_record(self, topic_suffix, message):

@@ -19,9 +19,9 @@
     "stagger_off_time": true,
     "clusters": [ 
         {
-            "device_control_file": "control_config",
-            "device_criteria_file": "criteria_config",
-            "pairwise_criteria_file": "pairwise_criteria.json",
+            "device_control_config": "config"//control_config",
+            "device_criteria_config": "config://criteria_config",
+            "pairwise_criteria_config": "config://pairwise_criteria.json",
             "cluster_priority": 1.0
         }
     ]

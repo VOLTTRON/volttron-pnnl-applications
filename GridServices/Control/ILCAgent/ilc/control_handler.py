@@ -40,14 +40,10 @@ PACIFIC NORTHWEST NATIONAL LABORATORY
 operated by BATTELLE for the UNITED STATES DEPARTMENT OF ENERGY
 under Contract DE-AC05-76RL01830
 """
-
-from sympy import symbols
 import logging
-from sympy.parsing.sympy_parser import parse_expr
 from volttron.platform.agent.utils import setup_logging, format_timestamp, get_aware_utc_now
-from volttron.platform.messaging import topics, headers as headers_mod
-
-from .utils import parse_sympy, create_device_topic_map, fix_up_point_name
+from volttron.platform.messaging import headers as headers_mod
+from .utils import parse_sympy, sympy_evaluate, create_device_topic_map, fix_up_point_name
 
 setup_logging()
 _log = logging.getLogger(__name__)
@@ -119,16 +115,12 @@ class ControlContainer(object):
 class DeviceStatus(object):
     def __init__(self, logging_topic, parent, device_status_args=[], condition="", default_device=""):
         self.current_device_values = {}
-        #device_status_args = parse_sympy(device_status_args)
-        device_status_args = device_status_args
-
         self.device_topic_map, self.device_topics = create_device_topic_map(device_status_args, default_device)
+        _log.debug(f'Device topic map: {default_device} -- {self.device_topic_map}')
 
-        _log.debug("Device topic map: {}".format(self.device_topic_map))
-        
         # self.device_status_args = device_status_args
-        self.condition = parse_sympy(condition, condition=True)
-        self.expr = parse_expr(self.condition)
+        self.condition = parse_sympy(condition)
+        self.expr = self.condition
         self.command_status = False
         self.default_device = default_device
         self.parent = parent
@@ -138,9 +130,7 @@ class DeviceStatus(object):
         for topic, point in self.device_topic_map.items():
             if topic in data:
                 self.current_device_values[point] = data[topic]
-                _log.debug("DEVICE_STATUS: {} - {} current device values: {}".format(topic,
-                                                                                     self.condition,
-                                                                                     self.current_device_values))
+
         # bail if we are missing values.
         if len(self.current_device_values) < len(self.device_topic_map):
             return
@@ -148,7 +138,7 @@ class DeviceStatus(object):
         conditional_points = self.current_device_values.items()
         conditional_value = False
         if conditional_points:
-            conditional_value = self.expr.subs(conditional_points)
+            conditional_value = sympy_evaluate(self.expr, conditional_points)
         try:
             self.command_status = bool(conditional_value)
         except TypeError:
@@ -156,6 +146,10 @@ class DeviceStatus(object):
         message = self.current_device_values
         message["Status"] = self.command_status
         topic = "/".join([self.logging_topic, self.default_device, "DeviceStatus"])
+        _log.debug(
+            f'DEVICE_STATUS {self.default_device} with condition '
+            f'{self.condition} evaluates to {self.command_status}.'
+        )
         # publish_data(time_stamp, message, topic, self.parent.vip.pubsub.publish)
 
 
@@ -276,9 +270,11 @@ class ControlManager(object):
         for control in self.controls.values():
             self.topics_per_device[control] = control.get_topic_maps()
 
+
 class ControlSetting(object):
-    def __init__(self, logging_topic, parent, point=None, value=None, load=None, offset=None, maximum=None, minimum=None,
-                 revert_priority=None, equation=None, control_method=None, control_mode="comfort",
+    def __init__(self, logging_topic, parent, point=None, value=None,
+                 load=None, offset=None, maximum=None, minimum=None, revert_priority=None,
+                 equation=None, control_method=None, control_mode="comfort",
                  condition="", conditional_args=[], default_device=""):
         if control_method is None:
             raise ValueError("Missing 'control_method' configuration parameter!")
@@ -302,7 +298,6 @@ class ControlSetting(object):
 
         if self.control_method.lower() == 'equation':
             self.equation_args = []
-            # equation_args = parse_sympy(equation['equation_args'])
             equation_args = equation['equation_args']
             for arg in equation_args:
                 point, point_device = fix_up_point_name(arg, default_device)
@@ -312,12 +307,11 @@ class ControlSetting(object):
                     token = arg
                 self.equation_args.append([token, point])
 
-            self.control_value_formula = parse_expr(parse_sympy(equation['operation']))
+            self.control_value_formula = equation['operation']
             self.maximum = equation['maximum']
             self.minimum = equation['minimum']
 
         if isinstance(load, dict):
-            #args = parse_sympy(load['equation_args'])
             args = load['equation_args']
             load_args = []
             for arg in args:
@@ -328,8 +322,7 @@ class ControlSetting(object):
                     token = arg
                 load_args.append([token, point])
             actuator_args = load['equation_args']
-            self.load_points = symbols(load_args)
-            load_expr = parse_expr(parse_sympy(load['operation']))
+            load_expr = load['operation']
             self.load = {
                 'load_equation': load_expr,
                 'load_equation_args': load_args,
@@ -338,16 +331,12 @@ class ControlSetting(object):
         else:
             self.load = load
 
-        # self.conditional_args = []
-        self.conditional_expr = None
         self.conditional_control = None
         self.device_topic_map, self.device_topics = {}, set()
         self.current_device_values = {}
 
         if conditional_args and condition:
-            # self.conditional_args = parse_sympy(conditional_args)
-            self.conditional_expr = parse_sympy(condition, condition=True)
-            self.conditional_control = parse_expr(self.conditional_expr)
+            self.conditional_control = parse_sympy(condition)
 
             self.device_topic_map, self.device_topics = create_device_topic_map(conditional_args, default_device)
         self.device_topics.add(self.point_device)
@@ -394,12 +383,12 @@ class ControlSetting(object):
 
     def check_condition(self):
         # If we don't have a condition then we are always true.
-        if self.conditional_expr is None:
+        if self.conditional_control is None:
             return True
 
         if self.conditional_points:
-            value = self.conditional_control.subs(self.conditional_points)
-            _log.debug('{} (conditional_control) evaluated to {}'.format(self.conditional_expr, value))
+            value = sympy_evaluate(self.conditional_control, self.conditional_points)
+            _log.debug('{} (conditional_control) evaluated to {}'.format(self.conditional_control, value))
         else:
             value = False
         return value

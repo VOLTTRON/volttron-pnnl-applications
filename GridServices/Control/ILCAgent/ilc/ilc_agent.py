@@ -49,24 +49,25 @@ from datetime import timedelta as td, datetime as dt
 from dateutil import parser
 import gevent
 import dateutil.tz
-from sympy.parsing.sympy_parser import parse_expr
-from sympy import symbols
+from transitions import Machine
+import time
+
 from volttron.platform.agent import utils
 from volttron.platform.messaging import topics, headers as headers_mod
 from volttron.platform.agent.math_utils import mean
 from volttron.platform.agent.utils import (setup_logging, format_timestamp, get_aware_utc_now, parse_timestamp_string)
 from volttron.platform.vip.agent import Agent, Core
 from volttron.platform.jsonrpc import RemoteError
+
 from ilc.ilc_matrices import (extract_criteria, calc_column_sums,
                               normalize_matrix, validate_input)
 from ilc.control_handler import ControlCluster, ControlContainer
-from ilc.criteria_handler import CriteriaContainer, CriteriaCluster, parse_sympy
+from ilc.criteria_handler import CriteriaContainer, CriteriaCluster
+from ilc.utils import sympy_evaluate
 
-from transitions import Machine
-import time
 # from transitions.extensions import GraphMachine as Machine
 __author__ = "Robert Lutes, robert.lutes@pnnl.gov"
-__version__ = "2.1.2"
+__version__ = "2.2.1"
 
 setup_logging()
 _log = logging.getLogger(__name__)
@@ -194,7 +195,7 @@ class ILCAgent(Agent):
 
     def __init__(self, config_path, **kwargs):
         super(ILCAgent, self).__init__(**kwargs)
-        #config = utils.load_config(config_path)
+        self.state = None
         self.state_machine = Machine(model=self, states=ILCAgent.states,
                                      transitions= ILCAgent.transitions, initial='inactive', queued=True)
         # self.get_graph().draw('my_state_diagram.png', prog='dot')
@@ -231,8 +232,8 @@ class ILCAgent(Agent):
 
         self.vip.config.set_default("config", self.default_config)
         self.vip.config.subscribe(self.configure_main,
-                                 actions=["NEW", "UPDATE"],
-                                 pattern="config")
+                                  actions=["NEW", "UPDATE"],
+                                  pattern="config")
 
         self.next_confirm = None
         self.action_end = None
@@ -280,14 +281,11 @@ class ILCAgent(Agent):
         campus = config.get("campus", "")
         building = config.get("building", "")
         self.agent_id = config.get("agent_id", APP_NAME)
-        dashboard_topic = config.get("dashboard_topic")
-        ilc_start_topic = self.agent_id
         self.load_control_modes = config.get("load_control_modes", ["curtail"])
 
         campus = config.get("campus", "")
         building = config.get("building", "")
         self.agent_id = config.get("agent_id", APP_NAME)
-
         ilc_start_topic = self.agent_id
         # --------------------------------------------------------------------------------
 
@@ -364,11 +362,9 @@ class ILCAgent(Agent):
         if demand_formula is not None:
             self.calculate_demand = True
             try:
-                demand_operation = parse_sympy(demand_formula["operation"])
-                _log.debug("Demand calculation - expression: {}".format(demand_operation))
-                self.demand_expr = parse_expr(parse_sympy(demand_operation))
-                self.demand_args = parse_sympy(demand_formula["operation_args"])
-                self.demand_points = symbols(self.demand_args)
+                self.demand_expr = demand_formula["operation"]
+                self.demand_args = demand_formula["operation_args"]
+                _log.debug("Demand calculation - expression: {}".format(self.demand_expr))
             except (KeyError, ValueError):
                 _log.debug("Missing 'operation_args' or 'operation' for setting demand formula!")
                 self.calculate_demand = False
@@ -543,18 +539,13 @@ class ILCAgent(Agent):
     def breakout_all_publish(self, topic, message):
         values_map = {}
         meta_map = {}
-
         topic_parts = topic.split('/')
 
         start_index = int(topic_parts[0] == "devices")
         end_index = -int(topic_parts[-1] == "all")
 
         topic = "/".join(topic_parts[start_index:end_index])
-
         values, meta = message
-
-        values = parse_sympy(values)
-        meta = parse_sympy(meta)
 
         for point in values:
             values_map[topic + "/" + point] = values[point]
@@ -577,7 +568,7 @@ class ILCAgent(Agent):
                             status = True
                             break
                     device_criteria.criteria_status((subdevice, state), status)
-                    _log.debug("Device: {} -- subdevice: {} -- curtail1 status: {}".format(device_name, subdevice, status))
+                    _log.debug("Device: {} -- subdevice: {} -- curtail status: {}".format(device_name, subdevice, status))
 
     def new_criteria_data(self, data_topics, now):
         data_t = list(data_topics.keys())
@@ -614,7 +605,7 @@ class ILCAgent(Agent):
         :param sender:
         :param bus:
         :param topic:
-        :param headers:
+        :param header:
         :param message:
         :return:
         """
@@ -622,7 +613,7 @@ class ILCAgent(Agent):
         if self.kill_signal_received:
             return
         _log.info("Data Received for {}".format(topic))
-        # self.sync_status()
+        self.sync_status()
         data, meta = message
         now = parse_timestamp_string(header[headers_mod.TIMESTAMP])
         data_topics, meta_topics = self.breakout_all_publish(topic, message)
@@ -767,7 +758,7 @@ class ILCAgent(Agent):
                     for point in self.demand_args:
                         _log.debug("Demand calculation - point: {} - value: {}".format(point, data[point]))
                         demand_point_list.append((point, data[point]))
-                    current_power = self.demand_expr.subs(demand_point_list)
+                    current_power = sympy_evaluate(self.demand_expr, demand_point_list)
                     _log.debug("Demand calculation - calculated power: {}".format(current_power))
                 except:
                     current_power = float(data[self.power_point])
@@ -1007,7 +998,7 @@ class ILCAgent(Agent):
                 continue
 
             if result is not None and result["result"] == "FAILURE":
-                _log.warn("Failed to schedule device (unavailable) " + device)
+                _log.warning("Failed to schedule device (unavailable) " + device)
                 already_handled[device] = False
             else:
                 already_handled[device] = True
@@ -1045,7 +1036,7 @@ class ILCAgent(Agent):
                     break
                 load_point_values.append((load_arg[0], value))
                 try:
-                    control_load = float(load_equation.subs(load_point_values))
+                    control_load = sympy_evaluate(load_equation, load_point_values)
                 except:
                     _log.debug("Could not convert expression for load estimation: ")
         error = False
@@ -1068,7 +1059,7 @@ class ILCAgent(Agent):
                 value = self.vip.rpc.call(device_actuator, "get_point", point_get).get(timeout=30)
                 equation_point_values.append((eq_arg[0], value))
 
-            control_value = float(equation.subs(equation_point_values))
+            control_value = sympy_evaluate(equation, equation_point_values)
         else:
             control_value = control["value"]
 

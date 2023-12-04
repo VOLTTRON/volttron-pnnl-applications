@@ -1,5 +1,5 @@
 """
-Copyright (c) 2020, Battelle Memorial Institute
+Copyright (c) 2023, Battelle Memorial Institute
 All rights reserved.
 Redistribution and use in source and binary forms, with or without
 modification, are permitted provided that the following conditions are met:
@@ -67,7 +67,7 @@ from ilc.utils import sympy_evaluate
 
 # from transitions.extensions import GraphMachine as Machine
 __author__ = "Robert Lutes, robert.lutes@pnnl.gov"
-__version__ = "2.2.1"
+__version__ = "2.2.2"
 
 setup_logging()
 _log = logging.getLogger(__name__)

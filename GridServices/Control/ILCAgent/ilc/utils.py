@@ -1,5 +1,5 @@
 """
-Copyright (c) 2020, Battelle Memorial Institute
+Copyright (c) 2023, Battelle Memorial Institute
 All rights reserved.
 Redistribution and use in source and binary forms, with or without
 modification, are permitted provided that the following conditions are met:
@@ -42,64 +42,123 @@ under Contract DE-AC05-76RL01830
 """
 
 import re
+import logging
+from typing import List, Set, Dict, Tuple, Iterable
+from sympy.parsing.sympy_parser import parse_expr
+from sympy.logic.boolalg import Boolean
+
+_log = logging.getLogger(__name__)
 
 
-def clean_text(text, rep={" ": ""}):
+def clean_text(text: str, rep: dict = {}) -> str:
+    """
+    Removes special characters associated with mathematics from a string.
+
+    :param text: string with special characters
+    :type text: str
+    :param rep: dictionary of special character replacements.
+    :type rep: dict
+    :return: string where special characters have been removed (replaced).
+    :rtype: str
+    """
+    rep = rep if rep else {".": "_", "-": "_", "+": "_", "/": "_", ":": "_"}
     rep = dict((re.escape(k), v) for k, v in rep.items())
     pattern = re.compile("|".join(rep.keys()))
     new_key = pattern.sub(lambda m: rep[re.escape(m.group(0))], text)
     return new_key
 
 
-def parse_sympy(data, condition=False):
+def sympy_evaluate(condition: str, points: Iterable[Tuple[str, float]]) -> bool | float:
     """
-    :param condition:
-    :param data:
-    :return:
-    """
-    if isinstance(data, dict):
-        return_data = {}
-        for key, value in data.items():
-            new_key = clean_text(key)
-            return_data[new_key] = value
+    Calls clean_text to remove special characters from string in points,
+    does string replace to for cleaned point in condition, and evaluates symbolic math
+    condition.
 
-    elif isinstance(data, list):
-        if condition:
-            return_data = ""
-            for item in data:
-                parsed_string = clean_text(item)
-                parsed_string = "(" + clean_text(item) + ")" if parsed_string not in ("&", "|") else parsed_string
-                return_data += parsed_string
-        else:
-            return_data = []
-            for item in data:
-                return_data.append(clean_text(item))
+    :param condition: string equation or condition.
+    :type condition: str
+    :param points: list of tuples with - [(point_name, value)] =
+    :type points: list[tuples]
+    :return: evaluated sympy expression
+    :rtype: float or bool
+    """
+    cleaned_points = []
+    cleaned_condition = condition
+    for point, value in points:
+        cleaned = clean_text(point)
+        cleaned_condition = cleaned_condition.replace(point, cleaned)
+        cleaned_points.append((cleaned, value))
+    _log.debug(f"Sympy debug condition: {condition} -- {cleaned_condition}")
+    _log.debug(f"Sympy debug points: {points} -- {cleaned_points}")
+    equation = parse_expr(cleaned_condition)
+    return_value = equation.subs(cleaned_points)
+    if isinstance(return_value, Boolean):
+        return bool(return_value)
     else:
-        return_data = clean_text(data)
+        return float(return_value)
+
+
+def parse_sympy(data: List[str] | str) -> str:
+    """
+    Creates conditional from list of conditional components.
+
+    :param data: List of conditional parts
+    :type data: list
+
+    :return: string of constructed condition for sympy
+    :rtype: str
+    """
+    if isinstance(data, list):
+        return_data = ""
+        for item in data:
+            parsed_string = "(" + item + ")" if item not in ("&", "|") else item
+            return_data += parsed_string
+    else:
+        return_data = data
     return return_data
 
-def create_device_topic_map(arg_list, default_topic=""):
+
+def create_device_topic_map(arg_list: List[str] | List[Tuple[str, str]],
+                            default_topic: str = ""
+                            ) -> Tuple[Dict[str, str], Set[str]]:
+    """
+    Create device topic map for ingestion of data.
+
+    :param arg_list: list of point names or point name, device topic pairs.
+    :type arg_list: list
+    :param default_topic: full topic for device
+    :type default_topic: str
+    :return result: dictionary of full point path: point
+    :rtype result: dict
+    :return topics: set of device topic strings
+    :rtype topics: set
+    """
     result = {}
     topics = set()
     for item in arg_list:
         if isinstance(item, str):
-            point = clean_text(item)
+            point = item
             result[default_topic + '/' + point] = point
             topics.add(default_topic)
         elif isinstance(item, (list, tuple)):
             device, point = item
-            point = clean_text(point)
             result[device+'/'+point] = point
             topics.add(device)
-
-
     return result, topics
 
-def fix_up_point_name(point, default_topic=""):
+
+def fix_up_point_name(point: str | List[str], default_topic: str = "") -> Tuple[str, str]:
+    """
+    Create full point path from point and device topic.
+
+    :param point: point name from device
+    :type point: str
+    :param default_topic: full topic for device
+    :type default_topic: str
+    :return: tuple with full point path and device topic
+    :rtype: tuple
+     """
     if isinstance(point, list):
         device, point = point
-        #point = clean_text(point)
         return device + '/' + point, device
     elif isinstance(point, str):
-        #point = clean_text(point)
         return default_topic + '/' + point, default_topic

@@ -43,7 +43,8 @@ import os
 import logging
 import pandas as pd
 import warnings
-warnings.filterwarnings("ignore", category=DeprecationWarning)
+
+warnings.filterwarnings('ignore', category=DeprecationWarning)
 from datetime import datetime as dt, timedelta as td
 from dateutil import parser, tz
 from volttron.platform.agent.utils import setup_logging, format_timestamp
@@ -54,67 +55,90 @@ _log = logging.getLogger(__name__)
 
 
 class Data:
-    def __init__(self, points, timezone, tag, data_dir=""):
+    def __init__(self, points, timezone, tag, data_dir='', setpoint_offset=None):
         self.points = points
-        self.current_time = dt.now()
+        self.current_dt = dt.now()
         self.df = None
         try:
             self.local_tz = tz.gettz(timezone)
         except:
-            self.local_tz = tz.gettz("UTC")
+            self.local_tz = tz.gettz('UTC')
         if data_dir:
-            data_file = data_dir + "/data_{}.csv".format(tag)
+            data_file = data_dir + f'/data_{tag}.csv'
         else:
-            data_dir = os.path.expanduser("~/optimal_start")
-            data_file = data_dir + "/data_{}.csv".format(tag)
+            data_dir = os.path.expanduser('~/optimal_start')
+            data_file = data_dir + f'/data_{tag}.csv'
         self.data_path = data_dir
+        self.setpoint_offset = setpoint_offset
         self.tag = tag
-        _log.debug("Data file: {}".format(data_file))
+        _log.debug('Data file: {}'.format(data_file))
         if os.path.isfile(data_file):
             try:
-                self.df = pd.read_csv(data_file, index_col='ts')
-                self.df.index = pd.to_datetime(self.df.index).apply(self.assign_local_tz)
+                self.df = pd.read_csv(data_file, index_col='ts', parse_dates=True)
             except Exception as ex:
-                _log.debug("No previous dataframe object: %s", ex)
+                _log.debug(f'No previous dataframe object: {ex}')
+        try:
+            if self.df is not None:
+                if self.df.index[0].date() != self.current_dt.date():
+                    self.df = None
+        except (AttributeError, IndexError, TypeError) as ex:
+            _log.debug(f'Error parsing DataFrame: {ex}')
 
     def assign_local_tz(self, _dt):
         """
         Convert UTC time from driver to local time.
+        @param _dt: datetime object
+        @type _dt: datetime.datetime
+        @return: localized datetime object
+        @rtype: datetime.datetime
         """
         if _dt.tzinfo is None or _dt.tzinfo.utcoffset(_dt) is None:
-            _log.debug("TZ: %s", _dt)
+            _log.debug(f'TZ: {_dt}')
             return _dt
         else:
             _dt = _dt.astimezone(self.local_tz)
-            _log.debug("TZ: %s", _dt)
+            _log.debug(f'TZ: {_dt}')
             return _dt
 
     def process_data(self):
         """
         Save data to disk, save 15 days of data.
+        @return:
+        @rtype:
         """
         _date = format_timestamp(dt.now())
-        data_file = self.data_path + "/data_{}_{}.csv".format(self.tag, _date)
+        data_file = self.data_path + f'/data_{self.tag}_{_date}.csv'
         try:
             self.df.to_csv(data_file)
             self.df = None
         except Exception as ex:
-            _log.debug("Error saving df csv!: %s", ex)
+            _log.debug(f'Error saving df csv!: {ex}')
             self.df = None
 
     def update_data(self, payload, header):
         """
         Store current data measurements in daily data df.
+        @param payload: data payload from device driver
+        @type payload: dict
+        @param header: header payload from device driver, contains timestamp
+        @type header: dict
+        @return: None
+        @rtype:
         """
         data, meta = payload
         _now = parser.parse(header[headers_mod.TIMESTAMP])
         stored_data = {}
-        current_time = self.assign_local_tz(_now)
-        self.current_time = current_time
-        for point, value in data.items():
-            if point in self.points.values():
-                _key = list(filter(lambda x: self.points[x] == point, self.points))[0]
-                stored_data[_key] = [value]
+        current_dt = self.assign_local_tz(_now)
+        self.current_dt = current_dt
+        for _key, point_name in self.points.items():
+            if point_name in data:
+                value = data[point_name]
+            else:
+                continue
+            stored_data[_key] = [value]
+        if self.setpoint_offset is not None:
+            stored_data['coolingsetpoint'][0] = stored_data['coolingsetpoint'][0] + self.setpoint_offset
+            stored_data['heatingsetpoint'][0] = stored_data['heatingsetpoint'][0] - self.setpoint_offset
         if 'reversingvalve' in stored_data and 'compressorcommand' in stored_data:
             vlv = stored_data['reversingvalve'][0]
             comp = stored_data['compressorcommand'][0]
@@ -130,14 +154,13 @@ class Data:
                     stored_data['cooling'] = [1]
 
         if stored_data:
-            stored_data['ts'] = [current_time]
+            stored_data['ts'] = [current_dt]
             df = pd.DataFrame.from_dict(stored_data)
-            df['ts'] = pd.to_datetime(df['ts'])
             df.set_index(df['ts'], inplace=True)
             if self.df is not None:
                 self.df = pd.concat([self.df, df], axis=0, ignore_index=False)
                 self.df = self.df.drop(columns=['ts'])
             else:
                 self.df = df
-            data_path = self.data_path + "/data_{}.csv".format(self.tag)
+            data_path = self.data_path + f'/data_{self.tag}.csv'
             self.df.to_csv(data_path)

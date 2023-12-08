@@ -35,29 +35,43 @@ constitute or imply its endorsement, recommendation, or favoring by the
 United States Government or any agency thereof, or Battelle Memorial Institute.
 The views and opinions of authors expressed herein do not necessarily state or
 reflect those of the United States Government or any agency thereof.
-
 PACIFIC NORTHWEST NATIONAL LABORATORY
 operated by BATTELLE for the UNITED STATES DEPARTMENT OF ENERGY
 under Contract DE-AC05-76RL01830
 """
+import pandas as pd
+from pandas.tseries.holiday import AbstractHolidayCalendar, Holiday, USFederalHolidayCalendar, USLaborDay, \
+    USThanksgivingDay, USMemorialDay, USMartinLutherKingJr, USColumbusDay, USPresidentsDay
+from pandas.tseries.holiday import *
 
-from setuptools import setup, find_packages
+ALL_HOLIDAYS = {
+    "New Year's Day": Holiday("New Year's Day", month=1, day=1, observance=nearest_workday),
+    "Martin Luther King Jr": USMartinLutherKingJr,
+    "Presidents Day": USPresidentsDay,
+    "Memorial Day": USMemorialDay,
+    "Juneteenth": Holiday(
+        "Juneteenth National Independence Day",
+        month=6,
+        day=19,
+        observance=nearest_workday,
+        ),
+    "Independence Day": Holiday("Independence Day", month=7, day=4, observance=nearest_workday),
+    "Labor Day": USLaborDay,
+    "Columbus Day": USColumbusDay,
+    "Veterans Day": Holiday("Veterans Day", month=11, day=11, observance=nearest_workday),
+    "Thanksgiving": USThanksgivingDay,
+    "Black Friday": Holiday("Black Friday", month=11, day=1, offset=pd.DateOffset(weekday=FR(4))),
+    "Christmas Eve": Holiday("Christmas Eve", month=12, day=24),
+    "Christmas": Holiday("Christmas", month=12, day=25, observance=nearest_workday)
+}
 
-packages = find_packages('.')
-package = packages[0]
-
-_temp = __import__(package+'.optimal_start', globals(), locals(), ['__version__'], 0)
-__version__ = _temp.__version__
-
-setup(
-    include_package_data=True,
-    name=package + 'agent',
-    version=__version__,
-    install_requires=['volttron>=3.0', 'numpy'],
-    packages=packages,
-    entry_points={
-        'setuptools.installation': [
-            'eggsecutable = ' + package + '.optimal_start:main',
-        ]
-    }
-)
+OBSERVANCE = {
+    'after_nearest_workday': after_nearest_workday,
+    'before_nearest_workday': before_nearest_workday,
+    'nearest_workday': nearest_workday,
+    'next_monday': next_monday,
+    'next_workday': next_workday,
+    'previous_workday': previous_workday,
+    'previous_friday': previous_friday,
+    'sunday_to_monday': sunday_to_monday
+}

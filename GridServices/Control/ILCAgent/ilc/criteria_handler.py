@@ -1,5 +1,5 @@
 """
-Copyright (c) 2020, Battelle Memorial Institute
+Copyright (c) 2023, Battelle Memorial Institute
 All rights reserved.
 Redistribution and use in source and binary forms, with or without
 modification, are permitted provided that the following conditions are met:
@@ -42,17 +42,15 @@ under Contract DE-AC05-76RL01830
 """
 
 import abc
-from sympy import symbols
-from sympy.core import numbers
-from sympy.parsing.sympy_parser import parse_expr
-from collections import deque
 import logging
+from collections import deque
 from datetime import timedelta as td
+from sympy.core import numbers
 from volttron.platform.agent.utils import setup_logging, get_aware_utc_now, format_timestamp
 from volttron.platform.messaging import topics, headers as headers_mod
-from .ilc_matrices import (build_score, input_matrix)
 
-from .utils import parse_sympy, create_device_topic_map, fix_up_point_name
+from .ilc_matrices import (build_score, input_matrix)
+from .utils import sympy_evaluate, create_device_topic_map, fix_up_point_name
 
 setup_logging()
 _log = logging.getLogger(__name__)
@@ -342,7 +340,7 @@ class FormulaCriterion(BaseCriterion):
         operation_args = self.fixup_dict_args(operation_args)
         self.build_ingest_map(operation_args)
         _log.debug("Device topic map: {}".format(self.device_topic_map))
-        self.expr = parse_expr(parse_sympy(operation))
+        self.expr = operation
         self.status = False
 
         self.current_operation_values = {}
@@ -387,7 +385,7 @@ class FormulaCriterion(BaseCriterion):
     def evaluate(self):
         if len(self.current_operation_values) >= self.operation_arg_count:
             point_list = self.current_operation_values.items()
-            value = self.expr.subs(point_list)
+            value = sympy_evaluate(self.expr, point_list)
         else:
             value = self.minimum
         return value
@@ -397,7 +395,6 @@ class FormulaCriterion(BaseCriterion):
             if topic in data:
                 if not self.status or point not in self.update_points.get("nc", set()):
                     value = data[topic]
-                    # self.publish_data(topic, value, time_stamp)
                     self.current_operation_values[point] = value
 
     def criteria_status(self, status):

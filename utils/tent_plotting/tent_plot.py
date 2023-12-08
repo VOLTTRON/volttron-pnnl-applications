@@ -33,14 +33,15 @@ timestring2 = '%Y%m%dT%H%M%S'
 
 
 class TENT_data(object):
-    def __init__(self, db_building, db_campus, db_city, building_list):
+    def __init__(self, db_building, db_campus, db_city, building_list, baseline_building):
 
         self.local_tz = pytz.timezone('UTC')
         self.df_power = {}
         self.device_data = {}
         self.building_df = {}
         bldg_list = list(building_list)
-        bldg_list.remove("SMALL_OFFICE_VANILLA")
+        if baseline_building is not None and baseline_building in bldg_list:
+            bldg_list.remove(baseline_building)
         for building in bldg_list:
             df = self.transactive_record(db_building, building)
             if df is not None:
@@ -186,6 +187,8 @@ class Main(object):
         self.campus = config.get("campus", "PNNL")
         self.building_topic_list = config.get("building_topic_list",
                                               ["SMALL_OFFICE_VANILLA", "SMALL_OFFICE_ILC", "SMALL_OFFICE_DR"])
+        baseline_building = config.get("baseline_building")
+        self.baseline_building = baseline_building
         self.power_meter = config.get("power_meter", "METERS")
         self.power_point = config.get("power_point", "WholeBuildingPower")
         self.avg_power_point = self.power_point + "Average"
@@ -203,7 +206,7 @@ class Main(object):
             db_city = sqlite3.connect(city_db_file)
         else:
             db_city = None
-        self.tent_data = TENT_data(db_building, db_campus, db_city, self.building_topic_list)
+        self.tent_data = TENT_data(db_building, db_campus, db_city, self.building_topic_list, baseline_building)
         devices = config.get("devices", {})
         for device_type, device_config in devices.items():
             self.device_list[device_type] = device_config.get("device_list", [])
@@ -216,8 +219,15 @@ class Main(object):
         self.build_power_df()
         self.additional_topic = self.tcc_data.get_df("PNNL/SMALL_OFFICE_VANILLA/HP1", "OutdoorAirTemperature")
         # how to create specs parameter automagically
-        self.specs = [[{"secondary_y": True}], [{"secondary_y": True}], [{"secondary_y": True}], [{"secondary_y": False}]]
+
         self.nplots = len(list(self.power.keys()))
+        if self.nplots == 3:
+            self.specs = [[{"secondary_y": True}], [{"secondary_y": True}], [{"secondary_y": True}], [{"secondary_y": False}]]
+        elif self.nplots == 2:
+            self.specs = [[{"secondary_y": True}], [{"secondary_y": True}], [{"secondary_y": False}]]
+        else:
+            self.specs = [[{"secondary_y": True}]]
+
 
     def create_device_units(self, device_type):
         x1 = set()
@@ -238,7 +248,14 @@ class Main(object):
             self.power[bldg][self.avg_power_point] = self.power[bldg][self.power_point].rolling(30).mean()
 
     def make_power_plot(self):
-        specs = [[{"secondary_y": False}], [{"secondary_y": True}], [{"secondary_y": True}]]
+        if self.nplots == 3:
+            specs = [[{"secondary_y": False}], [{"secondary_y": True}], [{"secondary_y": True}]]
+        elif self.nplots == 2 and self.baseline_building is not None and self.baseline_building in self.building_topic_list:
+            specs = [[{"secondary_y": False}], [{"secondary_y": True}]]
+        elif self.nplots == 2:
+            specs = [[{"secondary_y": True}], [{"secondary_y": True}]]
+        else:
+            specs = [[{"secondary_y": True}]]
         fig = make_subplots(specs=specs, rows=self.nplots, cols=1, shared_xaxes=True, y_title='Power (kW)', x_title='Date')
         _count = 1
         for bldg, df in self.power.items():
@@ -278,12 +295,16 @@ class Main(object):
         fig.write_html('power_combined.html', auto_open=True)
 
     def make_device_plots(self):
+        if len(self.building_topic_list) == 1:
+            nplots = 1
+        else:
+            nplots = self.nplots +1
         for device_type in self.device_list:
             for device_id in self.device_list[device_type]:
                 print("Creating device plot: {}".format(device_id))
                 zones = {}
                 _count = 1
-                fig = make_subplots(specs=self.specs, rows=self.nplots + 1, cols=1, shared_xaxes=True, x_title='Date')
+                fig = make_subplots(specs=self.specs, rows=nplots, cols=1, shared_xaxes=True, x_title='Date')
                 fig.update_yaxes(title_text=self.x2[device_type], secondary_y=True)
                 fig.update_yaxes(title_text=self.x1[device_type], secondary_y=False)
                 for building in self.building_topic_list:
@@ -300,14 +321,15 @@ class Main(object):
                     _count += 1
                     zones[building] = df
                 col = 0
-                for name, df in zones.items():
-                    tag = name.split("_")[-1]
-                    for point in combine_list:
-                        fig.add_trace(go.Scatter(x=df.index, y=df[point], mode='lines',
-                                                 line={"color": self.colors[col]}, name="{} {}".format(tag, point)),
-                                      row=_count, col=1)
-                    col += self.nplots
-                    device_tag = device_id.replace("/", "_")
+                if nplots > 1:
+                    for name, df in zones.items():
+                        tag = name.split("_")[-1]
+                        for point in combine_list:
+                            fig.add_trace(go.Scatter(x=df.index, y=df[point], mode='lines',
+                                                     line={"color": self.colors[col]}, name="{} {}".format(tag, point)),
+                                          row=_count, col=1)
+                        col += self.nplots
+                device_tag = device_id.replace("/", "_")
                 fig.write_html('zone_{}.html'.format(device_tag), auto_open=True)
 
 

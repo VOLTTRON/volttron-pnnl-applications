@@ -1,5 +1,5 @@
 """
-Copyright (c) 2020, Battelle Memorial Institute
+Copyright (c) 2023, Battelle Memorial Institute
 All rights reserved.
 Redistribution and use in source and binary forms, with or without
 modification, are permitted provided that the following conditions are met:
@@ -50,9 +50,6 @@ from functools import reduce
 
 utils.setup_logging()
 _log = logging.getLogger(__name__)
-logging.basicConfig(level=logging.debug,
-                    format='%(asctime)s   %(levelname)-8s %(message)s',
-                    datefmt='%m-%d-%y %H:%M:%S')
 
 
 def extract_criteria(filename):
@@ -63,14 +60,11 @@ def extract_criteria(filename):
     """
     criteria_labels = {}
     criteria_matrix = {}
-    # config_matrix = utils.load_config(filename)
     config_matrix = filename
     # check if file has been updated or uses old format
-    _log.debug("CONFIG_MATRIX: {}".format(config_matrix))
     if "curtail" not in config_matrix.keys() and "augment" not in config_matrix.keys():
         config_matrix = {"curtail": config_matrix}
 
-    _log.debug("CONFIG_MATRIX: {}".format(config_matrix))
     for state in config_matrix:
         index_of = dict([(a, i) for i, a in enumerate(config_matrix[state].keys())])
 
@@ -181,10 +175,10 @@ def validate_input(pairwise_matrix, col_sums):
             rindex = random_index[len(col_sums[state])]
             consistency_ratio = consistency_index / rindex
 
-        _log.debug("Pairwise comparison: {} - CR: {}".format(state, consistency_index))
+        _log.debug(f'Pairwise comparison: {state} - CR: {consistency_index}')
         if consistency_ratio > 0.2:
             consistent = False
-            _log.debug("Inconsistent pairwise comparison: {} - CR: {}".format(state, consistency_ratio))
+            _log.debug(f'Inconsistent pairwise comparison: {state} - CR: {consistency_ratio}')
 
     return consistent
 

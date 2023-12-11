@@ -43,7 +43,7 @@ under Contract DE-AC05-76RL01830
 from typing import Dict, Tuple, Union, List
 from datetime import datetime as dt, timedelta as td
 import logging
-import dill
+import numpy as np
 from .model import Johnson, Siemens, Carrier, Sbs
 from .utils import get_cls_attrs
 from volttron.platform.agent.utils import (setup_logging, format_timestamp, get_aware_utc_now)
@@ -135,21 +135,19 @@ class OptimalStartManager:
         finally:
             self.base.data_handler.process_data()
 
-    def get_controller(self):
+    def get_start_time(self):
         """
         Get optimal start time from active controller
         @return:
         @rtype:
         """
         try:
-            current_time = dt.now()
-            current_day = current_time.weekday()
-
-            controller = self.base.day_map[current_day]
-            active_minutes = self.result[controller]
+            start_times = [item for item in self.result.values()]
+            active_minutes = np.median(start_times)
+            _log.debug(f'OPTIMAL START - start_times: {self.result} -- median: {active_minutes}')
         except:
             active_minutes = self.earliest_start_time
-        return active_minutes
+        return max(self.latest_start_time, min(active_minutes, self.earliest_start_time))
 
     def run_method(self):
         """
@@ -199,9 +197,7 @@ class OptimalStartManager:
             self.result[tag] = optimal_start_time
 
         self.result['occupancy'] = format_timestamp(occupancy_time)
-        active_minutes = max(self.latest_start_time,
-                             min(self.get_controller(), self.earliest_start_time))
-
+        active_minutes = self.get_start_time()
         self.training_time = active_minutes
         optimal_start_time = occupancy_time - td(minutes=active_minutes)
         reschedule_time = dt.now() + td(minutes=15)

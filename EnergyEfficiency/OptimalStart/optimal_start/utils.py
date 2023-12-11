@@ -99,11 +99,12 @@ def trim(lst, new_value, cutoff):
         return
     lst.append([format_timestamp(dt.datetime.now()), new_value])
     if lst and len(lst) > cutoff:
-        lst.pop(0)
+        lst = lst[-cutoff:]
     return lst
 
 
-def get_time_temp_diff(htr):
+def get_time_temp_diff(htr, target):
+    htr = htr[htr['temp_diff'] >= target]
     htr['timediff'] = htr.index.to_series().diff().dt.total_seconds() / 60
     time_diff = htr['timediff'].sum(axis=0)
     temp_diff = htr['temp_diff'].iloc[0] - htr['temp_diff'].iloc[-1]

@@ -156,6 +156,7 @@ class Model:
         if len(df_list) == 1 and data['temp_diff'][0] > self.t_error:
             df_list.append(data.iloc[-1])
         htr = pd.concat(df_list, axis=1).T
+        htr = htr[~htr.index.duplicated(keep='first')]
         htr.to_csv('htr.csv')
         return htr
 

@@ -137,13 +137,12 @@ class Data:
                 continue
             stored_data[_key] = [value]
 
-        if 'warmcooladjust' in stored_data:
-            self.setpoint_offset = stored_data['warmcooladjust'][0]
-            stored_data['coolingsetpoint'][0] = stored_data['coolingsetpoint'][0] + self.setpoint_offset
-            stored_data['heatingsetpoint'][0] = stored_data['heatingsetpoint'][0] + self.setpoint_offset
-        elif self.setpoint_offset is not None:
+        if self.setpoint_offset is not None:
             stored_data['coolingsetpoint'][0] = stored_data['coolingsetpoint'][0] + self.setpoint_offset
             stored_data['heatingsetpoint'][0] = stored_data['heatingsetpoint'][0] - self.setpoint_offset
+        if 'warmcooladjust' in stored_data:
+            stored_data['coolingsetpoint'][0] = stored_data['coolingsetpoint'][0] + stored_data['warmcooladjust'][0]
+            stored_data['heatingsetpoint'][0] = stored_data['heatingsetpoint'][0] + stored_data['warmcooladjust'][0]
         if 'reversingvalve' in stored_data and 'compressorcommand' in stored_data:
             vlv = stored_data['reversingvalve'][0]
             comp = stored_data['compressorcommand'][0]

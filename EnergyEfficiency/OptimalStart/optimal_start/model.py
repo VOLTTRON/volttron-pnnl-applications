@@ -176,7 +176,7 @@ class Carrier(Model):
         if htr.empty:
             _log.debug('Carrier debug cooling htr returned empty!')
             return
-        time_diff, temp_diff = get_time_temp_diff(htr)
+        time_diff, temp_diff = get_time_temp_diff(htr, self.t_error)
         oat = htr['outdoortemperature'].mean()
         _log.debug('C: training {} -- {}'.format(temp_diff, time_diff))
         if not time_diff:
@@ -199,7 +199,7 @@ class Carrier(Model):
         if htr.empty:
             _log.debug('Carrier debug heating htr returned empty!')
             return
-        time_diff, temp_diff = get_time_temp_diff(htr)
+        time_diff, temp_diff = get_time_temp_diff(htr, self.t_error)
         oat = htr['outdoortemperature'].mean()
         if not time_diff:
             _log.debug('Carrier debug heating time_diff == 0!')
@@ -273,7 +273,7 @@ class Siemens(Model):
             return
         zcsp = htr['zonetemperature'][0] - htr['coolingsetpoint'][0]
         osp = htr['outdoortemperature'][0] - htr['coolingsetpoint'][0]
-        time_diff, temp_diff = get_time_temp_diff(htr)
+        time_diff, temp_diff = get_time_temp_diff(htr, self.t_error)
         if not time_diff:
             _log.debug('Siemens debug cooling time_diff == 0!')
             return
@@ -324,7 +324,7 @@ class Siemens(Model):
         # change htr to data?
         zhsp = htr['heatingsetpoint'][0] - htr['zonetemperature'][0]
         osp = htr['heatingsetpoint'][0] - htr['outdoortemperature'][0]
-        time_diff, temp_diff = get_time_temp_diff(htr)
+        time_diff, temp_diff = get_time_temp_diff(htr, self.t_error)
         if not time_diff:
             _log.debug('Siemens debug heating time_diff == 0!')
             return
@@ -420,7 +420,7 @@ class Johnson(Model):
             if htr.empty:
                 _log.debug('Johnson debug cooling htr returned empty!')
                 return
-            time_diff, temp_diff = get_time_temp_diff(htr)
+            time_diff, temp_diff = get_time_temp_diff(htr, self.t_error)
             if not time_diff:
                 _log.debug('JCI debug cooling time_diff == 0!')
                 return
@@ -463,7 +463,7 @@ class Johnson(Model):
             if htr.empty:
                 _log.debug('Johnson debug heating htr returned empty!')
                 return
-            time_diff, temp_diff = get_time_temp_diff(htr)
+            time_diff, temp_diff = get_time_temp_diff(htr, self.t_error)
             if not time_diff:
                 _log.debug('JCI debug heating time_diff == 0!')
                 return

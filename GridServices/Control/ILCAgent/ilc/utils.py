@@ -43,7 +43,7 @@ under Contract DE-AC05-76RL01830
 
 import re
 import logging
-from typing import List, Set, Dict, Tuple, Iterable
+from typing import List, Set, Dict, Tuple, Iterable, Union
 from sympy.parsing.sympy_parser import parse_expr
 from sympy.logic.boolalg import Boolean
 
@@ -68,7 +68,7 @@ def clean_text(text: str, rep: dict = {}) -> str:
     return new_key
 
 
-def sympy_evaluate(condition: str, points: Iterable[Tuple[str, float]]) -> bool | float:
+def sympy_evaluate(condition: str, points: Iterable[Tuple[str, float]]) -> Union[bool, float]:
     """
     Calls clean_text to remove special characters from string in points,
     does string replace to for cleaned point in condition, and evaluates symbolic math
@@ -97,7 +97,7 @@ def sympy_evaluate(condition: str, points: Iterable[Tuple[str, float]]) -> bool 
         return float(return_value)
 
 
-def parse_sympy(data: List[str] | str) -> str:
+def parse_sympy(data: Union[List[str], str]) -> str:
     """
     Creates conditional from list of conditional components.
 
@@ -117,7 +117,7 @@ def parse_sympy(data: List[str] | str) -> str:
     return return_data
 
 
-def create_device_topic_map(arg_list: List[str] | List[Tuple[str, str]],
+def create_device_topic_map(arg_list: Union[List[str], List[Tuple[str, str]]],
                             default_topic: str = ""
                             ) -> Tuple[Dict[str, str], Set[str]]:
     """
@@ -146,7 +146,7 @@ def create_device_topic_map(arg_list: List[str] | List[Tuple[str, str]],
     return result, topics
 
 
-def fix_up_point_name(point: str | List[str], default_topic: str = "") -> Tuple[str, str]:
+def fix_up_point_name(point: Union[str, List[str]], default_topic: str = "") -> Tuple[str, str]:
     """
     Create full point path from point and device topic.
 

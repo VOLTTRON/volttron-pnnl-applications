@@ -142,10 +142,11 @@ class OptimalStartManager:
         @rtype:
         """
         try:
-            start_times = [item for item in self.result.values()]
+            start_times = [value for key, value in self.result.items() if key in MODELS.keys()]
             active_minutes = np.median(start_times)
             _log.debug(f'OPTIMAL START - start_times: {self.result} -- median: {active_minutes}')
-        except:
+        except Exception as ex:
+            _log.debug(f'OPTIMAL START ERROR - start_times: {self.result} -- error: {ex}')
             active_minutes = self.earliest_start_time
         return max(self.latest_start_time, min(active_minutes, self.earliest_start_time))
 

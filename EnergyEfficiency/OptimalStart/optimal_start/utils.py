@@ -69,6 +69,9 @@ def clean_array(array):
 
 
 def parse_df(df, condition):
+    if condition not in ['heating', 'cooling']:
+        return pd.DataFrame()
+
     if condition == 'cooling':
         data_sort = df[df['zonetemperature'] <= df['coolingsetpoint']]
         df['temp_diff'] = df['zonetemperature'] - df['coolingsetpoint']
@@ -165,8 +168,14 @@ def get_operating_mode(data):
     mode = None
     cooling_count = data['cooling'].sum()
     heating_count = data['heating'].sum()
-    if cooling_count > heating_count and cooling_count > 0:
+    if cooling_count > 0 and heating_count > 0:
+        if data['zonetemperature'][0] > data['coolingsetpoint'][0]:
+            mode = 'cooling'
+        elif data['zonetemperature'][0] < data['heatingsetpoint'][0]:
+            mode = 'heating'
+        return mode
+    if cooling_count > 0:
         mode = 'cooling'
-    elif heating_count > cooling_count and heating_count > 0:
+    elif heating_count > 0:
         mode = 'heating'
     return mode

@@ -172,6 +172,7 @@ class Carrier(Model):
 
     def train_cooling(self, data):
         self.c1 = clean_array(self.c1)
+        self.oat_clg = clean_array(self.oat_clg)
         htr = self.heat_transfer_rate(data)
         if htr.empty:
             _log.debug('Carrier debug cooling htr returned empty!')
@@ -195,6 +196,7 @@ class Carrier(Model):
 
     def train_heating(self, data):
         self.h1 = clean_array(self.h1)
+        self.oat_htg = clean_array(self.oat_htg)
         htr = self.heat_transfer_rate(data)
         if htr.empty:
             _log.debug('Carrier debug heating htr returned empty!')

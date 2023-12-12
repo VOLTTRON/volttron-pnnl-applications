@@ -42,9 +42,9 @@ under Contract DE-AC05-76RL01830
 import datetime as dt
 import logging
 import numpy as np
-from volttron.platform.agent.utils import (setup_logging,
-                                           format_timestamp,)
-setup_logging()
+import pandas as pd
+from volttron.platform.agent.utils import format_timestamp
+pd.options.mode.chained_assignment = None
 _log = logging.getLogger(__name__)
 
 
@@ -55,12 +55,16 @@ def clean_array(array):
         :param array: (list) coefficients from models
         :return: array (list)
     """
-    array = [item for item in array if np.isfinite(item) and item >= 0]
-    if len(array) > 3:
-        u = np.mean(array)
-        s = np.std(array)
-        if np.isfinite(u) and np.isfinite(s):
-            array = [e for e in array if (u - 1.5 * s < e < u + 1.5 * s)]
+    try:
+        array = [item if isinstance(item, list) else ["", item] for item in array]
+        array_values = [item[1] for item in array if np.isfinite(item[1]) and item[1] >= 0]
+        if len(array) > 3:
+            u = np.mean(array_values)
+            s = np.std(array_values)
+            if np.isfinite(u) and np.isfinite(s):
+                array = [e for e in array if (u - 1.5 * s < e[1] < u + 1.5 * s)]
+    except Exception as ex:
+        _log.debug(f'Array parser error: {array} -- ex: {ex}')
     return array
 
 
@@ -105,7 +109,7 @@ def trim(lst, new_value, cutoff):
 
 def get_time_temp_diff(htr, target):
     htr = htr[htr['temp_diff'] >= target]
-    htr['timediff'] = htr.index.to_series().diff().dt.total_seconds() / 60
+    htr.loc[:, 'timediff'] = htr.index.to_series().diff().dt.total_seconds() / 60
     time_diff = htr['timediff'].sum(axis=0)
     temp_diff = htr['temp_diff'].iloc[0] - htr['temp_diff'].iloc[-1]
     return time_diff, temp_diff

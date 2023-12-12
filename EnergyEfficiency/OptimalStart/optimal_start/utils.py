@@ -78,7 +78,7 @@ def parse_df(df, condition):
     else:
         data_sort = df[df['zonetemperature'] >= df['heatingsetpoint']]
         df['temp_diff'] = df['heatingsetpoint'] - df['zonetemperature']
-    df['conditioning'] = df[condition].rolling(window=10).mean()
+    df['conditioning'] = df[condition].rolling(window=10).mean().fillna(value=1, inplace=False)
     data_sort_mode = df[df['conditioning'] == 0]
     if not data_sort.empty:
         idx = data_sort.index[0]

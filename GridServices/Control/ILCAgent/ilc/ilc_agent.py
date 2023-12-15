@@ -56,7 +56,7 @@ from volttron.platform.agent import utils
 from volttron.platform.messaging import topics, headers as headers_mod
 from volttron.platform.agent.math_utils import mean
 from volttron.platform.agent.utils import (setup_logging, format_timestamp, get_aware_utc_now, parse_timestamp_string)
-from volttron.platform.vip.agent import Agent, Core
+from volttron.platform.vip.agent import Agent, Core, RPC
 from volttron.platform.jsonrpc import RemoteError
 
 from ilc.ilc_matrices import (extract_criteria, calc_column_sums,
@@ -271,6 +271,23 @@ class ILCAgent(Agent):
                 # self.new_config = self.default_config.copy()
                 self.saved_config = self.default_config.copy()
                 self.saved_config.update(contents)
+
+    @RPC.export
+    def update_configurations(self, data):
+        """
+        Update configuration for ILC via RPC.
+        :param data: dictionary of all ILC configurations.
+        :type data: Dict[Dict]
+        :return: None
+        """
+        try:
+            config = data.pop('config')
+        except KeyError as ex:
+            config = {}
+            _log.debug(f'Cannot remotely update configurations!  Main config is not in payload!: {ex}')
+        for name, data in data:
+            self.vip.config.set(name, data)
+        self.vip.config.set('config', config, send_update=True, trigger_callack=True)
 
     def reset_parameters(self, config=None):
         """

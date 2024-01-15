@@ -45,15 +45,12 @@ import numpy as np
 from datetime import timedelta as td, datetime as dt
 import warnings
 import logging
-from .utils import (clean_array, parse_df,
-                    offset_time, trim,
-                    get_time_temp_diff, ema,
-                    calculate_prestart_time, get_operating_mode,
-                    get_time_target)
-from volttron.platform.agent.utils import setup_logging, format_timestamp
+from .utils import (parse_df, offset_time, trim,
+                    get_time_temp_diff, ema, calculate_prestart_time,
+                    get_operating_mode, get_time_target)
+from volttron.platform.agent.utils import format_timestamp
 
 warnings.filterwarnings('ignore', category=DeprecationWarning)
-setup_logging()
 _log = logging.getLogger(__name__)
 
 
@@ -172,8 +169,6 @@ class Carrier(Model):
         self.adjust_time = config.get('adjust_time', 0)
 
     def train_cooling(self, data):
-        self.c1 = clean_array(self.c1)
-        self.oat_clg = clean_array(self.oat_clg)
         htr = self.heat_transfer_rate(data)
         if htr.empty:
             _log.debug('Carrier debug cooling htr returned empty!')
@@ -196,8 +191,6 @@ class Carrier(Model):
         self.record = {'date': format_timestamp(dt.now()), 'c1': c1, 'c1_array': self.c1}
 
     def train_heating(self, data):
-        self.h1 = clean_array(self.h1)
-        self.oat_htg = clean_array(self.oat_htg)
         htr = self.heat_transfer_rate(data)
         if htr.empty:
             _log.debug('Carrier debug heating htr returned empty!')
@@ -268,8 +261,6 @@ class Siemens(Model):
         @return: None
         @rtype:
         """
-        self.c1 = clean_array(self.c1)
-        self.c2 = clean_array(self.c2)
         htr = self.heat_transfer_rate(data)
         if htr.empty:
             _log.debug('Siemens debug cooling htr returned empty!')
@@ -318,8 +309,6 @@ class Siemens(Model):
         @return: None
         @rtype:
         """
-        self.h1 = clean_array(self.h1)
-        self.h2 = clean_array(self.h2)
         htr = self.heat_transfer_rate(data)
         if htr.empty:
             _log.debug('Siemens debug cooling htr returned empty!')
@@ -414,8 +403,6 @@ class Johnson(Model):
 
     def train_cooling(self, data):
         # cooling trained flag checked
-        self.c1_list = clean_array(self.c1_list)
-        self.c2_list = clean_array(self.c2_list)
         temp_diff_begin = data['zonetemperature'][0] - data['coolingsetpoint'][0]
         # check if there is cooling data for the training data
         if not data.empty:
@@ -456,11 +443,8 @@ class Johnson(Model):
             }
 
     def train_heating(self, data):
-        # cooling trained flag checked
-        self.h1_list = clean_array(self.h1_list)
-        self.h2_list = clean_array(self.h2_list)
         temp_diff_begin = data['heatingsetpoint'][0] - data['zonetemperature'][0]
-        # check if there is cooling data for the training data
+        # check if there is heating data for the training data
         if not data.empty:
             htr = self.heat_transfer_rate(data)
             if htr.empty:

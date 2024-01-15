@@ -51,6 +51,8 @@ from volttron.platform.scheduling import cron
 from volttron.platform.vip.agent import Agent
 import json
 
+NUMBER_TYPE = (int, float, complex)
+
 setup_logging()
 _log = logging.getLogger(__name__)
 
@@ -142,11 +144,13 @@ class OptimalStartManager:
         @rtype:
         """
         try:
-            start_times = [value for key, value in self.result.items() if key in MODELS.keys()]
+            start_times = [value for value in self.result.values() if isinstance(value, NUMBER_TYPE)]
             active_minutes = np.median(start_times)
             _log.debug(f'OPTIMAL START - start_times: {self.result} -- median: {active_minutes}')
         except Exception as ex:
             _log.debug(f'OPTIMAL START ERROR - start_times: {self.result} -- error: {ex}')
+            active_minutes = self.earliest_start_time
+        if not np.isfinite(active_minutes):
             active_minutes = self.earliest_start_time
         return max(self.latest_start_time, min(active_minutes, self.earliest_start_time))
 
@@ -160,13 +164,13 @@ class OptimalStartManager:
         self.result = {}
         current_schedule = self.base.get_current_schedule()
         if not current_schedule:
-            _log.debug(f'{self.identity } - no schedule configured returned for current day!')
+            _log.debug(f'{self.identity} - no schedule configured returned for current day!')
             return
         if 'start' not in current_schedule:
-            _log.debug(f'{self.identity } - no occupancy start time in current schedule!')
+            _log.debug(f'{self.identity} - no occupancy start time in current schedule!')
             return
         if 'end' not in current_schedule:
-            _log.debug(f'{self.identity } - no occupancy end time in current schedule!')
+            _log.debug(f'{self.identity} - no occupancy end time in current schedule!')
             return
         start = current_schedule.get('start')
         end = current_schedule.get('end')
@@ -196,9 +200,13 @@ class OptimalStartManager:
                 _log.debug(f'{self.identity} - Error for optimal start: {tag} -- {ex}')
                 continue
             self.result[tag] = optimal_start_time
+        try:
+            active_minutes = self.get_start_time()
+        except Exception as ex:
+            _log.debug(f'ERROR on calculate median start time: {ex}')
+            active_minutes = self.earliest_start_time
 
         self.result['occupancy'] = format_timestamp(occupancy_time)
-        active_minutes = self.get_start_time()
         self.training_time = active_minutes
         optimal_start_time = occupancy_time - td(minutes=active_minutes)
         reschedule_time = dt.now() + td(minutes=15)

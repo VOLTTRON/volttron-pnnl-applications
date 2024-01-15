@@ -61,7 +61,7 @@ def clean_text(text: str, rep: dict = {}) -> str:
     :return: string where special characters have been removed (replaced).
     :rtype: str
     """
-    rep = rep if rep else {".": "_", "-": "_", "+": "_", "/": "_", ":": "_"}
+    rep = rep if rep else {".": "_", "-": "_", "+": "_", "/": "_", ":": "_", " ": "_"}
     rep = dict((re.escape(k), v) for k, v in rep.items())
     pattern = re.compile("|".join(rep.keys()))
     new_key = pattern.sub(lambda m: rep[re.escape(m.group(0))], text)

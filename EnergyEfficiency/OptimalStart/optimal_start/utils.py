@@ -62,7 +62,7 @@ def clean_array(array):
             u = np.mean(array_values)
             s = np.std(array_values)
             if np.isfinite(u) and np.isfinite(s):
-                array = [e for e in array if (u - 1.5 * s < e[1] < u + 1.5 * s)]
+                array = [e for e in array if (u - 1.75 * s <= e[1] <= u + 1.75 * s)]
     except Exception as ex:
         _log.debug(f'Array parser error: {array} -- ex: {ex}')
     return array
@@ -104,7 +104,7 @@ def offset_time(_time, offset):
 def trim(lst, new_value, cutoff):
     if not np.isfinite(new_value):
         return
-    lst.append([format_timestamp(dt.datetime.now()), new_value])
+    lst = clean_array(lst.append([format_timestamp(dt.datetime.now()), new_value]))
     if lst and len(lst) > cutoff:
         lst = lst[-cutoff:]
     return lst

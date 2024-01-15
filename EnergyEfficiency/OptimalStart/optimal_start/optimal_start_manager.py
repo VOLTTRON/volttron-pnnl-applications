@@ -196,9 +196,12 @@ class OptimalStartManager:
                 _log.debug(f'{self.identity} - Error for optimal start: {tag} -- {ex}')
                 continue
             self.result[tag] = optimal_start_time
-
+        try:
+            active_minutes = self.get_start_time()
+        except Exception as ex:
+            _log.debug(f'ERROR on calculate median start time: {ex}')
+            active_minutes = self.earliest_start_time
         self.result['occupancy'] = format_timestamp(occupancy_time)
-        active_minutes = self.get_start_time()
         self.training_time = active_minutes
         optimal_start_time = occupancy_time - td(minutes=active_minutes)
         reschedule_time = dt.now() + td(minutes=15)

@@ -102,16 +102,19 @@ def offset_time(_time, offset):
 
 
 def trim(lst, new_value, cutoff):
+    _log.debug(f'Trim {lst} -- {new_value} -- {cutoff}')
     if not np.isfinite(new_value):
-        return
-    lst = clean_array(lst.append([format_timestamp(dt.datetime.now()), new_value]))
+        return lst
+    lst.append([format_timestamp(dt.datetime.now()), new_value])
+    lst = clean_array(lst)
     if lst and len(lst) > cutoff:
         lst = lst[-cutoff:]
+    _log.debug(f'Trim2 {lst} -- {new_value} -- {cutoff}')
     return lst
 
 
 def get_time_temp_diff(htr, target):
-    htr = htr[htr['temp_diff'] >= target]
+    # htr = htr[htr['temp_diff'] >= target]
     htr.loc[:, 'timediff'] = htr.index.to_series().diff().dt.total_seconds() / 60
     time_diff = htr['timediff'].sum(axis=0)
     temp_diff = htr['temp_diff'].iloc[0] - htr['temp_diff'].iloc[-1]

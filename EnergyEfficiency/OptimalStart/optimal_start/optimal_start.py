@@ -132,6 +132,7 @@ class OptimalStart(Agent):
                                   callback=self.update_data)
         _log.debug('Subscribing to %s', self.base_device_topic)
         self.optimal_start.setup_optimal_start()
+        self.optimal_start.train_models()
 
     def init_schedule(self, schedule):
         """

@@ -70,7 +70,6 @@ class OptimalStartManager:
         self.models = {}
         self.weekend_holiday_models = {}
         self.result = {}
-        self.previous_weekend_holiday = False
         self.run_schedule = None
         self.training_time = None
         self.schedule = parent.schedule
@@ -154,6 +153,21 @@ class OptimalStartManager:
             active_minutes = self.earliest_start_time
         return max(self.latest_start_time, min(active_minutes, self.earliest_start_time))
 
+    def is_weekend_holiday(self):
+        """
+        Check if previous day was a weekend or holiday for model training.
+        @return: True if previous day was weekend or holiday False otherwise
+        @rtype: bool
+        """
+        yesterday = dt.now() - td(days=1)
+        yesterday_holiday = self.base.holiday_manager.is_holiday(yesterday)
+        yesterday_weekend = yesterday.weekday() >= 5
+        if yesterday_holiday or yesterday_weekend:
+            return True
+        else:
+            return False
+        
+
     def run_method(self):
         """
         Run at the earliest start time for the day.  Use models to calculate needed
@@ -183,11 +197,7 @@ class OptimalStartManager:
 
         # If previous day was weekend or holiday and holiday models exist
         # calculate optimal start time using weekend/holiday models.
-        yesterday = dt.now() - td(days=1)
-        yesterday_holiday = self.base.holiday_manager.is_holiday(yesterday)
-        yesterday_weekend = yesterday.weekday() >= 5
-        self.previous_weekend_holiday = True if yesterday_holiday or yesterday_weekend else False
-        if self.previous_weekend_holiday and self.weekend_holiday_trained:
+        if self.is_weekend_holiday() and self.weekend_holiday_trained:
             models = self.weekend_holiday_models
         else:
             models = self.models
@@ -258,7 +268,7 @@ class OptimalStartManager:
         training_time = int(self.training_time) + 5 if self.training_time else None
         data = self.base.data_handler.df
         models = self.models
-        if self.previous_weekend_holiday:
+        if self.is_weekend_holiday():
             models = self.weekend_holiday_models
             self.weekend_holiday_trained = True
 

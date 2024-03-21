@@ -39,43 +39,59 @@ PACIFIC NORTHWEST NATIONAL LABORATORY
 operated by BATTELLE for the UNITED STATES DEPARTMENT OF ENERGY
 under Contract DE-AC05-76RL01830
 """
-import pandas as pd
-from pandas.tseries.holiday import (FR, Holiday, USColumbusDay, USLaborDay,
-                                    USMartinLutherKingJr, USMemorialDay,
-                                    USPresidentsDay, USThanksgivingDay,
-                                    after_nearest_workday,
-                                    before_nearest_workday, nearest_workday,
-                                    next_monday, next_workday, previous_friday,
-                                    previous_workday, sunday_to_monday)
 
-ALL_HOLIDAYS = {
-    "New Year's Day": Holiday("New Year's Day", month=1, day=1, observance=nearest_workday),
-    'Martin Luther King Jr': USMartinLutherKingJr,
-    'Presidents Day': USPresidentsDay,
-    'Memorial Day': USMemorialDay,
-    'Juneteenth': Holiday(
-        'Juneteenth National Independence Day',
-        month=6,
-        day=19,
-        observance=nearest_workday,
-    ),
-    'Independence Day': Holiday('Independence Day', month=7, day=4, observance=nearest_workday),
-    'Labor Day': USLaborDay,
-    'Columbus Day': USColumbusDay,
-    'Veterans Day': Holiday('Veterans Day', month=11, day=11, observance=nearest_workday),
-    'Thanksgiving': USThanksgivingDay,
-    'Black Friday': Holiday('Black Friday', month=11, day=1, offset=pd.DateOffset(weekday=FR(4))),
-    'Christmas Eve': Holiday('Christmas Eve', month=12, day=24),
-    'Christmas': Holiday('Christmas', month=12, day=25, observance=nearest_workday)
-}
+from dataclasses import dataclass, field
+from enum import Enum, IntEnum
 
-OBSERVANCE = {
-    'after_nearest_workday': after_nearest_workday,
-    'before_nearest_workday': before_nearest_workday,
-    'nearest_workday': nearest_workday,
-    'next_monday': next_monday,
-    'next_workday': next_workday,
-    'previous_workday': previous_workday,
-    'previous_friday': previous_friday,
-    'sunday_to_monday': sunday_to_monday
-}
+
+class OccupancyTypes(Enum):
+    OCCUPIED = 'occupied'
+    UNOCCUPIED = 'unoccupied'
+    RELEASE = None
+
+
+class ZonePointNames(Enum):
+    zonetemperature = 'ZoneTemperature'
+    coolingsetpoint = 'OccupiedCoolingSetPoint'
+    heatingsetpoint = 'OccupiedHeatingSetPoint'
+    supplyfanstatus = 'SupplyFanStatus'
+    outdoorairtemperature = 'OutdoorAirTemperature'
+    heating = 'FirstStageHeating'
+    cooling = 'FirstStageCooling'
+
+
+class Points(Enum):
+    # Typically binary output
+    OCC_CMD = 'OccupancyCommand'
+    # Typically analog value
+    OCC_HTG_SP = 'OccupiedHeatingSetPoint'
+    # Typically analog value
+    OCC_CLG_SP = 'OccupiedCoolingSetPoint'
+    # Typically analog value
+    UNOCC_CLG_SP = 'UnoccupiedCoolingSetPoint'
+    # Typically analog value
+    UNOCC_HTG_SP = 'UnoccupiedHeatingSetPoint'
+    # Typically analog value
+    DB = 'DeadBand'
+    # Typically Analog value (for control setting 0)
+    OCC_SP = 'OccupiedSetPoint'
+    # Typically analog value
+    ECON_SP = 'EconomizerSwitchOverSetPoint'
+    # Typically analog value
+    ELEC_HEAT_SP = 'ElectricHeatEnableSetPoint'
+    # Typically BINARY OUT
+    AUX_HEAT_CMD = 'AuxiliaryHeatCommand'
+    # Typically BINARY OUT
+    COOLING_COMMAND = 'FirstStageCooling'
+    # For weather.gov data
+    outdoorairtemperature = 'OutdoorAirTemperature'
+
+
+class DaysOfWeek(IntEnum):
+    Monday = 0
+    Tuesday = 1
+    Wednesday = 2
+    Thursday = 3
+    Friday = 4
+    Saturday = 5
+    Sunday = 6

@@ -45,16 +45,16 @@ import inspect
 from dataclasses import asdict, dataclass, is_dataclass
 import logging
 from typing import Any
+import gevent
 
 from volttron.platform.agent import utils
-
 from volttron.platform.agent.utils import setup_logging
 from volttron.platform.vip.agent import Agent, Core
 from volttron.platform.jsonrpc import RemoteError
-import gevent
-from . import DefaultConfig, Location, Schedule
+
+from . import DefaultConfig
 from .data_utils import Data, DataFileAccess
-from .optimal_start_manager import OptimalStartConfig, OptimalStartManager
+from .optimal_start_manager import OptimalStartManager
 from .holiday_manager import HolidayManager
 from .points import DaysOfWeek, OccupancyTypes, Points
 

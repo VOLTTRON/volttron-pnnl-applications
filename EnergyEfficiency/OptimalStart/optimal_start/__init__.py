@@ -96,7 +96,7 @@ class OptimalStartConfig:
     latest_start_time: int
     earliest_start_time: int
     allowable_setpoint_deviation: int
-    optimal_start_lockout_temperature: int
+    optimal_start_lockout_temperature: int = 30
     training_period_window: int = 10
 
 

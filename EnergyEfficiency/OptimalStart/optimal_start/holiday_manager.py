@@ -39,6 +39,7 @@ PACIFIC NORTHWEST NATIONAL LABORATORY
 operated by BATTELLE for the UNITED STATES DEPARTMENT OF ENERGY
 under Contract DE-AC05-76RL01830
 """
+from __future__ import annotations
 import logging
 from datetime import datetime
 from typing import Optional

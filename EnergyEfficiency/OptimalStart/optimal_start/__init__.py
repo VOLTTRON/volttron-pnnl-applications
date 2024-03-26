@@ -46,6 +46,8 @@ from dataclasses import dataclass, field
 from datetime import datetime, time, timedelta
 from functools import cached_property, lru_cache
 from pathlib import Path
+from typing import Optional
+
 from volttron.platform.messaging import topics, utils
 from .points import DaysOfWeek, ZonePointNames
 
@@ -102,9 +104,9 @@ class OptimalStartConfig:
 
 @dataclass
 class DefaultConfig:
+    system: str
     campus: str = ''
     building: str = ''
-    system: str = ''
     outdoor_temperature_topic: str = ''
     system_status_point: str = 'OccupancyCommand'
     local_tz: str = 'UTC'
@@ -146,18 +148,20 @@ class DefaultConfig:
     # Path for data being read from the thermostat and stored in dataframes for csv.
     data_dir: str = '~/.optimal_start'
     model_dir: str = '~/.optimal_start/models'
+    data_file: Optional[Path] = None
     setpoint_offset: float = None
 
     def __post_init__(self):
         if self.data_dir:
-            self.data_dir = Path(self.data_dir)
+            self.data_dir = Path(self.data_dir).expanduser()
         self.data_dir.mkdir(parents=True, exist_ok=True)
         if self.model_dir:
-            self.model_dir = Path(self.model_dir)
+            self.model_dir = Path(self.model_dir).expanduser()
         self.model_dir.mkdir(parents=True, exist_ok=True)
         if isinstance(self.optimal_start, dict):
             self.optimal_start = OptimalStartConfig(**self.optimal_start)
         os.environ['LOCAL_TZ'] = self.local_tz
+        self.data_file = self.data_dir / self.system
         self.validate()
 
     def __hash__(self):

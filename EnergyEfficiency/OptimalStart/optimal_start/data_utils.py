@@ -67,16 +67,6 @@ class DataFileAccess:
         if not self.datafile.name.endswith('.csv'):
             self.datafile = Path(self.datafile.name + '.csv')
 
-        # If not a file then check if it is a relative path and try
-        # in the default location.
-        if not self.datafile.is_file():
-            if not self.datafile.is_absolute():
-                self.datafile = Path('~/.manager').expanduser() / self.datafile
-                if not self.datafile.is_file():
-                    _log.debug(f'Data file not found {self.datafile}')
-            else:
-                _log.debug(f'File not found: {self.datafile}')
-
     def read(self) -> Optional[pd.DataFrame]:
         return pd.read_csv(self.datafile, index_col='ts', parse_dates=True)
 

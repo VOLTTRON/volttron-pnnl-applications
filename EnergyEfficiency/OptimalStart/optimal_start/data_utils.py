@@ -63,9 +63,9 @@ class DataFileAccess:
     def __init__(self, datafile: str | Path) -> None:
         if isinstance(datafile, str):
             self.datafile = Path(datafile)
-
-        if not self.datafile.name.endswith('.csv'):
-            self.datafile = Path(self.datafile.name + '.csv')
+        else:
+            self.datafile = datafile
+        _log.debug(f'Data file: {self.datafile} -- {self.datafile.as_posix()}')
 
     def read(self) -> Optional[pd.DataFrame]:
         return pd.read_csv(self.datafile, index_col='ts', parse_dates=True)

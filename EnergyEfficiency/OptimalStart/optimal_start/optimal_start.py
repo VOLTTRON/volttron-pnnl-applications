@@ -74,7 +74,7 @@ class OptimalStart(Agent):
         self.identity = self.core.identity
         self.precontrols = config.get('precontrols', {})
         self.precontrol_flag = False
-        self.datafile = DataFileAccess(datafile=self.cfg.system)
+        self.datafile = DataFileAccess(datafile=self.cfg.data_file)
         self.data_handler = Data(timezone=self.cfg.timezone,
                                  data_accessor=self.datafile,
                                  setpoint_offset=self.cfg.setpoint_offset)

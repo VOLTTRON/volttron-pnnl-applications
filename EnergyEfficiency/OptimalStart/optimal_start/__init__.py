@@ -161,7 +161,7 @@ class DefaultConfig:
         if isinstance(self.optimal_start, dict):
             self.optimal_start = OptimalStartConfig(**self.optimal_start)
         os.environ['LOCAL_TZ'] = self.local_tz
-        self.data_file = self.data_dir / self.system
+        self.data_file = self.data_dir / f"{self.system}.csv"
         self.validate()
 
     def __hash__(self):

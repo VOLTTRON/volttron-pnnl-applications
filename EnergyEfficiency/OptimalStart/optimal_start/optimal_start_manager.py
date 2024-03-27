@@ -62,15 +62,42 @@ OPTIMAL_START = 'OptimalStart'
 OPTIMAL_START_MODEL = 'OptimalStartModel'
 OPTIMAL_START_TIME = 'OptimalStartTimes'
 MODELS = {'j': Johnson, 's': Siemens, 'c': Carrier, 'sbs': Sbs}
-CONFIG_STORE = 'model.'
+CONFIG_STORE = 'optimal_start.models'
 NUMBER_TYPE = (int, float, complex)
 
 
 class OptimalStartManager:
+    """
+    Manages model storage and training, scheduling, and running optimal start.
+    """
 
     def __init__(self, *, schedule: dict[str:dict[str, str]], config: DefaultConfig, identity: str,
                  config_get_fn: callable, scheduler_fn: callable, change_occupancy_fn: callable,
                  holiday_manager: HolidayManager, data_handler: Data, publish_fn: callable, config_set_fn: callable):
+        """
+        Manages the optimal start time for a device.
+
+        :param schedule: A dictionary containing the schedule.
+        :type schedule: dict[str:dict[str, str]]
+        :param config: The default configuration.
+        :type config: DefaultConfig
+        :param identity: The identity string.
+        :type identity: str
+        :param config_get_fn: A callable for getting the configuration.
+        :type config_get_fn: callable
+        :param scheduler_fn: A callable for scheduling.
+        :type scheduler_fn: callable
+        :param change_occupancy_fn: A callable for changing occupancy.
+        :type change_occupancy_fn: callable
+        :param holiday_manager: The holiday manager.
+        :type holiday_manager: HolidayManager
+        :param data_handler: The data handler.
+        :type data_handler: Data
+        :param publish_fn: A callable for publishing.
+        :type publish_fn: callable
+        :param config_set_fn: A callable for setting the configuration.
+        :type config_set_fn: callable
+        """
         self.models = {}
         self.weekend_holiday_models = {}
         self.result = {}
@@ -78,7 +105,7 @@ class OptimalStartManager:
         self.training_time = None
         self.schedule = schedule
         self.config = config
-        self.data_dir = config.model_dir
+        self.model_dir = config.model_dir
         self.device = config.system
         self.identity = identity
 
@@ -102,9 +129,9 @@ class OptimalStartManager:
 
     def setup_optimal_start(self):
         """
-
-        :return:
-        :rtype:
+        Set up optimal start by loading models and scheduling.
+        :return: None
+        :rtype: None
         """
         self.models = self.load_models(self.config.optimal_start)
         self.weekend_holiday_models = self.load_models(self.config.optimal_start, weekend=True)
@@ -115,6 +142,17 @@ class OptimalStartManager:
         self.scheduler_greenlets.append(self.scheduler_fn(cron('1 0 * * *'), self.set_up_run))
         self.scheduler_greenlets.append(self.scheduler_fn(cron('0 9 * * *'), self.train_models))
 
+    def update_model_configurations(self, config: OptimalStartConfig) -> None:
+        """
+        Receives configuration parameters for optimal start from config store callback.
+
+        :param config: Optimal start configuration parameters
+        """
+        for tag, cls in self.models.items():
+            cls.update_config(config, self.schedule)
+        for tag, cls in self.weekend_holiday_models.items():
+            cls.update_config(config, self.schedule)
+
     def set_up_run(self):
         """
         Run based daily based on cron schedule.  This method calculates the earliest start time
@@ -122,7 +160,6 @@ class OptimalStartManager:
         :return:
         :rtype:
         """
-        _log.debug('Setting up run!')
         current_schedule = self.config.get_current_day_schedule()
         is_holiday = self.holiday_manager.is_holiday(dt.now())
         try:
@@ -236,7 +273,7 @@ class OptimalStartManager:
 
     def load_models(self, config: OptimalStartConfig, weekend=False):
         """
-        Create or load model pickle (trained model instance).
+        Create or load model from the config store.
         :param config:
         :type config:
         :param weekend:
@@ -284,8 +321,7 @@ class OptimalStartManager:
                 cls_attrs = get_cls_attrs(model)
                 cls_attrs.pop('config')
                 self.config_set_fn(tag, cls_attrs)
-                _file = self.config.model_dir / f'{self.device}_{tag}.json'
-                _log.debug(f'FILE: {_file}')
+                _file = self.model_dir / f'{self.device}_{tag}.json'
                 with open(_file, 'w') as fp:
                     json.dump(cls_attrs, fp, indent=4)
             except Exception as ex:

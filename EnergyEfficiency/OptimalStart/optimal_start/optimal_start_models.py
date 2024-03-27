@@ -62,7 +62,7 @@ _log = logging.getLogger(__name__)
 class Model:
 
     def __init__(self, config: OptimalStartConfig, get_current_schedule_fn: Callable):
-        self.config = config
+        self.cfg = config
         self._get_current_schedule = get_current_schedule_fn
         self.latest_start_time = config.latest_start_time
         self.earliest_start_time = config.earliest_start_time
@@ -80,14 +80,14 @@ class Model:
         :return: None
         :rtype: None
         """
-        self.config = config
+        self.cfg = config
         self.load_config()
 
     def load_config(self):
-        self.latest_start_time = self.config.latest_start_time
-        self.earliest_start_time = self.config.earliest_start_time
-        self.t_error = self.config.allowable_setpoint_deviation
-        self.training_period_window = self.config.training_period_window
+        self.latest_start_time = self.cfg.latest_start_time
+        self.earliest_start_time = self.cfg.earliest_start_time
+        self.t_error = self.cfg.allowable_setpoint_deviation
+        self.training_period_window = self.cfg.training_period_window
 
     def load_model(self, model_dict):
         """

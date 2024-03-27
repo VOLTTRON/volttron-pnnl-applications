@@ -63,7 +63,7 @@ def clean_array(array):
             u = np.mean(array_values)
             s = np.std(array_values)
             if np.isfinite(u) and np.isfinite(s):
-                array = [e for e in array if (u - 1.75 * s <= e[1] <= u + 1.75 * s)]
+                array = [e for e in array if (u - 2.0 * s <= e[1] <= u + 2.0 * s)]
     except Exception as ex:
         _log.debug(f'Array parser error: {array} -- ex: {ex}')
     return array

@@ -1,3 +1,4 @@
+
 """
 Copyright (c) 2024, Battelle Memorial Institute
 All rights reserved.
@@ -40,6 +41,7 @@ operated by BATTELLE for the UNITED STATES DEPARTMENT OF ENERGY
 under Contract DE-AC05-76RL01830
 """
 from __future__ import annotations
+
 import logging
 import os
 from dataclasses import dataclass, field

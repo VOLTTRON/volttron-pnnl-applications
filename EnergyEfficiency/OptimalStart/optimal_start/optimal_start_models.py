@@ -44,7 +44,7 @@ import os
 import warnings
 from abc import abstractmethod
 from datetime import datetime as dt
-
+from typing import Callable
 import numpy as np
 import pandas as pd
 from volttron.platform.agent.utils import format_timestamp
@@ -61,30 +61,26 @@ _log = logging.getLogger(__name__)
 
 class Model:
 
-    def __init__(self, config: OptimalStartConfig, schedule):
+    def __init__(self, config: OptimalStartConfig, get_current_schedule_fn: Callable):
         self.config = config
-
+        self._get_current_schedule = get_current_schedule_fn
         self.latest_start_time = config.latest_start_time
         self.earliest_start_time = config.earliest_start_time
         self.t_error = config.allowable_setpoint_deviation
         self.training_period_window = config.training_period_window
-        self.schedule = schedule
         self.tz = os.environ.get('LOCAL_TZ', 'US/Pacific')
         self.record = {}
 
-    def update_config(self, config: OptimalStartConfig, schedule: dict) -> None:
+    def update_config(self, config: OptimalStartConfig) -> None:
         """
-        Update configurations from store or AEMS web interface
+        Update configurations for optimal start models.
 
-        :param config: dictionary of configuration parameters
-        :type config: dict
-        :param schedule: dictionary fo schedule information
-        :type schedule: dict
+        :param config: Optimal start configuration parameters
+        :type config: OptimalStartConfig object.
         :return: None
         :rtype: None
         """
         self.config = config
-        self.schedule = schedule
         self.load_config()
 
     def load_config(self):
@@ -124,9 +120,9 @@ class Model:
         if data.empty:
             return
         _day = dt.now().weekday()
-        schedule = self.schedule[_day]
-        if 'start' in schedule and 'earliest' in schedule:
-            occupancy_start = schedule['start']
+        schedule = self._get_current_schedule()
+        if schedule is not None:
+            occupancy_start = schedule.start
             training_start = calculate_prestart_time(occupancy_start, prestart)
             training_end = offset_time(occupancy_start, 60)
             _log.debug(f'Model training start: {training_start} -- end: {training_end}')

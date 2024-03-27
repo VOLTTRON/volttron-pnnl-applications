@@ -62,7 +62,7 @@ OPTIMAL_START = 'OptimalStart'
 OPTIMAL_START_MODEL = 'OptimalStartModel'
 OPTIMAL_START_TIME = 'OptimalStartTimes'
 MODELS = {'j': Johnson, 's': Siemens, 'c': Carrier, 'sbs': Sbs}
-CONFIG_STORE = 'optimal_start.model'
+CONFIG_STORE = 'model.'
 NUMBER_TYPE = (int, float, complex)
 
 
@@ -114,19 +114,6 @@ class OptimalStartManager:
         self.scheduler_greenlets = []
         self.scheduler_greenlets.append(self.scheduler_fn(cron('1 0 * * *'), self.set_up_run))
         self.scheduler_greenlets.append(self.scheduler_fn(cron('0 9 * * *'), self.train_models))
-
-    def update_model_configurations(self, config: OptimalStartConfig) -> None:
-        """
-        Receives configuration parameters for optimal start from config store callback.
-        :param data: dictionary of optimal start configuration parameters
-        :type data: dict
-        :return: None
-        :rtype: None
-        """
-        for tag, cls in self.models.items():
-            cls.update_config(config, self.schedule)
-        for tag, cls in self.weekend_holiday_models.items():
-            cls.update_config(config, self.schedule)
 
     def set_up_run(self):
         """
@@ -262,7 +249,7 @@ class OptimalStartManager:
             config.training_period_window = 5
         for name, cls in MODELS.items():
             tag = '_'.join([name, 'we']) if weekend else name
-            _cls = cls(config, self.schedule)
+            _cls = cls(config, self.config.get_current_day_schedule)
             try:
                 cls_attrs = self.config_get_fn(tag)
                 _cls.load_model(cls_attrs)
@@ -295,11 +282,10 @@ class OptimalStartManager:
                 continue
             try:
                 cls_attrs = get_cls_attrs(model)
-                cls_attrs.pop('schedule')
                 cls_attrs.pop('config')
-                store_tag = '.'.join([CONFIG_STORE, tag])
-                self.config_set_fn(store_tag, cls_attrs)
-                _file = self.data_dir + f'/{self.device}_{tag}.json'
+                self.config_set_fn(tag, cls_attrs)
+                _file = self.config.model_dir / f'{self.device}_{tag}.json'
+                _log.debug(f'FILE: {_file}')
                 with open(_file, 'w') as fp:
                     json.dump(cls_attrs, fp, indent=4)
             except Exception as ex:

@@ -288,7 +288,7 @@ class ILCAgent(Agent):
         for name, data in data.items():
             self.vip.config.set(name, data)
         self.vip.config.set('config', config, send_update=True, trigger_callback=True)
-       return True
+        return True
 
     def reset_parameters(self, config=None):
         """

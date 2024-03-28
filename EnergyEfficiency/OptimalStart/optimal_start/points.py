@@ -57,13 +57,13 @@ class PointValue:
 
 
 class ZonePointNames:
-    zonetemperature = PointValue('ZoneTemperature')
-    coolingsetpoint = PointValue('OccupiedCoolingSetPoint')
-    heatingsetpoint = PointValue('OccupiedHeatingSetPoint')
-    supplyfanstatus = PointValue('SupplyFanStatus')
-    outdoorairtemperature = PointValue('OutdoorAirTemperature')
-    heating = PointValue('FirstStageHeating')
-    cooling = PointValue('FirstStageCooling')
+    zonetemperature = PointValue(name='zonetemperature', value='ZoneTemperature')
+    coolingsetpoint = PointValue(name='coolingsetpoint', value='OccupiedCoolingSetPoint')
+    heatingsetpoint = PointValue(name='heatingsetpoint', value='OccupiedHeatingSetPoint')
+    supplyfanstatus = PointValue(name='supplyfanstatus', value='SupplyFanStatus')
+    outdoorairtemperature = PointValue(name='outdoorairtemperature', value='OutdoorAirTemperature')
+    heating = PointValue(name='heating', value='FirstStageHeating')
+    cooling = PointValue(name='cooling', value='FirstStageCooling')
 
 
 class Points(Enum):

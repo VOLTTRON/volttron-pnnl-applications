@@ -51,7 +51,7 @@ from pathlib import Path
 from typing import Optional
 
 from volttron.platform.messaging import topics, utils
-from .points import DaysOfWeek, ZonePointNames
+from .points import DaysOfWeek, ZonePointNames, PointValue
 
 _log = logging.getLogger(__name__)
 
@@ -117,7 +117,7 @@ class DefaultConfig:
                                                    earliest_start_time=180,
                                                    allowable_setpoint_deviation=1,
                                                    optimal_start_lockout_temperature=30))
-    zone_point_names: ZonePointNames = ZonePointNames
+    zone_point_names: dict[str, str] = field(default_factory=dict)
     schedule: dict[str, dict[str, str]] = field(
         default_factory=lambda: {
             'Monday': {
@@ -154,6 +154,8 @@ class DefaultConfig:
     setpoint_offset: float = None
 
     def __post_init__(self):
+        for k, v in self.zone_point_names.items():
+            ZonePointNames.__dict__[k] = PointValue(v)
         if self.data_dir:
             self.data_dir = Path(self.data_dir).expanduser()
         self.data_dir.mkdir(parents=True, exist_ok=True)

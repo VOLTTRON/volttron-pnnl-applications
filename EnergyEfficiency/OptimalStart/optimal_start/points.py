@@ -50,14 +50,19 @@ class OccupancyTypes(Enum):
     RELEASE = None
 
 
-class ZonePointNames(Enum):
-    zonetemperature = 'ZoneTemperature'
-    coolingsetpoint = 'OccupiedCoolingSetPoint'
-    heatingsetpoint = 'OccupiedHeatingSetPoint'
-    supplyfanstatus = 'SupplyFanStatus'
-    outdoorairtemperature = 'OutdoorAirTemperature'
-    heating = 'FirstStageHeating'
-    cooling = 'FirstStageCooling'
+@dataclass
+class PointValue:
+    value: str
+
+
+class ZonePointNames:
+    zonetemperature = PointValue('ZoneTemperature')
+    coolingsetpoint = PointValue('OccupiedCoolingSetPoint')
+    heatingsetpoint = PointValue('OccupiedHeatingSetPoint')
+    supplyfanstatus = PointValue('SupplyFanStatus')
+    outdoorairtemperature = PointValue('OutdoorAirTemperature')
+    heating = PointValue('FirstStageHeating')
+    cooling = PointValue('FirstStageCooling')
 
 
 class Points(Enum):

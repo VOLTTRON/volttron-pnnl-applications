@@ -59,10 +59,12 @@ class MultiplatformCoordinator(Agent):
 
     def __init__(self, config_path, **kwargs):
         super().__init__(**kwargs)
-        self.config = utils.load_config(config_path)
+        self.config = utils.load_config(config_path) if config_path else {}
+        self.vip.config.set_default("config", self.config)
         self.configured_platforms = self.config.get("connected_platforms")
         self.routing_table = {}
         self.register_subscriptions = {}
+        self.vip.config.subscribe(self.configure_main, action=['NEW', 'UPDATE'], pattern='config')
 
     def check_routing(self, platform, identity):
         """
@@ -78,30 +80,39 @@ class MultiplatformCoordinator(Agent):
         else:
             return False
 
-    @Core.receiver('onstart')
-    def onstart(self, sender, **kwargs):
+    def configure_main(self, config_name, action, contents):
+        """
+        Configure main setup routing table.
+        :param config_name:
+        :param action:
+        :param contents:
+        :return:
+        """
+        self.config = contents
+        self.configured_platforms = self.config.get("connected_platforms")
+        self.routing_table = {}
         for platform in self.configured_platforms:
             try:
                 agent_list = self.vip.rpc.call('control', 'peerlist', external_platform=platform).get(timeout=10)
                 self.routing_table[platform] = agent_list
-            except gevent.Timeout as ex:
+            except (gevent.Timeout, RemoteError) as ex:
                 _log.debug(f'Exception connection to {platform} -- {ex}')
                 self.routing_table[platform] = []
 
     @RPC.export
-    def relay(self, data) -> dict | float | str | None:
+    def relay(self, platform, identity, function, *args, **kwargs) -> any:
         """
-        Relay data to an external platform
-        :param data: dict {'platform': str, 'identity': str, 'function': str, 'args': [], 'kwargs': {}}
-        :return: bool
+        Relay rpc call from one remote to another.
+        :param platform: external platform
+        :param identity: vip-identity of agent
+        :param function: rpc function
+        :param args: rpc args
+        :param kwargs: rpc kwargs
+        :return: result from rpc call
+        :rtype: any
         """
-        _log.debug(f'Relaying message: {data}')
-        identity = data.get('identity', 'unknown')
-        platform = data.get('platform', 'unknown')
-        function = data.get('function', 'unknown')
-        args = data.get('args', [])
-        kwargs = data.get('kwargs', {})
-        result = {}
+        _log.debug(f'Relaying message: {platform} - identity: {identity}')
+        result = None
         if self.check_routing(platform, identity):
             try:
                 result = self.vip.rpc.call(identity, function, *args, **kwargs, external_platform=platform).get(timeout=10)
@@ -112,9 +123,10 @@ class MultiplatformCoordinator(Agent):
     @RPC.export
     def register_subscription(self, data) -> bool:
         """
-        Register a subscription for a given topic
+        Register a subscription for a given topic for a remote on a different remote.
         :param data: dict {'platform': str, 'topic': str, 'identity': str, 'function': str}
-        :return: bool
+        :return: True if successful else False
+        :rtype: bool
         """
         _log.debug(f'Registering subscription: {data}')
         try:
@@ -126,16 +138,11 @@ class MultiplatformCoordinator(Agent):
             _log.error(f'Failed to set configurations: {ex}', exc_info=True)
             return False
 
-    def subscription_handler(self, peer, sender, bus, topic, headers, message):
+    def subscription_handler(self, peer, sender, bus, topic, headers, message) -> None:
         """
         Handle subscriptions from remotes platforms.
-        :param peer:
-        :param sender:
-        :param bus:
-        :param topic:
-        :param headers:
-        :param message:
-        :return:
+        :return: None
+        :rtype: None
         """
         _log.debug(f'Received message from {peer} on {topic}: {message}')
         if topic in self.register_subscriptions:
@@ -143,6 +150,7 @@ class MultiplatformCoordinator(Agent):
             identity = data.get('identity', 'unknown')
             platform = data.get('platform', 'unknown')
             function = data.get('function', 'unknown')
+            # fuctions = self.vip.rpc.call(identity, 'inspect', external_platform=platform).get(timeout=10)
             if self.check_routing(platform, identity):
                 try:
                     self.vip.rpc.call(identity, function, message, external_platform=platform).get(timeout=10)
@@ -151,7 +159,7 @@ class MultiplatformCoordinator(Agent):
 
 
 def main(argv=sys.argv):
-    '''Main method called by the eggsecutable.'''
+    """Main method called by the eggsecutable."""
     try:
         utils.vip_main(MultiplatformCoordinator, version=__version__)
     except Exception as e:

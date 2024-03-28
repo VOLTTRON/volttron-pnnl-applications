@@ -53,6 +53,7 @@ class OccupancyTypes(Enum):
 @dataclass
 class PointValue:
     value: str
+    name: str
 
 
 class ZonePointNames:

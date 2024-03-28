@@ -45,6 +45,7 @@ import warnings
 from datetime import datetime as dt
 from pathlib import Path
 from typing import Optional
+import inspect
 
 import pandas as pd
 from dateutil import parser, tz
@@ -139,8 +140,9 @@ class Data:
         stored_data = {}
         current_dt = self.assign_local_tz(_now)
         self.current_dt = current_dt
-
-        for point in ZonePointNames:
+        members = inspect.getmembers(ZonePointNames, lambda a: not inspect.isdatadescriptor(a))
+        for point in members:
+            name, point = point
             if point.value in data:
                 value = data[point.value]
             else:

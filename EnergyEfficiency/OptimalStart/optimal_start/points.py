@@ -61,7 +61,7 @@ class ZonePointNames:
     coolingsetpoint = PointValue(name='coolingsetpoint', value='OccupiedCoolingSetPoint')
     heatingsetpoint = PointValue(name='heatingsetpoint', value='OccupiedHeatingSetPoint')
     supplyfanstatus = PointValue(name='supplyfanstatus', value='SupplyFanStatus')
-    outdoorairtemperature = PointValue(name='outdoorairtemperature', value='OutdoorAirTemperature')
+    outdoortemperature = PointValue(name='outdoortemperature', value='OutdoorAirTemperature')
     heating = PointValue(name='heating', value='FirstStageHeating')
     cooling = PointValue(name='cooling', value='FirstStageCooling')
 

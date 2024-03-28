@@ -193,12 +193,10 @@ class Data:
             self.df = df
 
         self._file_accessor.write(self.df)
-        # data_path = self.data_path + f'/data_{self.tag}.csv'
-        # self.df.to_csv(data_path)
 
     def get_current_oat(self):
         if not self.df.empty:
-            if ZonePointNames.outdoorairtemperature.name in self.df.columns:
-                df = self.df[self.df[ZonePointNames.outdoorairtemperature.name].notna()]
-                return df.index[-1], df[ZonePointNames.outdoorairtemperature.name].iloc[-1]
+            if ZonePointNames.outdoortemperature.name in self.df.columns:
+                df = self.df[self.df[ZonePointNames.outdoortemperature.name].notna()]
+                return df.index[-1], df[ZonePointNames.outdoortemperature.name].iloc[-1]
         return None, None

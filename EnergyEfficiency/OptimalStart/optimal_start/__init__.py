@@ -155,7 +155,7 @@ class DefaultConfig:
 
     def __post_init__(self):
         for k, v in self.zone_point_names.items():
-            ZonePointNames.__dict__[k] = PointValue(v)
+            setattr(ZonePointNames, k, PointValue(v))
         if self.data_dir:
             self.data_dir = Path(self.data_dir).expanduser()
         self.data_dir.mkdir(parents=True, exist_ok=True)

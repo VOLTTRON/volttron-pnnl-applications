@@ -122,11 +122,21 @@ class MultiplatformCoordinator(Agent):
             self.vip.pubsub.subscribe(peer='pubsub', prefix=topic, callback=self.subscription_handler, all_platforms=True).get(timeout=10)
             self.register_subscriptions[topic] = data
             return True
-        except Exception as ex:
+        except (gevent.Timeout, RemoteError) as ex:
             _log.error(f'Failed to set configurations: {ex}', exc_info=True)
             return False
 
     def subscription_handler(self, peer, sender, bus, topic, headers, message):
+        """
+        Handle subscriptions from remotes platforms.
+        :param peer:
+        :param sender:
+        :param bus:
+        :param topic:
+        :param headers:
+        :param message:
+        :return:
+        """
         _log.debug(f'Received message from {peer} on {topic}: {message}')
         if topic in self.register_subscriptions:
             data = self.register_subscriptions[topic]
@@ -136,7 +146,7 @@ class MultiplatformCoordinator(Agent):
             if self.check_routing(platform, identity):
                 try:
                     self.vip.rpc.call(identity, function, message, external_platform=platform).get(timeout=10)
-                except gevent.Timeout as ex:
+                except (gevent.Timeout, RemoteError) as ex:
                     _log.error(f'Failed to call {function} on {identity} on {platform}: {ex}', exc_info=True)
 
 

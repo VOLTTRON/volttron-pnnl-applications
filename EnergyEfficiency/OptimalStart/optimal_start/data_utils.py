@@ -141,7 +141,7 @@ class Data:
         current_dt = self.assign_local_tz(_now)
         self.current_dt = current_dt
         members = inspect.getmembers(ZonePointNames, lambda a: not inspect.isdatadescriptor(a))
-        for point in members:
+        for point in [x for x in members if not (x[0].startswith('__') and x[0].endswith('__'))]:
             name, point = point
             if point.value in data:
                 value = data[point.value]

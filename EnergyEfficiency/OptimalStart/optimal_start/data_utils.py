@@ -141,12 +141,9 @@ class Data:
         current_dt = self.assign_local_tz(_now)
         self.current_dt = current_dt
         for point in Points:
-            name, point = point
             if point.value in data:
                 value = data[point.value]
-            else:
-                continue
-            stored_data[point.name] = [value]
+                stored_data[point.name] = [value]
 
         if self.setpoint_offset is not None:
             stored_data['coolingsetpoint'][0] += self.setpoint_offset

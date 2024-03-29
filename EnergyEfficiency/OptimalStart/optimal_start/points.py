@@ -63,14 +63,14 @@ class _Points:
     def add_item(self, key: str, value: str):
         self._points[key] = PointValue(value, key)
 
+    def __getattr__(self, key: str) -> PointValue:
+        return self._points[key]
+
     def keys(self) -> List[str]:
         return list(self._points.keys())
 
     def values(self) -> List[PointValue]:
         return list(self._points.values())
-
-    def __getitem__(self, key: str) -> PointValue:
-        return self._points[key]
 
     def __iter__(self):
         self._curitter = iter(self._points)

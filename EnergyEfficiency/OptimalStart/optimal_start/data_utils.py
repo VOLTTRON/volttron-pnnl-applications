@@ -195,7 +195,7 @@ class Data:
 
     def get_current_oat(self):
         if not self.df.empty:
-            if ZonePointNames.outdoorairtemperature.name in self.df.columns:
-                df = self.df[self.df[ZonePointNames.outdoorairtemperature.name].notna()]
-                return df.index[-1], df[ZonePointNames.outdoorairtemperature.name].iloc[-1]
+            if Points.outdoorairtemperature.name in self.df.columns:
+                df = self.df[self.df[Points.outdoorairtemperature.name].notna()]
+                return df.index[-1], df[Points.outdoorairtemperature.name].iloc[-1]
         return None, None

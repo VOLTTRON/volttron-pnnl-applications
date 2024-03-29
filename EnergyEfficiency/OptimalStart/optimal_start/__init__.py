@@ -51,7 +51,7 @@ from pathlib import Path
 from typing import Optional
 
 from volttron.platform.messaging import topics, utils
-from .points import DaysOfWeek, ZonePointNames, PointValue
+from .points import DaysOfWeek, Points, PointValue
 
 _log = logging.getLogger(__name__)
 
@@ -155,7 +155,7 @@ class DefaultConfig:
 
     def __post_init__(self):
         for k, v in self.zone_point_names.items():
-            setattr(ZonePointNames, k, PointValue(name=k, value=v))
+            Points.add_item(k, v)
         if self.data_dir:
             self.data_dir = Path(self.data_dir).expanduser()
         self.data_dir.mkdir(parents=True, exist_ok=True)

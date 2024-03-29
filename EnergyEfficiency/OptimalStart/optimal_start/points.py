@@ -56,41 +56,45 @@ class PointValue:
     name: str
 
 
-class ZonePointNames:
-    zonetemperature = PointValue(name='zonetemperature', value='ZoneTemperature')
-    coolingsetpoint = PointValue(name='coolingsetpoint', value='OccupiedCoolingSetPoint')
-    heatingsetpoint = PointValue(name='heatingsetpoint', value='OccupiedHeatingSetPoint')
-    supplyfanstatus = PointValue(name='supplyfanstatus', value='SupplyFanStatus')
-    outdoortemperature = PointValue(name='outdoortemperature', value='OutdoorAirTemperature')
-    heating = PointValue(name='heating', value='FirstStageHeating')
-    cooling = PointValue(name='cooling', value='FirstStageCooling')
+class _Points:
+    def __init__(self):
+        self._points: dict[str, PointValue] = {}
+        self._curitter = None
+
+    def add_item(self, key: str, value: str):
+        self._points[key] = PointValue(value, key)
+
+    def __getitem__(self, key: str) -> PointValue:
+        return self._points[key]
+
+    def __iter__(self):
+        self._curitter = iter(self._points)
+        return self._curitter
+
+    def __len__(self):
+        return len(self._points)
+
+    def __next__(self):
+        item = next(self._curitter)
+        return item
 
 
-class Points(Enum):
-    # Typically binary output
-    OCC_CMD = 'OccupancyCommand'
-    # Typically analog value
-    OCC_HTG_SP = 'OccupiedHeatingSetPoint'
-    # Typically analog value
-    OCC_CLG_SP = 'OccupiedCoolingSetPoint'
-    # Typically analog value
-    UNOCC_CLG_SP = 'UnoccupiedCoolingSetPoint'
-    # Typically analog value
-    UNOCC_HTG_SP = 'UnoccupiedHeatingSetPoint'
-    # Typically analog value
-    DB = 'DeadBand'
-    # Typically Analog value (for control setting 0)
-    OCC_SP = 'OccupiedSetPoint'
-    # Typically analog value
-    ECON_SP = 'EconomizerSwitchOverSetPoint'
-    # Typically analog value
-    ELEC_HEAT_SP = 'ElectricHeatEnableSetPoint'
-    # Typically BINARY OUT
-    AUX_HEAT_CMD = 'AuxiliaryHeatCommand'
-    # Typically BINARY OUT
-    COOLING_COMMAND = 'FirstStageCooling'
-    # For weather.gov data
-    outdoorairtemperature = 'OutdoorAirTemperature'
+
+Points = _Points()
+Points.add_item('zonetemperature', 'ZoneTemperature')
+Points.add_item('coolingsetpoint', 'OccupiedCoolingSetPoint')
+Points.add_item('heatingsetpoint', 'OccupiedHeatingSetPoint')
+Points.add_item('supplyfanstatus', 'SupplyFanStatus')
+Points.add_item('outdoorairtemperature', 'OutdoorAirTemperature')
+Points.add_item('heating', 'FirstStageHeating')
+Points.add_item('cooling', 'FirstStageCooling')
+Points.add_item('occupancy', 'OccupancyCommand')
+Points.add_item('auxiliaryheatcommand', 'AuxiliaryHeatCommand')
+Points.add_item('economizerswitchoversetpoint', 'EconomizerSwitchOverSetPoint')
+Points.add_item('deadband', 'DeadBand')
+Points.add_item('unoccupiedheatingsetpoint', 'UnoccupiedHeatingSetPoint')
+Points.add_item('unoccupiedcoolingsetpoint', 'UnoccupiedCoolingSetPoint')
+Points.add_item('occupiedsetpoint', 'OccupiedSetPoint')
 
 
 class DaysOfWeek(IntEnum):

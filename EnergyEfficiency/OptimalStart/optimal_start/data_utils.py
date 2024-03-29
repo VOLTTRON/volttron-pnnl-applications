@@ -52,7 +52,7 @@ from dateutil import parser, tz
 from volttron.platform.agent.utils import format_timestamp
 from volttron.platform.messaging import headers as headers_mod
 
-from .points import ZonePointNames
+from .points import Points
 
 warnings.filterwarnings('ignore', category=DeprecationWarning)
 
@@ -140,8 +140,7 @@ class Data:
         stored_data = {}
         current_dt = self.assign_local_tz(_now)
         self.current_dt = current_dt
-        members = inspect.getmembers(ZonePointNames, lambda a: not inspect.isdatadescriptor(a))
-        for point in [x for x in members if not (x[0].startswith('__') and x[0].endswith('__'))]:
+        for point in Points:
             name, point = point
             if point.value in data:
                 value = data[point.value]
@@ -196,7 +195,7 @@ class Data:
 
     def get_current_oat(self):
         if not self.df.empty:
-            if ZonePointNames.outdoortemperature.name in self.df.columns:
-                df = self.df[self.df[ZonePointNames.outdoortemperature.name].notna()]
-                return df.index[-1], df[ZonePointNames.outdoortemperature.name].iloc[-1]
+            if ZonePointNames.outdoorairtemperature.name in self.df.columns:
+                df = self.df[self.df[ZonePointNames.outdoorairtemperature.name].notna()]
+                return df.index[-1], df[ZonePointNames.outdoorairtemperature.name].iloc[-1]
         return None, None

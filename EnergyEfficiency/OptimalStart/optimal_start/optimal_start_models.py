@@ -193,7 +193,7 @@ class Carrier(Model):
             _log.debug('Carrier debug cooling htr returned empty!')
             return
         time_diff, temp_diff = get_time_temp_diff(htr, self.t_error)
-        oat = htr['outdoortemperature'].mean()
+        oat = htr['outdoorairtemperature'].mean()
         _log.debug('C: training {} -- {}'.format(temp_diff, time_diff))
         if not time_diff:
             _log.debug('Carrier debug cooling time_diff == 0!')
@@ -215,7 +215,7 @@ class Carrier(Model):
             _log.debug('Carrier debug heating htr returned empty!')
             return
         time_diff, temp_diff = get_time_temp_diff(htr, self.t_error)
-        oat = htr['outdoortemperature'].mean()
+        oat = htr['outdoorairtemperature'].mean()
         if not time_diff:
             _log.debug('Carrier debug heating time_diff == 0!')
             return
@@ -237,7 +237,7 @@ class Carrier(Model):
         csp = data['coolingsetpoint'][-1]
         hsp = data['heatingsetpoint'][-1]
         zonetemp = data['zonetemperature'][-1]
-        oat = data['outdoortemperature'][-1]
+        oat = data['outdoorairtemperature'][-1]
         if zonetemp + self.t_error < hsp:
             if not self.h1:
                 return self.earliest_start_time
@@ -285,7 +285,7 @@ class Siemens(Model):
             _log.debug('Siemens debug cooling htr returned empty!')
             return
         zcsp = htr['zonetemperature'][0] - htr['coolingsetpoint'][0]
-        osp = htr['outdoortemperature'][0] - htr['coolingsetpoint'][0]
+        osp = htr['outdoorairtemperature'][0] - htr['coolingsetpoint'][0]
         time_diff, temp_diff = get_time_temp_diff(htr, self.t_error)
         if not time_diff:
             _log.debug('Siemens debug cooling time_diff == 0!')
@@ -328,7 +328,7 @@ class Siemens(Model):
             return
         # change htr to data?
         zhsp = htr['heatingsetpoint'][0] - htr['zonetemperature'][0]
-        osp = htr['heatingsetpoint'][0] - htr['outdoortemperature'][0]
+        osp = htr['heatingsetpoint'][0] - htr['outdoorairtemperature'][0]
         time_diff, temp_diff = get_time_temp_diff(htr, self.t_error)
         if not time_diff:
             _log.debug('Siemens debug heating time_diff == 0!')
@@ -370,7 +370,7 @@ class Siemens(Model):
         csp = data['coolingsetpoint'][-1]
         hsp = data['heatingsetpoint'][-1]
         zonetemp = data['zonetemperature'][-1]
-        oat = data['outdoortemperature'][-1]
+        oat = data['outdoorairtemperature'][-1]
         if zonetemp + self.t_error < hsp:
             if not self.h1 or not self.h2:
                 return self.earliest_start_time

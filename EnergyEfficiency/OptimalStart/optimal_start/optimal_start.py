@@ -208,7 +208,7 @@ class OptimalStart(Agent):
             new_occupancy_state = state.value
 
         try:
-            result = self.rpc_set_point(Points.OCC_CMD.value, new_occupancy_state)
+            result = self.rpc_set_point(Points.occupancy.value, new_occupancy_state)
 
         except RemoteError as ex:
             _log.warning(f'{self.identity} - Failed to set {self.cfg.system_rpc_path} to {state.value}: {ex}')

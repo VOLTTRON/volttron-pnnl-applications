@@ -39,15 +39,14 @@ PACIFIC NORTHWEST NATIONAL LABORATORY
 operated by BATTELLE for the UNITED STATES DEPARTMENT OF ENERGY
 under Contract DE-AC05-76RL01830
 """
-
 from dataclasses import dataclass, field
 from enum import Enum, IntEnum
 from typing import List
 
+
 class OccupancyTypes(Enum):
     OCCUPIED = 'occupied'
     UNOCCUPIED = 'unoccupied'
-    RELEASE = None
 
 
 @dataclass

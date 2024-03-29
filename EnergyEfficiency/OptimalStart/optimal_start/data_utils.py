@@ -140,7 +140,7 @@ class Data:
         stored_data = {}
         current_dt = self.assign_local_tz(_now)
         self.current_dt = current_dt
-        for point in Points:
+        for point in Points.values():
             if point.value in data:
                 value = data[point.value]
                 stored_data[point.name] = [value]

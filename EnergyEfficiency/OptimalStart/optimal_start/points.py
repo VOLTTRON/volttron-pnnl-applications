@@ -64,6 +64,12 @@ class _Points:
     def add_item(self, key: str, value: str):
         self._points[key] = PointValue(value, key)
 
+    def keys(self) -> list[str]:
+        return list(self._points.keys())
+
+    def values(self) -> list[PointValue]:
+        return list(self._points.values())
+
     def __getitem__(self, key: str) -> PointValue:
         return self._points[key]
 
@@ -77,7 +83,6 @@ class _Points:
     def __next__(self):
         item = next(self._curitter)
         return item
-
 
 
 Points = _Points()

@@ -42,7 +42,7 @@ under Contract DE-AC05-76RL01830
 
 from dataclasses import dataclass, field
 from enum import Enum, IntEnum
-
+from typing import List
 
 class OccupancyTypes(Enum):
     OCCUPIED = 'occupied'
@@ -64,10 +64,10 @@ class _Points:
     def add_item(self, key: str, value: str):
         self._points[key] = PointValue(value, key)
 
-    def keys(self) -> list[str]:
+    def keys(self) -> List[str]:
         return list(self._points.keys())
 
-    def values(self) -> list[PointValue]:
+    def values(self) -> List[PointValue]:
         return list(self._points.values())
 
     def __getitem__(self, key: str) -> PointValue:

@@ -319,7 +319,8 @@ class OptimalStartManager:
                 continue
             try:
                 cls_attrs = get_cls_attrs(model)
-                cls_attrs.pop('config')
+                if 'cfg' in cls_attrs:
+                    cls_attrs.pop('cfg')
                 self.config_set_fn(tag, cls_attrs)
                 _file = self.model_dir / f'{self.device}_{tag}.json'
                 with open(_file, 'w') as fp:

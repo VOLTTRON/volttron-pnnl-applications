@@ -45,7 +45,6 @@ import warnings
 from datetime import datetime as dt
 from pathlib import Path
 from typing import Optional
-import inspect
 
 import pandas as pd
 from dateutil import parser, tz

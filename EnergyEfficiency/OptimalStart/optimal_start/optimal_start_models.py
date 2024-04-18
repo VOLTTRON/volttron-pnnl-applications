@@ -164,12 +164,12 @@ class Model:
         _range = np.linspace(0, 15, 61)
         for j in _range:
             try:
-                min_slope = data[(data['temp_diff'][0] - data['temp_diff']) >= j].index[0]
+                min_slope = data[(data['temp_diff'].iloc[0] - data['temp_diff']) >= j].index[0]
                 df_list.append(data.loc[min_slope])
             except (IndexError, ValueError) as ex:
                 _log.debug('Model error getting heat transfer rate: %s', ex)
                 continue
-        if len(df_list) == 1 and data['temp_diff'][0] > self.t_error:
+        if len(df_list) == 1 and data['temp_diff'].iloc[0] > self.t_error:
             df_list.append(data.iloc[-1])
         htr = pd.concat(df_list, axis=1).T
         htr = htr[~htr.index.duplicated(keep='first')]
@@ -234,10 +234,10 @@ class Carrier(Model):
         if data.empty:
             _log.debug('C: DataFrame is empty cannot calculate start time!')
             return self.earliest_start_time
-        csp = data['coolingsetpoint'][-1]
-        hsp = data['heatingsetpoint'][-1]
-        zonetemp = data['zonetemperature'][-1]
-        oat = data['outdoorairtemperature'][-1]
+        csp = data['coolingsetpoint'].iloc[-1]
+        hsp = data['heatingsetpoint'].iloc[-1]
+        zonetemp = data['zonetemperature'].iloc[-1]
+        oat = data['outdoorairtemperature'].iloc[-1]
         if zonetemp + self.t_error < hsp:
             if not self.h1:
                 return self.earliest_start_time
@@ -284,8 +284,8 @@ class Siemens(Model):
         if htr.empty:
             _log.debug('Siemens debug cooling htr returned empty!')
             return
-        zcsp = htr['zonetemperature'][0] - htr['coolingsetpoint'][0]
-        osp = htr['outdoorairtemperature'][0] - htr['coolingsetpoint'][0]
+        zcsp = htr['zonetemperature'].iloc[0] - htr['coolingsetpoint'].iloc[0]
+        osp = htr['outdoorairtemperature'].iloc[0] - htr['coolingsetpoint'].iloc[0]
         time_diff, temp_diff = get_time_temp_diff(htr, self.t_error)
         if not time_diff:
             _log.debug('Siemens debug cooling time_diff == 0!')
@@ -327,8 +327,8 @@ class Siemens(Model):
             _log.debug('Siemens debug cooling htr returned empty!')
             return
         # change htr to data?
-        zhsp = htr['heatingsetpoint'][0] - htr['zonetemperature'][0]
-        osp = htr['heatingsetpoint'][0] - htr['outdoorairtemperature'][0]
+        zhsp = htr['heatingsetpoint'].iloc[0] - htr['zonetemperature'].iloc[0]
+        osp = htr['heatingsetpoint'].iloc[0] - htr['outdoorairtemperature'].iloc[0]
         time_diff, temp_diff = get_time_temp_diff(htr, self.t_error)
         if not time_diff:
             _log.debug('Siemens debug heating time_diff == 0!')
@@ -367,10 +367,10 @@ class Siemens(Model):
         if data.empty:
             _log.debug('S: DataFrame is empty cannot calculate start time!')
             return self.earliest_start_time
-        csp = data['coolingsetpoint'][-1]
-        hsp = data['heatingsetpoint'][-1]
-        zonetemp = data['zonetemperature'][-1]
-        oat = data['outdoorairtemperature'][-1]
+        csp = data['coolingsetpoint'].iloc[-1]
+        hsp = data['heatingsetpoint'].iloc[-1]
+        zonetemp = data['zonetemperature'].iloc[-1]
+        oat = data['outdoorairtemperature'].iloc[-1]
         if zonetemp + self.t_error < hsp:
             if not self.h1 or not self.h2:
                 return self.earliest_start_time
@@ -409,7 +409,7 @@ class Johnson(Model):
 
     def train_cooling(self, data):
         # cooling trained flag checked
-        temp_diff_begin = data['zonetemperature'][0] - data['coolingsetpoint'][0]
+        temp_diff_begin = data['zonetemperature'].iloc[0] - data['coolingsetpoint'].iloc[0]
         # check if there is cooling data for the training data
         if not data.empty:
             htr = self.heat_transfer_rate(data)
@@ -448,7 +448,7 @@ class Johnson(Model):
             }
 
     def train_heating(self, data):
-        temp_diff_begin = data['heatingsetpoint'][0] - data['zonetemperature'][0]
+        temp_diff_begin = data['heatingsetpoint'].iloc[0] - data['zonetemperature'].iloc[0]
         # check if there is heating data for the training data
         if not data.empty:
             htr = self.heat_transfer_rate(data)
@@ -490,9 +490,9 @@ class Johnson(Model):
         if data.empty:
             _log.debug('J: DataFrame is empty cannot calculate start time!')
             return self.earliest_start_time
-        csp = data['coolingsetpoint'][-1]
-        hsp = data['heatingsetpoint'][-1]
-        zonetemp = data['zonetemperature'][-1]
+        csp = data['coolingsetpoint'].iloc[-1]
+        hsp = data['heatingsetpoint'].iloc[-1]
+        zonetemp = data['zonetemperature'].iloc[-1]
         if zonetemp + self.t_error < hsp:
             zsp = zonetemp - hsp
             if not self.h1_list or not self.h2_list:
@@ -583,10 +583,10 @@ class Sbs(Model):
             _log.debug('SBS: DataFrame is empty cannot calculate start time!')
             return self.earliest_start_time
         # set target setpoint and deadband
-        rt = (data['coolingsetpoint'][-1] + data['heatingsetpoint'][-1]) / 2.0
-        db = data['coolingsetpoint'][-1] - data['heatingsetpoint'][-1]
+        rt = (data['coolingsetpoint'].iloc[-1] + data['heatingsetpoint'].iloc[-1]) / 2.0
+        db = data['coolingsetpoint'].iloc[-1] - data['heatingsetpoint'].iloc[-1]
         # current room temperature
-        yp = data['zonetemperature'][-1]
+        yp = data['zonetemperature'].iloc[-1]
         # start error (adjusted by deadband)
         e0 = (rt - yp)
         db_dict = {'e_b': e0, 'db': db}

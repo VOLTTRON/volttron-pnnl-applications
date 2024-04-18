@@ -122,12 +122,12 @@ def get_time_temp_diff(htr, target):
 
 def get_time_target(data, target):
     try:
-        idx = data[(data['temp_diff'][0] - data['temp_diff']) >= target].index[0]
+        idx = data[(data['temp_diff'].iloc[0] - data['temp_diff']) >= target].index[0]
         target_df = data.loc[:idx]
     except IndexError as ex:
         return 0
     _dt = (target_df.index[-1] - target_df.index[0]).total_seconds() / 60
-    temp = target_df['temp_diff'][0] - target_df['temp_diff'][-1]
+    temp = target_df['temp_diff'].iloc[0] - target_df['temp_diff'].iloc[-1]
 
     return _dt / temp
 

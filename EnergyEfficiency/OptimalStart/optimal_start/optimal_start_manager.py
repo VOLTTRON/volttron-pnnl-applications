@@ -236,7 +236,7 @@ class OptimalStartManager:
             models = self.models
 
         for tag, model in models.items():
-            data = self.data_handler.df.fillna(method='ffill')
+            data = self.data_handler.df.ffill()
             try:
                 optimal_start_time = model.calculate_prestart(data)
             except Exception as ex:
@@ -305,7 +305,7 @@ class OptimalStartManager:
         :rtype:
         """
         training_time = int(self.training_time) + 5 if self.training_time else None
-        data = self.data_handler.df.fillna(method='ffill')
+        data = self.data_handler.df.ffill()
         models = self.models
         if self.is_weekend_holiday():
             models = self.weekend_holiday_models

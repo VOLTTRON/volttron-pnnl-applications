@@ -119,7 +119,7 @@ class Data:
         :rtype:
         """
         try:
-            self._file_accessor.write_date_file(self.df.fillna(method='ffill'))
+            self._file_accessor.write_date_file(self.df.ffill())
             self.df = None
         except Exception as ex:
             _log.debug(f'Error saving df csv!: {ex}')

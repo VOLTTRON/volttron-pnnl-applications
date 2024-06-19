@@ -64,7 +64,7 @@ class MultiplatformCoordinator(Agent):
         self.configured_platforms = self.config.get("connected_platforms")
         self.routing_table = {}
         self.register_subscriptions = {}
-        self.vip.config.subscribe(self.configure_main, action=['NEW', 'UPDATE'], pattern='config')
+        self.vip.config.subscribe(self.configure_main, actions=['NEW', 'UPDATE'], pattern='config')
 
     def check_routing(self, platform, identity):
         """

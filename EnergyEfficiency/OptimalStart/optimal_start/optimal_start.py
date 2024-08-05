@@ -1,5 +1,5 @@
 """
-Copyright (c) 2023, Battelle Memorial Institute
+Copyright (c) 2024, Battelle Memorial Institute
 All rights reserved.
 Redistribution and use in source and binary forms, with or without
 modification, are permitted provided that the following conditions are met:
@@ -39,26 +39,25 @@ PACIFIC NORTHWEST NATIONAL LABORATORY
 operated by BATTELLE for the UNITED STATES DEPARTMENT OF ENERGY
 under Contract DE-AC05-76RL01830
 """
-
-import os
+from __future__ import annotations
 import sys
+import inspect
+from dataclasses import asdict, dataclass, is_dataclass
 import logging
-from datetime import timedelta as td, datetime as dt
-import pandas as pd
-import dill
-from dateutil.parser import parse
+from typing import Any
+import gevent
+
 from volttron.platform.agent import utils
-from volttron.platform.scheduling import cron
-from volttron.platform.messaging import topics
-from volttron.platform.agent.utils import (setup_logging, format_timestamp, get_aware_utc_now)
+from volttron.platform.agent.utils import setup_logging
 from volttron.platform.vip.agent import Agent, Core
 from volttron.platform.jsonrpc import RemoteError
-import gevent
-from .data_utils import Data
+
+from . import DefaultConfig
+from .data_utils import Data, DataFileAccess
 from .optimal_start_manager import OptimalStartManager
 from .holiday_manager import HolidayManager
+from .points import DaysOfWeek, OccupancyTypes, Points
 
-pd.set_option('display.max_rows', None)
 __author__ = 'Robert Lutes, robert.lutes@pnnl.gov'
 __version__ = '0.0.1'
 
@@ -70,48 +69,27 @@ class OptimalStart(Agent):
     def __init__(self, config_path, **kwargs):
         super(OptimalStart, self).__init__(**kwargs)
         config = utils.load_config(config_path)
+        default_config = DefaultConfig(**config)
+        self.cfg = default_config
         self.identity = self.core.identity
-        self.config = config
-        # topic for device level data
-        campus = config.get('campus', '')
-        building = config.get('building', '')
-        self.device = config.get('system', '')
-        self.system_rpc_path = topics.RPC_DEVICE_PATH(campus=campus,
-                                                      building=building,
-                                                      unit=self.device,
-                                                      path='',
-                                                      point=None)
-        self.base_device_topic = topics.DEVICES_VALUE(campus=campus,
-                                                      building=building,
-                                                      unit='',
-                                                      path=self.device,
-                                                      point='all')
-        # Result objects for record topic
-        self.base_record_topic = self.base_device_topic.replace('devices', 'record')
-        self.base_record_topic = self.base_record_topic.rstrip('/all')
-        # Configuration for data handler
-        timezone = config.get('local_tz', 'UTC')
-        self.zone_point_names = config.get('zone_point_names')
-        setpoint_offset = config.get('setpoint_offset')
-        self.data_handler = Data(self.zone_point_names, timezone, self.device, setpoint_offset=setpoint_offset)
-        # No precontrol code yet, this might be needed in future
         self.precontrols = config.get('precontrols', {})
         self.precontrol_flag = False
-        # Controller parameters
-        self.actuator = config.get('actuator', 'platform.actuator')
-        self.zone_control = config.get('zone_control', {})
-        self.day_map = config.get('day_map', {0: 's', 1: 's', 2: 'c', 3: 'c', 4: 'j'})
-        self.earliest_start_time = config.get('earliest_start_time', 180)
-        self.latest_start_time = config.get('latest_start_time', 0)
-        self.schedule = {}
-        self.init_schedule(config.get('schedule', {}))
-        if not self.schedule:
-            _log.debug('No schedule configured, exiting!')
-            self.core.stop()
-        self.model_path = os.path.expanduser('~/models')
+        self.datafile = DataFileAccess(datafile=self.cfg.data_file)
+        self.data_handler = Data(timezone=self.cfg.timezone,
+                                 data_accessor=self.datafile,
+                                 setpoint_offset=self.cfg.setpoint_offset)
         # Initialize sub-classes
         self.holiday_manager = HolidayManager()
-        self.optimal_start = OptimalStartManager(self)
+        self.optimal_start = OptimalStartManager(schedule=self.cfg.schedule,
+                                                 config=self.cfg,
+                                                 identity=self.identity,
+                                                 scheduler_fn=self.core.schedule,
+                                                 holiday_manager=self.holiday_manager,
+                                                 data_handler=self.data_handler,
+                                                 publish_fn=self.publish,
+                                                 change_occupancy_fn=self.change_occupancy,
+                                                 config_set_fn=self.config_set,
+                                                 config_get_fn=self.config_get)
 
     @Core.receiver('onstart')
     def starting_base(self, sender, **kwargs):
@@ -125,116 +103,185 @@ class OptimalStart(Agent):
         @return:
         @rtype:
         """
-        _log.debug('Starting!')
-
-        self.vip.pubsub.subscribe(peer='pubsub',
-                                  prefix=self.base_device_topic,
-                                  callback=self.update_data)
-        _log.debug('Subscribing to %s', self.base_device_topic)
+        _log.debug(f'SETUP DATA SUBSCRIPTIONS FOR {self.identity}')
+        self.vip.pubsub.subscribe(peer='pubsub', prefix=self.cfg.base_device_topic,
+                                  callback=self.update_data).get(timeout=10.0)
+        if self.cfg.outdoor_temperature_topic:
+            self.vip.pubsub.subscribe(peer='pubsub',
+                                      prefix=self.cfg.outdoor_temperature_topic,
+                                      callback=self.update_custom_data).get(timeout=10.0)
         self.optimal_start.setup_optimal_start()
 
-    def init_schedule(self, schedule):
+    def config_get(self, name: str):
         """
-        Parse weekly occupancy schedule.
-        @param schedule:
-        @type schedule:
-        @return:
-        @rtype:
-        """
-        _log.debug('Schedule!')
-        if schedule:
-            for day_str, schedule_info in schedule.items():
-                _day = parse(day_str).weekday()
-                if schedule_info not in ['always_on', 'always_off']:
-                    start = parse(schedule_info['start'])
-                    earliest = start - td(minutes=self.earliest_start_time)
-                    end = parse(schedule_info['end']).time()
-                    self.schedule[_day] = {'earliest': earliest.time(), 'start': start.time(), 'end': end}
-                else:
-                    self.schedule[_day] = schedule_info
-        _log.debug(f'Schedule!: {self.schedule}')
+        A helper method to get the configuration from the configuration store.
 
-    def get_current_schedule(self):
+        :param name: The name of the configuration to get.
+        :type name: str
+        :return: The configuration.
+        :rtype: dict
         """
-        Get stored value for current days schedule and return.
-        @return: current dates occupancy schedule (entries are datetime objects).
-        @rtype: dict
+        return self.vip.config.get(name)
+
+    def config_set(self, name: str, config: dict[str, Any] | dataclass):
         """
-        current_time = dt.now()
-        current_day = current_time.weekday()
-        current_schedule = None
-        if self.schedule and current_day in self.schedule:
-            current_schedule = self.schedule[current_day]
-        return current_schedule
+        A helper method to set the configuration in the configuration store.
+
+        :param name: The name of the configuration to set.
+        :type name: str
+        :param config: The configuration to set.
+        :type config: dict
+        :return: None
+        """
+        if is_dataclass(config):
+            config = asdict(config)
+
+        self.vip.config.set(name, config, send_update=True)
 
     def update_data(self, peer, sender, bus, topic, header, message):
         """
-        Update RTU data from driver publish for optimal start, lockout control, and
-        economizer control.
-        @param peer:
-        @type peer:
-        @param sender:
-        @type sender:
-        @param bus:
-        @type bus:
-        @param topic:
-        @type topic:
-        @param header:
-        @type header:
-        @param message:
-        @type message:
-        @return:
-        @rtype:
+        Update RTU data from driver publish for optimal start model training.
+        :param peer:
+        :type peer:
+        :param sender:
+        :type sender:
+        :param bus:
+        :type bus:
+        :param topic:
+        :type topic:
+        :param header:
+        :type header:
+        :param message:
+        :type message:
+        :return:
+        :rtype:
         """
         _log.debug(f'Update data : {topic}')
-        self.data_handler.update_data(message, header)
+        data, meta = message
+        self.data_handler.update_data(data, header)
 
-    def get_system_occupancy(self):
+    def update_custom_data(self, peer, sender, bus, topic, header, message):
         """
-        Call driver get_point to get current RTU occupancy status.
-        @return:
-        @rtype:
+        Update RTU data for custom data topics, typically when one device
+        had OAT for entire building.
+        :param peer:
+        :type peer:
+        :param sender:
+        :type sender:
+        :param bus:
+        :type bus:
+        :param topic:
+        :type topic:
+        :param header:
+        :type header:
+        :param message:
+        :type message:
+        :return:
+        :rtype:
         """
-        result = None
+        _log.debug(f'Update data : {topic}')
+        payload = {}
+        data, meta = message
+        if Points.outdoorairtemperature.value in data:
+            payload[Points.outdoorairtemperature.value] = data[Points.outdoorairtemperature.value]
+        self.data_handler.update_data(payload, header)
+
+    def change_occupancy(self, state: OccupancyTypes):
+        """
+        Change RTU occupancy state.
+
+        Makes RPC call to actuator agent to change zone control when zone transitions to occupied/unoccupied mode.
+
+        :param state: str; occupied or unoccupied
+        :type state: str
+        :return: True if successful, else False
+        """
+
+        if isinstance(state, str):
+            _log.debug(f'OCCUPANCY STATE IS A STRING Change occupancy state to {state}')
+            state = OccupancyTypes[state.upper()]
+
+        # Based upon the values in the configuration, set the occupancy state.
+        if state.value in self.cfg.occupancy_values:
+            new_occupancy_state = self.cfg.occupancy_values[state.value]
+        else:
+            new_occupancy_state = state.value
+
         try:
-            result = self.vip.rpc.call(self.actuator, 'get_point', self.system_rpc_path).get(timeout=30)
-            _log.debug(f'Do system get: {self.system_rpc_path} -- {result}')
-        except (RemoteError, gevent.Timeout) as ex:
-            _log.warning(f'Failed to get {self.system_rpc_path}: {ex}')
+            result = self.rpc_set_point(Points.occupancy.value, new_occupancy_state)
+
+        except RemoteError as ex:
+            _log.warning(f'{self.identity} - Failed to set {self.cfg.system_rpc_path} to {state.value}: {ex}')
+            return str(ex)
         return result
 
-    def occupancy_control(self, state):
+    def publish(self, topic: str, headers: dict[str, str], message: dict[str, Any] | dataclass):
         """
-        Makes RPC call to driver agent to change zone control when zone transitions to occupied
-        or unoccupied mode.
-        @param state: transitioning state (occupied or unoccupied)
-        @type state: str
-        @return: None
-        @rtype:
+        A helper method to publish a message to the message bus.
+
+        :param topic: The topic to publish the message to.
+        :type topic: str
+        :param headers: The headers to include with the message.
+        :type headers: dict
+        :param message: The message to publish.
+        :type message: dict
         """
-        control = self.zone_control[state]
-        for point, value in control.items():
-            topic = self.system_rpc_path(point=point)
-            try:
-                result = self.vip.rpc.call(self.actuator, 'set_point', 'optimal_start', topic, value).get(timeout=30)
-            except RemoteError as ex:
-                _log.warning(f'Failed to set {topic} to {value}: {ex}')
-            continue
+        if is_dataclass(message):
+            message = asdict(message)
+
+        debug_ref = f'{inspect.stack()[0][3]}()->{inspect.stack()[1][3]}()'
+        _log.debug(f'{debug_ref}: {topic} {headers} {message}')
+        self.vip.pubsub.publish('pubsub', topic, headers=headers, message=message).get(timeout=10.0)
+
+    def rpc_set_point(self, point: str, value: Any):
+        """
+        A helper method to call the RPC method on the actuator agent.
+
+        :param point: The point to set the value for.
+        :type point: str
+        :param value: The value to set the point to.
+        :type value: Any
+        :return: The result of the RPC call.
+        :rtype: Any
+        """
+
+        debug_ref = f'{inspect.stack()[0][3]}()->{inspect.stack()[1][3]}()'
+        _log.debug(f'Calling: {self.cfg.actuator_identity} set_point -- {self.cfg.system_rpc_path}, {point}, {value}')
+        result = self.vip.rpc.call(self.cfg.actuator_identity, 'set_point', self.cfg.system_rpc_path, point,
+                                   value).get(timeout=10.0)
+        _log.debug(f'{debug_ref}: -> {result}')
+        return result
+
+    def rpc_get_point(self, point: str):
+        """
+        A helper method to call the RPC method on the actuator agent.
+
+        :param point: The point to get the value for.
+        :type point: str
+        :return: The result of the RPC call.
+        :rtype: Any
+        """
+
+        result = self.vip.rpc.call(self.cfg.actuator_identity, 'get_point', self.cfg.system_rpc_path,
+                                   point).get(timeout=10.0)
+        debug_ref = f'{inspect.stack()[0][3]}()->{inspect.stack()[1][3]}()'
+        _log.debug(f'{debug_ref}: {self.cfg.system_rpc_path} -- {point} -> {result}')
+        return result
 
     def start_precontrol(self):
         """
         Makes RPC call to driver agent to enable any pre-control
         actions needed for optimal start.
-        @return:
-        @rtype:
+        :return:
+        :rtype:
         """
         result = None
         for topic, value in self.precontrols.items():
             try:
-                _log.debug(f'Do pre-control: {topic} -- {value}')
-                result = self.vip.rpc.call(self.actuator, 'set_point', 'optimal_start', topic, value).get(timeout=30)
+                _log.debug('Do pre-control: {} -- {}'.format(topic, value))
+                result = self.vip.rpc.call(self.cfg.actuator_identity, 'set_point', topic, value).get(timeout=30)
             except RemoteError as ex:
-                _log.warning(f'Failed to set {topic} to {value}: {ex}')
+                _log.warning('Failed to set {} to {}: {}'.format(topic, value, str(ex)))
                 continue
         self.precontrol_flag = True
         return result
@@ -243,17 +290,19 @@ class OptimalStart(Agent):
         """
         Makes RPC call to driver agent to end pre-control
         actions needed for optimal start.
-        @return:
-        @rtype:
+        :return:
+        :rtype:
         """
         result = None
         for topic, value in self.precontrols.items():
             try:
                 _log.debug('Do pre-control: {} -- {}'.format(topic, 'None'))
-                result = self.vip.rpc.call(self.actuator, 'set_point', 'optimal_start', topic, None).get(timeout=30)
+                result = self.vip.rpc.call(self.cfg.actuator_identity, 'set_point', 'optimal_start', topic,
+                                           None).get(timeout=30)
             except RemoteError as ex:
                 _log.warning('Failed to set {} to {}: {}'.format(topic, value, str(ex)))
                 continue
+        self.precontrol_flag = False
         return result
 
 

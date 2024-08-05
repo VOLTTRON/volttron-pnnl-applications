@@ -1,5 +1,5 @@
 """
-Copyright (c) 2023, Battelle Memorial Institute
+Copyright (c) 2024, Battelle Memorial Institute
 All rights reserved.
 Redistribution and use in source and binary forms, with or without
 modification, are permitted provided that the following conditions are met:
@@ -39,6 +39,7 @@ PACIFIC NORTHWEST NATIONAL LABORATORY
 operated by BATTELLE for the UNITED STATES DEPARTMENT OF ENERGY
 under Contract DE-AC05-76RL01830
 """
+from __future__ import annotations
 import datetime as dt
 import logging
 import numpy as np
@@ -56,13 +57,13 @@ def clean_array(array):
         :return: array (list)
     """
     try:
-        array = [item if isinstance(item, list) else ["", item] for item in array]
+        array = [item if isinstance(item, list) else ['', item] for item in array]
         array_values = [item[1] for item in array if np.isfinite(item[1]) and item[1] >= 0]
         if len(array) > 3:
             u = np.mean(array_values)
             s = np.std(array_values)
             if np.isfinite(u) and np.isfinite(s):
-                array = [e for e in array if (u - 1.5 * s < e[1] < u + 1.5 * s)]
+                array = [e for e in array if (u - 2.0 * s <= e[1] <= u + 2.0 * s)]
     except Exception as ex:
         _log.debug(f'Array parser error: {array} -- ex: {ex}')
     return array
@@ -103,15 +104,16 @@ def offset_time(_time, offset):
 
 def trim(lst, new_value, cutoff):
     if not np.isfinite(new_value):
-        return
+        return lst
     lst.append([format_timestamp(dt.datetime.now()), new_value])
+    lst = clean_array(lst)
     if lst and len(lst) > cutoff:
         lst = lst[-cutoff:]
     return lst
 
 
 def get_time_temp_diff(htr, target):
-    htr = htr[htr['temp_diff'] >= target]
+    # htr = htr[htr['temp_diff'] >= target]
     htr.loc[:, 'timediff'] = htr.index.to_series().diff().dt.total_seconds() / 60
     time_diff = htr['timediff'].sum(axis=0)
     temp_diff = htr['temp_diff'].iloc[0] - htr['temp_diff'].iloc[-1]
@@ -120,14 +122,14 @@ def get_time_temp_diff(htr, target):
 
 def get_time_target(data, target):
     try:
-        idx = data[(data['temp_diff'][0] - data['temp_diff']) >= target].index[0]
+        idx = data[(data['temp_diff'].iloc[0] - data['temp_diff']) >= target].index[0]
         target_df = data.loc[:idx]
     except IndexError as ex:
-        return
-    _dt = (target_df.index[-1] - target_df.index[0]).total_seconds()/60
-    temp = target_df['temp_diff'][0] - target_df['temp_diff'][-1]
+        return 0
+    _dt = (target_df.index[-1] - target_df.index[0]).total_seconds() / 60
+    temp = target_df['temp_diff'].iloc[0] - target_df['temp_diff'].iloc[-1]
 
-    return _dt/temp
+    return _dt / temp
 
 
 def ema(lst):
@@ -156,10 +158,9 @@ def calculate_prestart_time(end, prestart):
 
 def get_cls_attrs(cls):
     d = {
-        key: value for key, value in cls.__dict__.items()
-        if not key.startswith('__')
-           and not callable(value)
-           and not callable(getattr(value, '__get__', None))  # <- important
+        key: value
+        for key, value in cls.__dict__.items() if not key.startswith('__') and not callable(value)
+        and not callable(getattr(value, '__get__', None))  # <- important
     }
     return d
 

@@ -1,5 +1,5 @@
 """
-Copyright (c) 2023, Battelle Memorial Institute
+Copyright (c) 2024, Battelle Memorial Institute
 All rights reserved.
 Redistribution and use in source and binary forms, with or without
 modification, are permitted provided that the following conditions are met:
@@ -39,110 +39,119 @@ PACIFIC NORTHWEST NATIONAL LABORATORY
 operated by BATTELLE for the UNITED STATES DEPARTMENT OF ENERGY
 under Contract DE-AC05-76RL01830
 """
-import os
+from __future__ import annotations
 import logging
-import pandas as pd
 import warnings
+from datetime import datetime as dt
+from pathlib import Path
+from typing import Optional
+
+import pandas as pd
+from dateutil import parser, tz
+from volttron.platform.agent.utils import format_timestamp
+from volttron.platform.messaging import headers as headers_mod
+
+from .points import Points
 
 warnings.filterwarnings('ignore', category=DeprecationWarning)
-from datetime import datetime as dt, timedelta as td
-from dateutil import parser, tz
-from volttron.platform.agent.utils import setup_logging, format_timestamp
-from volttron.platform.messaging import topics, headers as headers_mod
 
-setup_logging()
 _log = logging.getLogger(__name__)
 
 
+class DataFileAccess:
+
+    def __init__(self, datafile: str | Path) -> None:
+        if isinstance(datafile, str):
+            self.datafile = Path(datafile)
+        else:
+            self.datafile = datafile
+        _log.debug(f'Data file: {self.datafile} -- {self.datafile.as_posix()}')
+
+    def read(self) -> Optional[pd.DataFrame]:
+        return pd.read_csv(self.datafile, index_col='ts', parse_dates=True)
+
+    def write(self, df: pd.DataFrame) -> None:
+        df.to_csv(self.datafile.as_posix())
+
+    def write_date_file(self, data: pd.DataFrame) -> None:
+        _date = format_timestamp(dt.now())
+        new_datafile: Path = self.datafile.parent / f'{self.datafile.stem}_{_date}.csv'
+        data.to_csv(new_datafile.as_posix())
+        self.datafile.unlink()
+
+    def reset_date_file(self) -> None:
+        self.datafile.unlink(missing_ok=True)
+
+
 class Data:
-    def __init__(self, points, timezone, tag, data_dir='', setpoint_offset=None):
-        self.points = points
+    # TODO default config already created data_dir
+    def __init__(self, *, timezone: tz.tz.tzfile, data_accessor: DataFileAccess, setpoint_offset: float | None = None):
         self.current_dt = dt.now()
         self.df = None
-        try:
-            self.local_tz = tz.gettz(timezone)
-        except:
-            self.local_tz = tz.gettz('UTC')
-        if data_dir:
-            data_file = data_dir + f'/data_{tag}.csv'
-        else:
-            data_dir = os.path.expanduser('~/optimal_start')
-            data_file = data_dir + f'/data_{tag}.csv'
-        self.data_path = data_dir
-        self.setpoint_offset = setpoint_offset
-        self.tag = tag
-        _log.debug('Data file: {}'.format(data_file))
-        if os.path.isfile(data_file):
-            try:
-                self.df = pd.read_csv(data_file, index_col='ts', parse_dates=True)
-            except Exception as ex:
-                _log.debug(f'No previous dataframe object: {ex}')
-        try:
-            if self.df is not None:
-                if self.df.index[0].date() != self.current_dt.date():
-                    self.df = None
-        except (AttributeError, IndexError, TypeError) as ex:
-            _log.debug(f'Error parsing DataFrame: {ex}')
+        self.timezone = timezone
 
-    def assign_local_tz(self, _dt):
+        self._file_accessor = data_accessor
+        if self._file_accessor.datafile.is_file():
+            self.df = data_accessor.read()
+
+        self.setpoint_offset = setpoint_offset
+
+    def assign_local_tz(self, _dt: dt) -> dt:
         """
         Convert UTC time from driver to local time.
-        @param _dt: datetime object
-        @type _dt: datetime.datetime
-        @return: localized datetime object
-        @rtype: datetime.datetime
+        :param _dt: datetime object
+        :type _dt: datetime.datetime
+        :return: localized datetime object
+        :rtype: datetime.datetime
         """
         if _dt.tzinfo is None or _dt.tzinfo.utcoffset(_dt) is None:
             _log.debug(f'TZ: {_dt}')
             return _dt
         else:
-            _dt = _dt.astimezone(self.local_tz)
+            _dt = _dt.astimezone(self.timezone)
             _log.debug(f'TZ: {_dt}')
             return _dt
 
     def process_data(self):
         """
         Save data to disk, save 15 days of data.
-        @return:
-        @rtype:
+        :return:
+        :rtype:
         """
-        _date = format_timestamp(dt.now())
-        data_file = self.data_path + f'/data_{self.tag}_{_date}.csv'
         try:
-            self.df.to_csv(data_file)
+            self._file_accessor.write_date_file(self.df.ffill())
             self.df = None
         except Exception as ex:
             _log.debug(f'Error saving df csv!: {ex}')
             self.df = None
 
-    def update_data(self, payload, header):
+    def update_data(self, data: dict, header: dict):
         """
         Store current data measurements in daily data df.
-        @param payload: data payload from device driver
-        @type payload: dict
-        @param header: header payload from device driver, contains timestamp
-        @type header: dict
-        @return: None
-        @rtype:
+        :param payload: data payload from device driver
+        :type payload: dict
+        :param header: header payload from device driver, contains timestamp
+        :type header: dict
+        :return: None
+        :rtype:
         """
-        data, meta = payload
         _now = parser.parse(header[headers_mod.TIMESTAMP])
         stored_data = {}
         current_dt = self.assign_local_tz(_now)
         self.current_dt = current_dt
-        for _key, point_name in self.points.items():
-            if point_name in data:
-                value = data[point_name]
-            else:
-                continue
-            stored_data[_key] = [value]
+        for point in Points.values():
+            if point.value in data:
+                value = data[point.value]
+                stored_data[point.name] = [value]
 
         if self.setpoint_offset is not None:
-            stored_data['coolingsetpoint'][0] = stored_data['coolingsetpoint'][0] + self.setpoint_offset
-            stored_data['heatingsetpoint'][0] = stored_data['heatingsetpoint'][0] - self.setpoint_offset
+            stored_data['coolingsetpoint'][0] += self.setpoint_offset
+            stored_data['heatingsetpoint'][0] -= self.setpoint_offset
+
         if 'warmcooladjust' in stored_data:
-            stored_data['coolingsetpoint'][0] = stored_data['coolingsetpoint'][0] + stored_data['warmcooladjust'][0]
-            stored_data['heatingsetpoint'][0] = stored_data['heatingsetpoint'][0] + stored_data['warmcooladjust'][0]
+            stored_data['coolingsetpoint'][0] += stored_data['warmcooladjust'][0]
+            stored_data['heatingsetpoint'][0] += stored_data['warmcooladjust'][0]
+
         if 'reversingvalve' in stored_data and 'compressorcommand' in stored_data:
             vlv = stored_data['reversingvalve'][0]
             comp = stored_data['compressorcommand'][0]
@@ -158,13 +167,31 @@ class Data:
                     stored_data['cooling'] = [1]
 
         if stored_data:
-            stored_data['ts'] = [current_dt]
-            df = pd.DataFrame.from_dict(stored_data)
-            df.set_index(df['ts'], inplace=True)
-            if self.df is not None:
-                self.df = pd.concat([self.df, df], axis=0, ignore_index=False)
-                self.df = self.df.drop(columns=['ts'])
-            else:
-                self.df = df
-            data_path = self.data_path + f'/data_{self.tag}.csv'
-            self.df.to_csv(data_path)
+            self.append_df(stored_data, current_dt)
+
+    def append_df(self, data: dict, current_dt: dt):
+        """
+        Appends a dictionary of data to a pandas DataFrame.
+
+        :param data: dict, The dictionary of data to append to the DataFrame.
+        :param current_dt: dt, The current datetime.
+        :return: None
+        :rtype: None
+        """
+        data['ts'] = [current_dt]
+        df = pd.DataFrame.from_dict(data)
+        df.set_index(df['ts'], inplace=True)
+        if self.df is not None:
+            self.df = pd.concat([self.df, df], axis=0, ignore_index=False)
+            self.df = self.df.drop(columns=['ts'])
+        else:
+            self.df = df
+
+        self._file_accessor.write(self.df)
+
+    def get_current_oat(self):
+        if not self.df.empty:
+            if Points.outdoorairtemperature.name in self.df.columns:
+                df = self.df[self.df[Points.outdoorairtemperature.name].notna()]
+                return df.index[-1], df[Points.outdoorairtemperature.name].iloc[-1]
+        return None, None

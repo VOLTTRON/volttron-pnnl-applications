@@ -39,43 +39,73 @@ PACIFIC NORTHWEST NATIONAL LABORATORY
 operated by BATTELLE for the UNITED STATES DEPARTMENT OF ENERGY
 under Contract DE-AC05-76RL01830
 """
-import pandas as pd
-from pandas.tseries.holiday import (FR, Holiday, USColumbusDay, USLaborDay,
-                                    USMartinLutherKingJr, USMemorialDay,
-                                    USPresidentsDay, USThanksgivingDay,
-                                    after_nearest_workday,
-                                    before_nearest_workday, nearest_workday,
-                                    next_monday, next_workday, previous_friday,
-                                    previous_workday, sunday_to_monday)
+from dataclasses import dataclass, field
+from enum import Enum, IntEnum
+from typing import List
 
-ALL_HOLIDAYS = {
-    "New Year's Day": Holiday("New Year's Day", month=1, day=1, observance=nearest_workday),
-    'Martin Luther King Jr': USMartinLutherKingJr,
-    'Presidents Day': USPresidentsDay,
-    'Memorial Day': USMemorialDay,
-    'Juneteenth': Holiday(
-        'Juneteenth National Independence Day',
-        month=6,
-        day=19,
-        observance=nearest_workday,
-    ),
-    'Independence Day': Holiday('Independence Day', month=7, day=4, observance=nearest_workday),
-    'Labor Day': USLaborDay,
-    'Columbus Day': USColumbusDay,
-    'Veterans Day': Holiday('Veterans Day', month=11, day=11, observance=nearest_workday),
-    'Thanksgiving': USThanksgivingDay,
-    'Black Friday': Holiday('Black Friday', month=11, day=1, offset=pd.DateOffset(weekday=FR(4))),
-    'Christmas Eve': Holiday('Christmas Eve', month=12, day=24),
-    'Christmas': Holiday('Christmas', month=12, day=25, observance=nearest_workday)
-}
 
-OBSERVANCE = {
-    'after_nearest_workday': after_nearest_workday,
-    'before_nearest_workday': before_nearest_workday,
-    'nearest_workday': nearest_workday,
-    'next_monday': next_monday,
-    'next_workday': next_workday,
-    'previous_workday': previous_workday,
-    'previous_friday': previous_friday,
-    'sunday_to_monday': sunday_to_monday
-}
+class OccupancyTypes(Enum):
+    OCCUPIED = 'occupied'
+    UNOCCUPIED = 'unoccupied'
+
+
+@dataclass
+class PointValue:
+    value: str
+    name: str
+
+
+class _Points:
+    def __init__(self):
+        self._points: dict[str, PointValue] = {}
+        self._curitter = None
+
+    def add_item(self, key: str, value: str):
+        self._points[key] = PointValue(value, key)
+
+    def __getattr__(self, key: str) -> PointValue:
+        return self._points[key]
+
+    def keys(self) -> List[str]:
+        return list(self._points.keys())
+
+    def values(self) -> List[PointValue]:
+        return list(self._points.values())
+
+    def __iter__(self):
+        self._curitter = iter(self._points)
+        return self._curitter
+
+    def __len__(self):
+        return len(self._points)
+
+    def __next__(self):
+        item = next(self._curitter)
+        return item
+
+
+Points = _Points()
+Points.add_item('zonetemperature', 'ZoneTemperature')
+Points.add_item('coolingsetpoint', 'OccupiedCoolingSetPoint')
+Points.add_item('heatingsetpoint', 'OccupiedHeatingSetPoint')
+Points.add_item('supplyfanstatus', 'SupplyFanStatus')
+Points.add_item('outdoorairtemperature', 'OutdoorAirTemperature')
+Points.add_item('heating', 'FirstStageHeating')
+Points.add_item('cooling', 'FirstStageCooling')
+Points.add_item('occupancy', 'OccupancyCommand')
+Points.add_item('auxiliaryheatcommand', 'AuxiliaryHeatCommand')
+Points.add_item('economizersetpoint', 'EconomizerSwitchOverSetPoint')
+Points.add_item('deadband', 'DeadBand')
+Points.add_item('unoccupiedheatingsetpoint', 'UnoccupiedHeatingSetPoint')
+Points.add_item('unoccupiedcoolingsetpoint', 'UnoccupiedCoolingSetPoint')
+Points.add_item('occupiedsetpoint', 'OccupiedSetPoint')
+
+
+class DaysOfWeek(IntEnum):
+    Monday = 0
+    Tuesday = 1
+    Wednesday = 2
+    Thursday = 3
+    Friday = 4
+    Saturday = 5
+    Sunday = 6

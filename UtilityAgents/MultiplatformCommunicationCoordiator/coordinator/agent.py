@@ -47,7 +47,6 @@ from volttron.platform.agent import utils
 
 from volttron.platform.vip.agent import Agent, Core, RPC
 from volttron.platform.jsonrpc import RemoteError
-from volttrontesting.subsystems.test_health_subsystem import subscription_results
 
 utils.setup_logging()
 _log = logging.getLogger(__name__)
@@ -323,18 +322,17 @@ class MultiplatformCoordinator(Agent):
         _log.debug(f'Received message from {peer} on {topic}')
         on_error = False
         subscriptions = self.subscription_registry.get(topic, {})
-        for topic, topic_payload in subscriptions.items():
-            for platform, platform_payload in topic_payload.items():
-                for identity, callback in platform_payload.items():
-                    _log.debug(f'Sending to {platform} -- {identity} with callback {callback}')
-                    if self.check_routing(platform, identity):
-                        try:
-                            self.vip.rpc.call(identity, callback, headers, message,
-                                              external_platform=platform).get(timeout=10)
-                        except (gevent.Timeout, RemoteError) as ex:
-                            on_error = True
-                            self.update_routing_table(platform)
-                            _log.error(f'Failed to call {callback} for {identity} on {platform}: {ex}')
+        for platform, platform_payload in subscriptions.items():
+            for identity, callback in platform_payload.items():
+                _log.debug(f'Sending to {platform} -- {identity} with callback {callback}')
+                if self.check_routing(platform, identity):
+                    try:
+                        self.vip.rpc.call(identity, callback, headers, message,
+                                          external_platform=platform).get(timeout=10)
+                    except (gevent.Timeout, RemoteError) as ex:
+                        on_error = True
+                        self.update_routing_table(platform)
+                        _log.error(f'Failed to call {callback} for {identity} on {platform}: {ex}')
         if on_error:
             self.unregister_subscription()
 

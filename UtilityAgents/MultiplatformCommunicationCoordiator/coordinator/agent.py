@@ -47,6 +47,7 @@ from volttron.platform.agent import utils
 
 from volttron.platform.vip.agent import Agent, Core, RPC
 from volttron.platform.jsonrpc import RemoteError
+from volttrontesting.subsystems.test_health_subsystem import subscription_results
 
 utils.setup_logging()
 _log = logging.getLogger(__name__)
@@ -60,7 +61,7 @@ class MultiplatformCoordinator(Agent):
         self.vip.config.set_default("config", self.config)
         self.configured_platforms = self.config.get("connected_platforms")
         self.routing_table = {}
-        self.register_subscriptions = defaultdict(lambda: defaultdict(dict))
+        self.subscription_registry = defaultdict(lambda: defaultdict(dict))
         self.vip.config.subscribe(self.configure_main, actions=['NEW', 'UPDATE'], pattern='config')
         self.error = False
 
@@ -221,7 +222,7 @@ class MultiplatformCoordinator(Agent):
         topic, platform, identity, callback = self.unpack_subscription_payload(data)
         self.update_routing_table(platform)
         _log.debug(f'Updating routing table: {self.routing_table}')
-        self.register_subscriptions[topic][platform][identity] = callback
+        self.subscription_registry[topic][platform][identity] = callback
         self.update_routing_table(platform)
         self.unregister_subscription()
 
@@ -239,18 +240,18 @@ class MultiplatformCoordinator(Agent):
 
     def cleanup_invalid_subscriptions(self):
         """
-        Removes invalid subscriptions from the register_subscriptions dictionary.
+        Removes invalid subscriptions from the subscription_registry dictionary.
 
         Identifies invalid subscriptions by checking if routing exists for each identity in the subscription.
         If routing does not exist, the identity is marked for cleanup.
 
-        This function iterates through each topic, platform, and identity in the register_subscriptions dictionary.
+        This function iterates through each topic, platform, and identity in the subscription_registry dictionary.
         If an identity is found to be invalid, it is added to a temporary cleanup dictionary.
-        After identifying all invalid subscriptions, it removes them from the original register_subscriptions dictionary.
+        After identifying all invalid subscriptions, it removes them from the original subscription_registry dictionary.
         """
         cleanup = defaultdict(lambda: defaultdict(list))
 
-        for topic, topic_payload in self.register_subscriptions.items():
+        for topic, topic_payload in self.subscription_registry.items():
             for platform, identities in topic_payload.items():
                 for identity in identities:
                     if not self.check_routing(platform, identity):
@@ -259,8 +260,8 @@ class MultiplatformCoordinator(Agent):
         for topic, platforms in cleanup.items():
             for platform, identities in platforms.items():
                 for identity in identities:
-                    self.register_subscriptions[topic][platform].pop(identity, None)
-        _log.debug(f'Execute cleanup_invalid_subscriptions {self.register_subscriptions}')
+                    self.subscription_registry[topic][platform].pop(identity, None)
+        _log.debug(f'Execute cleanup_invalid_subscriptions {self.subscription_registry}')
 
     def cleanup_empty_topics(self):
         """
@@ -271,13 +272,13 @@ class MultiplatformCoordinator(Agent):
 
         """
         empty_topics = []
-        all_topics = list(self.register_subscriptions.keys())
+        all_topics = list(self.subscription_registry.keys())
         for topic in all_topics:
-            if all(not payload for payload in self.register_subscriptions[topic].values()):
+            if all(not payload for payload in self.subscription_registry[topic].values()):
                 empty_topics.append(topic)
         _log.debug(f'Running cleanup_empty_topics {empty_topics}')
         for topic in empty_topics:
-            self.register_subscriptions.pop(topic, None)
+            self.subscription_registry.pop(topic, None)
             self.vip.pubsub.unsubscribe(peer='pubsub',
                                         prefix=topic,
                                         callback=self.subscription_handler).get(timeout=10)
@@ -321,7 +322,8 @@ class MultiplatformCoordinator(Agent):
         """
         _log.debug(f'Received message from {peer} on {topic}')
         on_error = False
-        for topic, topic_payload in self.register_subscriptions.items():
+        subscriptions = self.subscription_registry.get(topic, {})
+        for topic, topic_payload in subscriptions.items():
             for platform, platform_payload in topic_payload.items():
                 for identity, callback in platform_payload.items():
                     _log.debug(f'Sending to {platform} -- {identity} with callback {callback}')
